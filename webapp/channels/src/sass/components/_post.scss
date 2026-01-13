@@ -39,20 +39,19 @@
     min-height: 37px;
 
     .textbox-preview-area {
-        // Infomaniak
-        white-space: normal;
 
         position: relative;
         z-index: 2;
         top: 0;
         left: 0;
+        // Infomaniak
+        white-space: normal;
 
         &:focus {
             border-color: rgba(functions.v(center-channel-color-rgb), 0.4);
         }
 
         p {
-            margin: 0;
             white-space: pre-wrap;
         }
 
@@ -561,6 +560,10 @@
         }
     }
 
+    &:has(.post--failed) {
+        background-color:rgba(var(--center-channel-color-rgb), 0.08) !important;
+    }
+
     .hide-element {
         display: none;
     }
@@ -587,9 +590,9 @@
         }
 
         .custom-textarea {
+            overflow: auto;
             max-height: calc(50vh - 40px);
             background-color: var(--center-channel-bg);
-            overflow: auto;
             scrollbar-width: thin;
 
             &.custom-textarea--emoji-picker {
@@ -766,7 +769,15 @@
                     // ik: hide profile icon
                     display: none;
                 }
+
+                cursor: auto;
+                pointer-events: none;
             }
+        }
+
+        .post__link {
+            padding-top: 3px;
+            margin: 0;
         }
 
         .attachment {
@@ -787,6 +798,10 @@
         }
 
         &.post--comment {
+            .post__body {
+                padding-left: 8px;
+            }
+
             .attachment {
                 .attachment__body__wrap {
                     .btn-close {
@@ -798,11 +813,6 @@
 
         .auto-responder {
             background: functions.alpha-color(variables.$white, 0.7);
-        }
-
-        .post__img .status-wrapper {
-            cursor: auto;
-            pointer-events: none;
         }
 
         .ThreadFooter .status-wrapper {
@@ -832,7 +842,9 @@
         }
 
         blockquote {
-            padding: 3px 0 3px 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 8px;
 
             &::before {
                 top: 0;
@@ -863,7 +875,7 @@
         }
 
         .post__body {
-            padding: 2px 0 0;
+            padding: 2px 0 0 0;
             background: transparent !important;
             line-height: 1.5;
 
@@ -909,8 +921,8 @@
             &--audio {
                 .post-image__thumbnail {
                     display: flex;
-                    width: auto;
                     overflow: hidden;
+                    width: auto;
 
                     .post-image__icon-background {
                         border-radius: unset;
@@ -919,8 +931,8 @@
 
                 #post-image-end-button {
                     height: 100%;
-                    margin: 0;
                     border-radius: unset;
+                    margin: 0;
 
                     svg {
                         top: unset;
@@ -1043,8 +1055,8 @@
 
     &.post--comment {
         .post__body {
-            padding-left: 7px;
-            border-left: 4px solid rgba(var(--center-channel-color-rgb), 0.2);
+            padding-left: 12px;
+            border-left: 4px solid rgba(var(--button-bg-rgb), 0.24);
         }
 
         &.mention-comment {
@@ -1634,19 +1646,12 @@
         }
 
         &--small-image {
-            position: absolute;
             top: -8px;
-            left: 24px;
-            width: 68px;
+            right:0;
         }
 
-        &--small-image-no-copy-button {
-            left: 32px;
-            width: 38px;
-        }
 
         &:hover button.size-aware-image__copy_link,
-        &:hover a.size-aware-image__download--kdrive,
         &:hover a.size-aware-image__download {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }
@@ -2055,15 +2060,8 @@
 
 // ik: added to fix empty blockquote min-height
 .post-message__text > blockquote {
-    display: flex;
-    flex-direction: column;
+    min-height: 20px;
 
-    &::after {
-        content: '.';
-        display: inline;
-        visibility: hidden;
-        color: transparent;
-    }
 }
 
 .view-history__text {
@@ -2322,6 +2320,19 @@
                 &-text {
                     color: var(--button-bg);
                 }
+            }
+        }
+    }
+
+    &.post--comment {
+        .post__body {
+            border-color: rgba(var(--button-bg-rgb), 0.24);
+        }
+
+        &.other--root {
+            .post-comment {
+                border-color: rgba(var(--center-channel-color-rgb), 0.1);
+                background-color: rgba(var(--center-channel-color-rgb), 0.05);
             }
         }
     }

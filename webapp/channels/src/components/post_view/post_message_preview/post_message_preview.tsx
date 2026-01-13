@@ -21,7 +21,6 @@ import Avatar from 'components/widgets/users/avatar';
 
 import {Constants} from 'utils/constants';
 import * as PostUtils from 'utils/post_utils';
-import * as Utils from 'utils/utils';
 
 import MessageAttachmentList from '../message_attachments/message_attachment_list';
 import PostAttachmentContainer from '../post_attachment_container/post_attachment_container';
@@ -76,7 +75,8 @@ const PostMessagePreview = (props: Props) => {
     const isSystemMessage = PostUtils.isSystemMessage(previewPost);
     const fromWebhook = PostUtils.isFromWebhook(previewPost);
     const fromAutoResponder = PostUtils.fromAutoResponder(previewPost);
-    const profileSrc = Utils.imageURLForUser(user?.id ?? '');
+    const profileSrc = PostUtils.getProfilePictureURL(previewPost, user);
+
     const src = getPostIconURL(profileSrc, fromAutoResponder, fromWebhook);
 
     let avatar = (

@@ -137,6 +137,34 @@ describe('components/BrowseChannels', () => {
         channelsRequestStarted: false,
         canShowArchivedChannels: true,
         shouldHideJoinedChannels: false,
+        usageDeltas: {
+            public_channels: 0,
+            private_channels: 0,
+            storage: 0,
+            guests: 0,
+            pending_guests: 0,
+            members: 0,
+            usageLoaded: false,
+            files: {
+                totalStorage: 0,
+                totalStorageLoaded: false,
+            },
+            messages: {
+                history: 0,
+                historyLoaded: false,
+            },
+            teams: {
+                active: 0,
+                cloudArchived: 0,
+                teamsLoaded: false,
+            },
+            custom_emojis: 0,
+            incoming_webhooks: 0,
+            outgoing_webhooks: 0,
+            sidebar_categories: 0,
+            scheduled_draft_custom_date: 0,
+            reminder_custom_date: 0,
+        },
         myChannelMemberships: {
             'channel-id-3': TestHelper.getChannelMembershipMock({
                 channel_id: 'channel-id-3',

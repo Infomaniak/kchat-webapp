@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const NoThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => (
+const IkNoThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>
         <svg
             width='363'
@@ -152,4 +152,4 @@ const NoThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => (
     </span>
 );
 
-export default NoThreadIllustration;
+export default IkNoThreadIllustration;

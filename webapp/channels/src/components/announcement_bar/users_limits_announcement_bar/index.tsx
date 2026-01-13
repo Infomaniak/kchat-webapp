@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {AlertOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {useCallback} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {AlertOutlineIcon} from '@mattermost/compass-icons/components';
 import type {ClientLicense} from '@mattermost/types/config';
 
 import {getServerLimits} from 'mattermost-redux/selectors/entities/limits';

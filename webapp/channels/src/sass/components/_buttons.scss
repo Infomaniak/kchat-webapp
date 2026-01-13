@@ -227,7 +227,6 @@ button {
         &:disabled:hover,
         &:disabled:active {
             background: rgba(var(--center-channel-color-rgb), 0.08);
-            // color: rgba(var(--center-channel-color-rgb), 0.32) !important;
             opacity: 1;
         }
     }
@@ -386,10 +385,10 @@ button {
 
     // IK button
     &.btn-outline {
-        color: var(--center-channel-text);
-        background: var(--center-channel-bg);
 
         border: 1px solid var(--sidebar-text);
+        background: var(--center-channel-bg);
+        color: var(--center-channel-text);
         &:hover {
             border-color: var(--center-channel-color);
         }

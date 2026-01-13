@@ -186,9 +186,9 @@ body:not(.app__body) {
 .channel-invite__header {
     h2 {
         margin: 0 0 0.8rem;
+        color: var(--center-channel-color);
         font-size: 20px;
         font-weight: 400;
         line-height: 27px;
-        color: var(--center-channel-color);
     }
 }

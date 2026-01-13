@@ -24,6 +24,7 @@ export const DotMenuButton = styled.button<{isActive: boolean}>`
     justify-content: center;
     fill: rgba(var(--center-channel-color-rgb), 0.56);
     cursor: pointer;
+    user-select: none;
 
     color: ${(props) => (props.isActive ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
     background-color: ${(props) => (props.isActive ? 'rgba(var(--button-bg-rgb), 0.08)' : 'transparent')};

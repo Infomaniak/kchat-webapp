@@ -234,7 +234,6 @@ const TopThreadsTable = (props: Props) => {
                                     <Avatars
                                         userIds={thread.participants}
                                         size='xs'
-                                        disableProfileOverlay={true}
                                     />
                                 ) : null}
                             </>

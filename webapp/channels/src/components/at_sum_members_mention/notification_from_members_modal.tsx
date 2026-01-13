@@ -139,7 +139,8 @@ function NotificationFromMembersModal(props: Props) {
                     members={members}
                     searchTerms={''}
                     editing={false}
-                    actions={{openDirectMessage, loadMore}}
+                    openDirectMessage={openDirectMessage}
+                    loadMore={loadMore}
                     hasNextPage={false}
                     isNextPageLoading={false}
                 />

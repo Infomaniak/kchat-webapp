@@ -1,10 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
-import {useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
-
 import {
     DotsHorizontalIcon,
     PencilOutlineIcon,
@@ -13,7 +9,11 @@ import {
     ArrowExpandIcon,
     OpenInNewIcon,
     BookOutlineIcon,
-} from '@mattermost/compass-icons/components';
+} from '@infomaniak/compass-icons/components';
+import React, {useCallback} from 'react';
+import {useIntl} from 'react-intl';
+import {useDispatch} from 'react-redux';
+
 import type {ChannelBookmark, ChannelBookmarkPatch} from '@mattermost/types/channel_bookmarks';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';

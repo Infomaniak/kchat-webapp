@@ -95,21 +95,33 @@ export async function generateCodeChallenge(codeVerifier: string) {
 /**
  * get code_challenge and redirect to IK Login
  */
-export function getChallengeAndRedirectToLogin(infinite = false) {
-    const redirectTo = window.location.origin.endsWith('/') ? window.location.origin : `${window.location.origin}/`;
+export async function getChallengeAndRedirectToLogin(infinite = false) {
+    const redirectTo = new URL('/', window.location.origin).toString();
     const codeVerifier = getCodeVerifier();
-    let codeChallenge = '';
 
-    generateCodeChallenge(codeVerifier).then((challenge) => {
-        codeChallenge = challenge;
+    try {
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-        // TODO: store in redux instead of localstorage
         localStorage.setItem('challenge', JSON.stringify({verifier: codeVerifier, challenge: codeChallenge}));
+        localStorage.setItem('IKRedirectUri', redirectTo);
 
-        window.location.assign(`${IKConstants.LOGIN_URL}authorize?code_challenge=${codeChallenge}${infinite ? '' : '&access_type=offline'}&code_challenge_method=S256&client_id=${IKConstants.CLIENT_ID}&response_type=code&redirect_uri=${redirectTo}`);
-    }).catch(() => {
+        // Construct redirect URL
+        const params = new URLSearchParams();
+        params.set('code_challenge_method', 'S256');
+        params.set('code_challenge', codeChallenge);
+        if (infinite) {
+            params.set('access_type', 'offline');
+        }
+        params.set('client_id', IKConstants.CLIENT_ID);
+        params.set('response_type', 'code');
+        params.set('redirect_uri', redirectTo);
+        const url = `${IKConstants.LOGIN_URL}authorize?${params}`;
+
+        // Redirect
+        window.location.assign(url);
+    } catch (error) {
         console.log('[login/utils > getChallengeAndRedirectToLogin] error redirect');
-    });
+    }
 }
 
 /**
@@ -199,7 +211,7 @@ function isValidTokenV2(token: {token: string; refreshToken?: string; expiresAt?
 }
 
 export async function refreshIKToken(redirectToTeam = false): Promise<string> {
-    const updatedToken: {token: string; refreshToken?: string; expiresAt?: number} = await window.authManager.tokenRequest();
+    const updatedToken = await window.authManager.tokenRequest();
 
     // If desktop doesn't have a valid token/refresh token
     if (!Object.keys(updatedToken).length) {

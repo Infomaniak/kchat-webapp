@@ -285,8 +285,6 @@ const SidebarChannelMenu = ({
         );
     }
 
-    const menuId = `SidebarChannelMenu-MenuList-${channel.id}`;
-
     return (
         <Menu.Container
             menuButton={{
@@ -315,7 +313,6 @@ const SidebarChannelMenu = ({
             <Menu.Separator/>
             <ChannelMoveToSubmenu
                 channel={channel}
-                parentMenuId={menuId}
             />
             {(copyLinkMenuItem || addMembersMenuItem) && <Menu.Separator/>}
             {copyLinkMenuItem}

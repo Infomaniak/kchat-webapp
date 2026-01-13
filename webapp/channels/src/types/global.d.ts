@@ -9,6 +9,6 @@ interface Window {
     authManager: {
         logout: () => Promise<void>;
         resetToken?: () => void;
-        tokenRequest: () => Promise<void>;
+        tokenRequest: () => Promise<{token: string; refreshToken?: string; expiresAt?: number}>;
     };
 }

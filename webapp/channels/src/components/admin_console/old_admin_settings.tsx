@@ -142,8 +142,8 @@ export default abstract class OLDAdminSettings <Props extends BaseProps, State e
         return n;
     };
 
-    private parseIntNonNegative = (str: string, defaultValue?: number) => {
-        const n = parseInt(str, 10);
+    private parseIntNonNegative = (str: string | number, defaultValue?: number) => {
+        const n = parseInt(String(str), 10);
 
         if (isNaN(n) || n < 0) {
             if (defaultValue) {
@@ -155,8 +155,8 @@ export default abstract class OLDAdminSettings <Props extends BaseProps, State e
         return n;
     };
 
-    private parseIntZeroOrMin = (str: string, minimumValue = 1) => {
-        const n = parseInt(str, 10);
+    private parseIntZeroOrMin = (str: string | number, minimumValue = 1) => {
+        const n = parseInt(String(str), 10);
 
         if (isNaN(n) || n < 0) {
             return 0;
@@ -168,8 +168,8 @@ export default abstract class OLDAdminSettings <Props extends BaseProps, State e
         return n;
     };
 
-    protected parseIntNonZero = (str: string, defaultValue?: number, minimumValue = 1) => {
-        const n = parseInt(str, 10);
+    protected parseIntNonZero = (str: string | number, defaultValue?: number, minimumValue = 1) => {
+        const n = parseInt(String(str), 10);
 
         if (isNaN(n) || n < minimumValue) {
             if (defaultValue) {

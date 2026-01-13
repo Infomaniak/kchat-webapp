@@ -32,9 +32,9 @@ $tip-index: 1000;
             align-items: center;
             justify-content: center;
             border: unset;
+            border-radius: 4px;
             margin-left: 1.2rem;
             background: transparent;
-            border-radius: 4px;
             color: rgba(var(--center-channel-color-rgb), 0.56);
             font-weight: 600;
 
@@ -127,9 +127,9 @@ $tip-index: 1000;
     &__cancel-btn {
         display: inline-flex;
         align-items: center;
+        border-radius: 4px;
         margin-right: 4px;
         background: rgba(var(--button-bg-rgb), 0.08);
-        border-radius: 4px;
         color: var(--button-bg);
         text-decoration: none;
 
@@ -163,9 +163,9 @@ $tip-index: 1000;
         height: 12px;
         align-items: center;
         justify-content: center;
+        border-radius: 50%;
         margin-right: 4px;
         background: transparent;
-        border-radius: 50%;
 
         &:last-child {
             margin-right: 0;
@@ -182,8 +182,8 @@ $tip-index: 1000;
         left: 3px;
         width: 6px;
         height: 6px;
-        background: rgba(var(--button-bg-rgb), 0.32);
         border-radius: 6px;
+        background: rgba(var(--button-bg-rgb), 0.32);
 
         &.active {
             background: rgba(var(--button-bg-rgb), 1);
@@ -229,8 +229,8 @@ $tip-index: 1000;
     width: 32rem;
     padding: 1.8rem 2.4rem 2.4rem;
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    background: var(--center-channel-bg);
     border-radius: 4px;
+    background: var(--center-channel-bg);
     filter: drop-shadow(0 12px 32px rgba(variables.$black, 0.12));
 
     .arrow {

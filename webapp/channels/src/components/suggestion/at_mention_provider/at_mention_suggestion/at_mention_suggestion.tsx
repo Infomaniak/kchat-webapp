@@ -5,6 +5,7 @@ import React from 'react';
 import type {ReactNode} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
+import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {isGuest} from 'mattermost-redux/utils/user_utils';
@@ -35,7 +36,7 @@ export interface AtMentionSuggestionProps extends SuggestionProps<Item> {
     status?: string;
 }
 
-export const AtMentionSuggestion = React.forwardRef<HTMLDivElement, AtMentionSuggestionProps>((props, ref) => {
+export const AtMentionSuggestion = React.forwardRef<HTMLLIElement, AtMentionSuggestionProps>((props, ref) => {
     const {item} = props;
     const intl = useIntl();
 

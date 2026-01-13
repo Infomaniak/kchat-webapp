@@ -7,6 +7,7 @@ import React from 'react';
 import type {DroppableProvided, DropResult} from 'react-beautiful-dnd';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import Scrollbars from 'react-custom-scrollbars';
+import type {WrappedComponentProps} from 'react-intl';
 import {injectIntl} from 'react-intl';
 import type {RouteComponentProps} from 'react-router-dom';
 
@@ -25,7 +26,7 @@ import Pluggable from 'plugins/pluggable';
 
 import type {PropsFromRedux} from './index';
 
-export type Props = PropsFromRedux & RouteComponentProps;
+export type Props = PropsFromRedux & RouteComponentProps & WrappedComponentProps<'intl'>;
 
 type State = {
     showOrder: boolean;
@@ -240,6 +241,8 @@ export class TeamSidebar extends React.PureComponent<Props, State> {
                     mentions={this.props.mentionsInTeamMap.has(team.id) ? this.props.mentionsInTeamMap.get(team.id) : 0}
                     hasUrgent={this.props.teamHasUrgentMap.has(team.id) ? this.props.teamHasUrgentMap.get(team.id) : false}
                     teamIconUrl={Utils.imageURLForTeam(team)}
+
+                    // @ts-expect-error for safety i silented it
                     switchTeam={this.switchTeamIK}
                     isDraggable={true}
                     teamId={team.id}

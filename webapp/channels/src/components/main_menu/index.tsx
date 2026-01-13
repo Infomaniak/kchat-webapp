@@ -50,7 +50,7 @@ function mapStateToProps(state: GlobalState) {
     const moreTeamsToJoin = joinableTeams && joinableTeams.length > 0;
     const rhsState = getRhsState(state);
 
-    const ikGroupId = state.entities.teams.teams[currentTeam.id].account_id;
+    const ikGroupId = currentTeam ? state.entities.teams.teams[currentTeam.id]?.account_id : undefined;
 
     return {
         appDownloadLink,

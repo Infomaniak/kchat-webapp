@@ -37,6 +37,7 @@ describe('components/post_view/MessageAttachment', () => {
             doPostActionWithCookie: jest.fn(),
             openModal: jest.fn(),
             fetchMetadataIfPostIsPoll: jest.fn(),
+            saveFileToKDrive: jest.fn(),
         },
         imagesMetadata: {
             image_url: {
@@ -106,7 +107,7 @@ describe('components/post_view/MessageAttachment', () => {
             ...attachment,
             actions: [{id: actionId, name: 'action_name_1', cookie: 'cookie-contents'}] as PostAction[],
         };
-        const props = {...baseProps, actions: {doPostActionWithCookie, openModal, fetchMetadataIfPostIsPoll}, attachment: newAttachment};
+        const props = {...baseProps, actions: {doPostActionWithCookie, openModal, fetchMetadataIfPostIsPoll, saveFileToKDrive: jest.fn()}, attachment: newAttachment};
         const wrapper = shallow<MessageAttachment>(<MessageAttachment {...props}/>);
         expect(wrapper).toMatchSnapshot();
         wrapper.instance().handleAction({

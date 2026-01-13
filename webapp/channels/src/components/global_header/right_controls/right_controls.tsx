@@ -7,6 +7,8 @@ import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
+import type {ProductIdentifier} from '@mattermost/types/products';
+
 import {isCurrentUserGuestUser} from 'mattermost-redux/selectors/entities/users';
 
 import {getCurrentLocale} from 'selectors/i18n';
@@ -31,7 +33,7 @@ import type {GlobalState} from 'types/store';
 import AtMentionsButton from './at_mentions_button/at_mentions_button';
 import ReportingToolsButton from './reporting_tools_button';
 import SavedPostsButton from './saved_posts_button/saved_posts_button';
-import SettingsButton from './settings_button';
+import SettingsButton from './settings_button/index';
 
 // import PlanUpgradeButton from './plan_upgrade_button';
 
@@ -183,14 +185,12 @@ const RightControls = (): JSX.Element => {
             </ButtonWrapper>
             {!isDesktopApp && (
                 <WithTooltip
-                    id='rightControl__tooltip'
                     title={
                         <FormattedMessage
                             id='global_header.ikProduct'
                             defaultMessage='Your products'
                         />
                     }
-                    placement='bottom'
                 >
                     <div style={{position: 'relative'}}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}

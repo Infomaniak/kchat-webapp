@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/MsgTyping should match snapshot, on multiple users recording 1`] = `
+<span
+  className="msg-typing"
+>
+  <MemoizedFormattedMessage
+    defaultMessage="{users} and {last} are recording..."
+    id="msg_recording.areRecording"
+    values={
+      Object {
+        "last": "another.user",
+        "users": "test.user, other.test.user",
+      }
+    }
+  />
+</span>
+`;
+
+exports[`components/MsgTyping should match snapshot, on one user recording 1`] = `
+<span
+  className="msg-typing"
+>
+  <MemoizedFormattedMessage
+    defaultMessage="{user} is recording..."
+    id="msg_recording.isRecording"
+    values={
+      Object {
+        "user": "test.user",
+      }
+    }
+  />
+</span>
+`;

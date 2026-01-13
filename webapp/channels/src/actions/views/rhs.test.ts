@@ -3,9 +3,10 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
-import type {Dispatch} from 'redux';
+import type {Dispatch, AnyAction} from 'redux';
 import {batchActions} from 'redux-batched-actions';
 import type {MockStoreEnhanced} from 'redux-mock-store';
+import type {ThunkDispatch} from 'redux-thunk';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -139,7 +140,7 @@ describe('rhs view actions', () => {
         },
     } as GlobalState;
 
-    let store: MockStoreEnhanced<GlobalState>;
+    let store: MockStoreEnhanced<GlobalState, ThunkDispatch<GlobalState, Record<string, never>, AnyAction>>;
 
     beforeEach(() => {
         store = mockStore(initialState);
@@ -486,11 +487,15 @@ describe('rhs view actions', () => {
 
             const compareStore = mockStore(initialState);
 
-            compareStore.dispatch(performSearch('@mattermost ', '', true));
+            compareStore.dispatch(performSearch('@mattermost ', currentTeamId, true));
             compareStore.dispatch(batchActions([
                 {
                     type: ActionTypes.UPDATE_RHS_SEARCH_TERMS,
                     terms: '@mattermost ',
+                },
+                {
+                    type: ActionTypes.UPDATE_RHS_SEARCH_TEAM,
+                    teamId: currentTeamId,
                 },
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
@@ -763,11 +768,15 @@ describe('rhs view actions', () => {
             store.dispatch(openAtPrevious({isMentionSearch: true}));
             const compareStore = mockStore(initialState);
 
-            compareStore.dispatch(performSearch('@mattermost ', '', true));
+            compareStore.dispatch(performSearch('@mattermost ', currentTeamId, true));
             compareStore.dispatch(batchActions([
                 {
                     type: ActionTypes.UPDATE_RHS_SEARCH_TERMS,
                     terms: '@mattermost ',
+                },
+                {
+                    type: ActionTypes.UPDATE_RHS_SEARCH_TEAM,
+                    teamId: currentTeamId,
                 },
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,

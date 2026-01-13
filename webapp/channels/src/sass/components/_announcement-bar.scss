@@ -52,13 +52,13 @@
         }
 
         .full_storage_announcement_bar__upgrade-offer, .almost_full_storage_announcement_bar__upgrade-offer {
-            background: none;
-            border: none;
             padding: 0;
+            border: none;
             margin: 0;
-            text-decoration: underline;
+            background: none;
             cursor: pointer;
             font: inherit;
+            text-decoration: underline;
         }
     }
 
@@ -76,8 +76,8 @@
             top: 5px;
             right: 0;
             padding: 0 10px;
-            font-family: 'SuisseIntl', sans-serif;
             color: variables.$white;
+            font-family: 'SuisseIntl', sans-serif;
             font-size: 20px;
             font-weight: 600;
             text-decoration: none;
@@ -128,7 +128,7 @@
 
 .announcement-bar-critical {
     background-color: #FFCCC8;
-     color: #333333;
+    color: #333333;
 }
 
 .announcement-bar-success {
@@ -148,9 +148,9 @@
 }
 
 .announcement-bar-infomaniak-advisor {
+    border-bottom: 1px solid #E0E0E0;
     background: linear-gradient(0deg, #F4F6FD, #F4F6FD);
     color: #333333;
-    border-bottom: 1px solid #E0E0E0;
     .announcement-bar__text {
         > span {
             font-weight: 400;
@@ -163,8 +163,8 @@
 }
 
 .announcement-bar.announcement-bar-infomaniak {
-    max-height: variables.$ik-announcement-bar-height;
     min-height: variables.$ik-announcement-bar-height;
+    max-height: variables.$ik-announcement-bar-height;
     background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
 
     .announcement-bar__close {
@@ -179,8 +179,8 @@
 }
 
 .announcement-bar.announcement-bar-infomaniak-mobile {
-    max-height: variables.$ik-mobile-announcement-bar-height;
     min-height: variables.$ik-mobile-announcement-bar-height;
+    max-height: variables.$ik-mobile-announcement-bar-height;
     background: #F2F2F6;
 
     .announcement-bar__text {
@@ -191,19 +191,19 @@
             left: auto;
 
             > a {
+                padding: 0px 8px;
                 color: var(--button-bg) !important;
                 text-decoration: none !important;
-                padding: 0px 8px;
             }
         }
     }
 
     .announcement-bar__close {
-        color: #9F9F9F !important;
         top: auto;
+        right: auto;
         bottom: auto;
         left: 6px;
-        right: auto;
+        color: #9F9F9F !important;
         font-size: 30px;
         font-weight: 400;
     }
@@ -216,9 +216,9 @@
 .version-alert-icon {
     width: 16px;
     height: 16px;
+    margin-top: 2px;
     margin-bottom: 2px;
     margin-left: 8px;
-    margin-top: 2px;
 }
 
 .advisor-icon {

@@ -29,7 +29,7 @@ import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {imageURLForUser} from 'utils/utils';
 
-import type {ActionFunc, ActionFuncAsync, DispatchFunc, GlobalState} from 'types/store';
+import type {ActionFunc, ActionFuncAsync, DispatchFunc, GetStateFunc, GlobalState} from 'types/store';
 
 import {openCallDialingModal} from './kmeet_calls';
 import {closeModal} from './views/modals';
@@ -164,6 +164,9 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             }
             const data = await Client4.startMeet(channelID, version);
             const channel = getChannel(state, channelID);
+            if (!channel) {
+                return;
+            }
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,
@@ -304,9 +307,9 @@ export function callNoLongerExist(endMsg: any) {
 }
 
 export function joinCall(conferenceId: string, meetingUrl: string) {
-    return async (dispatch: DispatchFunc) => {
+    return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         Client4.acceptIncomingMeetCall(conferenceId);
-        const channelID = getCurrentChannelId(state);
+        const channelID = getCurrentChannelId(getState());
 
         if (isDesktopApp()) {
             // si desktop app on rejoins bien sur la fenetre integrée.
@@ -357,7 +360,7 @@ export function getCallingUser(userId: string) {
         clientFunc: Client4.getProfilesByIds,
         onSuccess: [ActionTypes.CALL_CALLING_USER],
         params: [
-            userId,
+            [userId],
         ],
     });
 }

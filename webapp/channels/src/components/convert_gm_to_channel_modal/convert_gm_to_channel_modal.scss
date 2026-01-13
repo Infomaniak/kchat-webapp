@@ -2,10 +2,10 @@
     .convert-gm-to-channel-modal-body {
         display: flex;
         flex-direction: column;
+        font-family: 'SuisseIntl';
         gap: 20px;
         overflow-y: visible;
         transition: height 200ms ease;
-        font-family: 'SuisseIntl';
 
         &.multi-team {
             min-height: 340px;

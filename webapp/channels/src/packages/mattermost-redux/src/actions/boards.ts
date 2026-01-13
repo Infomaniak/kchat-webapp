@@ -4,7 +4,7 @@
 import type {PreferenceType} from '@mattermost/types/preferences';
 
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
-import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync, DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
 import {OnboardingTaskCategory, OnboardingTaskList} from 'components/onboarding_tasks';
 
@@ -27,7 +27,7 @@ export function setNewChannelWithBoardPreference(initializationState: Record<str
     };
 }
 
-export function setAutoShowLinkedBoardPreference(): ActionFunc {
+export function setAutoShowLinkedBoardPreference(): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         const state = getState();
         const currentUserId = getCurrentUserId(state);

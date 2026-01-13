@@ -87,6 +87,7 @@ class TestHelper {
             delete_at: 0,
             roles: 'system_user',
             id: 'user_id',
+            user_id: 0,
             auth_service: '',
             nickname: '',
             position: '',
@@ -95,6 +96,7 @@ class TestHelper {
             update_at: 0,
             is_bot: false,
             props: {},
+            member_ids: [],
             notify_props: {
                 channel: 'false',
                 comments: 'never',
@@ -129,6 +131,7 @@ class TestHelper {
             delete_at: 0,
             roles: '',
             id: '',
+            user_id: 0,
             auth_service: '',
             nickname: '',
             position: '',
@@ -137,6 +140,7 @@ class TestHelper {
             update_at: 0,
             is_bot: false,
             props: {},
+            member_ids: [],
             notify_props: {
                 channel: 'false',
                 comments: 'never',
@@ -567,6 +571,7 @@ class TestHelper {
             post: {
                 channel_id: channelId,
                 user_id: userId,
+                props: {},
             },
             ...override,
         };
@@ -671,6 +676,7 @@ class TestHelper {
             has_syncables: false,
             member_count: 0,
             scheme_admin: false,
+            member_ids: [],
         };
     };
 

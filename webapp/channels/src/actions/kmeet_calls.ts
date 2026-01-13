@@ -35,6 +35,9 @@ export function openCallDialingModal(channelId: string, crossServerEvent?: any) 
 
         if (isDesktopApp()) {
             const conference = getConferenceByChannelId(state, channelId);
+            if (!conference) {
+                return;
+            }
             const currentUser = getCurrentUser(state);
             const caller = getUserById(state, conference.user_id);
 
@@ -102,6 +105,9 @@ export function externalJoinCall(msg: any): ActionFuncAsync {
 export function joinCall(channelId: string): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
+        if (!conference) {
+            return;
+        }
         try {
             const answer = await Client4.acceptIncomingMeetCall(conference.id);
             dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
@@ -176,10 +182,13 @@ export function declineCall(channelId: string): ActionFuncAsync {
     };
 }
 
-export function cancelCall(channelId: string): ActionFuncAsync {
-    return async (dispatch: DispatchFunc, getState) => {
+export function cancelCall(channelId: string) {
+    return async (dispatch: DispatchFunc, getState: () => GlobalState): Promise<{data: boolean} | undefined> => {
         const state = getState();
         const conference = getConferenceByChannelId(state, channelId);
+        if (!conference) {
+            return undefined;
+        }
         const currentUserId = getCurrentUserId(getState());
 
         await Client4.cancelMeet(conference.id);
@@ -223,6 +232,9 @@ export function startDesktopCall(channelId: string, jwt: string, subject: string
         const state = getState();
         const user = getCurrentUser(state);
         const conference = getConferenceByChannelId(state, channelId);
+        if (!conference) {
+            return;
+        }
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
 

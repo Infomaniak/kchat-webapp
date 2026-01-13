@@ -274,7 +274,7 @@ export default class Textbox extends React.PureComponent<Props> {
 
         /*if (this.props.badConnection) {
             textboxClassName += ' bad-connection';
-        }*/
+            }*/
         if (this.props.hasLabels) {
             textboxClassName += ' textarea--has-labels';
         }

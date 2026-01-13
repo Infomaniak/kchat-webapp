@@ -13,6 +13,7 @@ import {
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {trackFeatureEvent} from 'actions/telemetry_actions';
+import {getCurrentLocale} from 'selectors/i18n';
 
 import useTimePostBoxIndicator from 'components/advanced_text_editor/use_post_box_indicator';
 import * as Menu from 'components/menu';
@@ -27,10 +28,13 @@ type Props = {
     allowCustom: boolean;
 }
 
-function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string): string {
+function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string, userLocale: string): string {
     const scheduledTimeUTC = DateTime.fromMillis(userCurrentTimestamp, {zone: 'utc'});
     const teammateScheduledTime = scheduledTimeUTC.setZone(teammateTimezoneString);
-    const formattedTime = teammateScheduledTime.toFormat('h:mm a');
+    const formattedTime = teammateScheduledTime.
+        setLocale(userLocale).
+        toLocaleString(DateTime.TIME_SIMPLE);
+
     return formattedTime;
 }
 
@@ -52,6 +56,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     } = useTimePostBoxIndicator(channelId);
 
     const currentUserId = useSelector(getCurrentUserId);
+    const locale = useSelector(getCurrentLocale);
 
     useEffect(() => {
         // tracking opening of scheduled posts option menu.
@@ -92,7 +97,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
 
     if (isDM && !isBot && !isSelfDM) {
         const teammateTimezoneString = teammateTimezone.useAutomaticTimezone ? teammateTimezone.automaticTimezone : teammateTimezone.manualTimezone || 'UTC';
-        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow8amTime, teammateTimezoneString);
+        const scheduledTimeInTeammateTimezone = getScheduledTimeInTeammateTimezone(tomorrow8amTime, teammateTimezoneString, locale);
         const teammateTimeDisplay = (
             <FormattedMessage
                 id='create_post_button.option.schedule_message.options.teammate_user_hour'

@@ -33,7 +33,11 @@ const PostImage = ({
     post,
     actions,
 }: PostImageProps) => {
-    const {openModal} = actions;
+    const {openModal, saveFileToKDrive} = actions;
+    const handleKDriveSave = useCallback(async (fileId: string, fileName: string) => {
+        saveFileToKDrive(fileId, fileName);
+        return {data: true};
+    }, [saveFileToKDrive]);
     const showModal = useCallback((
         e: KeyboardEvent<HTMLImageElement> | MouseEvent<HTMLElement>,
         link = '',
@@ -72,6 +76,7 @@ const PostImage = ({
                             dimensions={imageMetadata}
                             showLoader={true}
                             onClick={showModal}
+                            handleKDriveSave={handleKDriveSave}
                         />
                     </>
                 )}

@@ -127,9 +127,6 @@ function DialingModal({toneTimeOut}: PropsType) {
                         userIds={getUsersForOverlay().map((usr) => usr.id)}
                         size='xl'
                         totalUsers={users.length}
-                        disableProfileOverlay={true}
-                        disablePopover={true}
-                        disableButton={true}
                     />
                 </div>
                 <div className='content-calling'>

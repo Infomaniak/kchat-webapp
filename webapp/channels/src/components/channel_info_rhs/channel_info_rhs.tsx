@@ -41,7 +41,7 @@ export interface Props {
     channel: Channel;
     channelStats: ChannelStats;
     currentUser: UserProfile;
-    currentTeam: Team;
+    currentTeam: Team | undefined;
     isArchived: boolean;
     isPreview: boolean;
     isFavorite: boolean;
@@ -84,7 +84,7 @@ const ChannelInfoRhs = ({
     actions,
 }: Props) => {
     const currentUserId = currentUser.id;
-    const channelURL = getSiteURL() + '/' + currentTeam.name + '/channels/' + channel.name;
+    const channelURL = getSiteURL() + '/' + currentTeam?.name + '/channels/' + channel?.name;
 
     const toggleFavorite = () => {
         if (isFavorite) {

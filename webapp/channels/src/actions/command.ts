@@ -107,7 +107,7 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
                 } else {
                     dispatch(leaveChannel(channel.id));
                 }
-                return {data: true};
+                return {data: {frontendHandled: true}};
             }
 
             if (channel.type === Constants.PRIVATE_CHANNEL) {

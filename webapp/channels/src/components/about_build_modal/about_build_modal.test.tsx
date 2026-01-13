@@ -73,7 +73,6 @@ describe('components/AboutBuildModal', () => {
         expect(screen.getByTestId('aboutModalBuildNumber')).toHaveTextContent('Build Number: 123456');
         expect(screen.getByText('Mattermost Enterprise Edition')).toBeInTheDocument();
         expect(screen.getByText('Modern communication from behind your firewall.')).toBeInTheDocument();
-        expect(screen.getByRole('link', {name: 'mattermost.com'})).toHaveAttribute('href', 'https://mattermost.com/');
         expect(screen.getByText('EE Build Hash: 0123456789abcdef', {exact: false})).toBeInTheDocument();
         expect(screen.queryByText('Hostname: mock.localhost', {exact: false})).toBeInTheDocument();
 

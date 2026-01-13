@@ -19,7 +19,6 @@ import {
     RHSStates,
 } from 'utils/constants';
 import {isToday} from 'utils/datetime';
-import {isEmptyObject} from 'utils/utils';
 
 import ChannelHeaderPlug from 'plugins/channel_header_plug';
 
@@ -125,13 +124,14 @@ class ChannelHeader extends React.PureComponent<Props> {
             rhsState,
             hasGuests,
             hideGuestTags,
+            canPost,
         } = this.props;
         if (!channel) {
             return null;
         }
 
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
-        let showMeetBtn = !isEmptyObject(channelMember);
+        let showMeetBtn = canPost;
 
         let hasGuestsText: ReactNode = '';
         if (hasGuests) {

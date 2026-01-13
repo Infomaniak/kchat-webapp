@@ -275,6 +275,7 @@ export class TestHelper {
             member_count: 0,
             scheme_admin: false,
             allow_reference: true,
+            member_ids: [],
         };
         return Object.assign({}, defaultGroup, override);
     }

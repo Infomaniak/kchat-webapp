@@ -22,7 +22,7 @@ interface Props {
 interface State {
     hidden: boolean;
     connectedID?: string;
-    intervalID?: NodeJS.Timer;
+    intervalID?: NodeJS.Timeout;
 }
 
 export default class ChannelCallToast extends React.PureComponent<Props, State> {
@@ -104,7 +104,6 @@ export default class ChannelCallToast extends React.PureComponent<Props, State> 
                     <ConnectedProfiles
                         profiles={this.props.profiles}
                         pictures={this.props.pictures}
-                        border={false}
                         maxShowedProfiles={2}
                     />
                 </div>

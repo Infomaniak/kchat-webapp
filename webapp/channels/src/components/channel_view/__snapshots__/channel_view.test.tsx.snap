@@ -20,6 +20,7 @@ exports[`components/channel_view Should match snapshot if channel is archived 1`
     isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
+    isMember={true}
     location={Object {}}
     match={
       Object {
@@ -86,6 +87,7 @@ exports[`components/channel_view Should match snapshot if channel is deactivated
     isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
+    isMember={true}
     location={Object {}}
     match={
       Object {
@@ -151,6 +153,7 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
     isChannelBookmarksEnabled={false}
     isCloud={false}
     isFirstAdmin={false}
+    isMember={true}
     location={Object {}}
     match={
       Object {
@@ -165,8 +168,12 @@ exports[`components/channel_view Should match snapshot with base props 1`] = `
   <DeferredRenderWrapper
     channelId="channelId"
   />
-  <BannerJoinChannel
-    onButtonClick={[Function]}
-  />
+  <div
+    className="post-create__container AdvancedTextEditor__ctr"
+    data-testid="post-create"
+    id="post-create"
+  >
+    <Memo(AdvancedCreatePost) />
+  </div>
 </div>
 `;

@@ -25,6 +25,7 @@ import {
 } from 'components/file_upload_overlay/file_upload_overlay';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import * as Menu from 'components/menu';
+import type {TextboxElement} from 'components/textbox';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants from 'utils/constants';
@@ -34,6 +35,7 @@ import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {hasPlainText, createFileFromClipboardDataItem} from 'utils/paste';
 import {
     isIosChrome,
+    isMobile,
     isMobileApp,
 } from 'utils/user_agent';
 import {
@@ -644,9 +646,28 @@ export class FileUpload extends PureComponent<Props, State> {
     render() {
         const {formatMessage} = this.props.intl;
         let multiple = true;
+        let deviceMessage;
+
         if (isMobileApp()) {
             // iOS WebViews don't upload videos properly in multiple mode
             multiple = false;
+        }
+
+        // Ik change : change message for mobile app
+        if (isMobile()) {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourmobiledevice'
+                    defaultMessage='Your mobile device'
+                />
+            );
+        } else {
+            deviceMessage = (
+                <FormattedMessage
+                    id='yourcomputer'
+                    defaultMessage='Your computer'
+                />
+            );
         }
 
         let accept = '';
@@ -780,12 +801,7 @@ export class FileUpload extends PureComponent<Props, State> {
 
                     >
                         <Menu.Item
-                            labels={
-                                <FormattedMessage
-                                    id='yourcomputer'
-                                    defaultMessage='Your computer'
-                                />
-                            }
+                            labels={deviceMessage}
                             leadingElement={
                                 <LaptopIcon size={16}/>
                             }

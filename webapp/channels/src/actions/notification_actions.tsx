@@ -236,6 +236,8 @@ const getNotificationBody = (state: GlobalState, post: Post, msgProps: NewPostMe
     if (strippedMarkdownNotifyText.length === 0) {
         if (msgProps.image) {
             body += Utils.localizeMessage({id: 'channel_loader.uploadedImage', defaultMessage: ' uploaded an image'});
+        } else if (post.type === 'voice') {
+            body += Utils.localizeMessage({id: 'channel_loader.postVocal', defaultMessage: ' sent a voice message'});
         } else if (msgProps.otherFile) {
             body += Utils.localizeMessage({id: 'channel_loader.uploadedFile', defaultMessage: ' uploaded a file'});
         } else if (image) {

@@ -238,7 +238,7 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
     const getDefaultResults = () => {
         let options: OptionsOrGroups<ChannelOption, GroupBase<ChannelOption>> = [];
 
-        const handleDefaultResults = (res: ProviderResult) => {
+        const handleDefaultResults = (res: ProviderResult<any>) => {
             options = [
                 {
                     label: formatMessage({id: 'suggestion.mention.recent.channels', defaultMessage: 'Recent'}),
@@ -269,7 +269,8 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
              */
             const handleResults = async (res: ProviderResult) => {
                 callCount++;
-                await res.items.filter((item) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).forEach((item) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                await res.items.filter((item: any) => item?.channel && isValidChannelType(item.channel) && !item.deactivated).forEach((item: any) => {
                     const {channel} = item;
 
                     if (options.findIndex((option) => option.value === channel.id) === -1) {

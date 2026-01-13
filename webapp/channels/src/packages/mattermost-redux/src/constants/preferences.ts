@@ -146,6 +146,17 @@ const Preferences = {
             switchServerIconColor: '#FAFAFA',
             switchServerHoverBackground: '#3E435B',
             guestBannerBackground: '#F4F6FD',
+
+            // Ik change for integration page colors
+            integrationHeaderColor: '#ffffff',
+            integrationHeaderBorder: 'rgba(0, 0, 0, 0.15)',
+            backstageBody: 'rgb(245, 245, 245)',
+            backstageText: '#3f4350',
+            integrationOptionBackground: '#ffffff',
+            boxShadow: '0 1px 16px rgba(0, 0, 0, 0.1)',
+            backgroundInput: '#ffffff',
+            backstageBackground: '#ffffff',
+            disableForm: '#f9f9f9',
         },
         indigo: {
             type: 'Indigo',
@@ -260,6 +271,17 @@ const Preferences = {
             switchServerIconColor: '#FAFAFA',
             switchServerHoverBackground: '#3E435B',
             guestBannerBackground: '#1f2328',
+
+            // Ik change for integration page colors
+            integrationHeaderColor: '#1A1D21',
+            integrationHeaderBorder: 'rgba(255, 255, 255, 0.15)',
+            backstageBody: '#1A1D21',
+            backstageText: '#dddfe4',
+            integrationOptionBackground: 'rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 4px 16px rgba(255, 255, 255, 0.1)',
+            backgroundInput: 'rgba(var(--sidebar-text-rgb), 0.15)',
+            backstageBackground: '#1A1D21',
+            disableForm: '#2A2E33',
         },
         quartz: {
             type: 'Quartz',

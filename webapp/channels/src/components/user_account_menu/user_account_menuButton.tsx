@@ -1,11 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {CheckCircleIcon, ClockIcon, MinusCircleIcon, RadioboxBlankIcon} from '@infomaniak/compass-icons/components';
 import React, {useMemo} from 'react';
 import type {MouseEvent, KeyboardEvent} from 'react';
 import {defineMessages, useIntl} from 'react-intl';
-
-import {CheckCircleIcon, ClockIcon, MinusCircleIcon, RadioboxBlankIcon} from '@mattermost/compass-icons/components';
 
 import CustomStatusEmoji from 'components/custom_status/custom_status_emoji';
 import Avatar from 'components/widgets/users/avatar/avatar';

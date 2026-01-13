@@ -41,7 +41,7 @@ import {ActionTypes, RHSStates, Constants} from 'utils/constants';
 import {Mark, Measure, measureAndReport} from 'utils/performance_telemetry';
 import {getBrowserUtcOffset, getUtcOffsetForTimeZone} from 'utils/timezone';
 
-import type {ActionFunc, ActionFuncAsync, ThunkActionFunc} from 'types/store';
+import type {ActionFunc, ActionFuncAsync, GlobalState, ThunkActionFunc} from 'types/store';
 import type {RhsState} from 'types/store/rhs';
 
 function selectPostWithPreviousState(post: Post, previousRhsState?: RhsState): ActionFunc<boolean> {
@@ -471,7 +471,9 @@ export function showChannelFiles(channelId: string): ActionFuncAsync<boolean> {
 
 export function showMentions(): ActionFunc<boolean> {
     return (dispatch, getState) => {
-        const termKeys = getCurrentUserMentionKeys(getState()).filter(({key}) => {
+        const state = getState();
+        const teamId = getCurrentTeamId(state);
+        const termKeys = getCurrentUserMentionKeys(state).filter(({key}) => {
             return key !== '@channel' && key !== '@all' && key !== '@here';
         });
 
@@ -479,11 +481,15 @@ export function showMentions(): ActionFunc<boolean> {
 
         trackEvent('api', 'api_posts_search_mention');
 
-        dispatch(performSearch(terms, '', true));
+        dispatch(performSearch(terms, teamId, true));
         dispatch(batchActions([
             {
                 type: ActionTypes.UPDATE_RHS_SEARCH_TERMS,
                 terms,
+            },
+            {
+                type: ActionTypes.UPDATE_RHS_SEARCH_TEAM,
+                teamId,
             },
             {
                 type: ActionTypes.UPDATE_RHS_STATE,

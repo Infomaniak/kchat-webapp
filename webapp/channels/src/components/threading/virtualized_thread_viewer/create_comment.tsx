@@ -1,11 +1,11 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {ArchiveOutlineIcon} from '@infomaniak/compass-icons/components';
 import React, {memo, forwardRef, useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import {ArchiveOutlineIcon} from '@mattermost/compass-icons/components';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {makeGetChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -23,8 +23,6 @@ type Props = {
     threadId: string;
     isThreadView?: boolean;
     placeholder?: string;
-    isMember: boolean;
-    channelId: string;
 };
 
 const CreateComment = forwardRef<HTMLDivElement, Props>(({

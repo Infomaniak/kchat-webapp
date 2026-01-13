@@ -12,7 +12,6 @@ import {Permissions} from 'mattermost-redux/constants';
 
 import AtMention from 'components/at_mention';
 import ChannelNotificationsModal from 'components/channel_notifications_modal';
-import ChannelIntroTownSquareSvg from 'components/common/svg_images_components/channel_intro_town_square_svg';
 import EmptyStateThemeableSvg from 'components/common/svg_images_components/empty_state_themeable_svg';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal';
 import ChannelPermissionGate from 'components/permissions_gates/channel_permission_gate';
@@ -400,7 +399,7 @@ function createDefaultIntroMessage(
             id='channelIntro'
             className={'channel-intro ' + centeredIntro}
         >
-            <ChannelIntroTownSquareSvg/>
+            <EmptyStateThemeableSvg/>
             <h2 className='channel-intro__title'>
                 {channel.display_name}
             </h2>

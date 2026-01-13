@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const ReadThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => (
+const IkReadThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) => (
     <span {...props}>
         <svg
             width='157'
@@ -44,4 +44,4 @@ const ReadThreadIllustration = (props: React.HTMLAttributes<HTMLSpanElement>) =>
     </span>
 );
 
-export default ReadThreadIllustration;
+export default IkReadThreadIllustration;

@@ -2,8 +2,8 @@
 // See LICENSE.txt for license information.
 
 import {mount} from 'enzyme';
-import type {ComponentProps} from 'react';
 import React from 'react';
+import type {ComponentProps} from 'react';
 
 import type {UserThread} from '@mattermost/types/threads';
 
@@ -284,5 +284,7 @@ describe('components/threading/channel_threads/thread_footer', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.exists(FollowButton)).toBe(true);
+        expect(wrapper.find(FollowButton).props()).toHaveProperty('isFollowing', true);
     });
 });

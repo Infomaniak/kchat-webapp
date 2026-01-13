@@ -249,7 +249,7 @@ exports[`components/post_edit_history should match snapshot 1`] = `
                   <time
                     datetime="1970-01-01T00:00:00.000"
                   >
-                    January 01, 1970 at 12:00 AM
+                    01 January 1970 at 12:00 am
                   </time>
                 </span>
                 <div
@@ -342,7 +342,7 @@ exports[`components/post_edit_history should match snapshot 1`] = `
                   <time
                     datetime="1970-01-01T00:00:00.000"
                   >
-                    January 01, 1970 at 12:00 AM
+                    01 January 1970 at 12:00 am
                   </time>
                 </span>
               </div>
@@ -385,7 +385,7 @@ exports[`components/post_edit_history should match snapshot 1`] = `
                   <time
                     datetime="1970-01-01T00:00:00.000"
                   >
-                    January 01, 1970 at 12:00 AM
+                    01 January 1970 at 12:00 am
                   </time>
                 </span>
               </div>

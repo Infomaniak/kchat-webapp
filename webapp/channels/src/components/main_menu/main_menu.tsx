@@ -55,7 +55,6 @@ export type Props = {
     // experimentalPrimaryTeam?: string;
     // helpLink?: string;
     // reportAProblemLink?: string;
-    pluginMenuItems?: PluginComponent[];
     moreTeamsToJoin: boolean;
     pluginMenuItems?: MainMenuAction[];
     isMentionSearch?: boolean;

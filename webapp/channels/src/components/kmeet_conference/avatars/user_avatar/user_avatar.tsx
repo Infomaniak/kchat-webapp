@@ -9,7 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
-import ProfilePopover from 'components/profile_popover';
+import ProfilePopover from 'components/profile_popover/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 

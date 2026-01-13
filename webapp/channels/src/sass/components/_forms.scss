@@ -209,7 +209,7 @@
 .form-control[readonly],
 fieldset[disabled] .form-control,
 .backstage-form .form-control[disabled] {
-    background-color: #f9f9f9;
+    background-color: var(--ik-disable-form);
 }
 
 input[type="file"]:focus,

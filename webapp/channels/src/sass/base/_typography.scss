@@ -30,51 +30,51 @@ a {
 /* Ik change : SuisseIntl weight 500 is declared as font-weight: 600 
    to visually align with Metropolis design */
 @font-face {
+    font-display: swap;
     font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.svg#suisse-intl-500-normal") format("svg");
+    font-style: normal;
     font-weight: 600;
-    font-style: normal;
-    font-display: swap
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/normal/suisse-intl-500-normal.svg#suisse-intl-500-normal") format("svg")
 }
 
 @font-face {
+    font-display: swap;
     font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.svg#suisse-intl-500-italic") format("svg");
+    font-style: italic;
     font-weight: 600;
-    font-style: italic;
-    font-display: swap
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/500/italic/suisse-intl-500-italic.svg#suisse-intl-500-italic") format("svg")
 }
 
 @font-face {
+    font-display: swap;
     font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.svg#suisse-intl-400-normal") format("svg");
-    font-weight: 400;
     font-style: normal;
-    font-display: swap
-}
-
-@font-face {
-    font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.svg#suisse-intl-400-italic") format("svg");
     font-weight: 400;
-    font-style: italic;
-    font-display: swap
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/normal/suisse-intl-400-normal.svg#suisse-intl-400-normal") format("svg")
 }
 
 @font-face {
+    font-display: swap;
     font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.svg#suisse-intl-300-normal") format("svg");
-    font-weight: 300;
+    font-style: italic;
+    font-weight: 400;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/400/italic/suisse-intl-400-italic.svg#suisse-intl-400-italic") format("svg")
+}
+
+@font-face {
+    font-display: swap;
+    font-family: "SuisseIntl";
     font-style: normal;
-    font-display: swap
+    font-weight: 300;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/normal/suisse-intl-300-normal.svg#suisse-intl-300-normal") format("svg")
 }
 
 @font-face {
+    font-display: swap;
     font-family: "SuisseIntl";
-    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.svg#suisse-intl-300-italic") format("svg");
-    font-weight: 300;
     font-style: italic;
-    font-display: swap
+    font-weight: 300;
+    src: url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff2") format("woff2"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.woff") format("woff"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.ttf") format("truetype"), url("https://fonts.storage.infomaniak.com/current/suisse-intl/300/italic/suisse-intl-300-italic.svg#suisse-intl-300-italic") format("svg")
 }
 
 

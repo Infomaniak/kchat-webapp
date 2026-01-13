@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {NavigateMessage} from '@infomaniak/ksuite-bridge';
-import {KSuiteBridge, NavigateMessageKey} from '@infomaniak/ksuite-bridge';
+import type {AppName, NavigateMessage} from '@infomaniak/ksuite-bridge';
+import {KSuiteBridge, NavigateMessageKey, OpenAppMessageKey} from '@infomaniak/ksuite-bridge';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import deepEqual from 'fast-deep-equal';
@@ -42,6 +42,7 @@ import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
+import {extractKSuiteAppName} from 'utils/url-ksuite-app';
 import {isInIframe} from 'utils/url-ksuite-redirect';
 import {getDesktopVersion, isAndroidWeb, isChromebook, isDesktopApp, isIosWeb} from 'utils/user_agent';
 import {applyTheme, injectWebcomponentInit, isTextDroppableEvent} from 'utils/utils';
@@ -218,6 +219,7 @@ export default class Root extends React.PureComponent<Props, State> {
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
         document.removeEventListener('drop', this.handleDropEvent);
         document.removeEventListener('dragover', this.handleDragOverEvent);
+        document.removeEventListener('click', this.ksuiteLinkHandler);
     }
 
     onConfigLoaded = () => {
@@ -386,6 +388,7 @@ export default class Root extends React.PureComponent<Props, State> {
         const loginCode = this.IKLoginCode;
         console.log('[component/root] try get token'); // eslint-disable-line no-console
         try { // Get new token
+            Client4.setIncludeCookies(false);
             const response: {
                 expires_in?: number;
                 access_token: string;
@@ -397,6 +400,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 IKConstants.LOGIN_URL!,
                 IKConstants.CLIENT_ID,
             );
+            Client4.setIncludeCookies(true);
 
             // Store in localstorage
             storeTokenResponse(response);
@@ -465,6 +469,43 @@ export default class Root extends React.PureComponent<Props, State> {
         ksuiteBridge?.sendMessage({type: NavigateMessageKey, path: location.pathname});
     };
 
+    ksuiteLinkHandler: EventListener = (e) => {
+        const {ksuiteBridge} = this.props;
+
+        if (!ksuiteBridge.isConnected) {
+            return;
+        }
+
+        const target = e.target;
+        if (!(target instanceof HTMLAnchorElement)) {
+            return;
+        }
+
+        if (target.target !== '_blank') {
+            return;
+        }
+        if (!target.href) {
+            return;
+        }
+
+        const appName = extractKSuiteAppName(target.href);
+        if (!appName) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const {origin, pathname, search} = new URL(target.href);
+
+        ksuiteBridge.sendMessage({
+            type: OpenAppMessageKey,
+            name: appName as AppName,
+            path: pathname.concat(search),
+            origin,
+        });
+    };
+
     runMounted = () => {
         const token = localStorage.getItem('IKToken');
 
@@ -484,8 +525,10 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                if (this.embeddedInIFrame) {
-                    window.open(window.location.href, '_top');
+                const searchParams = new URLSearchParams(window.location.search);
+                localStorage.setItem('IKRedirectUri', searchParams.get('redirect_to') || `${window.location.pathname}${window.location.search}`);
+                if (this.embeddedInIFrame && window.top) {
+                    window.top.location.href = window.location.href;
                 } else {
                     window.location.href = data.uri;
                 }
@@ -528,6 +571,10 @@ export default class Root extends React.PureComponent<Props, State> {
 
         if (spaceId) {
             storeBridgeParam('spaceId', spaceId)(store.dispatch);
+        }
+
+        if (this.embeddedInIFrame) {
+            document.addEventListener('click', this.ksuiteLinkHandler);
         }
 
         injectWebcomponentInit();
