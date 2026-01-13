@@ -257,7 +257,6 @@ export default class WebSocketClient {
             }
 
             const backoffDelay = Math.min(1000 * Math.pow(2, this.errorCount), 30000);
-            console.log('🚀 ~ WebSocketClient ~ initialize ~ backoffDelay:', backoffDelay);
 
             this.reconnectTimeout = setTimeout(() => {
                 this.reconnectTimeout = null;
@@ -311,25 +310,24 @@ export default class WebSocketClient {
         const SUBSCRIPTION_DELAY_BASE = 100;
         const SUBSCRIPTION_DELAY_RANDOM = 300;
 
+        const randomDelay = () => SUBSCRIPTION_DELAY_BASE + Math.random() * SUBSCRIPTION_DELAY_RANDOM;
+
         console.log(`${debugId} Using normal delays (base: ${SUBSCRIPTION_DELAY_BASE}ms, random: ${SUBSCRIPTION_DELAY_RANDOM}ms)`);
 
         this.subscribeToTeamChannel(this._teamId as string);
 
-        const delay1 = SUBSCRIPTION_DELAY_BASE + (Math.random() * SUBSCRIPTION_DELAY_RANDOM);
         setTimeout(() => {
             this.subscribeToUserChannel(this._userId || this._currentUserId);
-        }, delay1);
+        }, randomDelay());
 
-        const delay2 = SUBSCRIPTION_DELAY_BASE + (Math.random() * SUBSCRIPTION_DELAY_RANDOM);
         setTimeout(() => {
             this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
-        }, delay2);
+        }, randomDelay());
 
         if (this.otherTeams && this.otherTeams.length > 0) {
-            const delay3 = SUBSCRIPTION_DELAY_BASE + (Math.random() * SUBSCRIPTION_DELAY_RANDOM);
             setTimeout(() => {
                 this.subscribeToOtherTeams(this.otherTeams, this._teamId);
-            }, delay3);
+            }, randomDelay());
         }
 
         const presenceChannel = this._presenceChannelId || this.currentPresence;
@@ -383,24 +381,22 @@ export default class WebSocketClient {
             console.log(`${debugId} Successfully subscribed to private-team.${teamId}`);
 
             const wasReconnecting = this.reconnecting;
+            const connectionType = this.reconnecting ? 'reconnect' : 'firstConnect';
+            const debugId2 = `[WS ${connectionType}-${Date.now()}]`;
+            const socketId = this.conn?.connection.socket_id;
 
             if (this.reconnecting) {
-                const debugId2 = `[WS reconnect-${Date.now()}]`;
-                this.reconnectCallback?.(this.conn?.connection.socket_id);
-                this.reconnectListeners.forEach((listener) => {
-                    const funcName = listener.name || '<anonymous>';
-                    console.debug(`${debugId2} Calling reconnectListener (${funcName})`);
-                    listener(this.conn?.connection.socket_id);
-                });
+                this.reconnectCallback?.(socketId);
             } else {
-                const debugId2 = `[WS firstConnect-${Date.now()}]`;
-                this.firstConnectCallback?.(this.conn?.connection.socket_id);
-                this.firstConnectListeners.forEach((listener) => {
-                    const funcName = listener.name || '<anonymous>';
-                    console.debug(`${debugId2} Calling firstConnectListener (${funcName})`);
-                    listener(this.conn?.connection.socket_id);
-                });
+                this.firstConnectCallback?.(socketId);
             }
+
+            const listeners = this.reconnecting ? this.reconnectListeners : this.firstConnectListeners;
+            listeners.forEach((listener) => {
+                const funcName = listener.name || '<anonymous>';
+                console.debug(`${debugId2} Calling ${connectionType}Listener (${funcName})`);
+                listener(socketId);
+            });
 
             if (wasReconnecting) {
                 this.reconnecting = false;
