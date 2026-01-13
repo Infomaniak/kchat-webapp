@@ -184,6 +184,7 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                               "mailto",
                               "tel",
                               "mattermost",
+                              "craftdocs",
                             ]
                           }
                           channelNamesMap={Object {}}
@@ -419,6 +420,7 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                               "mailto",
                               "tel",
                               "mattermost",
+                              "craftdocs",
                             ]
                           }
                           channelNamesMap={Object {}}
@@ -717,6 +719,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                               "mailto",
                               "tel",
                               "mattermost",
+                              "craftdocs",
                             ]
                           }
                           channelNamesMap={Object {}}
@@ -995,6 +998,7 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                               "mailto",
                               "tel",
                               "mattermost",
+                              "craftdocs",
                             ]
                           }
                           channelNamesMap={Object {}}
