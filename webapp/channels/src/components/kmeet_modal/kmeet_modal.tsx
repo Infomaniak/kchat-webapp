@@ -72,7 +72,7 @@ const KmeetModal: FC<Props> = ({channel, conference, caller, users, user, crossS
             bridgeRecreate(otherServer.url);
             switchTeam(otherServer.url, otherServer);
             setLastKSuiteSeenCookie(otherServer.id);
-            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${crossServerEvent.data.channel_id}?ksuite-mode`;
+            const urlWithConferenceId = `${otherServer.url}/${otherServer.name}/channels/${Constants.DEFAULT_CHANNEL}/?cid=${crossServerEvent.data.channel_id}`;
             window.location.href = urlWithConferenceId;
         }
     }, [conference, otherServer, crossServerEvent, dispatch]);
