@@ -41,7 +41,7 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
     );
 
     const button = (
-        <a onClick={handleDownload}>
+        <a >
             <FormattedMessage
                 id='get_app_annoucement_bar_mobile.download'
                 defaultMessage='Download'
@@ -50,13 +50,15 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
     );
 
     return (
-        <AnnouncementBar
-            type={AnnouncementBarTypes.INFOMANIAK_MOBILE}
-            showCloseButton={true}
-            handleClose={handleClose}
-            icon={icon}
-            message={button}
-        />
+        <div onClick={handleDownload}>
+            <AnnouncementBar
+                type={AnnouncementBarTypes.INFOMANIAK_MOBILE}
+                showCloseButton={true}
+                handleClose={handleClose}
+                icon={icon}
+                message={button}
+            />
+        </div>
     );
 };
 
