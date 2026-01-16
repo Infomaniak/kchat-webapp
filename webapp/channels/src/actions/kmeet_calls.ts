@@ -36,7 +36,7 @@ export function openCallDialingModal(channelId: string, crossServerEvent?: any) 
         if (isDesktopApp()) {
             const conference = getConferenceByChannelId(state, channelId);
             if (!conference) {
-                return;
+                return {data: false};
             }
             const currentUser = getCurrentUser(state);
             const caller = getUserById(state, conference.user_id);
@@ -106,17 +106,18 @@ export function joinCall(channelId: string): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState) => {
         const conference = getConferenceByChannelId(getState(), channelId);
         if (!conference) {
-            return;
+            return {data: false};
         }
         try {
             const answer = await Client4.acceptIncomingMeetCall(conference.id);
             dispatch(startCall(channelId, answer.jwt, conference.url, answer.name));
+            return {data: false};
         } catch (error) {
             // eslint-disable-next-line no-console
             console.warn('cant join, call no longer exists', error);
             dispatch(deleteConference(conference.id, channelId));
+            return {data: false};
         }
-        return {data: true};
     };
 }
 
@@ -233,7 +234,7 @@ export function startDesktopCall(channelId: string, jwt: string, subject: string
         const user = getCurrentUser(state);
         const conference = getConferenceByChannelId(state, channelId);
         if (!conference) {
-            return;
+            return {data: false};
         }
         const avatar = Client4.getProfilePictureUrl(user.id, user.last_picture_update);
         const locale = getCurrentLocale(state);
