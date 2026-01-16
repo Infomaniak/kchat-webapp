@@ -16,13 +16,13 @@ exports[`components/threading/channel_threads/thread_footer should match snapsho
       onClick={[Function]}
     >
       <Button
-        className="separated FollowButton"
+        className="separated ThreadSubscribeBtn"
         disabled={false}
         isActive={true}
         onClick={[Function]}
       >
         <button
-          className="Button Button___transparent is-active separated FollowButton"
+          className="Button Button___transparent is-active separated ThreadSubscribeBtn"
           disabled={false}
           onClick={[Function]}
         >
@@ -370,13 +370,13 @@ exports[`components/threading/channel_threads/thread_footer should report total 
       onClick={[Function]}
     >
       <Button
-        className="separated FollowButton"
+        className="separated ThreadSubscribeBtn"
         disabled={false}
         isActive={true}
         onClick={[Function]}
       >
         <button
-          className="Button Button___transparent is-active separated FollowButton"
+          className="Button Button___transparent is-active separated ThreadSubscribeBtn"
           disabled={false}
           onClick={[Function]}
         >
@@ -880,13 +880,13 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
       onClick={[Function]}
     >
       <Button
-        className="separated FollowButton"
+        className="separated ThreadSubscribeBtn"
         disabled={false}
         isActive={true}
         onClick={[Function]}
       >
         <button
-          className="Button Button___transparent is-active separated FollowButton"
+          className="Button Button___transparent is-active separated ThreadSubscribeBtn"
           disabled={false}
           onClick={[Function]}
         >
