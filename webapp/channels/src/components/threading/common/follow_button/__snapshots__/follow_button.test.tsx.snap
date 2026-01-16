@@ -6,13 +6,13 @@ exports[`components/threading/common/follow_button should say follow 1`] = `
   onClick={[MockFunction]}
 >
   <Button
-    className="FollowButton"
+    className="ThreadSubscribeBtn"
     disabled={false}
     isActive={false}
     onClick={[MockFunction]}
   >
     <button
-      className="Button Button___transparent FollowButton"
+      className="Button Button___transparent ThreadSubscribeBtn"
       disabled={false}
       onClick={[MockFunction]}
     >
@@ -31,12 +31,12 @@ exports[`components/threading/common/follow_button should say following 1`] = `
   isFollowing={true}
 >
   <Button
-    className="FollowButton"
+    className="ThreadSubscribeBtn"
     disabled={false}
     isActive={true}
   >
     <button
-      className="Button Button___transparent is-active FollowButton"
+      className="Button Button___transparent is-active ThreadSubscribeBtn"
       disabled={false}
     >
       <span
