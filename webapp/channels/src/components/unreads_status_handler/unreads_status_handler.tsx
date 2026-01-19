@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {KSuiteBridge} from '@infomaniak/ksuite-bridge';
+import {UpdateBadgeMessageKey} from '@infomaniak/ksuite-bridge';
 import React from 'react';
 import {injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
@@ -48,6 +50,7 @@ type Props = {
     inGlobalThreads: boolean;
     inDrafts: boolean;
     inScheduledPosts: boolean;
+    kSuiteBridge: KSuiteBridge;
 };
 
 export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
@@ -81,6 +84,13 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
         const {isUnread, unreadMentionCount} = basicUnreadMeta(unreadStatus);
 
         DesktopApp.updateUnreadsAndMentions(isUnread, unreadMentionCount);
+
+        const bridge = this.props.kSuiteBridge;
+        if (!bridge) {
+            return;
+        }
+        const value = unreadMentionCount > 0 ? unreadMentionCount : (Boolean(isUnread));
+        bridge?.sendMessage({type: UpdateBadgeMessageKey, value});
     };
 
     updateTitle = () => {

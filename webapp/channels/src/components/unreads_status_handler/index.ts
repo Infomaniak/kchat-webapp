@@ -11,6 +11,7 @@ import type {GlobalState} from '@mattermost/types/store';
 
 import {getCurrentChannel, getUnreadStatus} from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getKSuiteBridge} from 'mattermost-redux/selectors/entities/ksuiteBridge';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import UnreadsStatusHandler from './unreads_status_handler';
@@ -22,6 +23,7 @@ function mapStateToProps(state: GlobalState, {location: {pathname}}: Props) {
     const currentChannel = getCurrentChannel(state);
     const currentTeammate = (currentChannel && currentChannel.teammate_id) ? currentChannel : null;
     const currentTeam = getCurrentTeam(state);
+    const kSuiteBridge = getKSuiteBridge(state);
 
     return {
         currentChannel,
@@ -32,6 +34,7 @@ function mapStateToProps(state: GlobalState, {location: {pathname}}: Props) {
         inGlobalThreads: matchPath(pathname, {path: '/:team/threads/:threadIdentifier?'}) != null,
         inDrafts: matchPath(pathname, {path: '/:team/drafts'}) != null,
         inScheduledPosts: matchPath(pathname, {path: '/:team/scheduled_posts'}) != null,
+        kSuiteBridge,
     };
 }
 
