@@ -1,20 +1,20 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {createSelector} from 'mattermost-redux/selectors/create_selector';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import type {GlobalState} from '@mattermost/types/store';
 
-import type {GlobalState} from 'types/store';
+import {createSelector} from 'mattermost-redux/selectors/create_selector';
+import {getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 
 export const getConferenceByChannelId = (state: GlobalState, channelId?: string) => {
     if (!channelId) {
         return null;
     }
-    return state.views.kmeetCalls.conferences[channelId];
+    return state.entities.kmeetCalls.conferences[channelId];
 };
 
 export const getIsAnyUserInConference = (state: GlobalState, channelId: string) => {
-    const conference = state.views.kmeetCalls.conferences[channelId];
+    const conference = state.entities.kmeetCalls.conferences[channelId];
 
     if (!conference) {
         return false;
@@ -28,7 +28,7 @@ export const getIsCurrentUserInCall = createSelector(
     (state: GlobalState) => state, getCurrentUserId,
     (state, currentUserId) => {
         let inCall = false;
-        const conferences = Object.values(state.views.kmeetCalls.conferences);
+        const conferences = Object.values(state.entities.kmeetCalls.conferences);
 
         for (const conference of conferences) {
             if (conference) {
@@ -40,6 +40,20 @@ export const getIsCurrentUserInCall = createSelector(
         }
 
         return inCall;
+    },
+);
+
+export const getConferenceParticipantsIds = createSelector(
+    'getConferenceParticipants',
+    (state: GlobalState, channelId: string) => getConferenceByChannelId(state, channelId),
+    getCurrentUser,
+    (conference, currentUser): string[] => {
+        if (!conference?.registrants) {
+            return [];
+        }
+
+        const ids = Object.keys(conference.registrants);
+        return currentUser ? ids.filter((id) => id !== currentUser.id) : ids;
     },
 );
 

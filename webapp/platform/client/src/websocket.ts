@@ -836,11 +836,24 @@ export default class WebSocketClient {
             const privateTeamChannel = this.conn?.subscribe(`private-team.${teamId}`) as Channel;
 
             presenceTeamUserChannel.callbacks.remove('badge_updated');
+            presenceTeamUserChannel.callbacks.remove('conference_added');
+            presenceTeamUserChannel.callbacks.remove('conference_deleted');
+
             privateTeamChannel.callbacks.remove('team_status_changed');
 
             this.bindChannelToEvent(presenceTeamUserChannel, 'badge_updated', (data) => {
                 // @ts-expect-error old error ignore
                 this.otherServersMessageListeners.forEach((listener) => listener({event: 'badge_updated', data, serverId: teamId}));
+            });
+
+            this.bindChannelToEvent(presenceTeamUserChannel, 'conference_added', (data) => {
+                // @ts-ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'conference_added', data}));
+            });
+
+            this.bindChannelToEvent(presenceTeamUserChannel, 'conference_deleted', (data) => {
+                // @ts-ignore
+                this.otherServersMessageListeners.forEach((listener) => listener({event: 'conference_deleted', data}));
             });
 
             this.bindChannelToEvent(privateTeamChannel, 'team_status_changed', (data) => {

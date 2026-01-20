@@ -1,15 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useMemo, useEffect} from 'react';
+import React, {memo, useMemo} from 'react';
 import type {ComponentProps, CSSProperties} from 'react';
 import {useIntl} from 'react-intl';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import tinycolor from 'tinycolor2';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getMissingProfilesByIds} from 'mattermost-redux/actions/users';
 import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
 
@@ -27,7 +26,7 @@ import {countMeta} from './utils';
 import './avatars.scss';
 
 type Props = {
-    conference: Conference;
+    conference: Conference | null;
     currentUser: UserProfile;
     showCurrentUser?: boolean;
     totalUsers?: number;
@@ -36,37 +35,45 @@ type Props = {
     fetchMissingUsers?: boolean;
     disableProfileOverlay?: boolean;
     displayProfileStatus?: boolean;
+    otherServerParticipants?: UserProfile[];
+    conferenceParticipants?: UserProfile[];
 };
 
 const OTHERS_DISPLAY_LIMIT = 99;
 
 const displayNameGetter = makeDisplayNameGetter();
 
-function Avatars({
+function KMeetAvatars({
     conference,
-    currentUser,
     size,
     disableProfileOverlay,
     displayProfileStatus,
-    fetchMissingUsers,
-    showCurrentUser = true,
     breakAt,
+    otherServerParticipants,
+    conferenceParticipants,
 }: Props) {
     const {formatMessage} = useIntl();
-    const dispatch = useDispatch();
 
     const usersIds = useMemo(() => {
-        const ids = Object.keys(conference.registrants);
+        if (conference && conference.registrants) {
+            return Object.keys(conference.registrants);
+        }
+        return [];
+    }, [conference]);
 
-        if (currentUser && !showCurrentUser) {
-            return ids.filter((id) => id !== currentUser.id);
+    const usersToDisplay = useMemo(() => {
+        if (conference && conference.registrants) {
+            return conferenceParticipants;
         }
 
-        return ids;
-    }, [conference, currentUser, showCurrentUser]);
+        if (otherServerParticipants) {
+            return otherServerParticipants;
+        }
+        return [];
+    }, [conference, otherServerParticipants, conferenceParticipants]);
 
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
-    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
+    const [, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
     const overflowNames = useSelector((state: GlobalState) => {
         return overflowUserIds.map((userId) => displayNameGetter(state, true)(selectUser(state, userId))).join(', ');
     });
@@ -76,29 +83,19 @@ function Avatars({
         background: tinycolor.mix(centerChannelBg, centerChannelColor, 8).toRgbString(),
     }), [centerChannelBg, centerChannelColor]);
 
-    useEffect(() => {
-        if (fetchMissingUsers) {
-            dispatch(getMissingProfilesByIds(usersIds));
-        }
-    }, [fetchMissingUsers, usersIds, dispatch]);
-
-    if (!conference) {
-        return <></>;
-    }
-
     return (
         <div
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {displayUserIds.map((id) => (
+            {usersToDisplay?.map((user) => (
                 <UserAvatar
                     style={avatarStyle}
-                    key={id}
-                    userId={id}
+                    key={user.id}
+                    user={user}
                     size={size}
                     overlayProps={overlayProps}
-                    status={conference.registrants[id]}
+                    status={conference?.registrants?.[user.id]}
                     displayProfileOverlay={Boolean(disableProfileOverlay)}
                     displayProfileStatus={Boolean(displayProfileStatus)}
                 />
@@ -136,4 +133,4 @@ function Avatars({
     );
 }
 
-export default memo(Avatars);
+export default memo(KMeetAvatars);

@@ -1010,6 +1010,16 @@ export default class Client4 {
         );
     };
 
+    getRemoteUsers = (customUrl: string | undefined, userIds: string[], options = {}): Promise<UserProfile[]> => {
+        const url = new URL(this.url);
+        const baseDomain = url.hostname.split('.').slice(1).join('.');
+        const baseUrl = `https://${customUrl}.${baseDomain}${this.urlVersion}`;
+        return this.doFetchWithRetry<UserProfile[]>(
+            `${baseUrl}/users/ids${buildQueryString(options)}`,
+            {method: 'post', body: JSON.stringify(userIds)},
+        );
+    };
+
     getUser = (userId: string) => {
         return this.doFetch<UserProfile>(
             `${this.getUserRoute(userId)}`,
