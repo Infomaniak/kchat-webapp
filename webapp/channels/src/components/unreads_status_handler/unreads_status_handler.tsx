@@ -64,6 +64,7 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
         }
 
         this.updateDesktopApp();
+        this.notifyKSuiteBridge();
     }
 
     get isDynamicFaviconSupported() {
@@ -84,13 +85,17 @@ export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
         const {isUnread, unreadMentionCount} = basicUnreadMeta(unreadStatus);
 
         DesktopApp.updateUnreadsAndMentions(isUnread, unreadMentionCount);
+    };
 
+    notifyKSuiteBridge = () => {
         const bridge = this.props.kSuiteBridge;
         if (!bridge) {
             return;
         }
+        const {isUnread, unreadMentionCount} = basicUnreadMeta(this.props.unreadStatus);
+
         const value = unreadMentionCount > 0 ? unreadMentionCount : (Boolean(isUnread));
-        bridge?.sendMessage({type: UpdateBadgeMessageKey, value});
+        bridge.sendMessage({type: UpdateBadgeMessageKey, value});
     };
 
     updateTitle = () => {
