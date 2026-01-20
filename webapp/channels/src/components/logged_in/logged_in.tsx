@@ -36,7 +36,7 @@ declare global {
 }
 
 export type Props = {
-    currentTeam: Team;
+    currentTeam?: Team;
     theme: Theme;
     currentUser?: UserProfile;
     currentChannelId?: string;
@@ -143,6 +143,12 @@ export default class LoggedIn extends React.PureComponent<Props> {
         }
     }
 
+    public componentDidUpdate(prevProps: Props): void {
+        if (!prevProps.currentTeam && this.props.currentTeam) {
+            this.getServerTheme();
+        }
+    }
+
     public componentWillUnmount(): void {
         WebSocketActions.close();
 
@@ -205,14 +211,16 @@ export default class LoggedIn extends React.PureComponent<Props> {
     };
 
     getServerTheme = () => {
-        const preferredTheme = this.props.theme;
         const currentTeam = this.props.currentTeam;
+        if (!currentTeam) {
+            return;
+        }
 
         window.postMessage(
             {
                 type: 'preferred-theme',
                 data: {
-                    theme: preferredTheme,
+                    theme: this.props.theme,
                     teamName: currentTeam.display_name,
                 },
             },
