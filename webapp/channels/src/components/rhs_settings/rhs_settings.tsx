@@ -134,7 +134,6 @@ export default function RhsSettings({
                     {activeTab === 'display' && (
                         <div>
                             <DisplayTab
-                                shouldAutoUpdateTimezone={true}
                                 user={currentUser}
                                 updateSection={updateSection}
                             />

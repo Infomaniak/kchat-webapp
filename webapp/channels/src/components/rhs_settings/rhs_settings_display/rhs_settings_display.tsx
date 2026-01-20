@@ -122,7 +122,7 @@ export type Props = {
     configTeammateNameDisplay: string;
     currentUserTimezone: string;
     enableTimezone: boolean;
-    shouldAutoUpdateTimezone: boolean | string;
+    shouldAutoUpdateTimezone?: boolean;
     lockTeammateNameDisplay: boolean;
     teammateNameDisplay: string;
     availabilityStatusOnPosts: string;
