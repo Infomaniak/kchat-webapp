@@ -5,7 +5,7 @@ import type {Moment} from 'moment-timezone';
 import React, {useCallback} from 'react';
 import {useIntl} from 'react-intl';
 
-import type {CustomReminderTimestamp, ReminderTimestamp} from 'mattermost-redux/actions/posts';
+import type {CustomReminderTimestamp, ReminderTimestamp} from '@mattermost/types/client4';
 
 import {getRoundedTime} from 'components/custom_status/date_time_input';
 import DateTimePickerModal from 'components/date_time_picker_modal/date_time_picker_modal';
@@ -25,7 +25,7 @@ type Props = PropsFromRedux & {
     };
 };
 
-function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actions}: Props) {
+function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actions, postpone, reminderPostId}: Props) {
     const {formatMessage} = useIntl();
     const ariaLabel = formatMessage({id: 'post_reminder_custom_time_picker_modal.defaultMsg', defaultMessage: 'Set a reminder'});
     const header = formatMessage({id: 'post_reminder.custom_time_picker_modal.header', defaultMessage: 'Set a reminder'});
@@ -34,12 +34,33 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
     const currentTime = getCurrentMomentForTimezone(timezone);
     const initialReminderTime = getRoundedTime(currentTime);
 
-    const handleConfirm = useCallback((dateTime: Moment) => {
-        const timestandInSeconds = toUTCUnixInSeconds(dateTime.toDate());
-        const targetTime: CustomReminderTimestamp = {type: 'custom', value: timestandInSeconds};
-        actions.addPostReminder(userId, postId, targetTime);
-        onExited();
-    }, [actions, postId, userId, onExited]);
+    const handleConfirm = useCallback(
+        (dateTime: Moment) => {
+            const timestampInSeconds = toUTCUnixInSeconds(dateTime.toDate());
+
+            const targetTime: CustomReminderTimestamp = {
+                type: 'custom',
+                value: timestampInSeconds,
+            };
+
+            if (postpone) {
+                actions.addPostReminder(
+                    userId,
+                    postId,
+                    targetTime,
+                    true,
+                    reminderPostId,
+                );
+            } else {
+                actions.addPostReminder(
+                    userId,
+                    postId,
+                    targetTime,
+                );
+            }
+        },
+        [actions, userId, postId, postpone, reminderPostId],
+    );
 
     return (
         <DateTimePickerModal
