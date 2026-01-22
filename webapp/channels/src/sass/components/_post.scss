@@ -1674,6 +1674,8 @@
 
     .post__time,
     .post-preview__time {
+        overflow: hidden;
+        text-overflow: ellipsis; // Ik change : responsive time display
         font-size: 0.9em;
         opacity: 0.73;
     }
