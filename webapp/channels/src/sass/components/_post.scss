@@ -1646,12 +1646,20 @@
         }
 
         &--small-image {
+            position: absolute;
             top: -8px;
-            right:0;
+            left: 24px;
+            width: 68px;
+        }
+
+        &--small-image-no-copy-button {
+            left: 32px;
+            width: 38px;
         }
 
 
         &:hover button.size-aware-image__copy_link,
+        &:hover a.size-aware-image__download--kdrive,
         &:hover a.size-aware-image__download {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }
