@@ -308,31 +308,25 @@ export default class WebSocketClient {
         }
 
         const SUBSCRIPTION_DELAY_BASE = 100;
-        const SUBSCRIPTION_DELAY_RANDOM = 300;
+        const SUBSCRIPTION_DELAY_RANDOM = 2000;
 
-        const randomDelay = () => SUBSCRIPTION_DELAY_BASE + Math.random() * SUBSCRIPTION_DELAY_RANDOM;
+        const scheduleSubscription = (name: string, fn: () => void) => {
+            const delay = Math.round(SUBSCRIPTION_DELAY_BASE + (Math.random() * SUBSCRIPTION_DELAY_RANDOM));
+            setTimeout(fn, delay);
+            console.log(`${debugId} ${name} (delay: ${delay}ms)`);
+        };
 
-        console.log(`${debugId} Using normal delays (base: ${SUBSCRIPTION_DELAY_BASE}ms, random: ${SUBSCRIPTION_DELAY_RANDOM}ms)`);
-
-        this.subscribeToTeamChannel(this._teamId as string);
-
-        setTimeout(() => {
-            this.subscribeToUserChannel(this._userId || this._currentUserId);
-        }, randomDelay());
-
-        setTimeout(() => {
-            this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
-        }, randomDelay());
+        scheduleSubscription('teamChannel', () => this.subscribeToTeamChannel(this._teamId as string));
+        scheduleSubscription('userChannel', () => this.subscribeToUserChannel(this._userId || this._currentUserId));
+        scheduleSubscription('userTeamScopedChannel', () => this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId));
 
         if (this.otherTeams && this.otherTeams.length > 0) {
-            setTimeout(() => {
-                this.subscribeToOtherTeams(this.otherTeams, this._teamId);
-            }, randomDelay());
+            scheduleSubscription('otherTeams', () => this.subscribeToOtherTeams(this.otherTeams, this._teamId));
         }
 
         const presenceChannel = this._presenceChannelId || this.currentPresence;
         if (presenceChannel) {
-            this.bindPresenceChannel(presenceChannel);
+            scheduleSubscription('presenceChannel', () => this.bindPresenceChannel(presenceChannel));
         }
 
         console.log(`${debugId} connected at`, Date.now());
