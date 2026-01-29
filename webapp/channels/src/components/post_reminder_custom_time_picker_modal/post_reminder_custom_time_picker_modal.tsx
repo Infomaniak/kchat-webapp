@@ -58,8 +58,9 @@ function PostReminderCustomTimePicker({userId, timezone, onExited, postId, actio
                     targetTime,
                 );
             }
+            onExited();
         },
-        [actions, userId, postId, postpone, reminderPostId],
+        [postpone, onExited, actions, userId, postId, reminderPostId],
     );
 
     return (
