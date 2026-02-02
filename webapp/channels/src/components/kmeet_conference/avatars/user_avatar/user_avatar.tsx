@@ -59,7 +59,7 @@ function UserAvatar({
                         registrant={status}
                     >
                         <Avatar
-                            url={imageURLForUser(user.id, user?.last_picture_update)}
+                            url={user.public_picture_url ?? imageURLForUser(user.id, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
                         />
