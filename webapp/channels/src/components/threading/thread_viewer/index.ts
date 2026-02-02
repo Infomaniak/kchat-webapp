@@ -28,11 +28,10 @@ import {getSocketStatus} from 'selectors/views/websocket';
 
 import type {GlobalState} from 'types/store';
 
+import type {Props} from './thread_viewer';
 import ThreadViewer from './thread_viewer';
 
-type OwnProps = {
-    rootPostId: string;
-};
+type OwnProps = Pick<Props, 'rootPostId' | 'useRelativeTimestamp' | 'isThreadView'>;
 
 function makeMapStateToProps() {
     const getPostIdsForThread = makeGetPostIdsForThread();

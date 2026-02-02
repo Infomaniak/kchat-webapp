@@ -69,8 +69,8 @@ export interface LimitsReducer {
     limitsLoaded: boolean;
 }
 
-const emptyLimits = {
-    limits: {},
+const emptyLimits: LimitsReducer = {
+    limits: {} as Limits,
     limitsLoaded: false,
 };
 

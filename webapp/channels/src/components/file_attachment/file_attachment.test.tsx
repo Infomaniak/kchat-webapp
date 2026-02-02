@@ -61,6 +61,7 @@ describe('FileAttachment', () => {
         handleFileDropdownOpened: jest.fn(() => null),
         actions: {
             openModal: jest.fn(),
+            saveFileToKDrive: jest.fn(),
         },
     };
 

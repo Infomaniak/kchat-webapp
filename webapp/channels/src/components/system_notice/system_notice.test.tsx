@@ -13,7 +13,7 @@ describe('components/SystemNotice', () => {
         preferences: {},
         dismissedNotices: {},
         isSystemAdmin: false,
-        notices: [{name: 'notice1', adminOnly: false, title: 'some title', body: 'some body', allowForget: true, show: () => true}],
+        notices: [{name: 'notice1', adminOnly: false, title: 'some title', body: 'some body', allowForget: true, icon: 'icon-test', show: () => true}],
         serverVersion: '5.1',
         license: {IsLicensed: 'true'},
         config: {},
@@ -98,7 +98,7 @@ describe('components/SystemNotice', () => {
     });
 
     test('should match snapshot when a custom icon is passed', () => {
-        const props = {...baseProps, notices: [{...baseProps.notices[0], icon: <span>{'icon'}</span>}]};
+        const props = {...baseProps, notices: [{...baseProps.notices[0], icon: 'icon-custom'}]};
         const wrapper = mountWithIntl(<SystemNotice {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });

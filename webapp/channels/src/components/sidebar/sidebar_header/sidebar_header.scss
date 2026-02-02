@@ -7,6 +7,10 @@
     justify-content: space-between;
     padding: 0 16px;
 
+    &:empty { // Ik change : if no children, collapse height
+        display: none;
+    }
+
     &__dropdownButton {
         display: flex;
         width: 100%;

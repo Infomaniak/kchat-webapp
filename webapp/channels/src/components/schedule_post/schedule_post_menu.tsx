@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {MenuProps} from '@mui/material';
-import {Fade} from '@mui/material';
+import {Fade, Menu} from '@mui/material';
 import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -18,7 +18,7 @@ import {getCurrentMomentForTimezone} from 'utils/timezone';
 
 import './schedule_post_menu.scss';
 
-const MuiMenuStyled = () => null;
+const MuiMenuStyled = Menu;
 
 type Props = {
     open: boolean;

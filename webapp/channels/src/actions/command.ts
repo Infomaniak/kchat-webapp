@@ -107,7 +107,7 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
                 } else {
                     dispatch(leaveChannel(channel.id));
                 }
-                return {data: true};
+                return {data: {frontendHandled: true}};
             }
 
             if (channel.type === Constants.PRIVATE_CHANNEL) {
@@ -237,6 +237,10 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
         }
 
         if (data.trigger_id) {
+            const dialogArguments = {
+                channel_id: args.channel_id,
+            };
+            dispatch({type: IntegrationTypes.RECEIVED_DIALOG_ARGUMENTS, data: dialogArguments});
             dispatch({type: IntegrationTypes.RECEIVED_DIALOG_TRIGGER_ID, data: data.trigger_id});
         }
 

@@ -19,6 +19,7 @@ import hostedCustomer from './hosted_customer';
 import insights from './insights';
 import integrations from './integrations';
 import jobs from './jobs';
+import kmeetCalls from './kmeet_calls';
 import ksuiteBridge from './ksuiteBridge';
 import limits from './limits';
 import posts from './posts';
@@ -65,4 +66,5 @@ export default combineReducers({
     channelBookmarks,
     scheduledPosts,
     ksuiteBridge,
+    kmeetCalls,
 });

@@ -6,18 +6,22 @@ import type {ExecuteWorkTemplateRequest} from '@mattermost/types/work_templates'
 import {WorkTemplatesType} from 'mattermost-redux/action_types';
 import {bindClientFunc} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
-import type {ActionFunc} from 'mattermost-redux/types/actions';
+import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 
-export function getWorkTemplateCategories(): ActionFunc {
+export function getWorkTemplateCategories(): ActionFuncAsync {
     return bindClientFunc({
+
+        // @ts-expect-error seems missing but for safety i silented it
         clientFunc: Client4.getWorkTemplateCategories,
         onRequest: WorkTemplatesType.WORK_TEMPLATE_CATEGORIES_REQUEST,
         onSuccess: [WorkTemplatesType.RECEIVED_WORK_TEMPLATE_CATEGORIES],
     });
 }
 
-export function getWorkTemplates(categoryId: string): ActionFunc {
+export function getWorkTemplates(categoryId: string): ActionFuncAsync {
     return bindClientFunc({
+
+        // @ts-expect-error seems missing but for safety i silented it
         clientFunc: Client4.getWorkTemplates,
         onRequest: WorkTemplatesType.WORK_TEMPLATES_REQUEST,
         onSuccess: [WorkTemplatesType.RECEIVED_WORK_TEMPLATES],
@@ -25,31 +29,33 @@ export function getWorkTemplates(categoryId: string): ActionFunc {
     });
 }
 
-export function executeWorkTemplate(req: ExecuteWorkTemplateRequest): ActionFunc {
+export function executeWorkTemplate(req: ExecuteWorkTemplateRequest): ActionFuncAsync {
     return bindClientFunc({
+
+        // @ts-expect-error seems missing but for safety i silented it
         clientFunc: Client4.executeWorkTemplate,
         params: [req],
     });
 }
 
-export function clearCategories(): ActionFunc {
+export function clearCategories(): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: WorkTemplatesType.CLEAR_WORK_TEMPLATE_CATEGORIES});
-        return [];
+        return {data: []};
     };
 }
 
-export function clearWorkTemplates(): ActionFunc {
+export function clearWorkTemplates(): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: WorkTemplatesType.CLEAR_WORK_TEMPLATES});
-        return [];
+        return {data: []};
     };
 }
 
 // stores the linked product information in the state so it can be used to show the tourtip
-export function onExecuteSuccess(data: Record<string, number>): ActionFunc {
+export function onExecuteSuccess(data: Record<string, number>): ActionFuncAsync {
     return async (dispatch) => {
         dispatch({type: WorkTemplatesType.EXECUTE_SUCCESS, data});
-        return [];
+        return {data: []};
     };
 }

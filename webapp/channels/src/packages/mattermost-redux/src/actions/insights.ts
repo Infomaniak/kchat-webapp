@@ -5,12 +5,12 @@ import type {LeastActiveChannelsActionResult, LeastActiveChannelsResponse, TimeF
 
 import {InsightTypes} from 'mattermost-redux/action_types';
 import {Client4} from 'mattermost-redux/client';
-import type {GetStateFunc, DispatchFunc, ActionFunc} from 'mattermost-redux/types/actions';
+import type {GetStateFunc, DispatchFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 
 import {logError} from './errors';
 import {forceLogoutIfNecessary} from './helpers';
 
-export function getTopReactionsForTeam(teamId: string, page: number, perPage: number, timeFrame: TimeFrame): ActionFunc {
+export function getTopReactionsForTeam(teamId: string, page: number, perPage: number, timeFrame: TimeFrame): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
         try {
@@ -31,7 +31,7 @@ export function getTopReactionsForTeam(teamId: string, page: number, perPage: nu
     };
 }
 
-export function getMyTopReactions(teamId: string, page: number, perPage: number, timeFrame: TimeFrame): ActionFunc {
+export function getMyTopReactions(teamId: string, page: number, perPage: number, timeFrame: TimeFrame): ActionFuncAsync {
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
         let data;
         try {

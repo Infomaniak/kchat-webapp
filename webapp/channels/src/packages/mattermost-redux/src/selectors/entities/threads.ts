@@ -82,7 +82,7 @@ export function makeGetThreadOrSynthetic(): (state: GlobalState, rootPost: Post)
         'getThreadOrSynthetic',
         (_: GlobalState, rootPost: Post) => rootPost,
         getThreads,
-        (rootPost, threads) => {
+        (rootPost, threads): UserThread | UserThreadSynthetic => {
             const thread = threads[rootPost.id];
             if (thread?.id) {
                 return thread;

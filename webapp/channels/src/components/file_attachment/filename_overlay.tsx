@@ -97,9 +97,7 @@ export default class FilenameOverlay extends React.PureComponent<Props> {
                         <>
                             {(!isDesktopApp() || isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.4.0')) && (
                                 <WithTooltip
-                                    id='file-name__tooltip'
                                     title={localizeMessage({id: 'kdrive.save', defaultMessage: 'Save file to kDrive'})}
-                                    placement='top'
                                 >
                                     <span className='file-kdrive__icon--wrapper'>
                                         <KDriveIcon

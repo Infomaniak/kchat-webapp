@@ -2,7 +2,11 @@
 // See LICENSE.txt for license information.
 
 import * as Sentry from '@sentry/react';
+import cloneDeep from 'lodash/cloneDeep';
 
+import type {GlobalState} from 'types/store';
+
+type SentryReadyState = Partial<GlobalState> | null | { error: string };
 interface Args {
     SENTRY_DSN: string;
 }
@@ -37,8 +41,8 @@ export default function init({SENTRY_DSN}: Args) {
         environment: host.split('.').splice(1).join('.'),
         normalizeDepth: 5,
         integrations: [
-            isCanaryOrPreprod && new Sentry.BrowserTracing(),
-            isCanaryOrPreprod && new Sentry.Replay(),
+            isCanaryOrPreprod && Sentry.browserTracingIntegration(),
+            isCanaryOrPreprod && Sentry.replayIntegration(),
         ].filter(bool),
         // eslint-disable-next-line no-process-env
         tracesSampleRate: parseFloat(process.env.SENTRY_PERFORMANCE_SAMPLE_RATE!),
@@ -75,4 +79,45 @@ export default function init({SENTRY_DSN}: Args) {
     }
 
     Sentry.init(config);
+}
+
+export function transformStateForSentry(state: GlobalState | undefined): SentryReadyState {
+    if (!state) {
+        return null;
+    }
+
+    const transformedState = cloneDeep(state);
+
+    if (transformedState.entities?.posts?.posts) {
+        Object.values(transformedState.entities.posts.posts).forEach((post) => {
+            if (post) {
+                post.message = '[REDACTED_MESSAGE]';
+            }
+        });
+    }
+
+    if (transformedState.entities?.users?.profiles) {
+        Object.entries(transformedState.entities.users.profiles).forEach(([userId, user]) => {
+            if (user) {
+                user.email = '[REDACTED_EMAIL]';
+                user.first_name = '[REDACTED]';
+                user.last_name = '[REDACTED]';
+                user.nickname = '[REDACTED]';
+                user.username = `user_${userId.substring(0, 6)}`;
+            }
+        });
+    }
+
+    if (transformedState.entities?.channels?.channels) {
+        Object.entries(transformedState.entities.channels.channels).forEach(([channelId, channel]) => {
+            if (channel) {
+                channel.display_name = `Channel ${channelId.substring(0, 6)}`;
+                channel.name = `channel-${channelId.substring(0, 6)}`;
+                channel.header = '[REDACTED_HEADER]';
+                channel.purpose = '[REDACTED_PURPOSE]';
+            }
+        });
+    }
+
+    return transformedState;
 }

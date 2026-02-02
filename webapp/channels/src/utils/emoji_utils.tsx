@@ -8,13 +8,8 @@ import type {Emoji, SystemEmoji} from '@mattermost/types/emojis';
 
 import {EmojiIndicesByUnicode, Emojis} from 'utils/emoji';
 
-const defaultRule = (aName: string, bName: string, emojiA: Emoji, emojiB: Emoji) => {
-    if (emojiA.category === 'custom' && emojiB.category !== 'custom') {
-        return 1;
-    } else if (emojiB.category === 'custom' && emojiA.category !== 'custom') {
-        return -1;
-    }
-
+// IK : We don't want to prioritize system emojis over custom emojis when their names are the same.
+const ikDefaultRule = (aName: string, bName: string) => {
     return aName.localeCompare(bName);
 };
 
@@ -68,10 +63,10 @@ export function compareEmojis(emojiA: Emoji, emojiB: Emoji, searchedName: string
 
     if (aPrefix === bPrefix) {
         if (aName in customRules) {
-            return customRules[aName](bName) || defaultRule(aName, bName, emojiA, emojiB);
+            return customRules[aName](bName) || ikDefaultRule(aName, bName);
         }
 
-        return defaultRule(aName, bName, emojiA, emojiB);
+        return ikDefaultRule(aName, bName);
     } else if (aPrefix) {
         return -1;
     }

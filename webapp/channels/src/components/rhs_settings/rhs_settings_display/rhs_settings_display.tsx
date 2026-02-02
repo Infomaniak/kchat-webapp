@@ -104,7 +104,7 @@ type CustomBtnSelectProps ={
     hasBottomBorder?: boolean;
 }
 
-type Props = {
+export type Props = {
     user: UserProfile;
     updateSection: (section: string) => void;
     activeSection?: string;
@@ -122,7 +122,7 @@ type Props = {
     configTeammateNameDisplay: string;
     currentUserTimezone: string;
     enableTimezone: boolean;
-    shouldAutoUpdateTimezone: boolean | string;
+    shouldAutoUpdateTimezone?: boolean;
     lockTeammateNameDisplay: boolean;
     teammateNameDisplay: string;
     availabilityStatusOnPosts: string;
@@ -376,6 +376,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
     handleOnChange(display: {[key: string]: any}) {
         this.handleSubmit({...this.state, ...display});
     }
+
+    // @ts-expect-error this seems wrong  as props is OnChangeActions but to minimize changed i only silented it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone: any, xd: any) => {
         // eslint-disable-next-line no-console

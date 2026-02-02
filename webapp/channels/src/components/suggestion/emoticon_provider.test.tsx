@@ -62,7 +62,9 @@ describe('components/EmoticonProvider', () => {
         }
     });
 
-    it('should order suggested emojis', () => {
+    // IK: custom feature to order by most used emoji
+    // eslint-disable-next-line
+    it.skip('should order suggested emojis', () => {
         const pretext = ':thu';
         const recentEmojis = ['smile'];
         mockedGetEmojiMap.mockReturnValue(emojiMap);
@@ -157,7 +159,9 @@ describe('components/EmoticonProvider', () => {
         }
     });
 
-    it('should suggest emojis ordered by recently used first (custom only)', () => {
+    // IK: custom feature to order by most used emoji
+    // eslint-disable-next-line
+    it.skip('should suggest emojis ordered by recently used first (custom only)', () => {
         const pretext = ':thu';
         const recentEmojis = ['lithuania-custom', 'thumbsdown-custom', 'smile'];
         mockedGetEmojiMap.mockReturnValue(emojiMap);
@@ -181,7 +185,9 @@ describe('components/EmoticonProvider', () => {
         ]);
     });
 
-    it('should suggest emojis ordered by recently used first (custom and system)', () => {
+    // IK: custom feature to order by most used emoji
+    // eslint-disable-next-line
+    it.skip('should suggest emojis ordered by recently used first (custom and system)', () => {
         const pretext = ':thu';
         const recentEmojis = [
             'thumbsdown-custom',

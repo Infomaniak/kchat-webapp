@@ -36,6 +36,7 @@ const ConvertPublictoPrivate = ({channel}: Props): JSX.Element => {
                 dialogProps: {
                     channelId: channel.id,
                     channelDisplayName: channel.display_name,
+                    channelType: channel.type,
                 },
             }),
         );

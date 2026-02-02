@@ -185,14 +185,12 @@ const RightControls = (): JSX.Element => {
             </ButtonWrapper>
             {!isDesktopApp && (
                 <WithTooltip
-                    id='rightControl__tooltip'
                     title={
                         <FormattedMessage
                             id='global_header.ikProduct'
                             defaultMessage='Your products'
                         />
                     }
-                    placement='bottom'
                 >
                     <div style={{position: 'relative'}}>
                         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}

@@ -185,10 +185,10 @@
 
     .announcement-bar__text {
         justify-content: flex-start;
+        padding: 0 0 0 10px;
+
         > span {
-            position: fixed;
-            right: 0px;
-            left: auto;
+            margin-left: auto;
 
             > a {
                 padding: 0px 8px;

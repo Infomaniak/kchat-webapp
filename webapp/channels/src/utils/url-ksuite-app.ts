@@ -1,7 +1,7 @@
 
 import type {AppName} from '@infomaniak/ksuite-bridge';
 
-export type KSuiteAppName = AppName | 'ksuite';
+export type KSuiteAppName = AppName | 'ksuite' | 'euria';
 
 export const KSUITE_APP_NAMES: KSuiteAppName[] = [
     'ksuite',

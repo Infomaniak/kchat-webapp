@@ -25,7 +25,10 @@ const GetAppAnnoucementBarMobile = ({onClose}: Props) => {
     };
 
     const icon = (
-        <div className='get-app-annoucement-bar-mobile-header'>
+        <div
+            className='get-app-annoucement-bar-mobile-header'
+            onClick={handleDownload}
+        >
             <img
                 className='get-app-annoucement-bar-mobile-header__logo'
                 src={loaderkChat}

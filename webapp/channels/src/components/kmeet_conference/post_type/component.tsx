@@ -173,7 +173,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
                     </Sc.JoinButton>
                 );
             }
-            if (status === 'M') {
+            if (status === 'M' || status === 'S') {
                 return (
                     <Sc.JoinButton onClick={onStartOrJoinCall}>
                         <Sc.ButtonText>

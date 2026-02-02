@@ -48,6 +48,7 @@ describe('components/ChannelHeaderMenu/MenuItems/ConvertPublicToPrivate', () => 
             dialogProps: {
                 channelId: channel.id,
                 channelDisplayName: channel.display_name,
+                channelType: channel.type,
             },
         });
     });

@@ -6,6 +6,7 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {getCurrentChannel, getCurrentChannelMembersCount} from 'mattermost-redux/selectors/entities/channels';
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {joinCall} from 'actions/kmeet_calls';
@@ -14,8 +15,6 @@ import {closeModal, openModal} from 'actions/views/modals';
 import type {GlobalState} from 'types/store';
 
 import MeetButton from './meet_button';
-
-import {getConferenceByChannelId} from '../../selectors/kmeet_calls';
 
 function mapStateToProps(state: GlobalState) {
     const channel = getCurrentChannel(state);

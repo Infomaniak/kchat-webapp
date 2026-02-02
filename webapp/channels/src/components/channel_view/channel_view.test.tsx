@@ -12,6 +12,7 @@ jest.mock('components/advanced_text_editor/voice_message_attachment', () => () =
 describe('components/channel_view', () => {
     const baseProps: Props = {
         channelId: 'channelId',
+        channel: undefined,
         deactivatedChannel: false,
         history: {} as Props['history'],
         location: {} as Props['location'],
@@ -29,6 +30,7 @@ describe('components/channel_view', () => {
         enableWebSocketEventScope: false,
         isChannelBookmarksEnabled: false,
         missingChannelRole: false,
+        isMember: true,
     };
 
     it('Should match snapshot with base props', () => {
