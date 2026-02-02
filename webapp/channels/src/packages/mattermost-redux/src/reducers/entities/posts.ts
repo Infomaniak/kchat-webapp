@@ -1,7 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import * as Sentry from '@sentry/react';
 import type {AnyAction} from 'redux';
 
 import type {TopThread} from '@mattermost/types/insights';
@@ -549,10 +548,7 @@ export function postsInChannel(state: Record<string, PostOrderBlock[]> = {}, act
         if (post.pending_post_id && post.id !== post.pending_post_id) {
             const index = nextRecentBlock.order.indexOf(post.pending_post_id);
 
-            if (index === -1) {
-                // IK: pending_post_id not found in recent block, may cause duplicate messages
-                Sentry.captureMessage(`Pending post not found in recent block: postId=${post.id}, pendingPostId=${post.pending_post_id}, channelId=${post.channel_id}`, 'warning');
-            } else {
+            if (index !== -1) {
                 nextRecentBlock.order.splice(index, 1);
 
                 // Need to re-sort to make sure any other pending posts come first
