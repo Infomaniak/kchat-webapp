@@ -98,7 +98,8 @@ const useRewrite = ({
         const messageBeforeRewrite = draft.message;
         setIsRewriting(true);
 
-        abortControllerRef.current = new AbortController();
+        const abortController = new AbortController();
+        abortControllerRef.current = abortController;
 
         try {
             const rewrittenMessage = await Client4.getAIRewrittenMessage(
@@ -106,6 +107,10 @@ const useRewrite = ({
                 action,
                 customPrompt,
             );
+
+            if (abortController.signal.aborted) {
+                return;
+            }
 
             if (originalMessage === null) {
                 setOriginalMessage(messageBeforeRewrite);

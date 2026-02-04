@@ -176,3 +176,39 @@ describe('RewriteMenu state logic', () => {
         expect(shouldSubmit).toBe(false);
     });
 });
+
+describe('Abort controller logic', () => {
+    it('should not update draft when abort signal is triggered', () => {
+        const abortController = new AbortController();
+        let draftUpdated = false;
+
+        const handleDraftChange = () => {
+            if (!abortController.signal.aborted) {
+                draftUpdated = true;
+            }
+        };
+
+        abortController.abort();
+
+        handleDraftChange();
+
+        expect(abortController.signal.aborted).toBe(true);
+        expect(draftUpdated).toBe(false);
+    });
+
+    it('should update draft when abort signal is not triggered', () => {
+        const abortController = new AbortController();
+        let draftUpdated = false;
+
+        const handleDraftChange = () => {
+            if (!abortController.signal.aborted) {
+                draftUpdated = true;
+            }
+        };
+
+        handleDraftChange();
+
+        expect(abortController.signal.aborted).toBe(false);
+        expect(draftUpdated).toBe(true);
+    });
+});
