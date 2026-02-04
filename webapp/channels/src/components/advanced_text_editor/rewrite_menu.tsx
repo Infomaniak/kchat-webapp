@@ -62,8 +62,8 @@ const menuItems: MenuItemConfig[] = [
     },
 ];
 
-const customPromptPlaceholder = defineMessage({id: 'texteditor.rewrite.prompt', defaultMessage: 'Ask AI to edit message...'});
-const customPromptNextPlaceholder = defineMessage({id: 'texteditor.rewrite.nextPrompt', defaultMessage: 'What would you like AI to do next?'});
+const customPromptPlaceholder = defineMessage({id: 'texteditor.rewrite.prompt', defaultMessage: 'Ask Euria to edit message...'});
+const customPromptNextPlaceholder = defineMessage({id: 'texteditor.rewrite.nextPrompt', defaultMessage: 'What would you like Euria to do next?'});
 
 interface RewriteMenuProps {
     disabled?: boolean;
