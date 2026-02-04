@@ -26,6 +26,7 @@ describe('components/admin_console/reset_password_modal/reset_password_modal.tsx
         highlight_keys: '',
         push: 'default',
         push_status: 'ooo',
+        calls_desktop_sound: 'true',
     };
     const user: UserProfile = TestHelper.getUserMock({
         auth_service: 'test',

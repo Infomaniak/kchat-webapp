@@ -39,8 +39,6 @@ exports[`components/file_attachment/FilenameOverlay should match snapshot, stand
     }
   >
     <WithTooltip
-      id="file-name__tooltip"
-      placement="top"
       title="Save file to kDrive"
     >
       <span
@@ -77,8 +75,6 @@ exports[`components/file_attachment/FilenameOverlay should match snapshot, with 
     }
   >
     <WithTooltip
-      id="file-name__tooltip"
-      placement="top"
       title="Save file to kDrive"
     >
       <span

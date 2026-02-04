@@ -93,6 +93,7 @@ interface Props {
     // and transformOrigin values - https://mui.com/material-ui/react-popover/#anchor-playground
     anchorOrigin?: PopoverOrigin;
     transformOrigin?: PopoverOrigin;
+    style?: React.CSSProperties;
 }
 
 /**

@@ -19,6 +19,7 @@ describe('components/SingleImageView', () => {
             toggleEmbedVisibility: jest.fn(),
             openModal: jest.fn(),
             getFilePublicLink: jest.fn(),
+            saveFileToKDrive: jest.fn(),
         },
         enablePublicLink: false,
     };

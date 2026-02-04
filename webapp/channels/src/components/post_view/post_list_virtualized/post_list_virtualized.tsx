@@ -374,7 +374,6 @@ export default class PostList extends React.PureComponent<Props, State> {
                     loadingNewerPosts={this.props.loadingNewerPosts}
                     loadingOlderPosts={this.props.loadingOlderPosts}
                     channelId={this.props.channelId}
-                    lastViewedAt={this.props.lastViewedAt}
                 />
             </div>
         );
@@ -668,13 +667,12 @@ export default class PostList extends React.PureComponent<Props, State> {
                 showScrollToBottomToast={this.state.showScrollToBottomToast}
                 onScrollToBottomToastDismiss={this.handleScrollToBottomToastDismiss}
                 hideScrollToBottomToast={this.hideScrollToBottomToast}
-                isThreadView={this.props.isThreadView}
+                isThreadView={this.props.isThreadView ?? false}
             />
         );
     };
 
     render() {
-        const {channelId} = this.props;
         const {dynamicListStyle} = this.state;
 
         return (
@@ -699,11 +697,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                         />
                     </>
                 )}
-                <div
-                    role='presentation'
-                    className='post-list-holder-by-time'
-                    key={'postlist-' + channelId}
-                >
+                <div className='post-list-holder-by-time'>
                     <div
                         role='presentation'
                         className='post-list__table'

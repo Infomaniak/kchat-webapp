@@ -3,6 +3,11 @@
 exports[`components/sidebar/sidebar_category/sidebar_category_menu should match snapshot and contain correct buttons 1`] = `
 <Memo(SidebarCategoryGenericMenu)
   id="test_category_id"
+  menuTriggerRef={
+    Object {
+      "current": null,
+    }
+  }
   name="custom_category_1"
 >
   <MarkAsUnreadItem

@@ -36,7 +36,6 @@ import type {GlobalState} from 'types/store';
 type Props = {
     channel: Channel;
     inHeaderDropdown?: boolean;
-    parentMenuId: string;
 };
 
 const ChannelMoveToSubMenu = (props: Props) => {
@@ -190,7 +189,6 @@ const ChannelMoveToSubMenu = (props: Props) => {
             trailingElements={<ChevronRightIcon size={16}/>}
             menuId={`moveTo-${props.channel.id}-menu`}
             menuAriaLabel={formatMessage({id: 'sidebar_left.sidebar_channel_menu.moveTo.dropdownAriaLabel', defaultMessage: 'Move to submenu'})}
-            parentMenuId={props.parentMenuId}
         >
             {getMoveToCategorySubmenuItems(categories, currentCategory)}
         </Menu.SubMenu>

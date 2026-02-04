@@ -40,6 +40,7 @@ import {IKConstants} from 'utils/constants-ik';
 import DesktopApp from 'utils/desktop_api';
 import {EmojiIndicesByAlias} from 'utils/emoji';
 import {TEAM_NAME_PATH_PATTERN} from 'utils/path';
+import {transformStateForSentry} from 'utils/sentry';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getSiteURL} from 'utils/url';
 import {extractKSuiteAppName} from 'utils/url-ksuite-app';
@@ -496,12 +497,13 @@ export default class Root extends React.PureComponent<Props, State> {
         e.preventDefault();
         e.stopPropagation();
 
-        const {pathname, search} = new URL(target.href);
+        const {origin, pathname, search} = new URL(target.href);
 
         ksuiteBridge.sendMessage({
             type: OpenAppMessageKey,
             name: appName as AppName,
             path: pathname.concat(search),
+            origin,
         });
     };
 
@@ -524,8 +526,10 @@ export default class Root extends React.PureComponent<Props, State> {
         Client4.bindEmitUserLoggedOutEvent(async (data) => {
             // eslint-disable-next-line no-negated-condition
             if (!isDesktopApp()) {
-                if (this.embeddedInIFrame) {
-                    window.open(window.location.href, '_top');
+                const searchParams = new URLSearchParams(window.location.search);
+                localStorage.setItem('IKRedirectUri', searchParams.get('redirect_to') || `${window.location.pathname}${window.location.search}`);
+                if (this.embeddedInIFrame && window.top) {
+                    window.top.location.href = window.location.href;
                 } else {
                     window.location.href = data.uri;
                 }
@@ -588,6 +592,10 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
+        window.addEventListener('emitReportSubmitted', (event) => {
+            this.handleWebComponentReportSubmitted(event as CustomEvent<{ ticketUrl: string }>);
+        });
+
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);
 
@@ -599,6 +607,34 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
         this.props.actions.handleLoginLogoutSignal(e);
+    };
+
+    handleWebComponentReportSubmitted = (redmineEvent: CustomEvent<{ ticketUrl: string }>) => {
+        const message = `Redmine created: ${redmineEvent.detail.ticketUrl}`;
+
+        if (redmineEvent) {
+            const currentState = store.getState();
+            const transformedState = JSON.stringify(transformStateForSentry(currentState));
+
+            Sentry.getCurrentScope().addAttachment({
+                filename: 'redux_state.json',
+                data: transformedState,
+                contentType: 'application/json',
+            });
+
+            Sentry.captureMessage(message, {
+                level: 'info',
+                extra: {
+                    webComponentDetails: redmineEvent,
+                },
+                tags: {
+                    source: 'webcomponent',
+                    eventType: 'reportSubmitted',
+                },
+            });
+
+            Sentry.getCurrentScope().clearAttachments();
+        }
     };
 
     handleThemeMediaQueryChangeEvent = (e: MediaQueryListEvent) => {

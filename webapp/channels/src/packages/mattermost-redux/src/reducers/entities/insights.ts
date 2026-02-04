@@ -2,11 +2,11 @@
 // See LICENSE.txt for license information.
 
 import {combineReducers} from 'redux';
+import type {AnyAction} from 'redux';
 
 import type {TopReaction, TimeFrame} from '@mattermost/types/insights';
 
 import {InsightTypes} from 'mattermost-redux/action_types';
-import type {GenericAction} from 'mattermost-redux/types/actions';
 
 const sortReactionsIntoState = (data: TopReaction[]) => {
     const newItems: Record<string, TopReaction> = {};
@@ -19,7 +19,7 @@ const sortReactionsIntoState = (data: TopReaction[]) => {
     return newItems;
 };
 
-function topReactions(state: Record<string, Record<TimeFrame, Record<string, TopReaction>>> = {}, action: GenericAction) {
+function topReactions(state: Record<string, Record<TimeFrame, Record<string, TopReaction>>> = {}, action: AnyAction) {
     switch (action.type) {
     case InsightTypes.RECEIVED_TOP_REACTIONS: {
         const results = action.data.data.items || [];
@@ -40,7 +40,7 @@ function topReactions(state: Record<string, Record<TimeFrame, Record<string, Top
     }
 }
 
-function myTopReactions(state: Record<string, Record<TimeFrame, Record<string, TopReaction>>> = {}, action: GenericAction) {
+function myTopReactions(state: Record<string, Record<TimeFrame, Record<string, TopReaction>>> = {}, action: AnyAction) {
     switch (action.type) {
     case InsightTypes.RECEIVED_MY_TOP_REACTIONS: {
         const results = action.data.data.items || [];

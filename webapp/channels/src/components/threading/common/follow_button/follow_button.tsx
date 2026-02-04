@@ -20,7 +20,7 @@ function FollowButton({
     return (
         <Button
             {...props}
-            className={classNames(props.className, 'FollowButton')}
+            className={classNames(props.className, 'ThreadSubscribeBtn')}
             disabled={Boolean(props.disabled)}
             isActive={isFollowing ?? false}
         >

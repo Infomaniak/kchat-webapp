@@ -402,7 +402,6 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
     let user = getCurrentUser(state);
     const shouldLoadUser = Utils.isEmptyObject(getTeamMemberships(state)) || !user;
 
-    // const onboardingFlowEnabled = getIsOnboardingFlowEnabled(state);
     if (shouldLoadUser) {
         await dispatch(loadMe());
         state = getState();
@@ -416,19 +415,18 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
     const locale = getCurrentLocale(state);
     const teamId = LocalStorageStore.getPreviousTeamId(user.id);
 
-    // let myTeams = getMyTeams(state);
-    // const teams = getActiveTeamsList(state);
-    // if (teams.length === 0) {
-    //     if (isUserFirstAdmin && onboardingFlowEnabled) {
-    //         historyPushWithQueryParams('/preparing-workspace', searchParams);
-    //         return;
-    //     }
-
-    //     historyPushWithQueryParams('/select_team', searchParams);
-
     let myTeams = getMyKSuites(state);
     if (myTeams.length === 0) {
-        getHistory().push('/error?type=no_ksuite');
+        const errorParams = new URLSearchParams({type: 'no_ksuite'});
+        historyPushWithQueryParams('/error', errorParams);
+        return;
+    }
+
+    // If a "IKRedirectUri" is specified, use it
+    const redirectUri = localStorage.getItem('IKRedirectUri');
+    if (typeof redirectUri === 'string') {
+        localStorage.removeItem('IKRedirectUri');
+        historyPushWithQueryParams(redirectUri, searchParams);
         return;
     }
 
@@ -442,7 +440,13 @@ export async function redirectUserToDefaultTeam(searchParams?: URLSearchParams) 
         if (channel) {
             dispatch(fetchTeamScheduledPosts(team.id, true));
             dispatch(selectChannel(channel.id));
-            historyPushWithQueryParams(`/${team.name}/channels/${channel.name}`, searchParams);
+
+            const path = `/${team.name}/channels/${channel.name}`;
+            if (window.location.hash) {
+                historyPushWithQueryParams(path + window.location.hash, searchParams);
+            } else {
+                historyPushWithQueryParams(path, searchParams);
+            }
             return;
         }
     }

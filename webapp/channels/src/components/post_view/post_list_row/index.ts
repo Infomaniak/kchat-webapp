@@ -20,7 +20,7 @@ import type {GlobalState} from 'types/store';
 import type {PostListRowProps} from './post_list_row';
 import PostListRow from './post_list_row';
 
-type OwnProps = Pick<PostListRowProps, 'listId'>
+type OwnProps = Pick<PostListRowProps, 'listId' | 'previousListId' | 'shouldHighlight' | 'loadOlderPosts' | 'loadNewerPosts' | 'togglePostMenu' | 'isLastPost' | 'loadingNewerPosts' | 'loadingOlderPosts' | 'channelId'>
 
 function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const shortcutReactToLastPostEmittedFrom = getShortcutReactToLastPostEmittedFrom(state);

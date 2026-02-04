@@ -55,7 +55,7 @@ function makeMapStateToProps(state: GlobalState, initialProps: OwnProps) {
         const isGroupsEnabled = enableCustomUserGroups || (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true');
         const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
         let profilesInCurrentChannel: UserProfile[];
-        let membersInTeam: RelationOneToOne<UserProfile, TeamMembership>;
+        let membersInTeam: RelationOneToOne<UserProfile, TeamMembership> | undefined;
         if (props.channel.id && props.channel.team_id) {
             profilesInCurrentChannel = doGetProfilesInChannel(state, props.channel.id);
             membersInTeam = getMembersInTeam(state, props.channel.team_id);

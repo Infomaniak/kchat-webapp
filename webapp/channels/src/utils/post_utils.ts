@@ -43,6 +43,7 @@ import {formatWithRenderer} from 'utils/markdown';
 import MentionableRenderer from 'utils/markdown/mentionable_renderer';
 import {allAtMentions} from 'utils/text_formatting';
 import {isMobile} from 'utils/user_agent';
+import * as Utils from 'utils/utils';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';
@@ -875,4 +876,14 @@ export function getVoiceMessageStateFromDraft(draft: PostDraft): VoiceMessageSta
         return VoiceMessageStates.RECORDING;
     }
     return VoiceMessageStates.IDLE;
+}
+
+export function getProfilePictureURL(post: Post, user: UserProfile | null): string {
+    if (user && user.id === post.user_id) {
+        return Utils.imageURLForUser(user.id, user.last_picture_update);
+    } else if (post.user_id) {
+        return Utils.imageURLForUser(post.user_id);
+    }
+
+    return '';
 }

@@ -88,6 +88,7 @@ import {
 import {getIsUserStatusesConfigEnabled} from 'mattermost-redux/selectors/entities/common';
 import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general';
 import {getGroup} from 'mattermost-redux/selectors/entities/groups';
+import {getConferenceByChannelId} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {getPost, getMostRecentPostIdInChannel} from 'mattermost-redux/selectors/entities/posts';
 import {callDialingEnabled, isCollapsedThreadsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveISystemPermission, haveITeamPermission} from 'mattermost-redux/selectors/entities/roles';
@@ -108,6 +109,7 @@ import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_acti
 import {getTeamsUsage} from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
+import {handleCallFromUrl, closeRingModal, deleteConference, externalJoinCall} from 'actions/kmeet_calls';
 import {sendDesktopNotification} from 'actions/notification_actions';
 import {handleNewPost} from 'actions/post_actions';
 import * as StatusActions from 'actions/status_actions';
@@ -120,7 +122,6 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import {incrementWsErrorCount, resetWsErrorCount} from 'actions/views/system';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {voiceConnectedChannels} from 'selectors/calls';
-import {getConferenceByChannelId} from 'selectors/kmeet_calls';
 import {getSelectedChannelId, getSelectedPost} from 'selectors/rhs';
 import {getGlobalItem} from 'selectors/storage';
 import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
@@ -140,7 +141,6 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
-import {closeRingModal, deleteConference, externalJoinCall} from './kmeet_calls';
 import {handleServerEvent} from './servers_actions';
 
 const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
@@ -375,7 +375,8 @@ export async function reconnect(socketId) {
     dispatch(clearErrors());
 
     dispatch(getDrafts(currentTeamId));
-    dispatch(getMyMeets());
+    await dispatch(getMyMeets());
+    dispatch(handleCallFromUrl());
 
     // eslint-disable-next-line no-console
     console.log(`${debugId} Reconnect completed`);

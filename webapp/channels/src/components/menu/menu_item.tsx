@@ -14,7 +14,6 @@ import type {
     ReactNode,
     KeyboardEvent,
     MouseEvent,
-    AriaRole,
 } from 'react';
 import {useSelector} from 'react-redux';
 
@@ -81,7 +80,7 @@ export interface Props extends MuiMenuItemProps {
 
     onClick?: (event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) => void;
 
-    role?: AriaRole;
+    role?: React.AriaRole;
 
     forceCloseOnSelect?: boolean;
 
@@ -354,7 +353,7 @@ function isCorrectKeyPressedOnMenuItem(event: MouseEvent<HTMLLIElement> | Keyboa
     return false;
 }
 
-function isRoleCheckboxOrRadio(role: AriaRole) {
+function isRoleCheckboxOrRadio(role: React.AriaRole) {
     return role === 'menuitemcheckbox' || role === 'menuitemradio';
 }
 

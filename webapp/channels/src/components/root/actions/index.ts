@@ -22,6 +22,7 @@ import {getLastKSuiteSeenId} from 'mattermost-redux/utils/team_utils';
 
 import {getMyMeets} from 'actions/calls';
 import {redirectUserToDefaultTeam, emitUserLoggedOutEvent} from 'actions/global_actions';
+import {handleCallFromUrl} from 'actions/kmeet_calls';
 
 import {getHistory} from 'utils/browser_history';
 import {ActionTypes, StoragePrefixes} from 'utils/constants';
@@ -98,6 +99,8 @@ export function loadConfigAndMe(): ThunkActionFunc<Promise<{isLoaded: boolean; i
                     dispatch(getMyTeamMembers()),
                     dispatch(getMyMeets()),
                 ]);
+
+                dispatch(handleCallFromUrl());
                 dispatch(getMyTeamUnreads(isCollapsedThreadsEnabled(getState())));
             } catch (error) {
                 dispatch(logError(error as ServerError));

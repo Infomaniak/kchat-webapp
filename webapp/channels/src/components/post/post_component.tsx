@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Emoji} from '@mattermost/types/emojis';
 import {PostPriority, type Post} from '@mattermost/types/posts';
@@ -17,6 +18,7 @@ import {
     isPostPendingOrFailed} from 'mattermost-redux/utils/post_utils';
 
 import {trackEvent} from 'actions/telemetry_actions';
+import {getCurrentLocale} from 'selectors/i18n';
 
 import AutoHeightSwitcher, {AutoHeightSlots} from 'components/common/auto_height_switcher';
 import EditPost from 'components/edit_post';
@@ -131,6 +133,11 @@ function PostComponent(props: Props) {
     const postRef = useRef<HTMLDivElement>(null);
     const postHeaderRef = useRef<HTMLDivElement>(null);
     const teamId = props.team?.id ?? props.currentTeam?.id ?? '';
+    const currentLocale = useSelector(getCurrentLocale);
+
+    // French locale uses mathematical notation (e.g., "-9 min") with 'narrow' style,
+    // so we use 'short' style instead to get natural language (e.g., "il y a 9 min")
+    const compactTimestampStyle = currentLocale === 'fr' ? 'short' : 'narrow';
 
     const [hover, setHover] = useState(false);
     const [a11yActive, setA11y] = useState(false);
@@ -308,9 +315,7 @@ function PostComponent(props: Props) {
             'post--comment': (post.root_id && post.root_id.length > 0 && !props.isCollapsedThreadsEnabled) || (props.location === Locations.RHS_COMMENT),
             'post--compact': props.compactDisplay,
             'post--hovered': hovered,
-
-            // Infomaniak: we disable this in threads
-            'same--user': (props.isConsecutivePost && props.location !== Locations.RHS_COMMENT && !props.compactDisplay),
+            'same--user': props.isConsecutivePost && (!props.compactDisplay || props.location === Locations.RHS_COMMENT),
             'cursor--pointer': alt && !props.channelIsArchived,
             'post--hide-controls': post.failed || post.state === Posts.POST_DELETED,
             'post--comment same--root': fromAutoResponder,
@@ -420,7 +425,7 @@ function PostComponent(props: Props) {
         }
     }, [handleCommentClick, handleJumpClick, props.currentTeam?.id, teamId]);
 
-    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem});
+    const postClass = classNames('post__body', {'post--edited': PostUtils.isEdited(post), 'search-item-snippet': isSearchResultItem, 'post--failed': post.failed});
 
     let comment;
     if (props.isFirstReply && props.parentPost && props.parentPostUser && post.type !== Constants.PostTypes.EPHEMERAL) {
@@ -610,7 +615,7 @@ function PostComponent(props: Props) {
                                         eventTime={post.create_at}
                                         postId={post.id}
                                         location={props.location}
-                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay && props.location !== Locations.RHS_COMMENT ? 'narrow' : undefined}}
+                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? compactTimestampStyle : undefined}}
                                     />
                                 }
                                 {priority}

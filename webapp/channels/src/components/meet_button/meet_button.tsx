@@ -2,7 +2,8 @@
 // See LICENSE.txt for license information.
 
 import React, {useRef} from 'react';
-import {FormattedMessage} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
+import {defineMessages, FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -135,6 +136,20 @@ function MeetButton(props: Props) {
     };
 
     const btnClasses = 'btn meet-btn';
+
+    const messages: Record<string, MessageDescriptor> = defineMessages({
+        join: {
+            id: 'kmeet.calls.join',
+            defaultMessage: 'Join call',
+        },
+        start: {
+            id: 'kmeet.calls.start',
+            defaultMessage: 'Start call',
+        },
+    });
+
+    const messageKey = props.hasCall ? 'join' : 'start';
+
     return (
         <div
             className='meet-btn__wrapper'
@@ -153,10 +168,7 @@ function MeetButton(props: Props) {
                     className='meet-btn__icon meet-btn__icon--18'
                 />
                 <span className='meet-btn__text'>
-                    <FormattedMessage
-                        id={props.hasCall ? 'kmeet.calls.join' : 'kmeet.calls.start'}
-                        defaultMessage={props.hasCall ? 'Join call' : 'Start call'}
-                    />
+                    <FormattedMessage {...messages[messageKey]}/>
                 </span>
             </button>
         </div>

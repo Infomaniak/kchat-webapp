@@ -25,6 +25,7 @@ import {
 } from 'components/file_upload_overlay/file_upload_overlay';
 import KeyboardShortcutSequence, {KEYBOARD_SHORTCUTS} from 'components/keyboard_shortcuts/keyboard_shortcuts_sequence';
 import * as Menu from 'components/menu';
+import type {TextboxElement} from 'components/textbox';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants from 'utils/constants';

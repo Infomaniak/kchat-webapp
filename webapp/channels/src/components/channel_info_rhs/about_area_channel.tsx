@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedDate, useIntl} from 'react-intl';
 import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
@@ -13,6 +13,14 @@ import EditableArea from './components/editable_area';
 import LineLimiter from './components/linelimiter';
 
 const ChannelId = styled.div`
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+`;
+
+const ChannelCreationDate = styled.div`
     margin-bottom: 12px;
     font-size: 11px;
     line-height: 16px;
@@ -101,6 +109,16 @@ const AboutAreaChannel = ({channel, canEditChannelProperties, actions}: Props) =
                     />
                 </ChannelHeader>
             )}
+
+            <ChannelCreationDate>
+                {formatMessage({id: 'channel_info_rhs.about_area.creation_date', defaultMessage: 'Created on: '})}
+                <FormattedDate
+                    value={new Date(channel.create_at)}
+                    year='numeric'
+                    month='long'
+                    day='numeric'
+                />
+            </ChannelCreationDate>
 
             <ChannelId>
                 {formatMessage({id: 'channel_info_rhs.about_area_id', defaultMessage: 'ID:'})} {channel.id}

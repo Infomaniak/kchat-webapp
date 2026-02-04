@@ -53,6 +53,7 @@ describe('components/sidebar/sidebar_channel/sidebar_channel_menu', () => {
         createCategory: jest.fn(),
         addChannelsInSidebar: jest.fn(),
         onMenuToggle: jest.fn(),
+        menuTriggerRef: React.createRef<HTMLButtonElement>(),
     };
 
     test('should match snapshot and contain correct buttons', () => {

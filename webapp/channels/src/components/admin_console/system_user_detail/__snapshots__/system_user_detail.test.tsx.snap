@@ -6,7 +6,7 @@ exports[`SystemUserDetail should match default snapshot 1`] = `
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a
@@ -215,7 +215,7 @@ exports[`SystemUserDetail should match snapshot if MFA is enabled 1`] = `
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a
@@ -424,7 +424,7 @@ exports[`SystemUserDetail should not show manage user settings button when user 
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a
@@ -633,7 +633,7 @@ exports[`SystemUserDetail should show manage user settings button as activated 1
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a
@@ -848,7 +848,7 @@ exports[`SystemUserDetail should show manage user settings button as disabled wh
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a
@@ -1057,7 +1057,7 @@ exports[`SystemUserDetail should show the activate user button as disabled when 
     class="SystemUserDetail wrapper--fixed"
   >
     <div
-      class="admin-console__header"
+      class="admin-console__header with-back"
     >
       <div>
         <a

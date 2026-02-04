@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {Dispatch} from 'redux';
+import type {Dispatch, AnyAction} from 'redux';
 import {bindActionCreators} from 'redux';
 import timezones from 'timezones.json';
 
@@ -73,7 +73,7 @@ export function makeMapStateToProps() {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<GenericAction>) {
+function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     return {
         actions: bindActionCreators({
             autoUpdateTimezone,

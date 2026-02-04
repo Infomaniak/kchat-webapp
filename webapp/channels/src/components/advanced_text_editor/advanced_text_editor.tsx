@@ -655,7 +655,7 @@ const AdvancedTextEditor = ({
                 id: 'create_post.write',
                 defaultMessage: 'Write to {channelDisplayName}',
             },
-            {channelDisplayName},
+            {channelDisplayName, channelType},
         );
     } else if (readOnlyChannel) {
         createMessage = formatMessage(

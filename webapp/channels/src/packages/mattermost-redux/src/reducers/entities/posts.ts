@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {AnyAction} from 'redux';
+
 import type {TopThread} from '@mattermost/types/insights';
 import type {MessageAttachment} from '@mattermost/types/message_attachments';
 import type {
@@ -252,7 +254,7 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: MMReduxAc
             return state;
         }
 
-        let attachments: MessageAttachment[] = state[postId].props.attachments;
+        let attachments: MessageAttachment[] = state[postId].props.attachments as MessageAttachment[];
         if (attachments.length === 0) {
             return state;
         }
@@ -1530,7 +1532,7 @@ function messagesHistory(state: Partial<MessageHistory> = {
     }
 }
 
-export function expandedURLs(state: Record<string, string> = {}, action: GenericAction) {
+export function expandedURLs(state: Record<string, string> = {}, action: AnyAction) {
     switch (action.type) {
     case GeneralTypes.REDIRECT_LOCATION_SUCCESS:
         return {

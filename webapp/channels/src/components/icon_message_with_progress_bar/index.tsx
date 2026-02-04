@@ -5,7 +5,8 @@ import React from 'react';
 
 import './icon_message_with_progress_bar.scss';
 
-const IconMessage = () => null;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const IconMessage = (props: any) => null;
 
 export const enum ProcessState {
     PROCESSING = 0,

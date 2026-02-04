@@ -130,7 +130,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
                 skeletonLoader
             }
             {
-                (!loading && topDMs && props.filterType === InsightsScopes.MY) &&
+                (!loading && topDMs && props.filterType === InsightsScopes.MY && currentTeam) &&
                 topDMs.map((topDM: TopDM, index: number) => {
                     const barSize = ((topDM.post_count / topDMs[0].post_count) * 0.75);
                     return (
@@ -144,7 +144,7 @@ const TopDMsAndNewMembers = (props: WidgetHocProps) => {
                 })
             }
             {
-                (!loading && props.filterType === InsightsScopes.TEAM && newMembers.length > 0) && (
+                (!loading && props.filterType === InsightsScopes.TEAM && newMembers.length > 0 && currentTeam) && (
                     <>
                         <NewMembersTotal
                             total={totalNewMembers}

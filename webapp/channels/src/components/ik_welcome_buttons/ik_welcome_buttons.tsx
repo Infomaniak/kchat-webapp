@@ -50,7 +50,10 @@ const IkWelcomeButtons = (props: Props) => {
             props.actions.openModal({
                 modalId: ModalIdentifiers.CREATE_DM_CHANNEL,
                 dialogType: MoreDirectChannels,
-                dialogProps: {isExistingChannel: false},
+                dialogProps: {
+                    isExistingChannel: false,
+                    focusOriginElement: 'ik-welcome-button-send-message',
+                },
             });
             break;
         case 'browse_channels':

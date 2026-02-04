@@ -12,6 +12,7 @@ describe('components/MsgTyping', () => {
         recordingUsers: [],
         channelId: 'test',
         rootId: '',
+        currentUserId: '',
         userStartedTyping: jest.fn(),
         userStoppedTyping: jest.fn(),
         userStartedRecording: jest.fn(),
@@ -41,22 +42,6 @@ describe('components/MsgTyping', () => {
 
     test('should should match snapshot, on nobody recording', () => {
         const wrapper = shallow(<MsgTyping {...baseProps}/>);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on one user recording', () => {
-        const recordingUsers = ['test.user'];
-        const props = {...baseProps, recordingUsers};
-
-        const wrapper = shallow(<MsgTyping {...props}/>);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should match snapshot, on multiple users recording', () => {
-        const recordingUsers = ['test.user', 'other.test.user', 'another.user'];
-        const props = {...baseProps, recordingUsers};
-
-        const wrapper = shallow(<MsgTyping {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 });

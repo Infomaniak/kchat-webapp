@@ -13,6 +13,7 @@ import AlmostFullStorageAnnouncementBar from './almost_full_storage_announcement
 import AppStoreBar from './appstore_announcement_bar';
 import AnnouncementBar from './default_announcement_bar';
 import {FullStorageAnnouncementBar} from './full_storage_announcement_bar/full_storage_announcement_bar';
+import GetAppAnnoucementBar from './get_app_announcement_bar';
 import MASMigrationBar from './mas_migration_bar';
 import NotificationPermissionBar from './notification_permission_bar';
 import OverageUsersBanner from './overage_users_banner';
@@ -84,6 +85,7 @@ class AnnouncementBarController extends React.PureComponent<Props> {
                 {this.props.license?.Cloud !== 'true' && <OverageUsersBanner/>}
                 <VersionBar/>
                 <AppStoreBar/>
+                <GetAppAnnoucementBar/>
                 <MASMigrationBar/>
                 <AlmostFullStorageAnnouncementBar userIsAdmin={this.props.userIsAdmin}/>
             </>

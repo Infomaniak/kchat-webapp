@@ -3,52 +3,47 @@
 
 import React, {memo, useRef} from 'react';
 import type {ComponentProps} from 'react';
-import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getUser as selectUser, makeDisplayNameGetter} from 'mattermost-redux/selectors/entities/users';
-
 import OverlayTrigger from 'components/overlay_trigger';
 import type {BaseOverlayTrigger} from 'components/overlay_trigger';
-import ProfilePopover from 'components/profile_popover';
+import ProfilePopover from 'components/profile_popover/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
 import {imageURLForUser} from 'utils/utils';
 
 import type {Registrant} from 'types/conference';
-import type {GlobalState} from 'types/store';
 
 import Status from '../status';
 
 type Props = {
-    userId: UserProfile['id'];
+    user: UserProfile;
     overlayProps: Partial<ComponentProps<typeof SimpleTooltip>>;
     displayProfileOverlay: boolean;
     displayProfileStatus: boolean;
-    status: Registrant;
+    disableFetch?: boolean;
+    rootClose?: boolean;
+    status?: Registrant;
 } & ComponentProps<typeof Avatar>
 
 interface MMOverlayTrigger extends BaseOverlayTrigger {
     hide: () => void;
 }
 
-const displayNameGetter = makeDisplayNameGetter();
-
 function UserAvatar({
-    userId,
+    user,
     overlayProps,
     displayProfileOverlay,
     displayProfileStatus,
+    disableFetch,
     status,
+    rootClose = true,
     ...props
 }: Props) {
-    const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
-    const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
-
-    const profilePictureURL = userId ? imageURLForUser(userId) : '';
+    const profilePictureURL = user.id ? imageURLForUser(user.id) : '';
 
     const overlay = useRef<MMOverlayTrigger>(null);
 
@@ -61,20 +56,21 @@ function UserAvatar({
             trigger='click'
             disabled={!displayProfileOverlay}
             placement='right'
-            rootClose={true}
+            rootClose={rootClose}
             ref={overlay}
             overlay={
                 <ProfilePopover
                     className='user-profile-popover'
-                    userId={userId}
+                    userId={user.id}
                     src={profilePictureURL}
                     hide={hideProfilePopover}
+                    disableFetch={disableFetch}
                 />
             }
         >
             <SimpleTooltip
-                id={`name-${userId}`}
-                content={name}
+                id={`name-${user.id}`}
+                content={user.username}
                 {...overlayProps}
             >
                 <RoundButton
@@ -86,7 +82,7 @@ function UserAvatar({
                         registrant={status}
                     >
                         <Avatar
-                            url={imageURLForUser(userId, user?.last_picture_update)}
+                            url={user?.public_picture_url ?? imageURLForUser(user.id, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
                         />
