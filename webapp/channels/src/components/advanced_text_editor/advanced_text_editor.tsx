@@ -367,6 +367,7 @@ const AdvancedTextEditor = ({
         handleDraftChange,
         focusTextbox,
         setServerError,
+        textboxRef,
         disabled: showPreview || isDisabled,
     });
     const [handleSubmit, errorClass] = useSubmit(

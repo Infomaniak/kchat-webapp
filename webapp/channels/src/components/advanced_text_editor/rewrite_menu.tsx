@@ -68,7 +68,8 @@ const RewriteMenu = ({
     const [customPrompt, setCustomPrompt] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleCustomPromptSubmit = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleCustomPromptKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.stopPropagation();
         if (e.key === 'Enter' && customPrompt.trim()) {
             onSelectAction(RewriteAction.CUSTOM, customPrompt.trim());
             setCustomPrompt('');
@@ -218,7 +219,7 @@ const RewriteMenu = ({
                 })}
                 value={customPrompt}
                 onChange={handleCustomPromptChange}
-                onKeyDown={handleCustomPromptSubmit}
+                onKeyDown={handleCustomPromptKeyDown}
             />
         </div>
     );

@@ -1,9 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import type {RefObject} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useIntl} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
+
+import type {TextboxClass} from 'components/textbox';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -17,6 +21,7 @@ interface UseRewriteParams {
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void;
     focusTextbox: (keepFocus?: boolean) => void;
     setServerError: (error: Error | null) => void;
+    textboxRef: RefObject<TextboxClass>;
     disabled?: boolean;
 }
 
@@ -30,8 +35,10 @@ const useRewrite = ({
     handleDraftChange,
     focusTextbox,
     setServerError,
+    textboxRef,
     disabled = false,
 }: UseRewriteParams): UseRewriteResult => {
+    const {formatMessage} = useIntl();
     const [isRewriting, setIsRewriting] = useState(false);
     const [originalMessage, setOriginalMessage] = useState<string | null>(null);
     const [lastAction, setLastAction] = useState<RewriteAction | null>(null);
@@ -40,18 +47,56 @@ const useRewrite = ({
 
     const hasMessage = Boolean(draft.message.trim());
 
+    useEffect(() => {
+        const input = textboxRef.current?.getInputBox();
+        if (!input) {
+            return undefined;
+        }
+
+        const wrapper = input.parentElement;
+        if (!wrapper) {
+            return undefined;
+        }
+
+        if (isRewriting) {
+            wrapper.style.position = 'relative';
+
+            const overlay = document.createElement('div');
+            overlay.className = 'rewrite-overlay';
+
+            const content = document.createElement('div');
+            content.className = 'rewrite-overlay__content';
+
+            const spinner = document.createElement('span');
+            spinner.className = 'rewrite-overlay__spinner';
+            spinner.innerHTML = '⟳';
+
+            const text = document.createElement('span');
+            text.textContent = formatMessage({
+                id: 'texteditor.rewrite.rewriting',
+                defaultMessage: 'Rewriting...',
+            });
+
+            content.appendChild(spinner);
+            content.appendChild(text);
+            overlay.appendChild(content);
+            wrapper.appendChild(overlay);
+
+            return () => {
+                overlay.remove();
+            };
+        }
+
+        return undefined;
+    }, [isRewriting, textboxRef, formatMessage]);
+
     const handleRewrite = useCallback(async (action: RewriteAction, customPrompt?: string) => {
         if (!draft.message.trim()) {
             return;
         }
 
-        if (originalMessage === null) {
-            setOriginalMessage(draft.message);
-        }
-
+        const messageBeforeRewrite = draft.message;
         setIsRewriting(true);
-        setLastAction(action);
-        setLastCustomPrompt(customPrompt);
 
         abortControllerRef.current = new AbortController();
 
@@ -61,6 +106,12 @@ const useRewrite = ({
                 action,
                 customPrompt,
             );
+
+            if (originalMessage === null) {
+                setOriginalMessage(messageBeforeRewrite);
+            }
+            setLastAction(action);
+            setLastCustomPrompt(customPrompt);
 
             handleDraftChange({
                 ...draft,
@@ -106,7 +157,7 @@ const useRewrite = ({
 
     const rewriteControl = useMemo(() => (
         <RewriteMenu
-            key='rewrite-menu'
+            key={`rewrite-menu-${draft.channelId}`}
             disabled={disabled || !hasMessage}
             isProcessing={isRewriting}
             hasOriginalMessage={originalMessage !== null}
@@ -116,6 +167,7 @@ const useRewrite = ({
             onStopGenerating={handleStopGenerating}
         />
     ), [
+        draft.channelId,
         hasMessage,
         disabled,
         isRewriting,
