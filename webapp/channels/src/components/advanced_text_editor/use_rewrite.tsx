@@ -68,8 +68,7 @@ const useRewrite = ({
             content.className = 'rewrite-overlay__content';
 
             const spinner = document.createElement('span');
-            spinner.className = 'rewrite-overlay__spinner';
-            spinner.innerHTML = '⟳';
+            spinner.className = 'fa fa-spinner fa-fw fa-pulse';
 
             const text = document.createElement('span');
             text.textContent = formatMessage({
