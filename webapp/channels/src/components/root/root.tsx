@@ -513,7 +513,7 @@ export default class Root extends React.PureComponent<Props, State> {
         if (isDesktopApp()) {
             if (isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0')) {
                 if (isDefaultAuthServer() && !token) {
-                    getChallengeAndRedirectToLogin(true);
+                    getChallengeAndRedirectToLogin();
                     console.log('[components/root] redirect to login'); // eslint-disable-line no-console
                     return;
                 }

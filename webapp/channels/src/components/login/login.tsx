@@ -12,8 +12,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import LoadingIk from 'components/loading_ik';
 
-import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
-import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
+import {isDesktopApp} from 'utils/user_agent';
 
 import {getChallengeAndRedirectToLogin, isDefaultAuthServer} from './utils';
 
@@ -37,7 +36,7 @@ const Login = () => {
                 // eslint-disable-next-line no-negated-condition
                 if (!Object.keys(data).length) {
                     if (isDefaultAuthServer()) {
-                        getChallengeAndRedirectToLogin(isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0'));
+                        getChallengeAndRedirectToLogin();
                     } else {
                         window.postMessage(
                             {
