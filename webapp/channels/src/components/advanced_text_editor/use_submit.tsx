@@ -82,6 +82,10 @@ const useSubmit = (
     const postFileIds = useSelector((state: GlobalState) => getFilesIdsForPost(state, postId || ''));
 
     const isDraftSubmitting = useRef(false);
+
+    // IK: Track last submission to prevent duplicate identical messages on unstable networks
+    const lastSubmission = useRef<{message: string; channelId: string; rootId: string; time: number} | null>(null);
+    const DUPLICATE_PREVENTION_MS = 350;
     const [errorClass, setErrorClass] = useState<string | null>(null);
     const isDirectOrGroup = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);
@@ -294,6 +298,17 @@ const useSubmit = (
             return;
         }
 
+        // IK: Prevent duplicate identical messages on unstable networks
+        const now = Date.now();
+        const last = lastSubmission.current;
+        if (last &&
+            last.message === submittingDraftParam.message &&
+            last.channelId === channelId &&
+            last.rootId === rootId &&
+            now - last.time < DUPLICATE_PREVENTION_MS) {
+            return;
+        }
+
         const submittingDraft = setUpdatedFileIds(submittingDraftParam);
         setShowPreview(false);
         isDraftSubmitting.current = true;
@@ -390,6 +405,13 @@ const useSubmit = (
                 }
             }
 
+            // IK: Record submission before sending to prevent duplicates
+            lastSubmission.current = {
+                message: submittingDraft.message,
+                channelId,
+                rootId,
+                time: Date.now(),
+            };
             await doSubmit(submittingDraft, schedulingInfo, options);
         } finally {
             isDraftSubmitting.current = false;
