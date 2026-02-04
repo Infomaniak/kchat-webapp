@@ -94,10 +94,12 @@ export async function generateCodeChallenge(codeVerifier: string) {
 
 /**
  * get code_challenge and redirect to IK Login
+ * For desktop >= 2.1.0, we use infinite token (no refresh token needed)
  */
-export async function getChallengeAndRedirectToLogin(infinite = false) {
+export async function getChallengeAndRedirectToLogin() {
     const redirectTo = new URL('/', window.location.origin).toString();
     const codeVerifier = getCodeVerifier();
+    const isInfiniteToken = isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.1.0');
 
     try {
         const codeChallenge = await generateCodeChallenge(codeVerifier);
@@ -109,7 +111,7 @@ export async function getChallengeAndRedirectToLogin(infinite = false) {
         const params = new URLSearchParams();
         params.set('code_challenge_method', 'S256');
         params.set('code_challenge', codeChallenge);
-        if (infinite) {
+        if (!isInfiniteToken) {
             params.set('access_type', 'offline');
         }
         params.set('client_id', IKConstants.CLIENT_ID);
