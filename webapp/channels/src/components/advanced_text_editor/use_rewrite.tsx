@@ -123,6 +123,11 @@ const useRewrite = ({
             });
             focusTextbox(true);
         } catch (error) {
+            if (abortController.signal.aborted) {
+                // eslint-disable-next-line no-console
+                console.info('[Rewrite] Aborted, ignoring error:', error);
+                return;
+            }
             if (error instanceof Error && error.name !== 'AbortError') {
                 setServerError(error);
             }
@@ -153,6 +158,8 @@ const useRewrite = ({
 
     const handleStopGenerating = useCallback(() => {
         if (abortControllerRef.current) {
+            // eslint-disable-next-line no-console
+            console.info('[Rewrite] User aborted rewrite');
             abortControllerRef.current.abort();
             abortControllerRef.current = null;
         }
