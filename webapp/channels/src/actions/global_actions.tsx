@@ -262,6 +262,12 @@ export function emitLocalUserTypingEvent(eventType = 'typing', channelId: string
     return dispatch(userTyping);
 }
 
+function getIKLogoutUrl() {
+    const url = isDesktopApp() ? new URL(IKConstants.LOGOUT_URL) : new URL('v3/logout', IKConstants.MANAGER_URL);
+    url.searchParams.set('r', window.location.origin);
+    return url.toString();
+}
+
 export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = true, userAction = true) {
     // If the logout was intentional, discard knowledge about having previously been logged in.
     // This bit is otherwise used to detect session expirations on the login page.
@@ -290,31 +296,23 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
         if (redirectTo && redirectTo !== 'ikLogout') {
             getHistory().push(redirectTo);
         } else if (userAction) {
-            // if ikLogout go to external ik logout
-            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
-                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
-                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
-
             // Desktop version 2.0 and up handles logout through authManager
             if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
                 return;
             }
 
-            window.location.assign(url);
+            // if ikLogout go to external ik logout
+            window.location.assign(getIKLogoutUrl());
         }
     }).catch(() => {
         if (redirectTo && redirectTo !== 'ikLogout') {
             getHistory().push(redirectTo);
         } else if (userAction) {
-            const url = isDesktopApp() ? // eslint-disable-line multiline-ternary
-                `${IKConstants.LOGOUT_URL}?r=${window.location.origin}` : // eslint-disable-line multiline-ternary
-                `${IKConstants.MANAGER_URL}shared/superadmin/logout.php?r=${window.location.origin}`;
-
             // Desktop version 2.0 and up handles logout through authManager
             if (isDesktopApp() && isServerVersionGreaterThanOrEqualTo(getDesktopVersion(), '2.0.0')) {
                 return;
             }
-            window.location.assign(url);
+            window.location.assign(getIKLogoutUrl());
         }
     });
 }
