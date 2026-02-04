@@ -1,0 +1,144 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+.rewrite-menu-button {
+    display: flex;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 7px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: rgba(var(--center-channel-color-rgb), var(--icon-opacity));
+    cursor: pointer;
+    place-content: center;
+    place-items: center;
+
+    &:hover {
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), var(--icon-opacity-hover));
+    }
+
+    &:active,
+    &.active {
+        background: rgba(var(--button-bg-rgb), 0.08);
+        color: var(--button-bg);
+    }
+
+    &:disabled {
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}
+
+.rewrite-stop-button {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.rewrite-menu {
+    min-width: 280px;
+
+    &__generated-by {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.72);
+        font-size: 12px;
+        font-weight: 600;
+        gap: 6px;
+    }
+
+    &__header {
+        display: flex;
+        padding: 8px 12px;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        gap: 8px;
+    }
+
+    &__action-button {
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        color: var(--center-channel-color);
+        cursor: pointer;
+        font-size: 12px;
+        gap: 4px;
+
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.16);
+        }
+    }
+
+    &__custom-prompt {
+        padding: 8px 12px;
+        border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+    }
+
+    &__custom-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+        border-radius: 4px;
+        background: var(--center-channel-bg);
+        color: var(--center-channel-color);
+        font-size: 14px;
+
+        &::placeholder {
+            color: rgba(var(--center-channel-color-rgb), 0.56);
+        }
+
+        &:focus {
+            border-color: var(--button-bg);
+            outline: none;
+        }
+    }
+}
+
+.rewrite-overlay {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(var(--center-channel-bg-rgb), 0.8);
+    inset: 0;
+
+    &__content {
+        display: flex;
+        align-items: center;
+        color: var(--center-channel-color);
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    &__spinner {
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

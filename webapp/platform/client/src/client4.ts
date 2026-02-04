@@ -4915,6 +4915,14 @@ export default class Client4 {
         return this.doFetch(url, {method: 'post'});
     }
 
+    async getAIRewrittenMessage(message: string, action?: string, customPrompt?: string): Promise<string> {
+        const response = await this.doFetch<{rewritten_text: string}>(
+            `${this.getPostsRoute()}/rewrite`,
+            {method: 'post', body: JSON.stringify({message, action, custom_prompt: customPrompt})},
+        );
+        return response.rewritten_text;
+    }
+
     // Schedule Post methods
     createScheduledPost = (schedulePost: PartialExcept<ScheduledPost, 'channel_id' | 'message' | 'scheduled_at'>, connectionId: string) => {
         this.trackFeatureEvent('scheduled_posts', 'create_scheduled_post', {actual_user_id: schedulePost.user_id, user_agent: 'desktop'});

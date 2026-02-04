@@ -84,6 +84,7 @@ import useKeyHandler from './use_key_handler';
 import useOrientationHandler from './use_orientation_handler';
 import usePluginItems from './use_plugin_items';
 import usePriority from './use_priority';
+import useRewrite from './use_rewrite';
 import useSubmit from './use_submit';
 import useTextboxFocus from './use_textbox_focus';
 import useUploadFiles from './use_upload_files';
@@ -361,6 +362,13 @@ const AdvancedTextEditor = ({
         isValidPersistentNotifications,
         onSubmitCheck: prioritySubmitCheck,
     } = usePriority(draft, handleDraftChange, focusTextbox, showPreview);
+    const {rewriteControl} = useRewrite({
+        draft,
+        handleDraftChange,
+        focusTextbox,
+        setServerError,
+        disabled: showPreview || isDisabled,
+    });
     const [handleSubmit, errorClass] = useSubmit(
         draft,
         postError,
@@ -722,8 +730,9 @@ const AdvancedTextEditor = ({
                 disabled={showPreview}
             />,
         ]),
+        rewriteControl,
         ...(pluginItems || []),
-    ].filter(Boolean), [pluginItems, priorityAdditionalControl, isInEditMode, location, showPreview]);
+    ].filter(Boolean), [pluginItems, priorityAdditionalControl, rewriteControl, isInEditMode, location, showPreview]);
 
     const formattingBar = (
         <AutoHeightSwitcher
