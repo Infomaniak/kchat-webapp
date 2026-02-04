@@ -14,13 +14,56 @@ import {
 } from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import type {MessageDescriptor} from 'react-intl';
+import {defineMessage, FormattedMessage, useIntl} from 'react-intl';
 
 import * as Menu from 'components/menu';
 import WithTooltip from 'components/with_tooltip';
 
 import {IconContainer} from './formatting_bar/formatting_icon';
 import {RewriteAction} from './rewrite_action';
+
+interface MenuItemConfig {
+    action: RewriteAction;
+    label: MessageDescriptor;
+    icon: React.ReactElement;
+}
+
+const menuItems: MenuItemConfig[] = [
+    {
+        action: RewriteAction.IMPROVE_WRITING,
+        label: defineMessage({id: 'texteditor.rewrite.improveWriting', defaultMessage: 'Improve writing'}),
+        icon: <PencilOutlineIcon size={18}/>,
+    },
+    {
+        action: RewriteAction.FIX_SPELLING,
+        label: defineMessage({id: 'texteditor.rewrite.fixSpelling', defaultMessage: 'Fix spelling and grammar'}),
+        icon: <FormatLetterCaseIcon size={18}/>,
+    },
+    {
+        action: RewriteAction.SHORTEN,
+        label: defineMessage({id: 'texteditor.rewrite.shorten', defaultMessage: 'Shorten'}),
+        icon: <ArrowCollapseIcon size={18}/>,
+    },
+    {
+        action: RewriteAction.ELABORATE,
+        label: defineMessage({id: 'texteditor.rewrite.elaborate', defaultMessage: 'Elaborate'}),
+        icon: <ArrowExpandIcon size={18}/>,
+    },
+    {
+        action: RewriteAction.SIMPLIFY,
+        label: defineMessage({id: 'texteditor.rewrite.simplify', defaultMessage: 'Simplify'}),
+        icon: <LightbulbOutlineIcon size={18}/>,
+    },
+    {
+        action: RewriteAction.SUMMARIZE,
+        label: defineMessage({id: 'texteditor.rewrite.summarize', defaultMessage: 'Summarize'}),
+        icon: <FormatListBulletedIcon size={18}/>,
+    },
+];
+
+const customPromptPlaceholder = defineMessage({id: 'texteditor.rewrite.prompt', defaultMessage: 'Ask AI to edit message...'});
+const customPromptNextPlaceholder = defineMessage({id: 'texteditor.rewrite.nextPrompt', defaultMessage: 'What would you like AI to do next?'});
 
 interface RewriteMenuProps {
     disabled?: boolean;
@@ -79,45 +122,6 @@ const RewriteMenu = ({
     const handleCustomPromptChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setCustomPrompt(e.target.value);
     }, []);
-
-    const menuItems = [
-        {
-            action: RewriteAction.IMPROVE_WRITING,
-            labelId: 'texteditor.rewrite.improveWriting',
-            defaultMessage: 'Improve writing',
-            icon: PencilOutlineIcon,
-        },
-        {
-            action: RewriteAction.FIX_SPELLING,
-            labelId: 'texteditor.rewrite.fixSpelling',
-            defaultMessage: 'Fix spelling and grammar',
-            icon: FormatLetterCaseIcon,
-        },
-        {
-            action: RewriteAction.SHORTEN,
-            labelId: 'texteditor.rewrite.shorten',
-            defaultMessage: 'Shorten',
-            icon: ArrowCollapseIcon,
-        },
-        {
-            action: RewriteAction.ELABORATE,
-            labelId: 'texteditor.rewrite.elaborate',
-            defaultMessage: 'Elaborate',
-            icon: ArrowExpandIcon,
-        },
-        {
-            action: RewriteAction.SIMPLIFY,
-            labelId: 'texteditor.rewrite.simplify',
-            defaultMessage: 'Simplify',
-            icon: LightbulbOutlineIcon,
-        },
-        {
-            action: RewriteAction.SUMMARIZE,
-            labelId: 'texteditor.rewrite.summarize',
-            defaultMessage: 'Summarize',
-            icon: FormatListBulletedIcon,
-        },
-    ];
 
     if (isProcessing) {
         return (
@@ -213,10 +217,7 @@ const RewriteMenu = ({
                 ref={inputRef}
                 type='text'
                 className='rewrite-menu__custom-input'
-                placeholder={formatMessage({
-                    id: hasOriginalMessage ? 'texteditor.rewrite.nextPrompt' : 'texteditor.rewrite.prompt',
-                    defaultMessage: hasOriginalMessage ? 'What would you like AI to do next?' : 'Ask AI to edit message...',
-                })}
+                placeholder={formatMessage(hasOriginalMessage ? customPromptNextPlaceholder : customPromptPlaceholder)}
                 value={customPrompt}
                 onChange={handleCustomPromptChange}
                 onKeyDown={handleCustomPromptKeyDown}
@@ -261,29 +262,14 @@ const RewriteMenu = ({
             anchorOrigin={{vertical: 'top', horizontal: 'left'}}
             transformOrigin={{vertical: 'bottom', horizontal: 'left'}}
         >
-            {menuItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                    <Menu.Item
-                        key={item.action}
-                        onClick={() => onSelectAction(item.action)}
-                        labels={
-                            <span>
-                                <FormattedMessage
-                                    id={item.labelId}
-                                    defaultMessage={item.defaultMessage}
-                                />
-                            </span>
-                        }
-                        leadingElement={
-                            <Icon
-                                color='currentColor'
-                                size={18}
-                            />
-                        }
-                    />
-                );
-            })}
+            {menuItems.map((item) => (
+                <Menu.Item
+                    key={item.action}
+                    onClick={() => onSelectAction(item.action)}
+                    labels={<span>{formatMessage(item.label)}</span>}
+                    leadingElement={item.icon}
+                />
+            ))}
         </Menu.Container>
     );
 };

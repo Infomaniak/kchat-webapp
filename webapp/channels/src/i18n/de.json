@@ -5147,6 +5147,7 @@
   "texteditor.rewrite.nextPrompt": "Was soll die KI als nächstes tun?",
   "texteditor.rewrite.prompt": "KI bitten, die Nachricht zu bearbeiten...",
   "texteditor.rewrite.regenerate": "Neu generieren",
+  "texteditor.rewrite.rewriting": "Wird umgeschrieben...",
   "texteditor.rewrite.shorten": "Kürzen",
   "texteditor.rewrite.simplify": "Vereinfachen",
   "texteditor.rewrite.stopGenerating": "Generierung stoppen",

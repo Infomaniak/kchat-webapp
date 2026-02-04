@@ -5147,6 +5147,7 @@
   "texteditor.rewrite.nextPrompt": "¿Qué quieres que haga la IA después?",
   "texteditor.rewrite.prompt": "Pide a la IA que edite el mensaje...",
   "texteditor.rewrite.regenerate": "Regenerar",
+  "texteditor.rewrite.rewriting": "Reescribiendo...",
   "texteditor.rewrite.shorten": "Acortar",
   "texteditor.rewrite.simplify": "Simplificar",
   "texteditor.rewrite.stopGenerating": "Detener generación",
