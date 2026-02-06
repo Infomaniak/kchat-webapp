@@ -5144,7 +5144,7 @@
   "texteditor.rewrite.nextPrompt": "Que souhaitez-vous qu'Euria fasse ensuite ?",
   "texteditor.rewrite.prompt": "Demander à Euria de modifier le message...",
   "texteditor.rewrite.regenerate": "Régénérer",
-  "texteditor.rewrite.rewriting": "Réécriture en cours...",
+  "texteditor.rewrite.rewriting": "En train de réfléchir...",
   "texteditor.rewrite.shorten": "Raccourcir",
   "texteditor.rewrite.simplify": "Simplifier",
   "texteditor.rewrite.stopGenerating": "Arrêter la génération",

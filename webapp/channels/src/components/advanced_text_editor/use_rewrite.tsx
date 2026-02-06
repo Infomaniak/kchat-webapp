@@ -3,11 +3,14 @@
 
 import type {RefObject} from 'react';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import ReactDOM from 'react-dom';
 import {useIntl} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
 
 import type {TextboxClass} from 'components/textbox';
+
+import IconEuria from 'plugins/ai/components/assets/icon_euria';
 
 import type {PostDraft} from 'types/store/draft';
 
@@ -15,6 +18,18 @@ import type {RewriteAction} from './rewrite_action';
 import RewriteMenu from './rewrite_menu';
 
 import './use_rewrite.scss';
+
+const RewriteOverlay = ({text}: {text: string}) => (
+    <div className='rewrite-overlay'>
+        <div className='rewrite-overlay__content'>
+            <IconEuria
+                height={16}
+                width={16}
+            />
+            <span>{text}</span>
+        </div>
+    </div>
+);
 
 interface UseRewriteParams {
     draft: PostDraft;
@@ -61,28 +76,18 @@ const useRewrite = ({
         if (isRewriting) {
             wrapper.style.position = 'relative';
 
-            const overlay = document.createElement('div');
-            overlay.className = 'rewrite-overlay';
+            const container = document.createElement('div');
+            wrapper.appendChild(container);
 
-            const content = document.createElement('div');
-            content.className = 'rewrite-overlay__content';
-
-            const spinner = document.createElement('span');
-            spinner.className = 'fa fa-spinner fa-fw fa-pulse';
-
-            const text = document.createElement('span');
-            text.textContent = formatMessage({
+            const text = formatMessage({
                 id: 'texteditor.rewrite.rewriting',
-                defaultMessage: 'Rewriting...',
+                defaultMessage: 'Thinking...',
             });
-
-            content.appendChild(spinner);
-            content.appendChild(text);
-            overlay.appendChild(content);
-            wrapper.appendChild(overlay);
+            ReactDOM.render(<RewriteOverlay text={text}/>, container);
 
             return () => {
-                overlay.remove();
+                ReactDOM.unmountComponentAtNode(container);
+                container.remove();
             };
         }
 
