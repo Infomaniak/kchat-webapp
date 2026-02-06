@@ -2,15 +2,15 @@
 // See LICENSE.txt for license information.
 
 import {
-    ArrowCollapseIcon,
-    ArrowExpandIcon,
+    AiSummarizeIcon,
+    AutoFixIcon,
     CloseIcon,
-    FormatLetterCaseIcon,
-    FormatListBulletedIcon,
-    LightbulbOutlineIcon,
-    PencilOutlineIcon,
+    CreationOutlineIcon,
     RefreshIcon,
+    SpellcheckIcon,
     SquareIcon,
+    TextLongIcon,
+    TextShortIcon,
 } from '@infomaniak/compass-icons/components';
 import classNames from 'classnames';
 import React, {useCallback, useRef, useState} from 'react';
@@ -35,32 +35,32 @@ const menuItems: MenuItemConfig[] = [
     {
         action: RewriteAction.IMPROVE_WRITING,
         label: defineMessage({id: 'texteditor.rewrite.improveWriting', defaultMessage: 'Improve writing'}),
-        icon: <PencilOutlineIcon size={18}/>,
+        icon: <AutoFixIcon size={18}/>,
     },
     {
         action: RewriteAction.FIX_SPELLING,
         label: defineMessage({id: 'texteditor.rewrite.fixSpelling', defaultMessage: 'Fix spelling and grammar'}),
-        icon: <FormatLetterCaseIcon size={18}/>,
+        icon: <SpellcheckIcon size={18}/>,
     },
     {
         action: RewriteAction.SHORTEN,
         label: defineMessage({id: 'texteditor.rewrite.shorten', defaultMessage: 'Shorten'}),
-        icon: <ArrowCollapseIcon size={18}/>,
+        icon: <TextShortIcon size={18}/>,
     },
     {
         action: RewriteAction.ELABORATE,
         label: defineMessage({id: 'texteditor.rewrite.elaborate', defaultMessage: 'Elaborate'}),
-        icon: <ArrowExpandIcon size={18}/>,
+        icon: <TextLongIcon size={18}/>,
     },
     {
         action: RewriteAction.SIMPLIFY,
         label: defineMessage({id: 'texteditor.rewrite.simplify', defaultMessage: 'Simplify'}),
-        icon: <LightbulbOutlineIcon size={18}/>,
+        icon: <CreationOutlineIcon size={18}/>,
     },
     {
         action: RewriteAction.SUMMARIZE,
         label: defineMessage({id: 'texteditor.rewrite.summarize', defaultMessage: 'Summarize'}),
-        icon: <FormatListBulletedIcon size={18}/>,
+        icon: <AiSummarizeIcon size={18}/>,
     },
 ];
 
