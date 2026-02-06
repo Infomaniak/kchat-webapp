@@ -220,6 +220,9 @@ const RewriteMenu = ({
                 value={customPrompt}
                 onChange={handleCustomPromptChange}
                 onKeyDown={handleCustomPromptKeyDown}
+                autoComplete='off'
+                data-lpignore='true'
+                data-form-type='other'
             />
         </div>
     );
