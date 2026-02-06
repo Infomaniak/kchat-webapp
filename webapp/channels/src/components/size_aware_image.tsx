@@ -324,7 +324,9 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             </WithTooltip>
         );
 
-        const kdriveSave = fileInfo && shouldShowKdriveAction ? (
+        const showkDriveAction = fileInfo && shouldShowKdriveAction;
+
+        const kdriveSave = showkDriveAction ? (
             <WithTooltip
                 title={localizeMessage({id: 'kdrive.save', defaultMessage: 'Save file to kDrive'})}
             >
@@ -376,7 +378,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
                     </div>
                     <span
                         className={classNames('image-preview-utility-buttons-container', 'image-preview-utility-buttons-container--small-image', {
-                            'image-preview-utility-buttons-container--small-image-no-copy-button': !enablePublicLink,
+                            'image-preview-utility-buttons-container--small-image-no-copy-button': !showkDriveAction,
                         })}
                         style={leftStyle}
                     >
@@ -396,7 +398,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
 
                         // cases for when image isn't a small image but width is < 100px
                         'image-preview-utility-buttons-container--small-image': this.state.imageWidth < MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS,
-                        'image-preview-utility-buttons-container--small-image-no-copy-button': (!enablePublicLink || !this.isInternalImage) && this.state.imageWidth < MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS,
+                        'image-preview-utility-buttons-container--small-image-no-copy-button': (!showkDriveAction || !this.isInternalImage) && this.state.imageWidth < MIN_IMAGE_SIZE_FOR_INTERNAL_BUTTONS,
                     })}
                 >
                     {(enablePublicLink || !this.isInternalImage) && copyLink}
