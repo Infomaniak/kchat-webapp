@@ -5142,7 +5142,7 @@
   "texteditor.rewrite.discard": "Annulla",
   "texteditor.rewrite.elaborate": "Elabora",
   "texteditor.rewrite.fixSpelling": "Correggi ortografia e grammatica",
-  "texteditor.rewrite.generatedBy": "Generato da Euria",
+  "texteditor.rewrite.generatedBy": "Chiedi a Euria",
   "texteditor.rewrite.improveWriting": "Migliora la scrittura",
   "texteditor.rewrite.nextPrompt": "Cosa vorresti che Euria facesse dopo?",
   "texteditor.rewrite.prompt": "Chiedi a Euria di modificare il messaggio...",
