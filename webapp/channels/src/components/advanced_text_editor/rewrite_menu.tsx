@@ -20,6 +20,8 @@ import {defineMessage, FormattedMessage, useIntl} from 'react-intl';
 import * as Menu from 'components/menu';
 import WithTooltip from 'components/with_tooltip';
 
+import IconEuria from 'plugins/ai/components/assets/icon_euria';
+
 import {IconContainer} from './formatting_bar/formatting_icon';
 import {RewriteAction} from './rewrite_action';
 
@@ -236,10 +238,7 @@ const RewriteMenu = ({
                 class: classNames('rewrite-menu-button', {active: false}),
                 disabled,
                 children: (
-                    <SparklesIcon
-                        color='currentColor'
-                        size={18}
-                    />
+                    <IconEuria/>
                 ),
             }}
             menuButtonTooltip={{
