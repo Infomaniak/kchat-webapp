@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 export const Body = styled.div`
     width: 264px;
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 4px;
+    background: var(--center-channel-bg);
+    box-shadow: var(--elevation-4);
 `;
 
 export const Header = styled.div`
