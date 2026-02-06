@@ -77,29 +77,6 @@ interface RewriteMenuProps {
     onStopGenerating: () => void;
 }
 
-const SparklesIcon = ({size = 18, color = 'currentColor'}: {size?: number; color?: string}) => (
-    <svg
-        width={size}
-        height={size}
-        viewBox='0 0 16 16'
-        fill='none'
-        xmlns='http://www.w3.org/2000/svg'
-    >
-        <path
-            d='M8 1L7.12 4.12L4 5L7.12 5.88L8 9L8.88 5.88L12 5L8.88 4.12L8 1Z'
-            fill={color}
-        />
-        <path
-            d='M12 7L11.648 8.248L10.4 8.6L11.648 8.952L12 10.2L12.352 8.952L13.6 8.6L12.352 8.248L12 7Z'
-            fill={color}
-        />
-        <path
-            d='M4 9L3.472 10.528L2 11L3.472 11.472L4 13L4.528 11.472L6 11L4.528 10.528L4 9Z'
-            fill={color}
-        />
-    </svg>
-);
-
 const RewriteMenu = ({
     disabled,
     isProcessing,
