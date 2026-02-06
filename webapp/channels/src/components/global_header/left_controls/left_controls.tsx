@@ -4,7 +4,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import AppNameDisplay from 'components/app_name_display';
+import IKAppBranding from 'components/app_branding';
 
 import {isDesktopApp, isPWA} from 'utils/user_agent';
 
@@ -13,11 +13,9 @@ import HistoryButtons from './history_buttons';
 const LeftControlsContainer = styled.div`
     display: flex;
     align-items: center;
-    height: 46px;
     flex-shrink: 0;
     background: var(--sidebar-bg);
-    border-bottom: solid 1px rgba(var(--sidebar-text-rgb), 0.25);
-    padding-left: 10px;
+    height: 64px;
     width: var(--overrideLhsWidth, 264px);
     min-width: 200px;
     max-width: 200px;
@@ -40,8 +38,7 @@ const LeftControlsContainer = styled.div`
 
 const LeftControls = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>}): JSX.Element => (
     <LeftControlsContainer ref={headerRef}>
-        {/* <ProductMenu/> */}
-        <AppNameDisplay/>
+        <IKAppBranding/>
         {(isDesktopApp() || isPWA()) && <HistoryButtons/>}
     </LeftControlsContainer>
 );

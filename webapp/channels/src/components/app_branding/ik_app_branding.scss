@@ -1,0 +1,30 @@
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
+// See LICENSE.txt for license information.
+
+.ik-app-branding {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &__logo {
+        width: 40px;
+        height: 40px;
+        margin-left: 16px;
+    }
+
+    &__title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 400;
+    }
+
+    &__name {
+        color: var(--ik-app-branding-name-color);
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+}
