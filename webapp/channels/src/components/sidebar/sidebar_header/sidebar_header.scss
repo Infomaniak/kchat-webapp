@@ -5,7 +5,12 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 15px;
+    margin: 10px 0 15px;
+
+    &--desktop {
+        margin-bottom: 0;
+    }
 
     &:empty { // Ik change : if no children, collapse height
         display: none;
@@ -24,7 +29,7 @@
         background: #0088B2;
         color: #FFF;
         font-size: 14px;
-        gap: 5px;
+        gap: 10px;
         line-height: 1;
     }
 }

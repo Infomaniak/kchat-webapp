@@ -638,6 +638,7 @@ export function applyTheme(theme: Theme) {
             'ik-modal-header': theme.ikModalHeader,
             'ik-btn-secondary': theme.ikBtnSecondary,
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
+            'ik-app-branding-name-color': theme.ikAppBrandingNameColor,
 
             // integrations
             'ik-integration-header-color': theme.integrationHeaderColor,

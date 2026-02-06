@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/IKAppBranding should match snapshot on desktop app 1`] = `
+<div
+  className="ik-app-branding"
+>
+  <img
+    alt="kChat logo"
+    className="ik-app-branding__logo"
+    src=""
+  />
+</div>
+`;
+
+exports[`components/IKAppBranding should match snapshot on web 1`] = `
+<div
+  className="ik-app-branding"
+>
+  <img
+    alt="kChat logo"
+    className="ik-app-branding__logo"
+    src=""
+  />
+  <span
+    className="ik-app-branding__title"
+  >
+    <img
+      alt="Infomaniak"
+      src=""
+    />
+    <span
+      className="ik-app-branding__name"
+    >
+      kChat
+    </span>
+  </span>
+</div>
+`;

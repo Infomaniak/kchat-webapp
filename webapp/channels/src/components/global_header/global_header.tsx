@@ -13,7 +13,6 @@ const GlobalHeaderContainer = styled.header`
     position: relative;
     display: flex;
     flex-shrink: 0;
-    align-items: center;
     justify-content: space-between;
     height: 46px;
     background: var(--global-header-background);

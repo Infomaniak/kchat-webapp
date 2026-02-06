@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
 import {useSelector} from 'react-redux';
 
@@ -32,8 +33,10 @@ const SidebarHeader = (props: Props) => {
         return null;
     }
 
+    const isDesktop = isDesktopApp();
+
     return (
-        <header className='sidebarHeaderContainer'>
+        <header className={classNames('sidebarHeaderContainer', {'sidebarHeaderContainer--desktop': isDesktop})}>
             {isDesktopApp() && (
                 <button
                     className='style--none sidebar-header'
