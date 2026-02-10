@@ -32,6 +32,11 @@ exports[`components/threading/common/thread_menu should match snapshot 1`] = `
     <MenuItemAction
       onClick={[Function]}
       show={true}
+      text="Summarize"
+    />
+    <MenuItemAction
+      onClick={[Function]}
+      show={true}
       text="Save"
     />
     <MenuItemAction
@@ -71,6 +76,11 @@ exports[`components/threading/common/thread_menu should match snapshot after ope
       onClick={[Function]}
       show={true}
       text="Mark as unread"
+    />
+    <MenuItemAction
+      onClick={[Function]}
+      show={true}
+      text="Summarize"
     />
     <MenuItemAction
       onClick={[Function]}
