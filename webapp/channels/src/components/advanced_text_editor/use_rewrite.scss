@@ -115,9 +115,10 @@
     z-index: 10;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 4px;
     background: rgba(var(--center-channel-bg-rgb), 0.8);
+    padding-left: 16px;
     inset: 0;
 
     &__content {
