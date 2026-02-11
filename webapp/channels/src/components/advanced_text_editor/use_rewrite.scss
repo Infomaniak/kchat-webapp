@@ -14,9 +14,22 @@
     place-content: center;
     place-items: center;
 
+    &__icon-filled {
+        display: none;
+    }
+
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.08);
         color: rgba(var(--center-channel-color-rgb), var(--icon-opacity-hover));
+
+        .rewrite-menu-button__icon-outline {
+            display: none;
+        }
+
+        .rewrite-menu-button__icon-filled {
+            display: block;
+            animation: euria-scale-bounce 0.3s ease-out;
+        }
     }
 
     &:active,
@@ -29,6 +42,24 @@
         color: rgba(var(--center-channel-color-rgb), 0.32);
         cursor: not-allowed;
         pointer-events: none;
+    }
+}
+
+@keyframes euria-scale-bounce {
+    0% {
+        transform: scale(0.6);
+    }
+
+    60% {
+        transform: scale(1.1);
+    }
+
+    80% {
+        transform: scale(0.97);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 

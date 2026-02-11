@@ -216,7 +216,14 @@ const RewriteMenu = ({
                 class: classNames('rewrite-menu-button', {active: false}),
                 disabled,
                 children: (
-                    <IconEuriaOutline/>
+                    <>
+                        <IconEuriaOutline className='rewrite-menu-button__icon-outline'/>
+                        <IconEuria
+                            className='rewrite-menu-button__icon-filled'
+                            height={18}
+                            width={18}
+                        />
+                    </>
                 ),
             }}
             menuButtonTooltip={{
