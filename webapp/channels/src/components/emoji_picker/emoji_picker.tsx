@@ -65,7 +65,6 @@ const EmojiPicker = ({
 }: Props) => {
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
-    const [isHovered, setIsHovered] = useState(false);
     const pickerContainerRef = useRef<HTMLDivElement>(null);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
@@ -147,6 +146,7 @@ const EmojiPicker = ({
 
         const [updatedCategoryOrEmojisRows, updatedEmojiPositions] = createCategoryAndEmojiRows(allEmojis, categories, filter, userSkinTone);
 
+        selectFirstEmoji(updatedEmojiPositions);
         setCategoryOrEmojisRows(updatedCategoryOrEmojisRows);
         setEmojiPositionsArray(updatedEmojiPositions);
         throttledSearchCustomEmoji.current(filter, customEmojisEnabled);
@@ -174,6 +174,22 @@ const EmojiPicker = ({
         }
         const emoji = allEmojis[emojiId] || allEmojis[emojiId.toUpperCase()] || allEmojis[emojiId.toLowerCase()];
         return emoji;
+    };
+
+    const selectFirstEmoji = (positions: EmojiPosition[]) => {
+        if (!positions[0]) {
+            return;
+        }
+
+        const {rowIndex, emojiId} = positions[0];
+        const cursorEmoji = getEmojiById(emojiId);
+        if (cursorEmoji) {
+            setCursor({
+                rowIndex,
+                emojiId,
+                emoji: cursorEmoji,
+            });
+        }
     };
 
     const handleCategoryClick = useCallback((categoryRowIndex: CategoryOrEmojiRow['index'], categoryName: EmojiCategory, emojiId: string) => {
@@ -358,7 +374,6 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const handleEmojiOnMouseOver = (mouseOverCursor: EmojiCursor) => {
-        setIsHovered(true);
         if (mouseOverCursor.emojiId !== cursor.emojiId || cursor.emojiId === '') {
             setCursor(mouseOverCursor);
         }
@@ -371,7 +386,6 @@ const EmojiPicker = ({
             emojiId: '',
             emoji: undefined,
         });
-        setIsHovered(false);
     };
 
     const cursorEmojiName = useMemo(() => {
@@ -390,7 +404,7 @@ const EmojiPicker = ({
     let footerContent;
     if (areSearchResultsEmpty) {
         footerContent = <div/>;
-    } else if (isHovered) {
+    } else if (cursor.emoji) {
         footerContent = <EmojiPickerPreview emoji={cursor.emoji}/>;
     } else {
         footerContent = (
