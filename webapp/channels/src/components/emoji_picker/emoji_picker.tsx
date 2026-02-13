@@ -155,14 +155,11 @@ const EmojiPicker = ({
         searchInputRef.current?.focus();
     }, []);
 
-    // clear out the active category on search input
     useEffect(() => {
-        if (activeCategory !== getInitialActiveCategory()) {
-            setActiveCategory(getInitialActiveCategory());
+        if (filter.length > 0) {
+            // eslint-disable-next-line no-underscore-dangle
+            infiniteLoaderRef?.current?._listRef?.scrollToItem(0, 'start');
         }
-
-        // eslint-disable-next-line no-underscore-dangle
-        infiniteLoaderRef?.current?._listRef?.scrollToItem(0, 'start');
     }, [filter]);
 
     const focusOnSearchInput = useCallback(() => {

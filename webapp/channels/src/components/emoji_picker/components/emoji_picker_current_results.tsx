@@ -91,10 +91,13 @@ const EmojiPickerCurrentResults = forwardRef<InfiniteLoader, Props>(({childRef, 
         incrementEmojiPickerPage();
     };
     useEffect(() => {
+        if (isFiltering) {
+            return;
+        }
         if (listRef.current) {
             listRef.current.scrollTo(scrollPositionRef.current);
         }
-    }, [categoryOrEmojisRows]); // keep track of the current categoryOrEmojisRows to avoid scrolling back after mounting
+    }, [categoryOrEmojisRows, isFiltering]);
 
     return (
         <div
