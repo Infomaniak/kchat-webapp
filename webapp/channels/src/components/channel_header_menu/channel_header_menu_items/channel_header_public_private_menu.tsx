@@ -161,7 +161,7 @@ const ChannelHeaderPublicMenu = ({channel, user, isMuted, isReadonly, isDefault,
             {!isDefault && (
                 <Menu.Separator/>
             )}
-            {!isDefault && !isGuest(user.roles) && (
+            {!isDefault && !isArchived && !isGuest(user.roles) && (
                 <MenuItemLeaveChannel
                     id='channelLeaveChannel'
                     channel={channel}

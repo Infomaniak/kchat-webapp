@@ -295,7 +295,7 @@ class ChannelHeader extends React.PureComponent<Props> {
                     tooltip={this.props.intl.formatMessage({id: 'channel_header.channelMembers', defaultMessage: 'Members'})}
                     buttonClass={membersIconClass}
                     buttonId={'member_rhs'}
-                    onClick={channelIsArchived ? () => {} : this.toggleChannelMembersRHS}
+                    onClick={this.toggleChannelMembersRHS}
                 >
                     {membersIcon}
                 </HeaderIconWrapper>
