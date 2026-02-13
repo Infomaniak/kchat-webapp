@@ -6,7 +6,7 @@ Context brain for AI agents working on kChat repository.
 
 ## 1. Project Summary
 
-**kChat** is Infomaniak's fork of Mattermost, a professional messaging platform for teams, integrated into the kSuite.
+**kChat** is Infomaniak's messaging platform for teams, integrated into the kSuite. Originally forked from Mattermost, it is now a **hard fork** — an independent codebase with no upstream sync obligation.
 
 ### High-Level Tech Stack
 
@@ -95,15 +95,13 @@ yarn build:dependencies
 
 - **TypeScript/React**: PascalCase for components, camelCase for variables/functions
 - **Files**: kebab-case for component files (e.g., `post_component.tsx`)
-- **Testing**: `.ik.test.ts` or `.ik.test.tsx` for Infomaniak custom tests
-- **No comments except**: `IK:` prefixed comments to explain custom modifications
 - **Imports**: Prefer destructuring, absolute imports from `components/`, `utils/`, etc.
 - **Components**: Functional components with hooks, Redux `connect()` for class components
 - **Preferred libraries**: Lodash (already bundled), date-fns for dates, luxon for timezones
 
 ### Code Rules
 
-- **No comments** except `IK:` prefixed comments
+- **No comments** except when genuinely necessary for complex logic
 - **No dead code**
 - **No useless abstractions**
 - **Code must be** clean, idiomatic, readable
@@ -116,15 +114,10 @@ yarn build:dependencies
 
 ### Testing
 
-- **Custom tests**: Use `.ik.test.ts(x)` extension
+- **Extension**: `.test.ts(x)`
 - **Test function**: Always use `it()` (not `test()`)
 - **Location**: Co-located with source or in `tests/` folders
-- **Required coverage**: Custom patches must be covered
-- **Upstream tests**: Must not regress
-- **Running**: `jest --testPathPattern=".ik.test"` for custom tests only
-- **Tests must cover**:
-  - The custom feature or bug
-  - Upstream non-regression
+- **Required coverage**: All patches must be covered
 - All tests must pass
 
 ### i18n (Internationalization)
@@ -137,37 +130,11 @@ yarn build:dependencies
 - No other languages
 - Translations must be natural
 
-### Scope Control (Ultra-controlled Scope)
+### Scope Control
 
 - Fix **only** what is asked for
 - Must not modify **any adjacent behavior**
 - No side effects allowed
-
-### Upstream-First Policy
-
-- Before any implementation, **search Mattermost upstream issues and PRs**
-- If a solution exists upstream, **request a cherry-pick**
-- Otherwise, implement a local **minimal, isolated, upstream-aligned patch**
-- No large rewrites, no unrequested refactors
-
-### Strategy Priority
-
-1. Cherry-pick from upstream
-2. Minimize lines modified
-3. Make it easy to delete when upstream fixes
-
-### Bugfix Upstream Policy
-
-- Issues + PRs must be reviewed
-- Cherry-pick if possible
-- Otherwise minimal local patch
-
-### App Stream Compatibility
-
-- If custom code breaks App Stream tests:
-  - Must be **disabled via a flag or targeted isolation**
-  - Add a **`IK:`** prefixed comment explaining the issue
-- **These comments are the only exception allowed**
 
 ### Output
 
@@ -177,7 +144,31 @@ yarn build:dependencies
 ### Finalization Process
 
 - After code is delivered, wait for developer confirmation that it's correct
-- Once validated, produce **in your response**:
+- Once validated, **ask**: *"Would you like me to do a code review before finalizing?"*
+- If accepted, perform a **senior-level code review** using the following criteria:
+
+#### Code Review Prompt
+
+> Review this patch as a senior software engineer with high standards. Be concise and actionable. Flag only real issues, not style nitpicks already covered by linting.
+>
+> Check for:
+> - **Correctness**: Logic errors, off-by-one, race conditions, unhandled edge cases, null/undefined risks
+> - **Security**: XSS, injection, unsafe data handling, leaked secrets, improper auth checks
+> - **Performance**: Unnecessary re-renders, missing memoization, expensive operations in hot paths, n+1 queries
+> - **Maintainability**: Unclear naming, overly clever code, missing types, leaky abstractions
+> - **Testing gaps**: Untested branches, missing error cases, brittle assertions
+> - **React/Redux specifics**: Incorrect hook dependencies, stale closures, selector recomputation, missing cleanup in effects
+>
+> For each issue found:
+> 1. Severity: 🔴 must fix / 🟡 should fix / 🟢 suggestion
+> 2. File and location
+> 3. What's wrong (one sentence)
+> 4. How to fix (one sentence)
+>
+> If the code is clean, say so. Do not invent problems.
+
+- Apply any 🔴 and 🟡 fixes, then present the updated patch
+- Once everything is clean, produce **in your response**:
   - **MR title in English** (Conventional Commit format)
   - **MR description in French**
   - **Changelog in English** (single short sentence)
@@ -185,11 +176,8 @@ yarn build:dependencies
 
 ### Learned Preferences
 
-- **Upstream-first**: Check Mattermost issues/PRs before implementing custom code
-- **Minimal patches**: Prefer cherry-picks from upstream, otherwise minimal isolated patches
 - **No dead code or unused abstractions**
 - **No git operations**: Never create commits or mention branches/MRs in code
-- **App Stream compatibility**: If custom code breaks upstream tests, isolate with feature flag + add `IK:` comment
 - **Output**: Provide minimal patch only, no explanations
 
 ---
