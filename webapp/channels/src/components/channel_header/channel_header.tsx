@@ -147,8 +147,6 @@ class ChannelHeader extends React.PureComponent<Props> {
             );
         }
 
-        const channelIsArchived = channel.delete_at !== 0;
-
         // Infomaniak: skip for channel previews
         // isEmptyObject(channel) ||
         // isEmptyObject(channelMember) ||
