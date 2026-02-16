@@ -30,7 +30,6 @@ import type {MainMenuAction} from 'types/store/plugins';
 // import {trackEvent} from 'actions/telemetry_actions';
 // import LearnAboutTeamsLink from './learn_about_teams_link';
 import './main_menu.scss';
-import {IKConstants} from '../../utils/constants-ik';
 import {
     reportingToolsOnClick,
     ReportingToolsLogo,
@@ -128,11 +127,6 @@ export class MainMenu extends React.PureComponent<Props> {
         }
     };
 
-    redirectToManagerProfile = (e: Event): void => {
-        e.preventDefault();
-        window.open(`${IKConstants.MANAGER_URL}/v3/ng/profile/user/dashboard`, '_blank');
-    };
-
     render() {
         const {
 
@@ -224,7 +218,7 @@ export class MainMenu extends React.PureComponent<Props> {
                     <Menu.ItemAction
                         id='accountSettings'
                         ariaLabel='Profile'
-                        onClick={this.redirectToManagerProfile}
+                        onClick={GlobalActions.redirectToManagerProfile}
                         text={formatMessage({id: 'navbar_dropdown.accountSettings', defaultMessage: 'Profile'})}
                         icon={<i className='fa fa-cog'/>}
                     />
