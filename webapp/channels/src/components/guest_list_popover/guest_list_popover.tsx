@@ -6,10 +6,7 @@ import type {FC} from 'react';
 import React, {useEffect, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
-
-import Popover from 'components/widgets/popover';
 
 import Constants, {A11yClassNames, A11yCustomEventTypes} from 'utils/constants';
 import type {A11yFocusEventDetail} from 'utils/constants';
@@ -18,12 +15,10 @@ import {shouldFocusMainTextbox} from 'utils/post_utils';
 
 import {Body, CloseButton, Header, Heading, NoShrink, Subtitle, Title} from './styled';
 import UserListProfiles from './user_list';
-import useShouldClose from './useShouldClose';
-import './guest_list_popover.scss';
 
 export type Props = {
     channelId: string;
-    channel: Channel;
+    channelDisplayName: string;
     profiles: UserProfile[];
     membersCount: number;
     hide: () => void;
@@ -32,19 +27,16 @@ export type Props = {
 }
 
 const GuestListPopover: FC<Props> = ({
-    channel,
+    channelDisplayName,
     profiles,
     membersCount,
     hide,
     returnFocus,
     showUserOverlay,
-    ...props
 }) => {
     const {formatMessage} = useIntl();
 
     const closeRef = useRef<HTMLButtonElement>(null);
-
-    const shouldClose = useShouldClose();
 
     useEffect(() => {
         document.dispatchEvent(new CustomEvent<A11yFocusEventDetail>(
@@ -57,15 +49,8 @@ const GuestListPopover: FC<Props> = ({
         ));
     }, []);
 
-    useEffect(() => {
-        if (shouldClose) {
-            hide();
-        }
-    }, [hide, shouldClose]);
-
     const handleClose = () => {
         hide();
-
         returnFocus();
     };
 
@@ -87,24 +72,21 @@ const GuestListPopover: FC<Props> = ({
     );
 
     return (
-        <Popover
-            id='user-list-popover'
-            {...props}
-        >
+        <>
             {tabCatcher}
             <Body
                 role='dialog'
                 aria-modal={true}
                 onKeyDown={handleKeyDown}
                 className={A11yClassNames.POPUP}
-                aria-label={channel.display_name}
+                aria-label={channelDisplayName}
             >
                 <Header>
                     <Heading>
                         <Title
                             className='overflow--ellipsis text-nowrap'
                         >
-                            {channel.display_name}
+                            {channelDisplayName}
                         </Title>
                         <CloseButton
                             className='btn-icon'
@@ -134,7 +116,8 @@ const GuestListPopover: FC<Props> = ({
                 />
             </Body>
             {tabCatcher}
-        </Popover>);
+        </>
+    );
 };
 
-export default React.memo(GuestListPopover);
+export default GuestListPopover;
