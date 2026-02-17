@@ -82,6 +82,7 @@ const useSubmit = (
     const postFileIds = useSelector((state: GlobalState) => getFilesIdsForPost(state, postId || ''));
 
     const isDraftSubmitting = useRef(false);
+
     const [errorClass, setErrorClass] = useState<string | null>(null);
     const isDirectOrGroup = useSelector((state: GlobalState) => {
         const channel = getChannel(state, channelId);

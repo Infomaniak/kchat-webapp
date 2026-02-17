@@ -3125,6 +3125,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@infomaniak/compass-icons@npm:0.14.0":
+  version: 0.14.0
+  resolution: "@infomaniak/compass-icons@npm:0.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fcompass-icons%2F0.14.0%2Ff5416bb81ddc25a33a07192db5e46a119f0aa0d0"
+  checksum: 10/4385a506236af6a535983b99e1b49a73c864bd00215369c5601859d1ad3b79bf43963b0ff74499aa4bff568483ef2ce3a8303c0326b87f3468f020f84653e312
+  languageName: node
+  linkType: hard
+
 "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.11.tgz":
   version: 0.3.11
   resolution: "@infomaniak/ksuite-bridge@https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.11.tgz"
@@ -17932,7 +17939,7 @@ __metadata:
     "@guyplusplus/turndown-plugin-gfm": "npm:1.0.7"
     "@hot-loader/react-dom": "npm:17.0.2"
     "@infomaniak/compass-components": "npm:0.17.0"
-    "@infomaniak/compass-icons": "npm:0.13.0"
+    "@infomaniak/compass-icons": "npm:0.14.0"
     "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.11.tgz"
     "@infomaniak/marked": "npm:^0.2.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
