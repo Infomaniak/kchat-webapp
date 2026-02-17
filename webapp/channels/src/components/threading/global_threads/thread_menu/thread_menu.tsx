@@ -23,6 +23,8 @@ import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import {getSiteURL} from 'utils/url';
 import {copyToClipboard} from 'utils/utils';
 
+import useSummarize from 'plugins/ai/hooks/use_summarize';
+
 import type {GlobalState} from 'types/store';
 
 import {useThreadRouting} from '../../hooks';
@@ -56,6 +58,7 @@ function ThreadMenu({
     } = useThreadRouting();
 
     const isSaved = useSelector((state: GlobalState) => isPostFlagged(state, threadId));
+    const summarize = useSummarize();
 
     const handleReadUnread = useCallback(() => {
         const lastViewedAt = hasUnreads ? Date.now() : unreadTimestamp;
@@ -127,7 +130,15 @@ function ThreadMenu({
                     })}
                     onClick={handleReadUnread}
                 />
-
+                <Menu.ItemAction
+                    text={formatMessage({
+                        id: 'ai.summarizeThread',
+                        defaultMessage: 'Summarize',
+                    })}
+                    onClick={useCallback(() => {
+                        summarize(threadId);
+                    }, [threadId, summarize])}
+                />
                 <Menu.ItemAction
                     text={isSaved ? formatMessage({
                         id: 'threading.threadMenu.unsave',
