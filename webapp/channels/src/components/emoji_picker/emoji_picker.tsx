@@ -25,6 +25,8 @@ import {
     SEARCH_RESULTS,
     EMOJI_PER_ROW,
     CUSTOM_EMOJI_SEARCH_THROTTLE_TIME_MS,
+    EMOJI_CONTAINER_HEIGHT,
+    CATEGORIES_CONTAINER_HEIGHT,
 } from 'components/emoji_picker/constants';
 import type {CategoryOrEmojiRow, Categories, EmojiCursor, EmojiPosition, EmojiRow} from 'components/emoji_picker/types';
 import {NavigationDirection} from 'components/emoji_picker/types';
@@ -63,7 +65,6 @@ const EmojiPicker = ({
 }: Props) => {
     const getInitialActiveCategory = () => (recentEmojis.length ? RECENT : SMILEY_EMOTION);
     const [activeCategory, setActiveCategory] = useState<EmojiCategory>(getInitialActiveCategory);
-    const [isHovered, setIsHovered] = useState(false);
     const pickerContainerRef = useRef<HTMLDivElement>(null);
 
     const [cursor, setCursor] = useState<EmojiCursor>({
@@ -145,6 +146,7 @@ const EmojiPicker = ({
 
         const [updatedCategoryOrEmojisRows, updatedEmojiPositions] = createCategoryAndEmojiRows(allEmojis, categories, filter, userSkinTone);
 
+        selectFirstEmoji(updatedEmojiPositions);
         setCategoryOrEmojisRows(updatedCategoryOrEmojisRows);
         setEmojiPositionsArray(updatedEmojiPositions);
         throttledSearchCustomEmoji.current(filter, customEmojisEnabled);
@@ -155,14 +157,11 @@ const EmojiPicker = ({
         searchInputRef.current?.focus();
     }, []);
 
-    // clear out the active category on search input
     useEffect(() => {
-        if (activeCategory !== getInitialActiveCategory()) {
-            setActiveCategory(getInitialActiveCategory());
+        if (filter.length > 0) {
+            // eslint-disable-next-line no-underscore-dangle
+            infiniteLoaderRef?.current?._listRef?.scrollToItem(0, 'start');
         }
-
-        // eslint-disable-next-line no-underscore-dangle
-        infiniteLoaderRef?.current?._listRef?.scrollToItem(0, 'start');
     }, [filter]);
 
     const focusOnSearchInput = useCallback(() => {
@@ -175,6 +174,22 @@ const EmojiPicker = ({
         }
         const emoji = allEmojis[emojiId] || allEmojis[emojiId.toUpperCase()] || allEmojis[emojiId.toLowerCase()];
         return emoji;
+    };
+
+    const selectFirstEmoji = (positions: EmojiPosition[]) => {
+        if (!positions[0]) {
+            return;
+        }
+
+        const {rowIndex, emojiId} = positions[0];
+        const cursorEmoji = getEmojiById(emojiId);
+        if (cursorEmoji) {
+            setCursor({
+                rowIndex,
+                emojiId,
+                emoji: cursorEmoji,
+            });
+        }
     };
 
     const handleCategoryClick = useCallback((categoryRowIndex: CategoryOrEmojiRow['index'], categoryName: EmojiCategory, emojiId: string) => {
@@ -359,7 +374,6 @@ const EmojiPicker = ({
     }, [cursor.emojiId]);
 
     const handleEmojiOnMouseOver = (mouseOverCursor: EmojiCursor) => {
-        setIsHovered(true);
         if (mouseOverCursor.emojiId !== cursor.emojiId || cursor.emojiId === '') {
             setCursor(mouseOverCursor);
         }
@@ -372,7 +386,6 @@ const EmojiPicker = ({
             emojiId: '',
             emoji: undefined,
         });
-        setIsHovered(false);
     };
 
     const cursorEmojiName = useMemo(() => {
@@ -391,7 +404,7 @@ const EmojiPicker = ({
     let footerContent;
     if (areSearchResultsEmpty) {
         footerContent = <div/>;
-    } else if (isHovered) {
+    } else if (cursor.emoji) {
         footerContent = <EmojiPickerPreview emoji={cursor.emoji}/>;
     } else {
         footerContent = (
@@ -434,19 +447,26 @@ const EmojiPicker = ({
                     onSkinSelected={setUserSkinTone}
                 />
             </div>
-            <EmojiPickerCategories
-                isFiltering={filter.length > 0}
-                active={activeCategory}
-                categories={categories}
-                onClick={handleCategoryClick}
-                onKeyDown={handleKeyboardEmojiNavigation}
-                focusOnSearchInput={focusOnSearchInput}
-            />
-            {areSearchResultsEmpty ? (
-                <NoResultsIndicator
-                    variant={NoResultsVariant.Search}
-                    titleValues={{channelName: `${filter}`}}
+            {filter.length === 0 && (
+                <EmojiPickerCategories
+                    isFiltering={filter.length > 0}
+                    active={activeCategory}
+                    categories={categories}
+                    onClick={handleCategoryClick}
+                    onKeyDown={handleKeyboardEmojiNavigation}
+                    focusOnSearchInput={focusOnSearchInput}
                 />
+            )}
+            {areSearchResultsEmpty ? (
+                <div
+                    className='emoji-picker__items'
+                    style={{height: EMOJI_CONTAINER_HEIGHT + CATEGORIES_CONTAINER_HEIGHT}}
+                >
+                    <NoResultsIndicator
+                        variant={NoResultsVariant.Search}
+                        titleValues={{channelName: `${filter}`}}
+                    />
+                </div>
             ) : (
 
                 <EmojiPickerCurrentResults
