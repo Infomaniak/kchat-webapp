@@ -13,7 +13,7 @@ import CloseChannel from './close_channel';
 
 describe('components/ChannelHeaderMenu/MenuItems/CloseChannel', () => {
     beforeEach(() => {
-        jest.spyOn(channelActions, 'goToLastViewedChannel');
+        jest.spyOn(channelActions, 'goToLastViewedChannel').mockReturnValue(jest.fn());
     });
 
     afterEach(() => {

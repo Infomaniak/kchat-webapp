@@ -3,6 +3,7 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import {useDispatch} from 'react-redux';
 
 import {goToLastViewedChannel} from 'actions/views/channel';
 
@@ -11,9 +12,10 @@ import * as Menu from 'components/menu';
 interface Props extends Menu.FirstMenuItemProps {}
 
 const CloseChannel = ({...rest}: Props): JSX.Element => {
+    const dispatch = useDispatch();
     return (
         <Menu.Item
-            onClick={goToLastViewedChannel}
+            onClick={() => dispatch(goToLastViewedChannel())}
             labels={
                 <FormattedMessage
                     id='center_panel.archived.closeChannel'
