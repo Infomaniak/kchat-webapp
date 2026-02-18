@@ -22,10 +22,7 @@ const IKAppBranding = (): JSX.Element => {
     }
 
     return (
-        <module-header-title-component
-            mode='app'
-            theme='kchat'
-        />
+        <module-header-title-component/>
     );
 };
 
