@@ -12,9 +12,4 @@ exports[`components/IKAppBranding should render logo on desktop app 1`] = `
 </div>
 `;
 
-exports[`components/IKAppBranding should render web component on web 1`] = `
-<module-header-title-component
-  mode="app"
-  theme="kchat"
-/>
-`;
+exports[`components/IKAppBranding should render web component on web 1`] = `<module-header-title-component />`;
