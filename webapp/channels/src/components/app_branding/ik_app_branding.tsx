@@ -9,7 +9,7 @@ import kchatLogo from 'images/logo_compact.png';
 import './ik_app_branding.scss';
 
 const IKAppBranding = (): JSX.Element => {
-    if (true) {
+    if (isDesktopApp()) {
         return (
             <div className='ik-app-branding'>
                 <img

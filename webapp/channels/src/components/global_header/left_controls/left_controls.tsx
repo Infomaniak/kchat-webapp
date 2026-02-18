@@ -39,7 +39,7 @@ const LeftControlsContainer = styled.div`
 const LeftControls = ({headerRef}: {headerRef: React.RefObject<HTMLDivElement>}): JSX.Element => (
     <LeftControlsContainer ref={headerRef}>
         <IKAppBranding/>
-        {true && <HistoryButtons/>}
+        {(isDesktopApp() || isPWA()) && <HistoryButtons/>}
     </LeftControlsContainer>
 );
 

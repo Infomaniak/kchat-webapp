@@ -169,8 +169,8 @@ export default function SidebarBrowserOrAddChannelMenu(props: Props) {
                     id: 'sidebarLeft.browserOrCreateChannelMenuButton.label',
                     defaultMessage: 'Browse or create channels',
                 }),
-                class: true ? 'btn btn-icon btn-sm btn-tertiary btn-inverted btn-round' : 'sidebarHeaderContainer__dropdownButton',
-                children: true ? (
+                class: isDesktopApp() ? 'btn btn-icon btn-sm btn-tertiary btn-inverted btn-round' : 'sidebarHeaderContainer__dropdownButton',
+                children: isDesktopApp() ? (
                     <PlusIcon size={18}/>
                 ) : (
                     <>
