@@ -36,8 +36,8 @@ const SidebarHeader = (props: Props) => {
     const isDesktop = isDesktopApp();
 
     return (
-        <header className={classNames('sidebarHeaderContainer', {'sidebarHeaderContainer--desktop': isDesktop})}>
-            {isDesktopApp() && (
+        <header className={classNames('sidebarHeaderContainer', {'sidebarHeaderContainer--desktop': true})}>
+            {true && (
                 <button
                     className='style--none sidebar-header'
                     type='button'

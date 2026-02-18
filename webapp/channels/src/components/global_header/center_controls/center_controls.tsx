@@ -15,7 +15,6 @@ const CenterControlsContainer = styled.div`
     justify-content: flex-start;
     flex-grow: 1;
     border-bottom: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
-    border-left: solid 1px rgba(var(--center-channel-color-rgb), 0.12);
     flex-basis: 40%;
 
     > * + * {

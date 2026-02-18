@@ -12,19 +12,4 @@
         margin-left: 16px;
     }
 
-    &__title {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-weight: 400;
-    }
-
-    &__name {
-        color: var(--ik-app-branding-name-color);
-        font-size: 12px;
-        text-transform: uppercase;
-    }
 }

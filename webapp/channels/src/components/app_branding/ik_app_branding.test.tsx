@@ -11,12 +11,12 @@ jest.mock('utils/user_agent', () => ({
 }));
 
 describe('components/IKAppBranding', () => {
-    test('should match snapshot on web', () => {
+    test('should render web component on web', () => {
         const wrapper = shallow(<IKAppBranding/>);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot on desktop app', () => {
+    test('should render logo on desktop app', () => {
         const {isDesktopApp} = require('utils/user_agent');
         isDesktopApp.mockReturnValue(true);
 
