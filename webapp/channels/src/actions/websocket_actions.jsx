@@ -1929,9 +1929,9 @@ function handleThreadReadChanged(msg) {
                 ),
             );
         } else if (msg.data.channel_id) {
-            doDispatch(handleAllThreadsInChannelMarkedRead(doDispatch, doGetState, msg.channel_id, msg.data.timestamp));
+            doDispatch(handleAllThreadsInChannelMarkedRead(msg.data.channel_id, msg.data.timestamp));
         } else {
-            doDispatch(handleAllMarkedRead(doDispatch, msg.team_id));
+            doDispatch(handleAllMarkedRead(msg.data.team_id));
         }
     };
 }
