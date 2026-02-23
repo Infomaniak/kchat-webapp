@@ -26,11 +26,13 @@ import classNames from 'classnames';
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import type {IntlShape} from 'react-intl';
+import {useSelector} from 'react-redux';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserThread} from '@mattermost/types/threads';
 
 import Permissions from 'mattermost-redux/constants/permissions';
+import {getUser} from 'mattermost-redux/selectors/entities/users';
 import {getZipforPost} from 'mattermost-redux/utils/file_utils';
 
 import DeletePostModal from 'components/delete_post_modal';
@@ -45,7 +47,11 @@ import * as Keyboard from 'utils/keyboard';
 import * as PostUtils from 'utils/post_utils';
 import * as Utils from 'utils/utils';
 
+import IconThreadSummarization from 'plugins/ai/components/assets/icon_thread_summarization';
+import useSummarize from 'plugins/ai/hooks/use_summarize';
+
 import type {ModalData} from 'types/actions';
+import type {GlobalState} from 'types/store';
 
 import PostReminderSubMenu from './post_reminder_submenu';
 import {trackDotMenuEvent} from './utils';
@@ -62,6 +68,28 @@ const ShortcutKey = ({shortcutKey: shortcut}: ShortcutKeyProps) => (
         {shortcut}
     </span>
 );
+
+const AiSummarizeMenuItem = ({post}: {post: Post}) => {
+    const user = useSelector((state: GlobalState) => getUser(state, post.user_id));
+    const isBot = Boolean(user && user.is_bot);
+    const summarize = useSummarize();
+
+    if (isBot) {
+        return null;
+    }
+
+    return (
+        <Menu.Item
+            labels={
+                <FormattedMessage
+                    id='ai.summarizeThread'
+                    defaultMessage='Summarize'
+                />}
+            leadingElement={<IconThreadSummarization/>}
+            onClick={() => summarize(post.id)}
+        />
+    );
+};
 
 type Props = {
     intl: IntlShape;
@@ -584,6 +612,9 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
                         />
                     </ChannelPermissionGate>
                 }
+                {Boolean(isMobile && !isSystemMessage) && (
+                    <AiSummarizeMenuItem post={this.props.post}/>
+                )}
                 {Boolean(
                     !isSystemMessage &&
                         this.props.isCollapsedThreadsEnabled &&

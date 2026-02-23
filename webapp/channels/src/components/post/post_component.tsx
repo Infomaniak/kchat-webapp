@@ -608,16 +608,14 @@ function PostComponent(props: Props) {
                                 isSystemMessage={isSystemMessage}
                             />
                             <div className='col d-flex align-items-center'>
-                                {((!hideProfilePicture && props.location === Locations.CENTER) || hover || props.location !== Locations.CENTER) &&
-                                    <PostTime
-                                        isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post) || post.id.startsWith('user-activity') || isDesktop)} // Infomaniak: disable permalink for user-activity posts and for all posts in desktop app
-                                        teamName={props.team?.name}
-                                        eventTime={post.create_at}
-                                        postId={post.id}
-                                        location={props.location}
-                                        timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? compactTimestampStyle : undefined}}
-                                    />
-                                }
+                                <PostTime
+                                    isPermalink={!(Posts.POST_DELETED === post.state || isPostPendingOrFailed(post) || post.id.startsWith('user-activity') || isDesktop)} // Infomaniak: disable permalink for user-activity posts and for all posts in desktop app
+                                    teamName={props.team?.name}
+                                    eventTime={post.create_at}
+                                    postId={post.id}
+                                    location={props.location}
+                                    timestampProps={{...props.timestampProps, style: props.isConsecutivePost && !props.compactDisplay ? compactTimestampStyle : undefined}}
+                                />
                                 {priority}
                                 {post.props && post.props.card &&
                                     <WithTooltip

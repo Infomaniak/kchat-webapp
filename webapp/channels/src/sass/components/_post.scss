@@ -1078,6 +1078,10 @@
         &.same--user {
             padding: 0 0.5em 0 1.5em;
 
+            .post__time {
+                opacity: 0;
+            }
+
             &:hover,
             &.post--hovered,
             &.a11y--active {
