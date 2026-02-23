@@ -15,6 +15,7 @@ import {getFileDownloadUrl} from 'mattermost-redux/utils/file_utils';
 import FileInfoPreview from 'components/file_info_preview';
 import LoadingSpinner from 'components/widgets/loading/loading_spinner';
 
+import {ZoomSettings} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 
 const INITIAL_RENDERED_PAGES = 3;
@@ -153,7 +154,10 @@ export default class PDFPreview extends React.PureComponent<Props, State> {
 
         const page = await this.loadPage(this.state.pdf!, pageIndex);
         const context = canvas.getContext('2d');
-        const viewport = page.getViewport({scale: this.props.scale});
+        const baseViewport = page.getViewport({scale: 1});
+        const containerWidth = canvas.parentElement?.clientWidth ?? baseViewport.width;
+        const baseFitScale = Math.min(containerWidth / (baseViewport.width * ZoomSettings.DEFAULT_SCALE), 1);
+        const viewport = page.getViewport({scale: baseFitScale * this.props.scale});
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
