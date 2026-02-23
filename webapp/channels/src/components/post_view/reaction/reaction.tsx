@@ -106,7 +106,8 @@ export default class Reaction extends React.PureComponent<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        if (prevProps.reactionCount !== this.props.reactionCount) {
+        if (prevProps.reactionCount !== this.props.reactionCount ||
+            prevProps.currentUserReacted !== this.props.currentUserReacted) {
             const {currentUserReacted} = this.props;
             const reactedClass = currentUserReacted ? 'Reaction--reacted' : 'Reaction--unreacted';
 
@@ -175,7 +176,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
     };
 
     render(): React.ReactNode {
-        if (!this.props.emojiImageUrl) {
+        if (!this.props.emojiImageUrl || this.props.reactionCount <= 0) {
             return null;
         }
         const {
