@@ -132,6 +132,15 @@ const getThemePreference = createSelector(
             themePreference = myPreferences[getPreferenceKey(Preferences.CATEGORY_THEME, '')];
         }
 
+        // IK: fallback – find any theme preference (kChat uses a single theme, not per-team)
+        if (!themePreference) {
+            const themeKeyPrefix = getPreferenceKey(Preferences.CATEGORY_THEME, '');
+            const key = Object.keys(myPreferences).find((k) => k.startsWith(themeKeyPrefix));
+            if (key) {
+                themePreference = myPreferences[key];
+            }
+        }
+
         return themePreference;
     },
 );
