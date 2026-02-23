@@ -201,7 +201,7 @@ const PostOptions = (props: Props): JSX.Element => {
     );
 
     let pluginItems: ReactNode = null;
-    if ((!isEphemeral && !post.failed && !systemMessage) && hoverLocal) {
+    if (!isMobileView && (!isEphemeral && !post.failed && !systemMessage) && hoverLocal) {
         pluginItems = props.pluginActions?.
             map((item) => {
                 if (item.component) {
