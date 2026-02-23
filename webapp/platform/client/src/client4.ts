@@ -4563,28 +4563,29 @@ export default class Client4 {
         });
     };
 
-    // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
-    doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
-        const RETRY_TIME = 1000; // 1 sec
-        for (let attempt = 0; attempt <= retries; attempt++) {
-            if (attempt > 0) {
-                console.log('retry #', attempt, options.method, url, 'at', Date.now());
-            }
-            try {
-                const response = await this.doFetchWithResponse<ClientDataResponse>(url, options);
-                return response;
-            } catch (err) {
-                console.log(options.method, url, 'retry #', attempt, 'fail at', Date.now());
+    // Ik changes : error handling when request fails, retrying with exponential backoff + jitter (Google HTTP Client Library recommendations).
+    // Parameters: initial=500ms, multiplier=1.5, jitter=50%, max=30s, 7 retries (~20s total before giving up)
+    doFetchWithResponseAndRetry = <ClientDataResponse>(url: string, options: Options, retries = 7): Promise<ClientResponse<ClientDataResponse>> => {
+        const BASE_DELAY = 500; // ms
+        const MULTIPLIER = 1.5;
+        const MAX_DELAY = 30000; // ms
 
-                if (attempt < retries) {
-                    await new Promise((resolve) => setTimeout(resolve, RETRY_TIME));
-                } else {
+        const attempt = (attemptNumber: number): Promise<ClientResponse<ClientDataResponse>> => {
+            return this.doFetchWithResponse<ClientDataResponse>(url, options).catch((err) => {
+                if (attemptNumber >= retries) {
+                    // eslint-disable-next-line no-console
                     console.log('all retry attempts for', options.method, url, 'failed');
                     throw err;
                 }
-            }
-        }
-        throw new Error('request retry failed.');
+                const baseDelay = Math.min(BASE_DELAY * Math.pow(MULTIPLIER, attemptNumber), MAX_DELAY);
+                const jitteredDelay = Math.round(baseDelay * (0.5 + Math.random()));
+                // eslint-disable-next-line no-console
+                console.log('retry #', attemptNumber + 1, options.method, url, `backoff ${jitteredDelay}ms`);
+                return new Promise((resolve) => setTimeout(resolve, jitteredDelay)).then(() => attempt(attemptNumber + 1));
+            });
+        };
+
+        return attempt(0);
     };
 
     trackEvent(category: string, event: string, props?: any) {
