@@ -549,7 +549,13 @@ const AdvancedTextEditor = ({
     }, [hasDraftMessage]);
 
     const handleMouseUpKeyUp = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
-        setCaretPosition((e.target as TextboxElement).selectionStart || 0);
+        const target = e.target as TextboxElement;
+
+        const isTextSelected = target.selectionStart !== target.selectionEnd;
+        if (isTextSelected) {
+            return;
+        }
+        setCaretPosition(target.selectionStart || 0);
     }, []);
 
     const prefillMessage = useCallback((message: string, shouldFocus?: boolean) => {
