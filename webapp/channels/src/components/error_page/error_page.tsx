@@ -6,9 +6,12 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
 
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
+
 import * as GlobalActions from 'actions/global_actions';
 
 import {ErrorPageTypes} from 'utils/constants';
+import {applyTheme} from 'utils/utils';
 
 import kSuite from 'images/ik/kSuite.svg';
 import MattermostLogoSvg from 'images/logo.svg';
@@ -33,15 +36,23 @@ type Props = {
     isAdmin?: boolean;
     ikGroupId?: number;
     ikGroupName?: string;
+    theme: Theme;
 }
 
 export default class ErrorPage extends React.PureComponent<Props> {
     public componentDidMount() {
-        document.body.setAttribute('class', 'sticky error');
+        document.body.classList.add('sticky', 'error');
+        applyTheme(this.props.theme);
+    }
+
+    public componentDidUpdate(prevProps: Props) {
+        if (this.props.theme !== prevProps.theme) {
+            applyTheme(this.props.theme);
+        }
     }
 
     public componentWillUnmount() {
-        document.body.removeAttribute('class');
+        document.body.classList.remove('sticky', 'error');
     }
 
     public renderHeader = () => {

@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/common';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {getTheme} from 'mattermost-redux/selectors/entities/preferences';
 import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {isAdmin, isGuest} from 'mattermost-redux/utils/user_utils';
 
@@ -35,6 +36,7 @@ function mapStateToProps(state: GlobalState) {
         isAdmin: Boolean(user && isAdmin(user.roles)),
         ikGroupId,
         ikGroupName,
+        theme: getTheme(state),
     };
 }
 
