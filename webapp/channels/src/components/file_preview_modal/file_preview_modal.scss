@@ -2,7 +2,7 @@
     padding-left: 0 !important;
 
     &__body {
-        height: 100vh;
+        height: 100%;
         padding: 0;
     }
 
@@ -26,7 +26,9 @@
         background: rgba(0, 0, 0, 0.9);
 
         @media screen and (max-width: 768px) {
-            height: calc(100vh - 108px);
+            flex: 1;
+            min-height: 0;
+            height: auto;
             padding: 0;
             background: rgb(0, 0, 0);
         }
@@ -41,7 +43,9 @@
         height: calc(100vh - 120px);
 
         @media screen and (max-width: 768px) {
-            height: calc(100vh - 156px);
+            flex: 1;
+            min-height: 0;
+            height: auto;
         }
     }
 
@@ -53,7 +57,7 @@
         margin: 0 auto;
 
         @media screen and (max-width: 768px) {
-            height: calc(100vh - 148px);
+            height: 100%;
             padding: 0;
         }
     }
