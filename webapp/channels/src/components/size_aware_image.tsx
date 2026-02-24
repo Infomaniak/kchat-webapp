@@ -16,6 +16,7 @@ import type {PostImage} from '@mattermost/types/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
+import BrokenImagePlaceholder from 'components/broken_image_placeholder';
 import LoadingImagePreview from 'components/loading_image_preview';
 import WithTooltip from 'components/with_tooltip';
 
@@ -109,6 +110,7 @@ type State = {
     linkCopyInProgress: boolean;
     error: boolean;
     imageWidth: number;
+    retryCount: number;
 }
 
 // SizeAwareImage is a component used for rendering images where the dimensions of the image are important for
@@ -117,6 +119,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     public heightTimeout = 0;
     public mounted = false;
     public timeout: NodeJS.Timeout | null = null;
+    public retryTimeout: NodeJS.Timeout | null = null;
 
     constructor(props: Props) {
         super(props);
@@ -130,6 +133,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             linkCopyInProgress: false,
             error: false,
             imageWidth: 0,
+            retryCount: 0,
         };
 
         this.heightTimeout = 0;
@@ -169,12 +173,17 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     };
 
     handleError = () => {
-        if (this.mounted) {
-            if (this.props.onImageLoadFail) {
-                this.props.onImageLoadFail();
-            }
-            this.setState({error: true});
+        if (!this.mounted) {
+            return;
         }
+        if (this.state.retryCount === 0) {
+            this.setState({retryCount: 1, loaded: false});
+            return;
+        }
+        if (this.props.onImageLoadFail) {
+            this.props.onImageLoadFail();
+        }
+        this.setState({error: true});
     };
 
     handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
@@ -241,6 +250,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
         const image = (
             <img
                 {...props}
+                key={this.state.retryCount}
                 aria-label={ariaLabelImage}
                 tabIndex={0}
                 onClick={this.handleImageClick}
@@ -419,6 +429,27 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             dimensions,
             fileInfo,
         } = this.props;
+
+        if (this.state.error) {
+            const width = dimensions?.width ?? MIN_IMAGE_SIZE;
+            const height = Math.min(dimensions?.height ?? MIN_IMAGE_SIZE, MAX_IMAGE_HEIGHT);
+            return (
+                <div
+                    className={`image-loading__container ${this.props.className ?? ''}`}
+                    style={{
+                        width,
+                        height,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: 'rgba(var(--center-channel-color-rgb), 0.04)',
+                        borderRadius: '4px',
+                    }}
+                >
+                    <BrokenImagePlaceholder size={32}/>
+                </div>
+            );
+        }
 
         let ariaLabelImage = this.props.intl.formatMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
         if (fileInfo) {

@@ -14,6 +14,8 @@ import './reaction.scss';
 type State = {
     displayNumber: number;
     reactedClass: 'Reaction--reacted' | 'Reaction--reacting' | 'Reaction--unreacted' | 'Reaction--unreacting';
+    emojiRetryCount: number;
+    emojiError: boolean;
 };
 
 type Props = {
@@ -96,14 +98,26 @@ export default class Reaction extends React.PureComponent<Props, State> {
             this.state = {
                 reactedClass: 'Reaction--reacted',
                 displayNumber: reactionCount,
+                emojiRetryCount: 0,
+                emojiError: false,
             };
         } else {
             this.state = {
                 reactedClass: 'Reaction--unreacted',
                 displayNumber: reactionCount,
+                emojiRetryCount: 0,
+                emojiError: false,
             };
         }
     }
+
+    handleEmojiError = (): void => {
+        if (this.state.emojiRetryCount === 0) {
+            this.setState({emojiRetryCount: 1});
+            return;
+        }
+        this.setState({emojiError: true});
+    };
 
     componentDidUpdate(prevProps: Props): void {
         if (prevProps.reactionCount !== this.props.reactionCount ||
@@ -203,8 +217,10 @@ export default class Reaction extends React.PureComponent<Props, State> {
 
         const emojiIcon = (
             <img
+                key={this.state.emojiRetryCount}
                 className='Reaction__emoji emoticon'
                 src={this.props.emojiImageUrl}
+                onError={this.state.emojiError ? undefined : this.handleEmojiError}
             />
         );
 
