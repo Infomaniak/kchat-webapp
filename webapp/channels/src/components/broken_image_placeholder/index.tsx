@@ -5,9 +5,10 @@ import React from 'react';
 
 type Props = {
     size?: number;
+    className?: string;
 }
 
-const BrokenImagePlaceholder = ({size = 32}: Props) => (
+const BrokenImagePlaceholder = ({size = 32, className}: Props) => (
     <svg
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
@@ -16,6 +17,7 @@ const BrokenImagePlaceholder = ({size = 32}: Props) => (
         fill='none'
         stroke='rgba(var(--center-channel-color-rgb), 0.32)'
         strokeWidth='1.5'
+        className={className}
     >
         <rect
             x='3'

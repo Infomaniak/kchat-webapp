@@ -119,7 +119,6 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     public heightTimeout = 0;
     public mounted = false;
     public timeout: NodeJS.Timeout | null = null;
-    public retryTimeout: NodeJS.Timeout | null = null;
 
     constructor(props: Props) {
         super(props);

@@ -28,6 +28,7 @@ const RenderEmoji = ({emojiName, emojiStyle, size, onClick}: ComponentProps) => 
     const emojiFromMap = emojiName ? emojiMap.get(emojiName) : undefined;
     const emojiImageUrl = emojiFromMap ? getEmojiImageUrl(emojiFromMap) : '';
 
+    // Hook must be called before the early returns below to respect React rules of hooks
     const imageError = useBackgroundImageError(emojiImageUrl);
 
     if (!emojiName || !emojiFromMap) {
