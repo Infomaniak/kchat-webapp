@@ -16,11 +16,11 @@ import type {PostImage} from '@mattermost/types/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
-import BrokenImagePlaceholder from 'components/broken_image_placeholder';
 import LoadingImagePreview from 'components/loading_image_preview';
 import WithTooltip from 'components/with_tooltip';
 
 import {FileTypes} from 'utils/constants';
+import {handleImageErrorWithRetry} from 'utils/imageRetry';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {copyToClipboard, getFileType, localizeMessage} from 'utils/utils';
@@ -172,17 +172,17 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     };
 
     handleError = () => {
-        if (!this.mounted) {
-            return;
-        }
-        if (this.state.retryCount === 0) {
-            this.setState({retryCount: 1, loaded: false});
-            return;
-        }
-        if (this.props.onImageLoadFail) {
-            this.props.onImageLoadFail();
-        }
-        this.setState({error: true});
+        handleImageErrorWithRetry(
+            this.mounted,
+            this.state.retryCount,
+            () => this.setState({retryCount: 1, loaded: false}),
+            () => {
+                if (this.props.onImageLoadFail) {
+                    this.props.onImageLoadFail();
+                }
+                this.setState({error: true});
+            },
+        );
     };
 
     handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
@@ -245,7 +245,6 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
                 height: 'auto',
             };
         }
-
         const image = (
             <img
                 {...props}
@@ -429,27 +428,6 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             fileInfo,
         } = this.props;
 
-        if (this.state.error) {
-            const width = dimensions?.width ?? MIN_IMAGE_SIZE;
-            const height = Math.min(dimensions?.height ?? MIN_IMAGE_SIZE, MAX_IMAGE_HEIGHT);
-            return (
-                <div
-                    className={`image-loading__container ${this.props.className ?? ''}`}
-                    style={{
-                        width,
-                        height,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        background: 'rgba(var(--center-channel-color-rgb), 0.04)',
-                        borderRadius: '4px',
-                    }}
-                >
-                    <BrokenImagePlaceholder size={32}/>
-                </div>
-            );
-        }
-
         let ariaLabelImage = this.props.intl.formatMessage({id: 'file_attachment.thumbnail', defaultMessage: 'file thumbnail'});
         if (fileInfo) {
             ariaLabelImage += ` ${fileInfo.name}`.toLowerCase();
@@ -457,7 +435,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
 
         let fallback;
 
-        if (this.dimensionsAvailable(dimensions) && !this.state.loaded) {
+        if (this.dimensionsAvailable(dimensions) && !this.state.loaded && !this.state.error) {
             const ratio = (dimensions?.height ?? 0) > MAX_IMAGE_HEIGHT ? MAX_IMAGE_HEIGHT / (dimensions?.height ?? 1) : 1;
             const height = (dimensions?.height ?? 0) * ratio;
             const width = (dimensions?.width ?? 0) * ratio;
@@ -497,7 +475,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             }
         }
 
-        const shouldShowImg = !this.dimensionsAvailable(dimensions) || this.state.loaded;
+        const shouldShowImg = !this.dimensionsAvailable(dimensions) || this.state.loaded || this.state.error;
 
         return (
             <>
