@@ -6,8 +6,8 @@ import React from 'react';
 import type {Post} from '@mattermost/types/posts';
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
-import * as Utils from 'utils/utils';
 import {handleImageErrorWithRetry} from 'utils/imageRetry';
+import * as Utils from 'utils/utils';
 
 import ReactionTooltip from './reaction_tooltip';
 import './reaction.scss';
