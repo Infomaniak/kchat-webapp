@@ -126,6 +126,12 @@ describe('components/SizeAwareImage', () => {
             preventDefault: () => { },
             stopPropagation: () => { },
         } as React.SyntheticEvent<HTMLImageElement>;
+
+        // First error triggers a retry (retryCount 0 → 1), error stays false
+        wrapper.find(SizeAwareImageComponent).find('img').prop('onError')?.(errorEvent);
+        expect(wrapper.find(SizeAwareImageComponent).state('error')).toBe(false);
+
+        // Second error sets error:true after retry exhausted
         wrapper.find(SizeAwareImageComponent).find('img').prop('onError')?.(errorEvent);
 
         expect(wrapper.find(SizeAwareImageComponent).state('error')).toBe(true);

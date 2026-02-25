@@ -36,6 +36,7 @@ exports[`components/SizeAwareImage should load download and copy link buttons wh
       <img
         aria-label="file thumbnail photo-1533709752211-118fcaf03312"
         className="class"
+        key="0"
         onClick={[Function]}
         onError={[Function]}
         onKeyDown={[Function]}
@@ -148,6 +149,7 @@ exports[`components/SizeAwareImage should match snapshot when handleSmallImageCo
       <img
         aria-label="file thumbnail photo-1533709752211-118fcaf03312"
         className="class"
+        key="0"
         onClick={[Function]}
         onError={[Function]}
         onKeyDown={[Function]}
@@ -273,6 +275,7 @@ exports[`components/SizeAwareImage should render a placeholder and has loader wh
       <img
         aria-label="file thumbnail photo-1533709752211-118fcaf03312"
         className="class"
+        key="0"
         onClick={[Function]}
         onError={[Function]}
         onKeyDown={[Function]}

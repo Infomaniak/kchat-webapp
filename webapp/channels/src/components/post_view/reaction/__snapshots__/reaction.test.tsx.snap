@@ -35,6 +35,8 @@ exports[`components/post_view/Reaction should apply read-only class if user does
     >
       <img
         className="Reaction__emoji emoticon"
+        key="0"
+        onError={[Function]}
         src="emoji_image_url"
       />
       <span
@@ -101,6 +103,8 @@ exports[`components/post_view/Reaction should apply read-only class if user does
     >
       <img
         className="Reaction__emoji emoticon"
+        key="0"
+        onError={[Function]}
         src="emoji_image_url"
       />
       <span
@@ -167,6 +171,8 @@ exports[`components/post_view/Reaction should match snapshot 1`] = `
     >
       <img
         className="Reaction__emoji emoticon"
+        key="0"
+        onError={[Function]}
         src="emoji_image_url"
       />
       <span
@@ -233,6 +239,8 @@ exports[`components/post_view/Reaction should match snapshot when a current user
     >
       <img
         className="Reaction__emoji emoticon"
+        key="0"
+        onError={[Function]}
         src="emoji_image_url"
       />
       <span
