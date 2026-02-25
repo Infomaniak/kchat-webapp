@@ -16,11 +16,11 @@ import type {PostImage} from '@mattermost/types/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
+import ImgWithRetry from 'components/img_with_retry';
 import LoadingImagePreview from 'components/loading_image_preview';
 import WithTooltip from 'components/with_tooltip';
 
 import {FileTypes} from 'utils/constants';
-import {handleImageErrorWithRetry} from 'utils/imageRetry';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import {copyToClipboard, getFileType, localizeMessage} from 'utils/utils';
@@ -110,7 +110,6 @@ type State = {
     linkCopyInProgress: boolean;
     error: boolean;
     imageWidth: number;
-    retryCount: number;
 }
 
 // SizeAwareImage is a component used for rendering images where the dimensions of the image are important for
@@ -132,7 +131,6 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             linkCopyInProgress: false,
             error: false,
             imageWidth: 0,
-            retryCount: 0,
         };
 
         this.heightTimeout = 0;
@@ -172,17 +170,12 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     };
 
     handleError = () => {
-        handleImageErrorWithRetry(
-            this.mounted,
-            this.state.retryCount,
-            () => this.setState({retryCount: 1, loaded: false}),
-            () => {
-                if (this.props.onImageLoadFail) {
-                    this.props.onImageLoadFail();
-                }
-                this.setState({error: true});
-            },
-        );
+        if (this.mounted) {
+            if (this.props.onImageLoadFail) {
+                this.props.onImageLoadFail();
+            }
+            this.setState({error: true});
+        }
     };
 
     handleImageClick = (e: MouseEvent<HTMLImageElement>) => {
@@ -246,9 +239,8 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             };
         }
         const image = (
-            <img
+            <ImgWithRetry
                 {...props}
-                key={this.state.retryCount}
                 aria-label={ariaLabelImage}
                 tabIndex={0}
                 onClick={this.handleImageClick}

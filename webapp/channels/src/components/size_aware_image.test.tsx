@@ -4,6 +4,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 
+import ImgWithRetry from 'components/img_with_retry';
 import LoadingImagePreview from 'components/loading_image_preview';
 import SizeAwareImage, {SizeAwareImage as SizeAwareImageComponent} from 'components/size_aware_image';
 
@@ -113,26 +114,16 @@ describe('components/SizeAwareImage', () => {
 
         const wrapper = shallowWithIntl(<SizeAwareImage {...baseProps}/>);
 
-        wrapper.find('img')?.prop('onLoad')?.({target: {naturalHeight: height, naturalWidth: width}} as unknown as React.SyntheticEvent<HTMLImageElement>);
+        wrapper.find(ImgWithRetry)?.prop('onLoad')?.({target: {naturalHeight: height, naturalWidth: width}} as unknown as React.SyntheticEvent<HTMLImageElement>);
         expect(wrapper.state('loaded')).toBe(true);
         expect(baseProps.onImageLoaded).toHaveBeenCalledWith({height, width});
     });
 
     test('should call onImageLoadFail when image load fails and should have svg', () => {
         const wrapper = mountWithIntl(<Provider store={store}><SizeAwareImage {...baseProps}/></Provider>);
-        const errorEvent = {
-            target: {},
-            currentTarget: {},
-            preventDefault: () => { },
-            stopPropagation: () => { },
-        } as React.SyntheticEvent<HTMLImageElement>;
 
-        // First error triggers a retry (retryCount 0 → 1), error stays false
-        wrapper.find(SizeAwareImageComponent).find('img').prop('onError')?.(errorEvent);
-        expect(wrapper.find(SizeAwareImageComponent).state('error')).toBe(false);
-
-        // Second error sets error:true after retry exhausted
-        wrapper.find(SizeAwareImageComponent).find('img').prop('onError')?.(errorEvent);
+        // ImgWithRetry handles the retry internally; call handleError directly to test SizeAwareImage behavior
+        wrapper.find(SizeAwareImageComponent).instance().handleError();
 
         expect(wrapper.find(SizeAwareImageComponent).state('error')).toBe(true);
         expect(wrapper.find(SizeAwareImageComponent).find('svg').exists()).toEqual(true);
@@ -193,7 +184,7 @@ describe('components/SizeAwareImage', () => {
 
         wrapper.instance().setState({isSmallImage: true, imageWidth: 24});
 
-        expect(wrapper.find('img').prop('className')).toBe(`${props.className} small-image--inside-container`);
+        expect(wrapper.find(ImgWithRetry).prop('className')).toBe(`${props.className} small-image--inside-container`);
     });
 
     test('should load download and copy link buttons when an image is mounted', () => {

@@ -6,7 +6,8 @@ import React from 'react';
 import type {Post} from '@mattermost/types/posts';
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
-import {handleImageErrorWithRetry} from 'utils/imageRetry';
+import ImgWithRetry from 'components/img_with_retry';
+
 import * as Utils from 'utils/utils';
 
 import ReactionTooltip from './reaction_tooltip';
@@ -15,7 +16,6 @@ import './reaction.scss';
 type State = {
     displayNumber: number;
     reactedClass: 'Reaction--reacted' | 'Reaction--reacting' | 'Reaction--unreacted' | 'Reaction--unreacting';
-    emojiRetryCount: number;
 };
 
 type Props = {
@@ -98,25 +98,14 @@ export default class Reaction extends React.PureComponent<Props, State> {
             this.state = {
                 reactedClass: 'Reaction--reacted',
                 displayNumber: reactionCount,
-                emojiRetryCount: 0,
             };
         } else {
             this.state = {
                 reactedClass: 'Reaction--unreacted',
                 displayNumber: reactionCount,
-                emojiRetryCount: 0,
             };
         }
     }
-
-    handleEmojiError = (): void => {
-        handleImageErrorWithRetry(
-            true,
-            this.state.emojiRetryCount,
-            () => this.setState({emojiRetryCount: 1}),
-            () => {},
-        );
-    };
 
     componentDidUpdate(prevProps: Props): void {
         if (prevProps.reactionCount !== this.props.reactionCount ||
@@ -215,11 +204,9 @@ export default class Reaction extends React.PureComponent<Props, State> {
         }
 
         const emojiIcon = (
-            <img
-                key={this.state.emojiRetryCount}
+            <ImgWithRetry
                 className='Reaction__emoji emoticon'
                 src={this.props.emojiImageUrl}
-                onError={this.handleEmojiError}
             />
         );
 

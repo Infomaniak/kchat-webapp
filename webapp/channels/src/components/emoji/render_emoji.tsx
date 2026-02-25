@@ -9,6 +9,8 @@ import {getEmojiImageUrl} from 'mattermost-redux/utils/emoji_utils';
 
 import {getEmojiMap} from 'selectors/emojis';
 
+import ImgWithRetry from 'components/img_with_retry';
+
 import type {GlobalState} from 'types/store';
 
 interface ComponentProps {
@@ -51,7 +53,7 @@ const RenderEmoji = ({emojiName, emojiStyle, size, onClick}: ComponentProps) => 
                 ...emojiStyle,
             }}
         >
-            <img
+            <ImgWithRetry
                 src={emojiImageUrl}
                 alt={`:${emojiName}:`}
                 width={size}
