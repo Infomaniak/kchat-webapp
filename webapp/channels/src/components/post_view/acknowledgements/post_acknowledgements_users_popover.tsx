@@ -61,6 +61,7 @@ const Popover = styled.div`
     font-family: inherit;
     max-height: 400px;
     overflow-y: scroll;
+    overscroll-behavior: contain;
     padding: 8px 0;
 `;
 
