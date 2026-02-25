@@ -124,24 +124,19 @@ export default function WithTooltip({
         return {initial, fallback};
     }, [isVertical]);
 
+    const middleware = useMemo(() => [
+        offset(OverlayArrow.OFFSET),
+        flip({fallbackPlacements: placements.fallback}),
+        shift({padding: 8}),
+        arrow({element: arrowRef}),
+    ], [placements.fallback]);
+
     const {refs: {setReference, setFloating}, floatingStyles, context: floatingContext} = useFloating({
         open: disabled ? false : open,
         onOpenChange: handleChange,
         whileElementsMounted: autoUpdate,
         placement: placements.initial,
-        middleware: [
-            offset(OverlayArrow.OFFSET),
-            flip({
-                fallbackPlacements: placements.fallback,
-            }),
-
-            // IK change: Add 8px of padding so the tooltip is always at least 8px away from any edge of the screen.
-            // If the tooltip would overflow (e.g., on the right), it will be shifted left to maintain this space.
-            shift({padding: 8}),
-            arrow({
-                element: arrowRef,
-            }),
-        ],
+        middleware,
     });
 
     const {isMounted, styles: transitionStyles} = useTransitionStyles(floatingContext, TRANSITION_STYLE_PROPS);
