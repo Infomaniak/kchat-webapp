@@ -250,7 +250,7 @@ export default class WebSocketClient {
             this.errorCount++;
             this.connectFailCount++;
 
-            Sentry.captureException(err?.error ?? err, {
+            Sentry.captureException(evt?.error ?? evt, {
                 tags: {
                     source: 'websocket',
                     errorCount: this.errorCount,
