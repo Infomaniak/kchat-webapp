@@ -99,7 +99,6 @@ import type {
     SubmitDialogResponse,
 } from '@mattermost/types/integrations';
 import type {Job, JobTypeBase} from '@mattermost/types/jobs';
-import type {ServerLimits} from '@mattermost/types/limits';
 import type {
     MarketplaceApp,
     MarketplacePlugin,
@@ -152,6 +151,7 @@ import type {
 } from '@mattermost/types/users';
 import type {DeepPartial, PartialExcept, RelationOneToOne} from '@mattermost/types/utilities';
 
+import {backOff} from './backoff';
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString, setUserAgent} from './helpers';
 import type {TelemetryHandler} from './telemetry';
@@ -4563,29 +4563,28 @@ export default class Client4 {
         });
     };
 
-    // Ik changes : error handling when request fails, retrying with exponential backoff + jitter (Google HTTP Client Library recommendations).
-    // Parameters: initial=500ms, multiplier=1.5, jitter=50%, max=30s, 7 retries (~20s total before giving up)
+    // Ik changes : error handling when request fails, retrying with exponential backoff + full jitter (AWS recommendation).
+    // Parameters: initial=500ms, multiplier=1.5, jitter=full, max=30s, 7 retries (~20s total before giving up)
     doFetchWithResponseAndRetry = <ClientDataResponse>(url: string, options: Options, retries = 7): Promise<ClientResponse<ClientDataResponse>> => {
-        const BASE_DELAY = 500; // ms
-        const MULTIPLIER = 1.5;
-        const MAX_DELAY = 30000; // ms
-
-        const attempt = (attemptNumber: number): Promise<ClientResponse<ClientDataResponse>> => {
-            return this.doFetchWithResponse<ClientDataResponse>(url, options).catch((err) => {
-                if (attemptNumber >= retries) {
+        return backOff<ClientResponse<ClientDataResponse>>(
+            () => this.doFetchWithResponse<ClientDataResponse>(url, options),
+            {
+                numOfAttempts: retries + 1,
+                startingDelay: 500,
+                timeMultiple: 1.5,
+                maxDelay: 30000,
+                jitter: 'full',
+                retry: (_err, attemptNumber, delay) => {
                     // eslint-disable-next-line no-console
-                    console.log('all retry attempts for', options.method, url, 'failed');
-                    throw err;
-                }
-                const baseDelay = Math.min(BASE_DELAY * Math.pow(MULTIPLIER, attemptNumber), MAX_DELAY);
-                const jitteredDelay = Math.round(baseDelay * (0.5 + Math.random()));
-                // eslint-disable-next-line no-console
-                console.log('retry #', attemptNumber + 1, options.method, url, `backoff ${jitteredDelay}ms`);
-                return new Promise((resolve) => setTimeout(resolve, jitteredDelay)).then(() => attempt(attemptNumber + 1));
-            });
-        };
-
-        return attempt(0);
+                    console.warn('retry #', attemptNumber, options.method, url, `backoff ${delay}ms`);
+                    return true;
+                },
+            },
+        ).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn('all retry attempts for', options.method, url, 'failed');
+            throw err;
+        });
     };
 
     trackEvent(category: string, event: string, props?: any) {
