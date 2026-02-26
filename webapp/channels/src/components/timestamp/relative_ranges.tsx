@@ -19,6 +19,7 @@ export const TODAY_TITLE_CASE: RangeDescriptor = {
             defaultMessage='Today'
         />
     ),
+    updateIntervalInSeconds: 60,
 };
 
 export const YESTERDAY_TITLE_CASE: RangeDescriptor = {
@@ -29,6 +30,7 @@ export const YESTERDAY_TITLE_CASE: RangeDescriptor = {
             defaultMessage='Yesterday'
         />
     ),
+    updateIntervalInSeconds: 60,
 };
 
 export const TOMORROW_TITLE_CASE: RangeDescriptor = {
