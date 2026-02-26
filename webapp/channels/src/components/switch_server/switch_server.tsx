@@ -17,16 +17,17 @@ type Props = {
     servers: Server[];
     isMultiServer: boolean;
     spaceId: string;
+    isGuest: boolean;
 }
 
-const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiServer, spaceId}) => {
+const SwitchServer: FC<Props> = ({currentServer, unreadStatus, servers, isMultiServer, spaceId, isGuest}) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const handleToggleDropdown = () => setIsOpen(!isOpen);
 
     return (
         <div
             id='switch-server'
-            className={classNames('switch-server-dropdown', {open: isOpen})}
+            className={classNames('switch-server-dropdown', {open: isOpen, guest: isGuest})}
         >
             <div className='bordered'>
                 <SwitchItem
