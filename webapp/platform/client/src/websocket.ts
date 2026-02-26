@@ -3,6 +3,7 @@
 // See LICENSE.txt for license information.
 /* eslint-disable no-console */
 
+import * as Sentry from '@sentry/react';
 import type {Channel} from 'pusher-js';
 import Pusher from 'pusher-js';
 
@@ -248,6 +249,18 @@ export default class WebSocketClient {
             console.log(`${debugId} unexpected error:`, evt);
             this.errorCount++;
             this.connectFailCount++;
+
+            Sentry.captureException(evt?.error ?? evt, {
+                tags: {
+                    source: 'websocket',
+                    errorCount: this.errorCount,
+                    connectFailCount: this.connectFailCount,
+                },
+                extra: {
+                    connectionUrl,
+                    pusherState: this.conn?.connection.state,
+                },
+            });
 
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name);
