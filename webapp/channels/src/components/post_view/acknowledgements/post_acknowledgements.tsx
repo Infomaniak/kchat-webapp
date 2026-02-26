@@ -3,11 +3,13 @@
 
 import {
     FloatingFocusManager,
+    FloatingPortal,
     autoUpdate,
     flip,
     offset,
     safePolygon,
     shift,
+    size,
     useFloating,
     useHover,
     useId,
@@ -58,6 +60,7 @@ function PostAcknowledgements({
     const isCurrentAuthor = authorId === currentUserId;
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
+    const [maxHeight, setMaxHeight] = useState(400);
 
     if (list && list.length) {
         const ack = list.find((ack) => ack.user.id === currentUserId);
@@ -80,6 +83,12 @@ function PostAcknowledgements({
             }),
             shift({
                 padding: 12,
+            }),
+            size({
+                padding: 12,
+                apply({availableHeight}) {
+                    setMaxHeight(Math.min(400, availableHeight));
+                },
             }),
         ],
     });
@@ -156,28 +165,31 @@ function PostAcknowledgements({
         <>
             {button}
             {open && (
-                <FloatingFocusManager
-                    context={context}
-                    modal={false}
-                >
-                    <div
-                        ref={setFloating}
-                        style={{
-                            position: strategy,
-                            top: y ?? 0,
-                            left: x ?? 0,
-                            width: 248,
-                            zIndex: 999,
-                        }}
-                        aria-labelledby={headingId}
-                        {...getFloatingProps()}
+                <FloatingPortal>
+                    <FloatingFocusManager
+                        context={context}
+                        modal={false}
                     >
-                        <PostAcknowledgementsUserPopover
-                            currentUserId={currentUserId}
-                            list={list}
-                        />
-                    </div>
-                </FloatingFocusManager>
+                        <div
+                            ref={setFloating}
+                            style={{
+                                position: strategy,
+                                top: y ?? 0,
+                                left: x ?? 0,
+                                width: 248,
+                                zIndex: 999,
+                            }}
+                            aria-labelledby={headingId}
+                            {...getFloatingProps()}
+                        >
+                            <PostAcknowledgementsUserPopover
+                                currentUserId={currentUserId}
+                                list={list}
+                                maxHeight={maxHeight}
+                            />
+                        </div>
+                    </FloatingFocusManager>
+                </FloatingPortal>
             )}
         </>
     );
