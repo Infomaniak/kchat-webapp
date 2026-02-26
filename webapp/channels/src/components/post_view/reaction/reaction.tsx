@@ -6,7 +6,7 @@ import React from 'react';
 import type {Post} from '@mattermost/types/posts';
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
-import ImgWithRetry from 'components/img_with_retry';
+import Image from 'components/image';
 
 import * as Utils from 'utils/utils';
 
@@ -204,7 +204,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
         }
 
         const emojiIcon = (
-            <ImgWithRetry
+            <Image
                 className='Reaction__emoji emoticon'
                 src={this.props.emojiImageUrl}
             />

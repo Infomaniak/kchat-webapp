@@ -16,7 +16,7 @@ import type {PostImage} from '@mattermost/types/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
-import ImgWithRetry from 'components/img_with_retry';
+import Image from 'components/image';
 import LoadingImagePreview from 'components/loading_image_preview';
 import WithTooltip from 'components/with_tooltip';
 
@@ -239,7 +239,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             };
         }
         const image = (
-            <ImgWithRetry
+            <Image
                 {...props}
                 aria-label={ariaLabelImage}
                 tabIndex={0}

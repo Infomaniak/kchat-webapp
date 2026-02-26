@@ -4,17 +4,20 @@
 import React, {useState} from 'react';
 import type {ImgHTMLAttributes, SyntheticEvent} from 'react';
 
-type Props = ImgHTMLAttributes<HTMLImageElement>;
+type Props = ImgHTMLAttributes<HTMLImageElement> & {
 
-/**
- * Drop-in replacement for <img> with a single automatic retry on load error.
- * After the retry, the native onError handler is called (if provided).
- */
-const ImgWithRetry = ({onError, ...props}: Props) => {
+    /**
+     * When true (default), automatically retries once on load error before
+     * falling back to the native browser broken-image behaviour.
+     */
+    retry?: boolean;
+}
+
+const Image = ({retry = true, onError, ...props}: Props) => {
     const [retryCount, setRetryCount] = useState(0);
 
     const handleError = (e: SyntheticEvent<HTMLImageElement>) => {
-        if (retryCount === 0) {
+        if (retry && retryCount === 0) {
             setRetryCount(1);
         } else {
             onError?.(e);
@@ -30,4 +33,4 @@ const ImgWithRetry = ({onError, ...props}: Props) => {
     );
 };
 
-export default ImgWithRetry;
+export default Image;

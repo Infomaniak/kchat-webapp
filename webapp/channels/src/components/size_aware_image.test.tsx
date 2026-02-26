@@ -4,7 +4,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 
-import ImgWithRetry from 'components/img_with_retry';
+import Image from 'components/image';
 import LoadingImagePreview from 'components/loading_image_preview';
 import SizeAwareImage, {SizeAwareImage as SizeAwareImageComponent} from 'components/size_aware_image';
 
@@ -114,7 +114,7 @@ describe('components/SizeAwareImage', () => {
 
         const wrapper = shallowWithIntl(<SizeAwareImage {...baseProps}/>);
 
-        wrapper.find(ImgWithRetry)?.prop('onLoad')?.({target: {naturalHeight: height, naturalWidth: width}} as unknown as React.SyntheticEvent<HTMLImageElement>);
+        wrapper.find(Image)?.prop('onLoad')?.({target: {naturalHeight: height, naturalWidth: width}} as unknown as React.SyntheticEvent<HTMLImageElement>);
         expect(wrapper.state('loaded')).toBe(true);
         expect(baseProps.onImageLoaded).toHaveBeenCalledWith({height, width});
     });
@@ -184,7 +184,7 @@ describe('components/SizeAwareImage', () => {
 
         wrapper.instance().setState({isSmallImage: true, imageWidth: 24});
 
-        expect(wrapper.find(ImgWithRetry).prop('className')).toBe(`${props.className} small-image--inside-container`);
+        expect(wrapper.find(Image).prop('className')).toBe(`${props.className} small-image--inside-container`);
     });
 
     test('should load download and copy link buttons when an image is mounted', () => {
