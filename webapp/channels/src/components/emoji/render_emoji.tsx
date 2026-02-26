@@ -9,6 +9,8 @@ import {getEmojiImageUrl} from 'mattermost-redux/utils/emoji_utils';
 
 import {getEmojiMap} from 'selectors/emojis';
 
+import Image from 'components/image';
+
 import type {GlobalState} from 'types/store';
 
 interface ComponentProps {
@@ -38,8 +40,9 @@ const RenderEmoji = ({emojiName, emojiStyle, size, onClick}: ComponentProps) => 
             aria-label={`:${emojiName}:`}
             data-emoticon={emojiName}
             style={{
-                backgroundImage: `url(${emojiImageUrl})`,
-                backgroundSize: 'contain',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 height: size,
                 width: size,
                 maxHeight: size,
@@ -49,7 +52,15 @@ const RenderEmoji = ({emojiName, emojiStyle, size, onClick}: ComponentProps) => 
                 overflow: 'hidden',
                 ...emojiStyle,
             }}
-        />
+        >
+            <Image
+                src={emojiImageUrl}
+                alt={`:${emojiName}:`}
+                width={size}
+                height={size}
+                style={{objectFit: 'contain'}}
+            />
+        </span>
     );
 };
 

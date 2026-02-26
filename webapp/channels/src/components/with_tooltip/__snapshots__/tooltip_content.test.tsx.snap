@@ -33,8 +33,16 @@ exports[`TooltipContent have correct structure with title and emoji 1`] = `
           aria-label=":smile:"
           class="emoticon"
           data-emoticon="smile"
-          style="background-image: url(/static/emoji/1f604.png); background-size: contain; height: 28px; width: 28px; max-height: 28px; max-width: 28px; min-height: 28px; min-width: 28px; overflow: hidden;"
-        />
+          style="display: inline-flex; align-items: center; justify-content: center; height: 28px; width: 28px; max-height: 28px; max-width: 28px; min-height: 28px; min-width: 28px; overflow: hidden;"
+        >
+          <img
+            alt=":smile:"
+            height="28"
+            src="/static/emoji/1f604.png"
+            style="object-fit: contain;"
+            width="28"
+          />
+        </span>
       </span>
       <span
         class="tooltipContentTitle"
@@ -61,8 +69,16 @@ exports[`TooltipContent have correct structure with title and large emoji 1`] = 
           aria-label=":smile:"
           class="emoticon"
           data-emoticon="smile"
-          style="background-image: url(/static/emoji/1f604.png); background-size: contain; height: 48px; width: 48px; max-height: 48px; max-width: 48px; min-height: 48px; min-width: 48px; overflow: hidden;"
-        />
+          style="display: inline-flex; align-items: center; justify-content: center; height: 48px; width: 48px; max-height: 48px; max-width: 48px; min-height: 48px; min-width: 48px; overflow: hidden;"
+        >
+          <img
+            alt=":smile:"
+            height="48"
+            src="/static/emoji/1f604.png"
+            style="object-fit: contain;"
+            width="48"
+          />
+        </span>
       </span>
       <span
         class="tooltipContentTitle"
@@ -121,8 +137,16 @@ exports[`TooltipContent have correct structure with title, emoji and hint 1`] = 
           aria-label=":smile:"
           class="emoticon"
           data-emoticon="smile"
-          style="background-image: url(/static/emoji/1f604.png); background-size: contain; height: 28px; width: 28px; max-height: 28px; max-width: 28px; min-height: 28px; min-width: 28px; overflow: hidden;"
-        />
+          style="display: inline-flex; align-items: center; justify-content: center; height: 28px; width: 28px; max-height: 28px; max-width: 28px; min-height: 28px; min-width: 28px; overflow: hidden;"
+        >
+          <img
+            alt=":smile:"
+            height="28"
+            src="/static/emoji/1f604.png"
+            style="object-fit: contain;"
+            width="28"
+          />
+        </span>
       </span>
       <span
         class="tooltipContentTitle"

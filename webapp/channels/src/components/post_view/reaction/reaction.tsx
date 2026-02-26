@@ -6,6 +6,8 @@ import React from 'react';
 import type {Post} from '@mattermost/types/posts';
 import type {Reaction as ReactionType} from '@mattermost/types/reactions';
 
+import Image from 'components/image';
+
 import * as Utils from 'utils/utils';
 
 import ReactionTooltip from './reaction_tooltip';
@@ -202,7 +204,7 @@ export default class Reaction extends React.PureComponent<Props, State> {
         }
 
         const emojiIcon = (
-            <img
+            <Image
                 className='Reaction__emoji emoticon'
                 src={this.props.emojiImageUrl}
             />

@@ -16,6 +16,7 @@ import type {PostImage} from '@mattermost/types/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import {getFileMiniPreviewUrl} from 'mattermost-redux/utils/file_utils';
 
+import Image from 'components/image';
 import LoadingImagePreview from 'components/loading_image_preview';
 import WithTooltip from 'components/with_tooltip';
 
@@ -237,9 +238,8 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
                 height: 'auto',
             };
         }
-
         const image = (
-            <img
+            <Image
                 {...props}
                 aria-label={ariaLabelImage}
                 tabIndex={0}
@@ -427,7 +427,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
 
         let fallback;
 
-        if (this.dimensionsAvailable(dimensions) && !this.state.loaded) {
+        if (this.dimensionsAvailable(dimensions) && !this.state.loaded && !this.state.error) {
             const ratio = (dimensions?.height ?? 0) > MAX_IMAGE_HEIGHT ? MAX_IMAGE_HEIGHT / (dimensions?.height ?? 1) : 1;
             const height = (dimensions?.height ?? 0) * ratio;
             const width = (dimensions?.width ?? 0) * ratio;
@@ -467,7 +467,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             }
         }
 
-        const shouldShowImg = !this.dimensionsAvailable(dimensions) || this.state.loaded;
+        const shouldShowImg = !this.dimensionsAvailable(dimensions) || this.state.loaded || this.state.error;
 
         return (
             <>
