@@ -24,6 +24,10 @@
         border-radius: 4px;
     }
 
+    &.guest {
+        margin-top: 20px;
+    }
+
     @media screen and (max-width: 768px) {
         padding: 0 14px;
         margin-top: 16px;
