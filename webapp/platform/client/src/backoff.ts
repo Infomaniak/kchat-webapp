@@ -99,7 +99,8 @@ export async function backOff<T>(
                 throw err;
             }
 
-            await new Promise<void>((resolve) => setTimeout(resolve, delay)); // eslint-disable-line no-await-in-loop
+            const actualDelay = process.env.NODE_ENV === 'test' ? 0 : delay;
+            await new Promise<void>((resolve) => setTimeout(resolve, actualDelay)); // eslint-disable-line no-await-in-loop
         }
     }
 
