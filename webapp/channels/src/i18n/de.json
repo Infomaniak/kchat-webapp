@@ -4082,7 +4082,7 @@
   "leave_private_channel_modal.last_admin": "Als letzter Administrator dieses Kanals weisen Sie einem anderen Mitglied administrative Rechte zu, bevor Sie diesen Kanal verlassen.",
   "leave_private_channel_modal.last_user": "Möchten Sie den Kanal {channel} archivieren?",
   "leave_private_channel_modal.leave": "Ja, Kanal verlassen",
-  "leave_private_channel_modal.message": "Bist du sicher, dass du den privaten Kanal {channel} verlassen möchtest? Du musst erneut eingeladen werden, um diesen Kanal erneut zu betreten.",
+  "leave_private_channel_modal.message": "Bist du sicher, dass du den privaten Kanal {channel} verlassen möchtest?",
   "leave_private_channel_modal.one_admin": "Als letzter Benutzer können Sie diesen privaten Kanal nicht verlassen, sondern nur archivieren. Sie oder ein Administrator können ihn jederzeit wiederherstellen.",
   "leave_private_channel_modal.title": "Privaten Kanal {channel} verlassen",
   "leave_private_channel_modal.which_user": "Welchem Benutzer möchten Sie administrative Rechte auf diesem Kanal gewähren?",
