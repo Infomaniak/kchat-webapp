@@ -4082,7 +4082,7 @@
   "leave_private_channel_modal.last_admin": "Essendo l'ultimo amministratore di questo canale, assegna i diritti amministrativi a un altro membro prima di lasciare questo canale.",
   "leave_private_channel_modal.last_user": "Vuoi archiviare il canale {channel}?",
   "leave_private_channel_modal.leave": "Sì, lascia il canale",
-  "leave_private_channel_modal.message": "Sei sicuro di voler abbandonare il canale privato {channel}? Dovrai essere invitato di nuovo per poterci rientrare.",
+  "leave_private_channel_modal.message": "Sei sicuro di voler abbandonare il canale privato {channel}?",
   "leave_private_channel_modal.one_admin": "Come ultimo utente, non puoi lasciare questo canale privato ma solo archiviarlo. Tu, o un amministratore, potete sempre ripristinarlo.",
   "leave_private_channel_modal.title": "Abbandona il canale privato {channel}",
   "leave_private_channel_modal.which_user": "A quale utente desideri concedere i diritti amministrativi su questo canale?",

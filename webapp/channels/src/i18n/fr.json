@@ -4079,7 +4079,7 @@
   "leave_private_channel_modal.last_admin": "En tant que dernier administrateur de ce canal, attribuez des droits d’administration à un autre membre avant de quitter ce canal.",
   "leave_private_channel_modal.last_user": "Souhaitez-vous archiver le canal {channel} ?",
   "leave_private_channel_modal.leave": "Quitter",
-  "leave_private_channel_modal.message": "Voulez-vous vraiment quitter le canal privé {channel} ? Vous devrez être réinvité pour pouvoir le rejoindre à nouveau dans le futur.",
+  "leave_private_channel_modal.message": "Voulez-vous vraiment quitter le canal privé {channel} ?",
   "leave_private_channel_modal.one_admin": "En tant que dernier utilisateur, vous ne pouvez pas quitter ce canal privé mais uniquement l'archiver. Vous, ou un administrateur, pourrez toujours le désarchiver.",
   "leave_private_channel_modal.title": "Quitter le canal privé {channel}",
   "leave_private_channel_modal.which_user": "A quel utilisateur souhaitez-vous accorder un droit d’administrateur sur ce canal ?",
