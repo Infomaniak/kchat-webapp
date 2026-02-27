@@ -883,6 +883,11 @@
             cursor: pointer;
         }
 
+        &.more-modal__row--disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
         &.more-modal__row--selected {
             background: rgba(var(--sys-center-channel-color-rgb), 0.08);
 

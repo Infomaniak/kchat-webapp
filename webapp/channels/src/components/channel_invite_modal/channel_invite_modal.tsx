@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import React from 'react';
 import {Modal} from 'react-bootstrap';
@@ -401,13 +402,16 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 });
             });
             const displayName = displayUsername(option, this.props.teammateNameDisplaySetting);
+            const isAlreadyInChannel = Boolean(userMapping[option.id]);
+            const handleClick = isAlreadyInChannel ? undefined : () => onAdd(option);
+            const handleMouseMove = isAlreadyInChannel ? undefined : () => onMouseMove(option);
             return (
                 <div
                     key={option.id}
                     ref={isSelected ? this.selectedItemRef : option.id}
-                    className={'more-modal__row clickable ' + rowSelected}
-                    onClick={() => onAdd(option)}
-                    onMouseMove={() => onMouseMove(option)}
+                    className={classNames('more-modal__row clickable', rowSelected, {'more-modal__row--disabled': isAlreadyInChannel})}
+                    onClick={handleClick}
+                    onMouseMove={handleMouseMove}
                 >
                     <ProfilePicture
                         src={Client4.getProfilePictureUrl(option.id, option.last_picture_update)}
@@ -433,7 +437,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                             </span>
                         </div>
                     </div>
-                    <div className='more-modal__actions'>
+                    {!isAlreadyInChannel && <div className='more-modal__actions'>
                         <button
                             className='more-modal__actions--round'
                             aria-label='Add channel to invite'
@@ -442,7 +446,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                                 className='icon icon-plus'
                             />
                         </button>
-                    </div>
+                    </div>}
                 </div>
             );
         }
