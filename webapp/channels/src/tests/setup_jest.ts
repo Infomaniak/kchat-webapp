@@ -60,6 +60,11 @@ jest.mock('utils/url_import', () => ({
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
+// isRetryWarning returns true when the console.warn message is coming from the backOff retry utility.
+function isRetryWarning(params: string[]) {
+    return params[0] === 'retry #' || params[0] === 'all retry attempts for';
+}
+
 // isDependencyWarning returns true when the given console.warn message is coming from a dependency using deprecated
 // React lifecycle methods.
 function isDependencyWarning(params: string[]) {
@@ -88,6 +93,11 @@ beforeAll(() => {
     console.warn = jest.fn((...params) => {
         // Ignore any deprecation warnings coming from dependencies
         if (isDependencyWarning(params)) {
+            return;
+        }
+
+        // Ignore retry warnings from the backOff utility
+        if (isRetryWarning(params)) {
             return;
         }
 

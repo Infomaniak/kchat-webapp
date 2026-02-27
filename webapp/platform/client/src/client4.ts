@@ -99,7 +99,6 @@ import type {
     SubmitDialogResponse,
 } from '@mattermost/types/integrations';
 import type {Job, JobTypeBase} from '@mattermost/types/jobs';
-import type {ServerLimits} from '@mattermost/types/limits';
 import type {
     MarketplaceApp,
     MarketplacePlugin,
@@ -152,6 +151,7 @@ import type {
 } from '@mattermost/types/users';
 import type {DeepPartial, PartialExcept, RelationOneToOne} from '@mattermost/types/utilities';
 
+import {backOff} from './backoff';
 import {cleanUrlForLogging} from './errors';
 import {buildQueryString, setUserAgent} from './helpers';
 import type {TelemetryHandler} from './telemetry';
@@ -4563,28 +4563,28 @@ export default class Client4 {
         });
     };
 
-    // Ik changes : error handling when request fails, retrying request 3 times with 0,5s delay, only apply this to data_prefetch API calls.
-    doFetchWithResponseAndRetry = async <ClientDataResponse>(url: string, options: Options, retries = 3): Promise<ClientResponse<ClientDataResponse>> => {
-        const RETRY_TIME = 1000; // 1 sec
-        for (let attempt = 0; attempt <= retries; attempt++) {
-            if (attempt > 0) {
-                console.log('retry #', attempt, options.method, url, 'at', Date.now());
-            }
-            try {
-                const response = await this.doFetchWithResponse<ClientDataResponse>(url, options);
-                return response;
-            } catch (err) {
-                console.log(options.method, url, 'retry #', attempt, 'fail at', Date.now());
-
-                if (attempt < retries) {
-                    await new Promise((resolve) => setTimeout(resolve, RETRY_TIME));
-                } else {
-                    console.log('all retry attempts for', options.method, url, 'failed');
-                    throw err;
-                }
-            }
-        }
-        throw new Error('request retry failed.');
+    // Ik changes : error handling when request fails, retrying with exponential backoff + full jitter (AWS recommendation).
+    // Parameters: initial=500ms, multiplier=1.5, jitter=full, max=30s, 7 retries (~20s total before giving up)
+    doFetchWithResponseAndRetry = <ClientDataResponse>(url: string, options: Options, retries = 7): Promise<ClientResponse<ClientDataResponse>> => {
+        return backOff<ClientResponse<ClientDataResponse>>(
+            () => this.doFetchWithResponse<ClientDataResponse>(url, options),
+            {
+                numOfAttempts: retries + 1,
+                startingDelay: 500,
+                timeMultiple: 1.5,
+                maxDelay: 30000,
+                jitter: 'full',
+                retry: (_err, attemptNumber, delay) => {
+                    // eslint-disable-next-line no-console
+                    console.warn('retry #', attemptNumber, options.method, url, `backoff ${delay}ms`);
+                    return true;
+                },
+            },
+        ).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.warn('all retry attempts for', options.method, url, 'failed');
+            throw err;
+        });
     };
 
     trackEvent(category: string, event: string, props?: any) {
