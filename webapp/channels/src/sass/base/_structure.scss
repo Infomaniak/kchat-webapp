@@ -220,6 +220,11 @@ body.app__body #root {
         overflow: visible;
     }
 
+    #channel_view {
+        container-type: inline-size;
+        container-name: channel-view;
+    }
+
     .product-wrapper {
         overflow: auto;
     }

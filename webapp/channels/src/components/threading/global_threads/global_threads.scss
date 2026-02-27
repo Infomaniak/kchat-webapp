@@ -45,7 +45,7 @@
     > .no-results__holder {
         grid-area: list/list/pane/pane;
 
-        @media screen and (max-width: 1020px) {
+        @container channel-view (max-width: 760px) {
             grid-area: main;
         }
     }
@@ -75,8 +75,8 @@
     grid-template-columns: var(--list) var(--pane);
     grid-template-rows: 1fr;
 
-    // single column
-    @media screen and (max-width: 1020px) {
+    // single column - based on actual container width
+    @container channel-view (max-width: 760px) {
         grid-template-areas: 'main main';
 
         &:not(.thread-selected) {
@@ -119,15 +119,15 @@
         }
     }
 
-    @media screen and (min-width: 1021px) {
+    @container channel-view (min-width: 761px) {
         --list: minmax(min-content, 350px);
     }
 
-    @media screen and (min-width: 1267px) {
+    @container channel-view (min-width: 1007px) {
         --list: minmax(min-content, 400px);
     }
 
-    @media screen and (min-width: 1680px) {
+    @container channel-view (min-width: 1420px) {
         --list: minmax(min-content, 500px);
     }
 }
