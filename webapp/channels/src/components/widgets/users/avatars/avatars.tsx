@@ -58,7 +58,7 @@ function UserAvatar({
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
-    const profilePictureURL = userId ? imageURLForUser(userId) : '';
+    const profilePictureURL = userId ? imageURLForUser(userId, user?.last_picture_update) : '';
 
     return (
         <ProfilePopover<HTMLButtonElement>
