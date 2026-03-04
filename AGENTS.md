@@ -3,11 +3,13 @@
 ## Code Rules
 
 - Follow existing patterns and conventions in the codebase
-- **Functional components only** with hooks — no class components, no `connect()`
-- **No comments** except when genuinely necessary for complex logic
-- **No dead code**
-- **No useless abstractions**
-- **Code must be** clean, idiomatic, readable
+- **Functional components only** — hooks, no class components, no `connect()`
+- **No comments** — code should be self-documenting; introduce named variables/functions or pattern if needed
+- **No dead code, no unused imports**
+- **No premature abstractions** — abstract only when a pattern repeats
+- **Clean, idiomatic, readable code** — apply SOLID principles where relevant
+- Drop `ik.test` convention
+- Drop `IK:` comments
 
 ## i18n
 
