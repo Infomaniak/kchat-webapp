@@ -116,7 +116,7 @@ describe('compareEmojis - IK custom behavior', () => {
             const systemStar = TH.getSystemEmojiMock({
                 short_name: 'star',
                 short_names: ['star'],
-                category: 'nature',
+                category: 'animals-nature',
             });
 
             const emojiArray = [systemStar, customRocket];

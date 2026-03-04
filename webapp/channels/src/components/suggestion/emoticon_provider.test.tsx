@@ -154,6 +154,7 @@ describe('components/EmoticonProvider', () => {
                 'thumbsdown-custom',
                 'thumbsup-custom',
                 'lithuania',
+                'hand_with_index_finger_and_thumb_crossed',
                 'lithuania-custom',
             ]);
         }
