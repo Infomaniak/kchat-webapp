@@ -11668,31 +11668,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"emoji-datasource-apple@npm:6.1.1":
-  version: 6.1.1
-  resolution: "emoji-datasource-apple@npm:6.1.1"
-  checksum: 10/21bb5c7c3179db9b36bca96a272b3621c6de72e08ca43d1b3f273b56aaa2fed6512a879a9dccba3b052c7ef2b67662ce3a93a1862ce2970742f392a317f1f3b5
+"emoji-datasource-apple@npm:16.0.0":
+  version: 16.0.0
+  resolution: "emoji-datasource-apple@npm:16.0.0"
+  checksum: 10/6537d4a3b9d461e659a93a55285d7f87f4687901c54c8842b04180d6b2bd70c79e4851a76b98e763f1bef0c9e33744cccf46721b993d30935d7101e158fc0794
   languageName: node
   linkType: hard
 
-"emoji-datasource-google@npm:6.1.1":
-  version: 6.1.1
-  resolution: "emoji-datasource-google@npm:6.1.1"
-  checksum: 10/27e4f68b0f72462fa13cfba887774b6c0d85d4f777e7e8356f0e1bcd5269acd4f1f35ee5ae68a616586e06ca9e9a04368e4cf019f05b6ce8eeccd41e38353f84
+"emoji-datasource-google@npm:16.0.0":
+  version: 16.0.0
+  resolution: "emoji-datasource-google@npm:16.0.0"
+  checksum: 10/9430455c0f05796857e046a8d6d723d82a57d15f2029dd48ceeffc4b90c53f49eb9a01f034bb4abdf0ead1c39053d7a72a0cc8cfbe68b2f163008329c7d21232
   languageName: node
   linkType: hard
 
-"emoji-datasource@npm:6.1.1":
-  version: 6.1.1
-  resolution: "emoji-datasource@npm:6.1.1"
-  checksum: 10/ca3ed78b482088142b57494a8f55bd1ed3ac83107a7da8296c8e63b6e1e70125b448b4be06d1fe2f896334b53ea5093061b68b5e226dd7153fa7fdc859d5774c
-  languageName: node
-  linkType: hard
-
-"emoji-regex@npm:10.2.1":
-  version: 10.2.1
-  resolution: "emoji-regex@npm:10.2.1"
-  checksum: 10/fb2143d669ed7a3b180a56bfb5fc0638af25aeef421df4bb9c3a835dccfc4b737bcb45dfc8cea33c3f2b9dcd92a3fdb79820c7a840491a899e2d68aa3245c4b5
+"emoji-datasource@npm:16.0.0":
+  version: 16.0.0
+  resolution: "emoji-datasource@npm:16.0.0"
+  checksum: 10/8470523ccd81049b392f9956ef9e67d8ca972f0dbdd621b708c753169b2060dab22e5475614b646311672142d0265accb8ae28d2675abae028d587b8c68a49b2
   languageName: node
   linkType: hard
 
@@ -11700,6 +11693,13 @@ __metadata:
   version: 10.3.0
   resolution: "emoji-regex@npm:10.3.0"
   checksum: 10/b9b084ebe904f13bb4b66ee4c29fb41a7a4a1165adcc33c1ce8056c0194b882cc91ebdc782f1a779b5d7ea7375c5064643a7734893d7c657b44c5c6b9d7bf1e7
+  languageName: node
+  linkType: hard
+
+"emoji-regex@npm:10.6.0":
+  version: 10.6.0
+  resolution: "emoji-regex@npm:10.6.0"
+  checksum: 10/98cc0b0e1daed1ed25afbf69dcb921fee00f712f51aab93aa1547e4e4e8171725cc4f0098aaa645b4f611a19da11ec9f4623eb6ff2b72314b39a8f2ae7c12bf2
   languageName: node
   linkType: hard
 
@@ -18022,10 +18022,10 @@ __metadata:
     css-vars-ponyfill: "npm:2.4.8"
     date-fns: "npm:2.29.3"
     dynamic-virtualized-list: "github:mattermost/dynamic-virtualized-list#3fe918b41de4cb08dbf43f1207bb58827b38e833"
-    emoji-datasource: "npm:6.1.1"
-    emoji-datasource-apple: "npm:6.1.1"
-    emoji-datasource-google: "npm:6.1.1"
-    emoji-regex: "npm:10.2.1"
+    emoji-datasource: "npm:16.0.0"
+    emoji-datasource-apple: "npm:16.0.0"
+    emoji-datasource-google: "npm:16.0.0"
+    emoji-regex: "npm:10.6.0"
     enzyme: "npm:3.11.0"
     enzyme-adapter-react-17-updated: "npm:1.0.2"
     enzyme-to-json: "npm:3.6.2"

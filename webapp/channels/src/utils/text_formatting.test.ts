@@ -273,11 +273,6 @@ describe('handleUnicodeEmoji', () => {
             output: '<span data-emoticon="+1">👍</span>',
         },
         {
-            description: 'should not replace unsupported emojis with an image',
-            text: '😮‍💨', // Note, this test will fail as soon as this emoji gets a corresponding image
-            output: '<span class="emoticon emoticon--unicode">😮‍💨</span>',
-        },
-        {
             description: 'should correctly match gendered emojis',
             text: '🙅‍♀️🙅‍♂️',
             output: '<span data-emoticon="woman-gesturing-no">🙅‍♀️</span><span data-emoticon="man-gesturing-no">🙅‍♂️</span>',
