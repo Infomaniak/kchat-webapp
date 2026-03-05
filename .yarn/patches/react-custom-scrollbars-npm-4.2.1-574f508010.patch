@@ -1,0 +1,33 @@
+diff --git a/lib/utils/getScrollbarWidth.js b/lib/utils/getScrollbarWidth.js
+index 6c6e849d73962d6a3b402908acad089e75552641..a6fa605a58e41e63432076737cb179907e8cd1b7 100644
+--- a/lib/utils/getScrollbarWidth.js
++++ b/lib/utils/getScrollbarWidth.js
+@@ -14,7 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
+ var scrollbarWidth = false;
+ 
+ function getScrollbarWidth() {
+-    if (scrollbarWidth !== false) return scrollbarWidth;
++    if (scrollbarWidth) return scrollbarWidth;
+     /* istanbul ignore else */
+     if (typeof document !== 'undefined') {
+         var div = document.createElement('div');
+@@ -27,10 +27,14 @@ function getScrollbarWidth() {
+             MsOverflowStyle: 'scrollbar'
+         });
+         document.body.appendChild(div);
+-        scrollbarWidth = div.offsetWidth - div.clientWidth;
++        var width = div.offsetWidth - div.clientWidth;
+         document.body.removeChild(div);
+-    } else {
+-        scrollbarWidth = 0;
++        // Only cache if > 0: when loaded in a display:none iframe, offsetWidth
++        // and clientWidth are both 0, and caching that would break scrollbars.
++        if (width > 0) {
++            scrollbarWidth = width;
++        }
++        return width;
+     }
+-    return scrollbarWidth || 0;
++    return 0;
+ }
+\ No newline at end of file

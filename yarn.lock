@@ -18085,7 +18085,7 @@ __metadata:
     react-bootstrap: "github:mattermost/react-bootstrap#d821e2b1db1059bd36112d7587fd1b0912b27626"
     react-color: "npm:2.19.3"
     react-contextmenu: "npm:2.14.0"
-    react-custom-scrollbars: "npm:4.2.1"
+    react-custom-scrollbars: "patch:react-custom-scrollbars@npm%3A4.2.1#~/.yarn/patches/react-custom-scrollbars-npm-4.2.1-574f508010.patch"
     react-day-picker: "npm:8.3.6"
     react-dom: "npm:17.0.2"
     react-hot-loader: "npm:4.13.0"
@@ -20875,6 +20875,20 @@ __metadata:
     react: ^0.14.0 || ^15.0.0 || ^16.0.0
     react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
   checksum: 10/58c62e04f6a23558f9f4c3df1e96f30efa344d0ce63eb7894f58ca497f8c383e25b86d8055496c7e7910d61eb77496dbe4b451097c98f0347a31aaa7880879f6
+  languageName: node
+  linkType: hard
+
+"react-custom-scrollbars@patch:react-custom-scrollbars@npm%3A4.2.1#~/.yarn/patches/react-custom-scrollbars-npm-4.2.1-574f508010.patch":
+  version: 4.2.1
+  resolution: "react-custom-scrollbars@patch:react-custom-scrollbars@npm%3A4.2.1#~/.yarn/patches/react-custom-scrollbars-npm-4.2.1-574f508010.patch::version=4.2.1&hash=8b4038"
+  dependencies:
+    dom-css: "npm:^2.0.0"
+    prop-types: "npm:^15.5.10"
+    raf: "npm:^3.1.0"
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.0 || ^16.0.0
+    react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0
+  checksum: 10/efde75e7e7181988770902fdf556a6e69458df8433bfd59fd81589054da5271b3d621b779deeebc82f662a588acd898eba8e3ade3f089a7fd86789bd60ec5525
   languageName: node
   linkType: hard
 
