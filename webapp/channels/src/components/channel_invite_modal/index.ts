@@ -7,7 +7,7 @@ import type {Dispatch} from 'redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import {getTeamStats, getTeamMembersByIds} from 'mattermost-redux/actions/teams';
+import {getTeamStats} from 'mattermost-redux/actions/teams';
 import {getProfilesNotInChannel, getProfilesInChannel, searchProfiles} from 'mattermost-redux/actions/users';
 import {Permissions} from 'mattermost-redux/constants';
 import {getRecentProfilesFromDMs} from 'mattermost-redux/selectors/entities/channels';
@@ -16,7 +16,7 @@ import {getConfig, getLicense} from 'mattermost-redux/selectors/entities/general
 import {makeGetAllAssociatedGroupsForReference} from 'mattermost-redux/selectors/entities/groups';
 import {getTeammateNameDisplaySetting, isCustomGroupsEnabled} from 'mattermost-redux/selectors/entities/preferences';
 import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentPackName, getCurrentTeam, getMembersInCurrentTeam, getMembersInTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentPackName, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getProfilesNotInCurrentChannel, getProfilesInCurrentChannel, getProfilesNotInCurrentTeam, getProfilesNotInTeam, getUserStatuses, makeGetProfilesNotInChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
 import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
@@ -51,18 +51,15 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         let profilesNotInCurrentChannel: UserProfile[];
         let profilesInCurrentChannel: UserProfile[];
         let profilesNotInCurrentTeam: UserProfile[];
-        let membersInTeam;
 
         if (props.channelId && props.teamId) {
             profilesNotInCurrentChannel = doGetProfilesNotInChannel(state, props.channelId);
             profilesInCurrentChannel = doGetProfilesInChannel(state, props.channelId);
             profilesNotInCurrentTeam = getProfilesNotInTeam(state, props.teamId);
-            membersInTeam = getMembersInTeam(state, props.teamId);
         } else {
             profilesNotInCurrentChannel = getProfilesNotInCurrentChannel(state);
             profilesInCurrentChannel = getProfilesInCurrentChannel(state);
             profilesNotInCurrentTeam = getProfilesNotInCurrentTeam(state);
-            membersInTeam = getMembersInCurrentTeam(state);
         }
         const profilesFromRecentDMs = getRecentProfilesFromDMs(state);
         const config = getConfig(state);
@@ -94,7 +91,6 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
             profilesNotInCurrentChannel,
             profilesInCurrentChannel,
             profilesNotInCurrentTeam,
-            membersInTeam,
             teammateNameDisplaySetting,
             profilesFromRecentDMs,
             userStatuses,
@@ -119,7 +115,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
             searchProfiles,
             closeModal,
             searchAssociatedGroupsForReference,
-            getTeamMembersByIds,
         }, dispatch),
     };
 }
