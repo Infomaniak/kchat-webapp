@@ -66,7 +66,6 @@ describe('components/channel_invite_modal', () => {
         profilesInCurrentChannel: [],
         profilesNotInCurrentTeam: [],
         profilesFromRecentDMs: [],
-        membersInTeam: {},
         groups: [],
         userStatuses: {},
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
@@ -89,7 +88,6 @@ describe('components/channel_invite_modal', () => {
             loadStatusesForProfilesList: jest.fn(),
             searchProfiles: jest.fn(),
             closeModal: jest.fn(),
-            getTeamMembersByIds: jest.fn(),
         },
         onExited: jest.fn(),
     };
