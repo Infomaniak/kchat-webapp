@@ -777,6 +777,7 @@ export class FileUpload extends PureComponent<Props, State> {
                         menuButton={{
                             id: 'fileUploadButton',
                             class: 'style--none AdvancedTextEditor__action-button',
+                            disabled: this.props.disabled,
                             'aria-label': iconAriaLabel,
                             children: (
 

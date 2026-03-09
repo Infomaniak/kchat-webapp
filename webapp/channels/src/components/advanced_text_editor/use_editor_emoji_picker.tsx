@@ -29,6 +29,7 @@ import {IconContainer} from './formatting_bar/formatting_icon';
 const useEditorEmojiPicker = (
     textboxId: string,
     isDisabled: boolean,
+    isVoiceDraft: boolean,
     draft: PostDraft,
     caretPosition: number,
     setCaretPosition: (pos: number) => void,
@@ -153,7 +154,7 @@ const useEditorEmojiPicker = (
                         onClick={toggleEmojiPicker}
                         type='button'
                         aria-label={intl.formatMessage({id: 'emoji_picker.emojiPicker.button.ariaLabel', defaultMessage: 'select an emoji'})}
-                        disabled={shouldShowPreview}
+                        disabled={shouldShowPreview || isVoiceDraft}
                         className={classNames({active: showEmojiPicker})}
                         {...getReferenceProps()}
                     >

@@ -41,6 +41,7 @@ const useUploadFiles = (
     isThreadView: boolean,
     storedDrafts: React.MutableRefObject<Record<string, PostDraft | undefined>>,
     isDisabled: boolean,
+    isVoiceDraft: boolean,
     textboxRef: React.RefObject<TextboxClass>,
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
     focusTextbox: (forceFocust?: boolean) => void,
@@ -195,7 +196,7 @@ const useUploadFiles = (
             rootId={postId}
             channelId={channelId}
             postType={postType}
-            disabled={false}
+            disabled={isVoiceDraft}
 
             // For drive sharelinks
             message={draft.message}

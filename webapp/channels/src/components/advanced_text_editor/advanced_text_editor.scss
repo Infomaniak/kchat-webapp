@@ -143,6 +143,12 @@
             visibility: hidden;
         }
 
+        &:disabled {
+            pointer-events: none;
+            cursor: not-allowed;
+            color: rgba(var(--center-channel-color-rgb), 0.32);
+        }
+
         &+input {
             position: absolute;
             top: 0;

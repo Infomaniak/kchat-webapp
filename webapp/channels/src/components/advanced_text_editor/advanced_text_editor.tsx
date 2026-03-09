@@ -243,6 +243,7 @@ const AdvancedTextEditor = ({
     const enableSharedChannelsDMs = useSelector((state: GlobalState) => getFeatureFlagValue(state, 'EnableSharedChannelsDMs') === 'true');
     const isDMOrGMRemote = isChannelShared && (channelType === Constants.DM_CHANNEL || channelType === Constants.GM_CHANNEL);
     const isDisabled = Boolean(readOnlyChannel || (!enableSharedChannelsDMs && isDMOrGMRemote));
+    const isVoiceDraft = draft.postType === Constants.PostTypes.VOICE;
 
     const handleShowPreview = useCallback(() => {
         setShowPreview((prev) => !prev);
@@ -331,6 +332,7 @@ const AdvancedTextEditor = ({
         isThreadView,
         storedDrafts,
         isDisabled,
+        isVoiceDraft,
         textboxRef,
         handleDraftChange,
         focusTextbox,
@@ -348,6 +350,7 @@ const AdvancedTextEditor = ({
     } = useEditorEmojiPicker(
         textboxId,
         isDisabled,
+        isVoiceDraft,
         draft,
         caretPosition,
         setCaretPosition,
@@ -722,12 +725,12 @@ const AdvancedTextEditor = ({
         ...(location === Locations.RHS_COMMENT ? [] : [
             <Poll
                 key='poll'
-                disabled={showPreview}
+                disabled={showPreview || isVoiceDraft}
             />,
         ]),
         rewriteControl,
         ...(pluginItems || []),
-    ].filter(Boolean), [pluginItems, priorityAdditionalControl, rewriteControl, isInEditMode, location, showPreview]);
+    ].filter(Boolean), [pluginItems, priorityAdditionalControl, rewriteControl, isInEditMode, location, showPreview, isVoiceDraft]);
 
     const formattingBar = (
         <AutoHeightSwitcher
