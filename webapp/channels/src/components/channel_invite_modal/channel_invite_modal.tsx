@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import type {Channel} from '@mattermost/types/channels';
 import type {Group, GroupSearchParams} from '@mattermost/types/groups';
-import type {PackName, TeamMembership} from '@mattermost/types/teams';
+import type {PackName} from '@mattermost/types/teams';
 import type {UserProfile} from '@mattermost/types/users';
 import type {RelationOneToOne} from '@mattermost/types/utilities';
 
@@ -33,7 +33,6 @@ import Constants, {ModalIdentifiers} from 'utils/constants';
 import {sortUsersAndGroups} from 'utils/utils';
 
 import GroupOption from './group_option';
-import TeamWarningBanner from './team_warning_banner';
 
 import './channel_invite_modal.css';
 
@@ -51,7 +50,6 @@ export type Props = {
     profilesNotInCurrentTeam: UserProfile[];
     profilesFromRecentDMs: UserProfile[];
     intl: IntlShape;
-    membersInTeam?: RelationOneToOne<UserProfile, TeamMembership>;
     userStatuses: RelationOneToOne<UserProfile, string>;
     onExited: () => void;
     channel: Channel;
@@ -86,15 +84,12 @@ export type Props = {
         searchProfiles: (term: string, options: any) => Promise<ActionResult>;
         closeModal: (modalId: string) => void;
         searchAssociatedGroupsForReference: (prefix: string, teamId: string, channelId: string | undefined, opts: GroupSearchParams) => Promise<ActionResult>;
-        getTeamMembersByIds: (teamId: string, userIds: string[]) => Promise<ActionResult>;
     };
 }
 
 type State = {
     selectedUsers: UserProfileValue[];
     groupAndUserOptions: Array<UserProfileValue | GroupValue>;
-    usersNotInTeam: UserProfileValue[];
-    guestsNotInTeam: UserProfileValue[];
     term: string;
     show: boolean;
     saving: boolean;
@@ -125,8 +120,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         super(props);
         this.state = {
             selectedUsers: [],
-            usersNotInTeam: [],
-            guestsNotInTeam: [],
             term: '',
             show: true,
             saving: false,
@@ -142,52 +135,12 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
     private addValue = (value: UserProfileValue | GroupValue): void => {
         if (this.isUser(value)) {
             const profile = value;
-            if (!this.props.membersInTeam || !this.props.membersInTeam[profile.id]) {
-                if (isGuest(profile.roles)) {
-                    if (this.state.guestsNotInTeam.indexOf(profile) === -1) {
-                        this.setState((prevState) => {
-                            return {guestsNotInTeam: [...prevState.guestsNotInTeam, profile]};
-                        });
-                    }
-                    return;
-                }
-                if (this.state.usersNotInTeam.indexOf(profile) === -1) {
-                    this.setState((prevState) => {
-                        return {usersNotInTeam: [...prevState.usersNotInTeam, profile]};
-                    });
-                }
-                return;
-            }
-
             if (this.state.selectedUsers.indexOf(profile) === -1) {
                 this.setState((prevState) => {
                     return {selectedUsers: [...prevState.selectedUsers, profile]};
                 });
             }
         }
-    };
-
-    private removeInvitedUsers = (profiles: UserProfile[]): void => {
-        const usersNotInTeam = this.state.usersNotInTeam.filter((profile) => {
-            const user = profile as UserProfileValue;
-
-            const index = profiles.indexOf(user);
-            if (index === -1) {
-                return true;
-            }
-            this.addValue(user);
-            return false;
-        });
-
-        this.setState({usersNotInTeam: [...usersNotInTeam], guestsNotInTeam: []});
-    };
-
-    private removeUsersFromValuesNotInTeam = (profiles: UserProfile[]): void => {
-        const usersNotInTeam = this.state.usersNotInTeam.filter((profile) => {
-            const index = profiles.indexOf(profile);
-            return index === -1;
-        });
-        this.setState({usersNotInTeam: [...usersNotInTeam], guestsNotInTeam: []});
     };
 
     public componentDidMount(): void {
@@ -200,24 +153,10 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         this.props.actions.loadStatusesForProfilesList(this.props.profilesInCurrentChannel);
     }
 
-    public async componentDidUpdate(prevProps: Props, prevState: State) {
+    public componentDidUpdate(prevProps: Props, prevState: State) {
         if (prevState.term !== this.state.term) {
             const values = this.getOptions();
-            const userIds: string[] = [];
-
-            for (let index = 0; index < values.length; index++) {
-                const newValue = values[index];
-                if (this.isUser(newValue)) {
-                    userIds.push(newValue.id);
-                } else if (newValue.member_ids) {
-                    userIds.push(...newValue.member_ids);
-                }
-            }
-
             if (!isEqual(values, this.state.groupAndUserOptions)) {
-                if (userIds.length > 0) {
-                    this.props.actions.getTeamMembersByIds(this.props.channel.team_id, userIds);
-                }
                 this.setState({groupAndUserOptions: values});
             }
         }
@@ -651,11 +590,6 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                     {inviteError}
                     <div className='channel-invite__content'>
                         {content}
-                        <TeamWarningBanner
-                            guests={this.state.guestsNotInTeam}
-                            teamId={this.props.channel.team_id}
-                            users={this.state.usersNotInTeam}
-                        />
                         {(this.props.emailInvitationsEnabled && this.props.canInviteGuests) && inviteGuestComp}
                     </div>
                 </Modal.Body>
