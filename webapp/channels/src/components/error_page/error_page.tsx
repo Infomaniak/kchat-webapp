@@ -10,7 +10,9 @@ import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import * as GlobalActions from 'actions/global_actions';
 
+import {getHistory} from 'utils/browser_history';
 import {ErrorPageTypes} from 'utils/constants';
+import {isInIframe} from 'utils/url-ksuite-redirect';
 import {applyTheme} from 'utils/utils';
 
 import kSuite from 'images/ik/kSuite.svg';
@@ -83,7 +85,9 @@ export default class ErrorPage extends React.PureComponent<Props> {
         const signature = params.get('s');
         let customClasses = '';
         const reloadPage = () => {
-            if (window && window.location) {
+            if (isInIframe()) {
+                getHistory().push('/');
+            } else if (window && window.location) {
                 window.location.assign(window.location.origin);
             }
         };
