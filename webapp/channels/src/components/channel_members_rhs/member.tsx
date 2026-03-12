@@ -241,11 +241,13 @@ export default styled(Member)`
         align-items: center;
         margin-right: auto;
         max-width: calc(100% - 24px);
+        min-width: 0;
         padding: 4px 0px;
 
         .profileSpan_userInfo {
             display: flex;
             flex-grow: 1;
+            min-width: 0;
             cursor: pointer;
             overflow: hidden;
             text-overflow: ellipsis;
