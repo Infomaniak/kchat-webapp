@@ -505,7 +505,9 @@ export function fetchAllMyChannelMembers(): ActionFuncAsync {
 
 export function fetchAllMyTeamsChannels(): ActionFuncAsync {
     return async (dispatch, getState) => {
-        let channels;
+        const previousChannels = getState().entities.channels.channels;
+
+        let channels: ServerChannel[];
         try {
             channels = await Client4.getAllTeamsChannels();
         } catch (error) {
@@ -518,6 +520,26 @@ export function fetchAllMyTeamsChannels(): ActionFuncAsync {
             type: ChannelTypes.RECEIVED_CHANNELS,
             data: channels,
         });
+
+        // Detect channels that were in state but are no longer returned by the
+        // server (e.g. archived while we were disconnected). Mark them as
+        // deleted so the sidebar and channel view update accordingly.
+        const fetchedIds = new Set(channels.map((c) => c.id));
+        const isStaleChannel = (ch: Channel) => !fetchedIds.has(ch.id) && ch.delete_at === 0 && ch.type !== 'D' && ch.type !== 'G';
+
+        const staleActions: AnyAction[] = [];
+        for (const ch of Object.values(previousChannels)) {
+            if (isStaleChannel(ch)) {
+                staleActions.push({
+                    type: ChannelTypes.RECEIVED_CHANNEL_DELETED,
+                    data: {id: ch.id, team_id: ch.team_id, deleteAt: Date.now(), viewArchivedChannels: false},
+                });
+            }
+        }
+        if (staleActions.length > 0) {
+            dispatch(batchActions(staleActions));
+        }
+
         return {data: channels};
     };
 }
