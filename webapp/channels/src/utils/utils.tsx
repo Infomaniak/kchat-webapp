@@ -60,6 +60,7 @@ import type {TextboxElement} from 'components/textbox';
 import {getHistory} from 'utils/browser_history';
 import type {A11yFocusEventDetail} from 'utils/constants';
 import Constants, {FileTypes, ValidationErrors, A11yCustomEventTypes, AdvancedTextEditorTextboxIds} from 'utils/constants';
+import {IKConstants} from 'utils/constants-ik';
 import * as Keyboard from 'utils/keyboard';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
@@ -1170,6 +1171,13 @@ export function getShopUrl() {
 
     const path = 'order2/select/ksuite_change_offer';
     return new URL(path, baseUrl).toString();
+}
+
+export function getManagerTeamsUrl(accountId: number | undefined) {
+    if (!IKConstants.MANAGER_URL) {
+        return '';
+    }
+    return new URL(`v3/${accountId}/ng/accounts/rights/teams/list`, IKConstants.MANAGER_URL).toString();
 }
 
 // in contrast to Client4.getTeamIconUrl, for ui logic this function returns null if last_team_icon_update is unset

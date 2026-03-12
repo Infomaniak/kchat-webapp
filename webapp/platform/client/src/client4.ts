@@ -3939,7 +3939,7 @@ export default class Client4 {
 
     getGroupsByUserId = (userID: string) => {
         return this.doFetch<Group[]>(
-            `${this.getUsersRoute()}/${userID}/groups`,
+            `${this.getUsersRoute()}/${userID}/groups${buildQueryString({include_member_count: true})}`,
             {method: 'get'},
         );
     };
@@ -4037,10 +4037,8 @@ export default class Client4 {
     getGroupsAssociatedToChannel = (channelID: string, q = '', page = 0, perPage = PER_PAGE_DEFAULT, filterAllowReference = false) => {
         this.trackEvent('api', 'api_groups_get_associated_to_channel', {channel_id: channelID});
 
-        return this.doFetch<{
-            groups: Group[];
-            total_group_count: number;
-        }>(
+        // IK: backend returns Group[] directly
+        return this.doFetch<Group[]>(
             `${this.getBaseRoute()}/channels/${channelID}/groups${buildQueryString({page, per_page: perPage, q, include_member_count: true, filter_allow_reference: filterAllowReference})}`,
             {method: 'get'},
         );

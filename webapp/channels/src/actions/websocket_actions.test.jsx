@@ -90,22 +90,19 @@ jest.mock('mattermost-redux/actions/channels', () => ({
 }));
 
 jest.mock('actions/post_actions', () => ({
-    ...jest.requireActual('actions/post_actions'),
     handleNewPost: jest.fn(() => ({type: 'HANDLE_NEW_POST'})),
 }));
 
 jest.mock('actions/user_actions', () => ({
-    ...jest.requireActual('actions/user_actions'),
     loadProfilesForSidebar: jest.fn(),
 }));
 
 jest.mock('actions/global_actions', () => ({
-    ...jest.requireActual('actions/global_actions'),
     redirectUserToDefaultTeam: jest.fn(),
+    redirectDesktopUserToDefaultTeam: jest.fn(),
 }));
 
 jest.mock('actions/views/channel', () => ({
-    ...jest.requireActual('actions/views/channel'),
     syncPostsInChannel: jest.fn(),
 }));
 
@@ -324,6 +321,30 @@ describe('handleGroupAddedMemberEvent', () => {
         testStore.dispatch(handleGroupAddedMemberEvent(msg));
         expect(getGroup).toHaveBeenCalled();
         expect(testStore.getActions()).toEqual([{type: 'RECEIVED_GROUP'}]);
+    });
+
+    test('add other user to group in state updates member count', async () => {
+        const testStore = configureStore(mockState);
+        const msg = {
+            data: {
+                group_member: {group_id: 'group-1', user_id: 'otherUserId', create_at: 1691178673417, delete_at: 0},
+            },
+            broadcast: {
+                user_id: 'otherUserId',
+            },
+        };
+
+        testStore.dispatch(handleGroupAddedMemberEvent(msg));
+        expect(store.dispatch).toHaveBeenCalledWith({
+            type: 'RECEIVED_MEMBER_TO_ADD_TO_GROUP',
+            data: {
+                create_at: 1691178673417,
+                delete_at: 0,
+                group_id: 'group-1',
+                user_id: 'otherUserId',
+            },
+            id: 'group-1',
+        });
     });
 });
 

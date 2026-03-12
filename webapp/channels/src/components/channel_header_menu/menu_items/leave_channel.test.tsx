@@ -5,12 +5,9 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 
 import * as channelActions from 'actions/views/channel';
-import * as modalActions from 'actions/views/modals';
 
-import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
-import {ModalIdentifiers} from 'utils/constants';
 import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext, screen, fireEvent} from 'tests/react_testing_utils';
@@ -19,8 +16,9 @@ import LeaveChannel from './leave_channel';
 
 describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
     beforeEach(() => {
-        jest.spyOn(modalActions, 'openModal');
-        jest.spyOn(channelActions, 'leaveChannel');
+        jest.spyOn(channelActions, 'requestLeaveChannel').mockReturnValue(
+            () => Promise.resolve({data: undefined}) as any,
+        );
 
         // Mock useDispatch to return our custom dispatch function
         jest.spyOn(require('react-redux'), 'useDispatch');
@@ -44,11 +42,11 @@ describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
 
         fireEvent.click(menuItem); // Simulate click on the menu item
         expect(useDispatch).toHaveBeenCalledTimes(1); // Ensure dispatch was called
-        expect(channelActions.leaveChannel).toHaveBeenCalledTimes(1); // Ensure dispatch was called
-        expect(channelActions.leaveChannel).toHaveBeenCalledWith(channel.id);
+        expect(channelActions.requestLeaveChannel).toHaveBeenCalledTimes(1); // Ensure requestLeaveChannel was called
+        expect(channelActions.requestLeaveChannel).toHaveBeenCalledWith(channel);
     });
 
-    test('renders the component correctly, handle click event for manage groups', () => {
+    test('renders the component correctly, handle click event for private channel', () => {
         const channel = TestHelper.getChannelMock({type: 'P'});
 
         renderWithContext(
@@ -62,13 +60,7 @@ describe('components/ChannelHeaderMenu/MenuItems/LeaveChannelTest', () => {
 
         fireEvent.click(menuItemMG); // Simulate click on the menu item
         expect(useDispatch).toHaveBeenCalledTimes(1); // Ensure dispatch was called
-        expect(modalActions.openModal).toHaveBeenCalledTimes(1);
-        expect(modalActions.openModal).toHaveBeenCalledWith({
-            modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-            dialogType: IkLeaveChannelModal,
-            dialogProps: {
-                channel,
-            },
-        });
+        expect(channelActions.requestLeaveChannel).toHaveBeenCalledTimes(1);
+        expect(channelActions.requestLeaveChannel).toHaveBeenCalledWith(channel);
     });
 });

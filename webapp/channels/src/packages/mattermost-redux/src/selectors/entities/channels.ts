@@ -1548,7 +1548,8 @@ export const getRecentProfilesFromDMs: (state: GlobalState) => UserProfile[] = c
     },
 );
 
-export const getPendingGuestsInChannel = (state: GlobalState, channelId: string) => state.entities.channels.pendingGuests[channelId] ?? {};
+const EMPTY_PENDING_GUESTS: Record<string, never> = {};
+export const getPendingGuestsInChannel = (state: GlobalState, channelId: string) => state.entities.channels.pendingGuests[channelId] ?? EMPTY_PENDING_GUESTS;
 
 export const isDeactivatedDirectChannel = (state: GlobalState, channelId: string) => {
     const teammate = getDirectTeammate(state, channelId);
