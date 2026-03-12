@@ -8,13 +8,9 @@ import {useDispatch} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import {leaveChannel} from 'actions/views/channel';
-import {openModal} from 'actions/views/modals';
+import {requestLeaveChannel} from 'actions/views/channel';
 
-import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import * as Menu from 'components/menu';
-
-import {Constants, ModalIdentifiers} from 'utils/constants';
 
 type Props = {
     channel: Channel;
@@ -27,19 +23,7 @@ const LeaveChannel = ({
 }: Props) => {
     const dispatch = useDispatch();
     const handleLeave = () => {
-        if (channel.type === Constants.PRIVATE_CHANNEL) {
-            dispatch(
-                openModal({
-                    modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                    dialogType: IkLeaveChannelModal,
-                    dialogProps: {
-                        channel,
-                    },
-                }),
-            );
-        } else {
-            dispatch(leaveChannel(channel.id));
-        }
+        dispatch(requestLeaveChannel(channel));
     };
 
     return (

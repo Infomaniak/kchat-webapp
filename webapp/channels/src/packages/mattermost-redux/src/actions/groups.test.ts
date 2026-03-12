@@ -634,7 +634,9 @@ describe('Actions.Groups', () => {
         });
     });
 
-    it('getGroupsAssociatedToChannel', async () => {
+    // IK: skipped because backend returns Group[] directly, tested in groups.ik.test.ts
+    // eslint-disable-next-line no-only-tests/no-only-tests
+    it.skip('getGroupsAssociatedToChannel', async () => {
         const channelID = '5rgoajywb3nfbdtyafbod47ryb';
 
         const response = {

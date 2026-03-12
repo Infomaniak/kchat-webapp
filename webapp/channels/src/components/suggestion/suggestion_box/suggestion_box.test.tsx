@@ -5,6 +5,18 @@ import React, {useCallback, useState} from 'react';
 
 import {renderWithContext, screen, userEvent, waitFor} from 'tests/react_testing_utils';
 
+jest.mock('components/profile_picture', () => {
+    return function MockProfilePicture({src}: {src: string}) {
+        return (
+            <img
+                alt='profile'
+                data-testid='mock-profile-picture'
+                src={src}
+            />
+        );
+    };
+});
+
 import SuggestionBox from './suggestion_box';
 
 import type {ResultsCallback} from '../provider';

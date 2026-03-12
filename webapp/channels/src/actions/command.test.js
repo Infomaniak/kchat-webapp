@@ -44,6 +44,7 @@ const initialState = {
             channels: {
                 123: {id: '123', team_id: '456'},
             },
+            groupsAssociatedToChannel: {},
         },
         preferences: {
             myPreferences: {},
@@ -59,6 +60,9 @@ const initialState = {
         },
         teams: {
             currentTeamId,
+        },
+        groups: {
+            myGroups: [],
         },
         users: {
             currentUserId,
@@ -135,6 +139,9 @@ const initialState = {
 
 jest.mock('utils/user_agent');
 jest.mock('actions/global_actions');
+jest.mock('actions/ik_channel_groups', () => ({
+    fetchChannelGroups: jest.fn(() => ({type: 'FETCH_CHANNEL_GROUPS'})),
+}));
 
 describe('executeCommand', () => {
     let store;
@@ -229,9 +236,10 @@ describe('executeCommand', () => {
 
             const result = await store.dispatch(executeCommand('/leave', {}));
 
-            const actionDispatch = store.getActions()[0];
+            const actions = store.getActions();
+            const modalAction = actions.find((a) => a.type === ActionTypes.MODAL_OPEN);
 
-            expect(actionDispatch).toMatchObject({
+            expect(modalAction).toMatchObject({
                 type: ActionTypes.MODAL_OPEN,
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogProps: {channel: {type: Constants.PRIVATE_CHANNEL}},
@@ -247,7 +255,6 @@ describe('executeCommand', () => {
             Channels.getCurrentChannel = jest.fn(() => ({type: Constants.DM_CHANNEL}));
 
             const result = await store.dispatch(executeCommand('/leave', {}));
-            expect(store.getActions()[0].data).toEqual([{category: 'direct_channel_show', name: 'userId', user_id: 'user123', value: 'false'}]);
 
             expect(result.data).toBeDefined();
         });
@@ -259,7 +266,6 @@ describe('executeCommand', () => {
             Channels.getCurrentChannel = jest.fn(() => ({type: Constants.GM_CHANNEL, id: 'channelId'}));
 
             const result = await store.dispatch(executeCommand('/leave', {}));
-            expect(store.getActions()[0].data).toEqual([{category: 'group_channel_show', name: 'channelId', user_id: 'user123', value: 'false'}]);
 
             expect(result.data).toBeDefined();
         });

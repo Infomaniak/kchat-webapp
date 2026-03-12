@@ -4,8 +4,9 @@
 import {
     useFloating,
     autoUpdate,
-    autoPlacement,
+    flip,
     shift,
+    offset,
     useTransitionStyles,
     useClick,
     useDismiss,
@@ -45,8 +46,9 @@ export function UserGroupPopoverController(props: Props) {
     const {refs, floatingStyles, context: floatingContext} = useFloating({
         open: isOpen,
         onOpenChange: setOpen,
+        placement: 'bottom-end',
         whileElementsMounted: autoUpdate,
-        middleware: [autoPlacement(), shift()],
+        middleware: [offset({mainAxis: -12, crossAxis: -16}), flip(), shift()],
     });
 
     const {isMounted, styles: transitionStyles} = useTransitionStyles(floatingContext, {

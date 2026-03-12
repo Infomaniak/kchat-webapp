@@ -65,7 +65,7 @@ const UserGroupsModal = (props: Props) => {
         if (selectedFilter === 'archived') {
             setGroups(props.archivedGroups);
         }
-    }, [selectedFilter, props.groups, props.myGroups]);
+    }, [selectedFilter, props.groups, props.myGroups, props.archivedGroups]);
 
     const doHide = () => {
         setShow(false);

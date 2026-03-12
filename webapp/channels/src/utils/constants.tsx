@@ -477,6 +477,8 @@ export const ModalIdentifiers = {
     POST_DELETED_MODAL: 'post_deleted_modal',
     FILE_PREVIEW_MODAL: 'file_preview_modal',
     LEAVE_PRIVATE_CHANNEL_MODAL: 'leave_private_channel_modal',
+    LEAVE_CHANNEL_GROUP_BLOCKED_MODAL: 'leave_channel_group_blocked_modal',
+    MEMBER_IN_GROUP_MODAL: 'member_in_group_modal',
     GET_PUBLIC_LINK_MODAL: 'get_public_link_modal',
     KEYBOARD_SHORTCUTS_MODAL: 'keyboar_shortcuts_modal',
     USERS_TO_BE_REMOVED: 'users_to_be_removed',
@@ -779,6 +781,8 @@ export const SocketEvents = {
     CPA_FIELD_DELETED: 'custom_profile_attributes_field_deleted',
     CPA_VALUES_UPDATED: 'custom_profile_attributes_values_updated',
     QUOTA_CHANGED: 'quota_changed',
+    CHANNEL_GROUP_ADDED: 'channel_group_added',
+    CHANNEL_GROUP_REMOVED: 'channel_group_removed',
 };
 
 export const TutorialSteps = {

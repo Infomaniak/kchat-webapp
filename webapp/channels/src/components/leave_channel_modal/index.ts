@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import {leaveChannel} from 'actions/views/channel';
+import {leaveChannel} from 'actions/views/channel_operations';
 
 import LeaveChannelModal from './leave_channel_modal';
 

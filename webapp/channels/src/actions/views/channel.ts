@@ -7,35 +7,30 @@ import {batchActions} from 'redux-batched-actions';
 import type {UserAutocomplete} from '@mattermost/types/autocomplete';
 import type {Channel} from '@mattermost/types/channels';
 
-import {TeamTypes} from 'mattermost-redux/action_types';
 import {
-    leaveChannel as leaveChannelRedux,
     joinChannel,
     markChannelAsRead,
     unfavoriteChannel,
-    deleteChannel as deleteChannelRedux,
     getChannel as loadChannel,
 } from 'mattermost-redux/actions/channels';
 import * as PostActions from 'mattermost-redux/actions/posts';
-import {selectTeam} from 'mattermost-redux/actions/teams';
+import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {autocompleteUsers} from 'mattermost-redux/actions/users';
-import {Posts, RequestStatus} from 'mattermost-redux/constants';
+import {Posts, RequestStatus, General} from 'mattermost-redux/constants';
 import {
     getChannel,
     getChannelsNameMapInCurrentTeam,
     getCurrentChannel,
     getRedirectChannelNameForTeam,
-    getMyChannels,
-    getMyChannelMemberships,
     getAllDirectChannelsNameMapInCurrentTeam,
     isFavoriteChannel,
     isManuallyUnread,
     getCurrentChannelId,
 } from 'mattermost-redux/selectors/entities/channels';
+import {isCurrentUserInChannelGroup, getCurrentUserChannelGroups} from 'mattermost-redux/selectors/entities/groups';
 import {getMostRecentPostIdInChannel, getPost} from 'mattermost-redux/selectors/entities/posts';
 import {
     getCurrentRelativeTeamUrl,
-    getCurrentTeam,
     getCurrentTeamId,
     getRelativeTeamUrl,
     getTeamsList,
@@ -47,21 +42,28 @@ import EventEmitter from 'mattermost-redux/utils/event_emitter';
 
 import {openDirectChannelToUserId} from 'actions/channel_actions';
 import {loadCustomStatusEmojisForPostList} from 'actions/emoji_actions';
-import {closeRightHandSide} from 'actions/views/rhs';
+import {sendEphemeralPost} from 'actions/global_actions';
+import {fetchChannelGroups} from 'actions/ik_channel_groups';
+import {openModal} from 'actions/views/modals';
 import {markThreadAsRead} from 'actions/views/threads';
 import {getLastViewedChannelName} from 'selectors/local_storage';
-import {getSelectedPost, getSelectedPostId} from 'selectors/rhs';
+import {getSelectedPostId} from 'selectors/rhs';
 import {getLastPostsApiTimeForChannel} from 'selectors/views/channel';
 import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
 import {getSocketStatus} from 'selectors/views/websocket';
 import LocalStorageStore from 'stores/local_storage_store';
 
+import IkLeaveChannelGroupBlockedModal from 'components/ik_leave_channel_group_blocked_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
+
 import {getHistory} from 'utils/browser_history';
-import {isArchivedChannel} from 'utils/channel_utils';
-import {Constants, ActionTypes, EventTypes, PostRequestTypes} from 'utils/constants';
-import {logTimestamp} from 'utils/utils';
+import {Constants, ActionTypes, EventTypes, PostRequestTypes, ModalIdentifiers} from 'utils/constants';
+import {logTimestamp, getUserIdFromChannelName, localizeMessage} from 'utils/utils';
 
 import type {ActionFuncAsync, ThunkActionFunc} from 'types/store';
+
+export {leaveChannel, deleteChannel} from './channel_operations';
+import {leaveChannel} from './channel_operations';
 
 export function goToLastViewedChannel(): ActionFuncAsync {
     return async (dispatch, getState) => {
@@ -148,60 +150,6 @@ export function joinChannelById(channelId: string): ActionFuncAsync {
     };
 }
 
-export function leaveChannel(channelId: string): ActionFuncAsync {
-    return async (dispatch, getState) => {
-        let state = getState();
-        const currentUserId = getCurrentUserId(state);
-        const currentTeam = getCurrentTeam(state);
-        if (!currentTeam) {
-            return {data: false};
-        }
-        const channel = getChannel(state, channelId);
-        const currentChannelId = getCurrentChannelId(state);
-
-        if (isFavoriteChannel(state, channelId)) {
-            dispatch(unfavoriteChannel(channelId));
-        }
-
-        const teamUrl = getCurrentRelativeTeamUrl(state);
-
-        if (!isArchivedChannel(channel)) {
-            LocalStorageStore.removePreviousChannel(currentUserId, currentTeam.id, state);
-        }
-        const {error} = await dispatch(leaveChannelRedux(channelId));
-        if (error) {
-            return {error};
-        }
-        state = getState();
-
-        const prevChannelName = LocalStorageStore.getPreviousChannelName(currentUserId, currentTeam.id, state);
-        const channelsInTeam = getChannelsNameMapInCurrentTeam(state);
-        const prevChannel = getChannelByName(channelsInTeam, prevChannelName);
-        if (!prevChannel || !getMyChannelMemberships(state)[prevChannel.id]) {
-            LocalStorageStore.removePreviousChannel(currentUserId, currentTeam.id, state);
-        }
-        const selectedPost = getSelectedPost(state);
-        const selectedPostId = getSelectedPostId(state);
-        if (selectedPostId && selectedPost.exists === false) {
-            dispatch(closeRightHandSide());
-        }
-
-        if (getMyChannels(getState()).filter((c) => c.type === Constants.OPEN_CHANNEL || c.type === Constants.PRIVATE_CHANNEL).length === 0) {
-            LocalStorageStore.removePreviousChannel(currentUserId, currentTeam.id, state);
-            dispatch(selectTeam(''));
-            dispatch({type: TeamTypes.LEAVE_TEAM, data: currentTeam});
-            getHistory().push('/');
-        } else if (channelId === currentChannelId) {
-            // We only need to leave the channel if we are in the channel
-            getHistory().push(teamUrl);
-        }
-
-        return {
-            data: true,
-        };
-    };
-}
-
 export function leaveDirectChannel(channelName: string): ActionFuncAsync {
     return async (dispatch, getState) => {
         const state = getState();
@@ -219,6 +167,69 @@ export function leaveDirectChannel(channelName: string): ActionFuncAsync {
         return {
             data: true,
         };
+    };
+}
+
+export function requestLeaveChannel(channel: Channel): ActionFuncAsync<void> {
+    return async (dispatch, getState) => {
+        // Ensure channel groups are loaded before checking
+        await dispatch(fetchChannelGroups(channel.id));
+
+        const state = getState();
+
+        if (isCurrentUserInChannelGroup(state, channel.id)) {
+            const groups = getCurrentUserChannelGroups(state, channel.id);
+            dispatch(openModal({
+                modalId: ModalIdentifiers.LEAVE_CHANNEL_GROUP_BLOCKED_MODAL,
+                dialogType: IkLeaveChannelGroupBlockedModal,
+                dialogProps: {groups},
+            }));
+            return {data: undefined};
+        }
+
+        if (channel.type === Constants.PRIVATE_CHANNEL) {
+            dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
+            return {data: undefined};
+        }
+
+        if (channel.type === Constants.OPEN_CHANNEL) {
+            if (channel.name === General.DEFAULT_CHANNEL) {
+                const message = localizeMessage({id: 'leave_public_channel_error.default_channel', defaultMessage: 'Unable to leave the default channel.'});
+                dispatch(sendEphemeralPost(message, channel.id));
+                return {data: undefined};
+            }
+            await dispatch(leaveChannel(channel.id));
+            return {data: undefined};
+        }
+
+        if (channel.type === Constants.DM_CHANNEL || channel.type === Constants.GM_CHANNEL) {
+            const currentUserId = getCurrentUserId(state);
+            let name: string;
+            let category: string;
+
+            if (channel.type === Constants.DM_CHANNEL) {
+                name = getUserIdFromChannelName(channel);
+                category = Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW;
+            } else {
+                name = channel.id;
+                category = Constants.Preferences.CATEGORY_GROUP_CHANNEL_SHOW;
+            }
+
+            const currentTeamId = getCurrentTeamId(state);
+            const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
+            const teamUrl = getCurrentRelativeTeamUrl(state);
+            getHistory().push(`${teamUrl}/channels/${redirectChannel}`);
+
+            dispatch(savePreferences(currentUserId, [{category, name, user_id: currentUserId, value: 'false'}]));
+
+            if (isFavoriteChannel(state, channel.id)) {
+                dispatch(unfavoriteChannel(channel.id));
+            }
+
+            return {data: undefined};
+        }
+
+        return {data: undefined};
     };
 }
 
@@ -533,20 +544,3 @@ export function updateToastStatus(status: boolean) {
     };
 }
 
-export function deleteChannel(channelId: string): ActionFuncAsync<boolean> {
-    return async (dispatch, getState) => {
-        const res = await dispatch(deleteChannelRedux(channelId));
-        if (res.error) {
-            return {data: false};
-        }
-        const state = getState();
-
-        const selectedPost = getSelectedPost(state);
-        const selectedPostId = getSelectedPostId(state);
-        if (selectedPostId && !selectedPost.exists) {
-            dispatch(closeRightHandSide());
-        }
-
-        return {data: true};
-    };
-}

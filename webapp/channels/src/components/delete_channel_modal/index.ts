@@ -10,7 +10,7 @@ import type {GlobalState} from '@mattermost/types/store';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
-import {deleteChannel} from 'actions/views/channel';
+import {deleteChannel} from 'actions/views/channel_operations';
 
 import DeleteChannelModal from './delete_channel_modal';
 

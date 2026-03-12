@@ -3,11 +3,12 @@
 
 import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
 
 import type {Channel, ChannelMembership} from '@mattermost/types/channels';
+import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {Client4} from 'mattermost-redux/client';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
@@ -20,6 +21,8 @@ import {Constants, ModalIdentifiers} from 'utils/constants';
 
 import type {ModalData} from 'types/actions';
 
+import IkMemberInGroupModal from './ik_member_in_group_modal';
+
 const ROWS_FROM_BOTTOM_TO_OPEN_UP = 2;
 
 export interface Props {
@@ -30,6 +33,8 @@ export interface Props {
     canChangeMemberRoles: boolean;
     canRemoveMember: boolean;
     hasChannelMembersAdmin: boolean;
+    channelGroups: Group[];
+    isSystemAdmin: boolean;
     index: number;
     totalUsers: number;
     channelAdminLabel?: JSX.Element;
@@ -41,6 +46,7 @@ export interface Props {
         removeChannelMember: (channelId: string, userId: string) => Promise<ActionResult>;
         getChannelMember: (channelId: string, userId: string) => void;
         openModal: <P>(modalData: ModalData<P>) => void;
+        getGroupsByUserId: (userId: string) => Promise<ActionResult>;
     };
 }
 
@@ -57,39 +63,64 @@ export default function ChannelMembersDropdown({
     channelMemberLabel,
     guestLabel,
     hasChannelMembersAdmin,
+    channelGroups,
+    isSystemAdmin,
     actions,
 }: Props) {
     const intl = useIntl();
 
     const [removing, setRemoving] = useState(false);
     const [serverError, setServerError] = useState<string | null>(null);
-    const dispatch = useDispatch();
 
     const handleRemoveFromChannel = async () => {
         if (removing) {
             return;
         }
 
+        if (channelGroups.length > 0) {
+            try {
+                const userGroups = await Client4.getGroupsByUserId(user.id);
+                const userGroupIds = new Set(userGroups.map((g) => g.id));
+
+                // Create a snapshot of groups data to avoid re-render issues
+                const overlap = channelGroups.
+                    filter((g) => userGroupIds.has(g.id)).
+                    map((g) => ({...g})); // Clone to prevent reference changes
+                if (overlap.length > 0) {
+                    actions.openModal({
+                        modalId: ModalIdentifiers.MEMBER_IN_GROUP_MODAL,
+                        dialogType: IkMemberInGroupModal,
+                        dialogProps: {channel, groups: overlap, isSystemAdmin},
+                    });
+                    return;
+                }
+            } catch (error) {
+                // eslint-disable-next-line no-console
+                console.error('Failed to fetch user groups:', error);
+            }
+        }
+
         if (user.id === currentUserId) {
             setRemoving(true);
-            dispatch(actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
+            actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogType: IkLeaveChannelModal,
                 dialogProps: {
                     channel,
                 },
-            }));
-        } else {
-            setRemoving(true);
-            const {error} = await actions.removeChannelMember(channel.id, user.id);
-            setRemoving(false);
-            if (error) {
-                setServerError(error.message);
-                return;
-            }
-
-            actions.getChannelStats(channel.id);
+            });
+            return;
         }
+
+        setRemoving(true);
+        const {error} = await actions.removeChannelMember(channel.id, user.id);
+        setRemoving(false);
+        if (error) {
+            setServerError(error.message);
+            return;
+        }
+
+        actions.getChannelStats(channel.id);
     };
 
     const handleMakeChannelAdmin = () => {

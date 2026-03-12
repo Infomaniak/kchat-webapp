@@ -4,6 +4,25 @@
 import {shallow} from 'enzyme';
 import React from 'react';
 
+jest.mock('components/suggestion/suggestion_box', () => {
+    return function MockSuggestionBox() {
+        // eslint-disable-next-line react/jsx-no-literals
+        return <div data-testid='mock-suggestion-box'>MockSuggestionBox</div>;
+    };
+});
+
+jest.mock('components/profile_picture', () => {
+    return function MockProfilePicture({src}: {src: string}) {
+        return (
+            <img
+                alt='profile'
+                data-testid='mock-profile-picture'
+                src={src}
+            />
+        );
+    };
+});
+
 import AddUserToChannelModal from 'components/add_user_to_channel_modal/add_user_to_channel_modal';
 
 import {TestHelper} from 'utils/test_helper';

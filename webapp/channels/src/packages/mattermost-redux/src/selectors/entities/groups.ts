@@ -389,3 +389,23 @@ export const searchArchivedGroups: (state: GlobalState, term: string) => Group[]
         return filterGroupsMatchingTerm(groups, term);
     },
 );
+
+export const isCurrentUserInChannelGroup: (state: GlobalState, channelID: string) => boolean = createSelector(
+    'isCurrentUserInChannelGroup',
+    getMyGroupIds,
+    (state: GlobalState, channelID: string) => getChannelGroupIDSet(state, channelID),
+    (myGroupIds, channelGroupIDSet) => {
+        return myGroupIds.some((groupId) => channelGroupIDSet.has(groupId));
+    },
+);
+
+export const getCurrentUserChannelGroups: (state: GlobalState, channelID: string) => Group[] = createSelector(
+    'getCurrentUserChannelGroups',
+    getAllGroups,
+    getMyGroupIds,
+    (state: GlobalState, channelID: string) => getChannelGroupIDSet(state, channelID),
+    (allGroups, myGroupIds, channelGroupIDSet) => {
+        const overlappingIds = myGroupIds.filter((groupId) => channelGroupIDSet.has(groupId));
+        return overlappingIds.map((groupId) => allGroups[groupId]).filter(Boolean);
+    },
+);

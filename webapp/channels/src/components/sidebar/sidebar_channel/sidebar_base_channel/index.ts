@@ -6,16 +6,14 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
-import {leaveChannel} from 'actions/views/channel';
-import {openModal} from 'actions/views/modals';
+import {requestLeaveChannel} from 'actions/views/channel';
 
 import SidebarBaseChannel from './sidebar_base_channel';
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         actions: bindActionCreators({
-            leaveChannel,
-            openModal,
+            requestLeaveChannel,
         }, dispatch),
     };
 }

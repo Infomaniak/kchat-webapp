@@ -2,12 +2,13 @@
 // See LICENSE.txt for license information.
 
 import debounce from 'lodash/debounce';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
 import type {Channel, ChannelMembership, PendingGuest, PendingGuests} from '@mattermost/types/channels';
+import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
@@ -15,6 +16,8 @@ import {ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 import AlertBanner from 'components/alert_banner';
 import ChannelInviteModal from 'components/channel_invite_modal';
 import MoreDirectChannels from 'components/more_direct_channels';
+import InfoIconFilled from 'components/widgets/icons/info_icon_filled';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 
@@ -46,6 +49,7 @@ export interface Props {
     canGoBack: boolean;
     teamUrl: string;
     channelMembers: ChannelMember[];
+    channelGroups: Group[];
     canManageMembers: boolean;
     editing: boolean;
     pendingGuests: PendingGuests;
@@ -61,6 +65,7 @@ export interface Props {
         setEditChannelMembers: (active: boolean) => void;
         searchProfilesAndChannelMembers: (term: string, options: any) => Promise<{data: UserProfile[]}>;
         getChannelPendingGuests: (channelId: string) => void;
+        fetchChannelGroups: (channelId: string) => Promise<{data: Group[]}>;
     };
     isGuestUser: boolean;
 }
@@ -68,13 +73,14 @@ export interface Props {
 export enum ListItemType {
     Member = 'member',
     PendingGuest = 'pending-guest',
+    Group = 'group',
     FirstSeparator = 'first-separator',
     Separator = 'separator',
 }
 
 export interface ListItem {
     type: ListItemType;
-    data: ChannelMember | PendingGuest | JSX.Element;
+    data: ChannelMember | PendingGuest | Group | JSX.Element;
 }
 
 export default function ChannelMembersRHS({
@@ -85,6 +91,7 @@ export default function ChannelMembersRHS({
     canGoBack,
     teamUrl,
     channelMembers,
+    channelGroups,
     canManageMembers,
     editing = false,
     pendingGuests,
@@ -92,8 +99,6 @@ export default function ChannelMembersRHS({
     isGuestUser,
 }: Props) {
     const history = useHistory();
-
-    const [list, setList] = useState<ListItem[]>([]);
 
     const [page, setPage] = useState(0);
     const [isNextPageLoading, setIsNextPageLoading] = useState(false);
@@ -118,50 +123,86 @@ export default function ChannelMembersRHS({
         };
     }, []);
 
-    useEffect(() => {
+    const list = useMemo(() => {
         const listcp: ListItem[] = [];
-        let memberDone = false;
 
-        for (let i = 0; i < channelMembers.length; i++) {
-            const member = channelMembers[i];
-            if (listcp.length === 0) {
-                let text = null;
-                if (member.membership?.scheme_admin === true) {
-                    text = (
+        const lowerSearch = searchTerms.toLowerCase();
+        const filteredGroups = searchTerms ? channelGroups.filter((g) => g.display_name.toLowerCase().includes(lowerSearch) || g.name.toLowerCase().includes(lowerSearch)) : channelGroups;
+
+        const admins = channelMembers.filter((m) => m.membership?.scheme_admin === true);
+        const members = channelMembers.filter((m) => m.membership?.scheme_admin !== true);
+
+        const groupsSeparator = (isFirst: boolean) => {
+            const SeparatorComponent = isFirst ? FirstMemberListSeparator : MemberListSeparator;
+            return (
+                <SeparatorComponent>
+                    <SeparatorWithInfo>
+                        <FormattedMessage
+                            id='channel_members_rhs.groups.title'
+                            defaultMessage='TEAMS'
+                        />
+                        <WithTooltip
+                            title={formatMessage({
+                                id: 'channel_members_rhs.groups.info_tooltip',
+                                defaultMessage: 'Team members are added individually in the Members section of this channel.',
+                            })}
+                        >
+                            <InfoIconButton aria-label={formatMessage({id: 'channel_members_rhs.groups.info_tooltip', defaultMessage: 'Team members are added individually in the Members section of this channel.'})}>
+                                <InfoIconFilled/>
+                            </InfoIconButton>
+                        </WithTooltip>
+                    </SeparatorWithInfo>
+                </SeparatorComponent>
+            );
+        };
+
+        if (admins.length > 0) {
+            listcp.push({
+                type: ListItemType.FirstSeparator,
+                data: (
+                    <FirstMemberListSeparator>
                         <FormattedMessage
                             id='channel_members_rhs.list.channel_admin_title'
                             defaultMessage='CHANNEL ADMINS'
                         />
-                    );
-                } else {
-                    text = (
-                        <FormattedMessage
-                            id='channel_members_rhs.list.channel_members_title'
-                            defaultMessage='MEMBERS'
-                        />
-                    );
-                    memberDone = true;
-                }
-
-                listcp.push({
-                    type: ListItemType.FirstSeparator,
-                    data: <FirstMemberListSeparator>{text}</FirstMemberListSeparator>,
-                });
-            } else if (!memberDone && member.membership?.scheme_admin === false) {
-                listcp.push({
-                    type: ListItemType.Separator,
-                    data: <MemberListSeparator>
-                        <FormattedMessage
-                            id='channel_members_rhs.list.channel_members_title'
-                            defaultMessage='MEMBERS'
-                        />
-                    </MemberListSeparator>,
-                });
-                memberDone = true;
-            }
-
-            listcp.push({type: ListItemType.Member, data: member});
+                    </FirstMemberListSeparator>
+                ),
+            });
+            admins.forEach((member) => {
+                listcp.push({type: ListItemType.Member, data: member});
+            });
         }
+
+        if (filteredGroups.length > 0) {
+            const isFirst = listcp.length === 0;
+            listcp.push({
+                type: isFirst ? ListItemType.FirstSeparator : ListItemType.Separator,
+                data: groupsSeparator(isFirst),
+            });
+            filteredGroups.forEach((group) => {
+                listcp.push({type: ListItemType.Group, data: group});
+            });
+        }
+
+        if (members.length > 0) {
+            const isFirst = listcp.length === 0;
+            const SeparatorComponent = isFirst ? FirstMemberListSeparator : MemberListSeparator;
+            listcp.push({
+                type: isFirst ? ListItemType.FirstSeparator : ListItemType.Separator,
+                data: (
+                    <SeparatorComponent>
+                        <FormattedMessage
+                            id='channel_members_rhs.list.channel_members_title'
+                            defaultMessage='MEMBERS'
+                        />
+                    </SeparatorComponent>
+                ),
+            });
+            members.forEach((member) => {
+                listcp.push({type: ListItemType.Member, data: member});
+            });
+        }
+
         if (!isGuestUser) {
             Object.keys(pendingGuests).forEach((key, index) => {
                 const pendingGuest = pendingGuests[key];
@@ -181,10 +222,8 @@ export default function ChannelMembersRHS({
             });
         }
 
-        if (JSON.stringify(list) !== JSON.stringify(listcp)) {
-            setList(listcp);
-        }
-    }, [channelMembers, pendingGuests]);
+        return listcp;
+    }, [channelMembers, channelGroups, searchTerms, pendingGuests, formatMessage, isGuestUser]);
 
     useEffect(() => {
         if (channel.type === Constants.DM_CHANNEL) {
@@ -201,6 +240,7 @@ export default function ChannelMembersRHS({
         actions.setChannelMembersRhsSearchTerm('');
         actions.loadProfilesAndReloadChannelMembers(0, USERS_PER_PAGE, channel.id, ProfilesInChannelSortBy.Admin);
         actions.loadMyChannelMemberAndRole(channel.id);
+        actions.fetchChannelGroups(channel.id);
     }, [channel.id, channel.type]);
 
     const setSearchTerms = async (terms: string) => {
@@ -305,11 +345,12 @@ export default function ChannelMembersRHS({
             )}
 
             <MembersContainer>
-                {channelMembers.length > 0 && (
+                {list.length > 0 && (
                     <MemberList
                         searchTerms={searchTerms}
                         members={list}
                         editing={editing}
+                        canRemoveGroups={currentUserIsChannelAdmin}
                         channel={channel}
                         openDirectMessage={openDirectMessage}
                         loadMore={loadMore}
@@ -339,4 +380,29 @@ const FirstMemberListSeparator = styled(MemberListSeparator)`
 
 const AlertContainer = styled.div`
     padding: 0 20px 15px;
+`;
+
+const SeparatorWithInfo = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+`;
+
+const InfoIconButton = styled.button`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    line-height: 1;
+
+    svg path {
+        fill: rgba(var(--center-channel-color-rgb), 0.48);
+    }
+
+    &:hover svg path {
+        fill: rgba(var(--center-channel-color-rgb), 0.64);
+    }
 `;
