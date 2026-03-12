@@ -32,8 +32,7 @@ describe('components/sidebar/sidebar_channel/sidebar_base_channel', () => {
         },
         currentTeamName: 'team_name',
         actions: {
-            leaveChannel: jest.fn(),
-            openModal: jest.fn(),
+            requestLeaveChannel: jest.fn(),
         },
     };
 
@@ -94,7 +93,7 @@ describe('components/sidebar/sidebar_channel/sidebar_base_channel', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('expect leaveChannel to be called when leave public channel ', async () => {
+    test('expect requestLeaveChannel to be called when leave public channel ', async () => {
         const mockfn = jest.fn();
 
         const props = {
@@ -106,8 +105,7 @@ describe('components/sidebar/sidebar_channel/sidebar_base_channel', () => {
                 name: 'l',
             },
             actions: {
-                leaveChannel: mockfn,
-                openModal: jest.fn(),
+                requestLeaveChannel: mockfn,
             },
         };
 
@@ -125,7 +123,7 @@ describe('components/sidebar/sidebar_channel/sidebar_base_channel', () => {
         });
     });
 
-    test('expect openModal to be called when leave private channel ', async () => {
+    test('expect requestLeaveChannel to be called when leave private channel ', async () => {
         const mockfn = jest.fn();
 
         const props = {
@@ -136,8 +134,7 @@ describe('components/sidebar/sidebar_channel/sidebar_base_channel', () => {
                 name: 'l',
             },
             actions: {
-                leaveChannel: jest.fn(),
-                openModal: mockfn,
+                requestLeaveChannel: mockfn,
             },
         };
 

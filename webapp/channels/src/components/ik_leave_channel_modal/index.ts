@@ -23,7 +23,7 @@ import {getProfilesInCurrentChannel, makeGetProfilesInChannel} from 'mattermost-
 import {addUsersToChannel} from 'actions/channel_actions';
 import {loadStatusesForProfilesList} from 'actions/status_actions';
 import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
-import {leaveChannel, deleteChannel} from 'actions/views/channel';
+import {leaveChannel, deleteChannel} from 'actions/views/channel_operations';
 import {searchAssociatedGroupsForReference} from 'actions/views/group';
 import {closeModal} from 'actions/views/modals';
 

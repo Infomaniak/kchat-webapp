@@ -106,6 +106,7 @@ import {getCurrentUser, getCurrentUserId, getUser, getIsManualStatusForUserId, i
 import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {loadChannelsForCurrentUser, loadDeletedPosts} from 'actions/channel_actions';
+import {loadNewChannelMember, unloadChannelMember} from 'actions/channel_member_actions';
 import {getTeamsUsage} from 'actions/cloud';
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 import {redirectDesktopUserToDefaultTeam, redirectUserToDefaultTeam} from 'actions/global_actions';
@@ -128,7 +129,6 @@ import {isThreadOpen, isThreadManuallyUnread} from 'selectors/views/threads';
 import store from 'stores/redux_store';
 
 import {withSuspense} from 'components/common/hocs/with_suspense';
-import InteractiveDialog from 'components/interactive_dialog';
 import {checkIKTokenIsExpired, refreshIKToken} from 'components/login/utils';
 
 import {getHistory} from 'utils/browser_history';
@@ -141,6 +141,7 @@ import WebSocketClient from 'client/web_websocket_client';
 import {loadPlugin, loadPluginsIfNecessary, removePlugin} from 'plugins';
 
 import {callNoLongerExist, getMyMeets, receivedCall} from './calls';
+import {fetchChannelGroups} from './ik_channel_groups';
 import {handleServerEvent} from './servers_actions';
 
 const RemovedFromChannelModal = withSuspense(lazy(() => import('components/removed_from_channel_modal')));
@@ -769,6 +770,12 @@ export function handleEvent(msg) {
     case SocketEvents.CPA_FIELD_DELETED:
         dispatch(handleCustomAttributesDeleted(msg));
         break;
+    case SocketEvents.CHANNEL_GROUP_ADDED:
+        handleChannelGroupAddedEvent(msg);
+        break;
+    case SocketEvents.CHANNEL_GROUP_REMOVED:
+        handleChannelGroupRemovedEvent(msg);
+        break;
     default:
     }
 
@@ -1240,6 +1247,9 @@ function handleUserAddedEvent(msg) {
                 type: UserTypes.RECEIVED_PROFILE_IN_CHANNEL,
                 data: {id: msg.data.channel_id, user_id: msg.data.user_id},
             });
+
+            doDispatch(loadNewChannelMember(msg.data.user_id, currentChannelId));
+
             if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
                 doDispatch(getChannelMemberCountsByGroup(currentChannelId));
             }
@@ -1328,6 +1338,9 @@ export function handleUserRemovedEvent(msg) {
             type: UserTypes.RECEIVED_PROFILE_NOT_IN_CHANNEL,
             data: {id: msg.data.channel_id, user_id: msg.data.user_id},
         });
+
+        dispatch(unloadChannelMember(msg.data.user_id, currentChannel.id));
+
         if (license?.IsLicensed === 'true' && license?.LDAPGroups === 'true' && config.EnableConfirmNotificationsToChannel === 'true') {
             dispatch(getChannelMemberCountsByGroup(currentChannel.id, isTimezoneEnabled));
         }
@@ -1628,7 +1641,7 @@ function handlePluginStatusesChangedEvent(msg) {
     store.dispatch({type: AdminTypes.RECEIVED_PLUGIN_STATUSES, data: msg.data.plugin_statuses});
 }
 
-function handleOpenDialogEvent(msg) {
+async function handleOpenDialogEvent(msg) {
     const data = (msg.data && msg.data.dialog) || {};
     const dialog = data;
 
@@ -1640,6 +1653,8 @@ function handleOpenDialogEvent(msg) {
         return;
     }
 
+    // Dynamic import to avoid circular dependency
+    const {default: InteractiveDialog} = await import('components/interactive_dialog');
     store.dispatch(openModal({modalId: ModalIdentifiers.INTERACTIVE_DIALOG, dialogType: InteractiveDialog}));
 }
 
@@ -1676,10 +1691,10 @@ export function handleGroupAddedMemberEvent(msg) {
     return async (doDispatch, doGetState) => {
         const state = doGetState();
         const currentUserId = getCurrentUserId(state);
-        const groupMember = msg.data.group_member; //IK: we do not need a JSON.parse
+        const groupMember = msg.data.group_member;
+        const group = getGroup(state, groupMember.group_id);
 
         if (currentUserId === groupMember.user_id) {
-            const group = getGroup(state, groupMember.group_id);
             if (group) {
                 handleMyGroupUpdate(groupMember);
             } else {
@@ -1688,6 +1703,12 @@ export function handleGroupAddedMemberEvent(msg) {
                     handleMyGroupUpdate(groupMember);
                 }
             }
+        } else if (group) {
+            dispatch({
+                type: GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP,
+                data: groupMember,
+                id: groupMember.group_id,
+            });
         }
     };
 }
@@ -1742,6 +1763,27 @@ function handleGroupAssociatedToChannelEvent(msg) {
 }
 
 function handleGroupNotAssociatedToChannelEvent(msg) {
+    store.dispatch({
+        type: GroupTypes.RECEIVED_GROUP_NOT_ASSOCIATED_TO_CHANNEL,
+        data: {channelID: msg.data.channel_id, groups: [{id: msg.data.group_id}]},
+    });
+}
+
+// IK: custom WS events for channel groups
+function handleChannelGroupAddedEvent(msg) {
+    const group = msg.data.group;
+    store.dispatch({
+        type: GroupTypes.RECEIVED_GROUP,
+        data: group,
+    });
+    store.dispatch({
+        type: GroupTypes.RECEIVED_GROUP_ASSOCIATED_TO_CHANNEL,
+        data: {channelID: msg.data.channel_id, groups: [group]},
+    });
+    store.dispatch(fetchChannelGroups(msg.data.channel_id));
+}
+
+function handleChannelGroupRemovedEvent(msg) {
     store.dispatch({
         type: GroupTypes.RECEIVED_GROUP_NOT_ASSOCIATED_TO_CHANNEL,
         data: {channelID: msg.data.channel_id, groups: [{id: msg.data.group_id}]},

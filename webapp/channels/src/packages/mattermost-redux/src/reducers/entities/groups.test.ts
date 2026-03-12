@@ -438,5 +438,87 @@ describe('reducers/entities/groups', () => {
             const newState = reducer(state, receivedMemberToDelAction);
             expect(newState.groups).toEqual(state.groups);
         });
+
+        it('GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP, without member_ids', () => {
+            const state = {
+                ...stateTemplate,
+                groups: {
+                    [groupId]: {...groupTemplate, id: groupId, member_count: 5, member_ids: undefined as any},
+                },
+            };
+
+            const expectedState = {
+                ...stateTemplate,
+                groups: {
+                    [groupId]: {...groupTemplate, id: groupId, member_count: 6, member_ids: undefined as any},
+                },
+            };
+
+            const newState = reducer(state, receivedMemberToAddAction);
+            expect(newState.groups).toEqual(expectedState.groups);
+        });
+
+        it('GroupTypes.RECEIVED_MEMBER_TO_REMOVE_FROM_GROUP, without member_ids', () => {
+            const state = {
+                ...stateTemplate,
+                groups: {
+                    [groupId]: {...groupTemplate, id: groupId, member_count: 5, member_ids: undefined as any},
+                },
+            };
+
+            const expectedState = {
+                ...stateTemplate,
+                groups: {
+                    [groupId]: {...groupTemplate, id: groupId, member_count: 4, member_ids: undefined as any},
+                },
+            };
+
+            const newState = reducer(state, receivedMemberToDelAction);
+            expect(newState.groups).toEqual(expectedState.groups);
+        });
+    });
+    describe('PATCHED_GROUP preserves existing fields', () => {
+        it('should preserve member_count when receiving PATCHED_GROUP without member_count', () => {
+            const groupId = 'test-group-id';
+            const state = {
+                syncables: {},
+                groups: {
+                    [groupId]: {
+                        id: groupId,
+                        name: 'old-name',
+                        display_name: 'Old Name',
+                        member_count: 9,
+                        description: '',
+                        source: 'custom',
+                        remote_id: '123',
+                    } as Group,
+                },
+                stats: {},
+                myGroups: [],
+            };
+
+            const patchAction = {
+                type: GroupTypes.PATCHED_GROUP,
+                data: {
+                    id: groupId,
+                    name: 'new-name',
+                    display_name: 'New Name',
+
+                    // Note: member_count is NOT included in the payload
+                },
+            };
+
+            const newState = reducer(state, patchAction);
+
+            expect(newState.groups[groupId]).toEqual({
+                id: groupId,
+                name: 'new-name',
+                display_name: 'New Name',
+                member_count: 9, // Should be preserved from existing state
+                description: '',
+                source: 'custom',
+                remote_id: '123',
+            });
+        });
     });
 });

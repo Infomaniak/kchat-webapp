@@ -7,21 +7,17 @@ import type {AppCallResponse} from '@mattermost/types/apps';
 import type {CommandArgs, CommandResponse} from '@mattermost/types/integrations';
 
 import {IntegrationTypes} from 'mattermost-redux/action_types';
-import {unfavoriteChannel} from 'mattermost-redux/actions/channels';
-import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Client4} from 'mattermost-redux/client';
-import {General, Permissions} from 'mattermost-redux/constants';
+import {Permissions} from 'mattermost-redux/constants';
 import {AppCallResponseTypes} from 'mattermost-redux/constants/apps';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
-import {getCurrentChannel, getRedirectChannelNameForTeam, isFavoriteChannel} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {isMarketplaceEnabled} from 'mattermost-redux/selectors/entities/general';
 import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentRelativeTeamUrl, getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import * as GlobalActions from 'actions/global_actions';
 import * as PostActions from 'actions/post_actions';
-import {leaveChannel} from 'actions/views/channel';
+import {requestLeaveChannel} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 
 import {withSuspense} from 'components/common/hocs/with_suspense';
@@ -29,10 +25,10 @@ import {AppCommandParser} from 'components/suggestion/command_provider/app_comma
 import {intlShim} from 'components/suggestion/command_provider/app_command_parser/app_command_parser_dependencies';
 
 import {getHistory} from 'utils/browser_history';
-import {Constants, ModalIdentifiers} from 'utils/constants';
+import {ModalIdentifiers} from 'utils/constants';
 import {isUrlSafe, getSiteURL} from 'utils/url';
 import * as UserAgent from 'utils/user_agent';
-import {localizeMessage, getUserIdFromChannelName} from 'utils/utils';
+import {localizeMessage} from 'utils/utils';
 
 import type {ActionFuncAsync} from 'types/store';
 
@@ -40,7 +36,6 @@ import {doAppSubmit, openAppsModal, postEphemeralCallResponseForCommandArgs} fro
 import {trackEvent} from './telemetry_actions';
 
 const KeyboardShortcutsModal = withSuspense(lazy(() => import('components/keyboard_shortcuts/keyboard_shortcuts_modal/keyboard_shortcuts_modal')));
-const IkLeaveChannelModal = withSuspense(lazy(() => import('components/ik_leave_channel_modal')));
 const MarketplaceModal = withSuspense(lazy(() => import('components/plugin_marketplace/marketplace_modal')));
 export const UserSettingsModal = withSuspense(lazy(() => import('components/user_settings/modal')));
 
@@ -99,48 +94,8 @@ export function executeCommand(message: string, args: CommandArgs): ActionFuncAs
                 return {data: {silentFailureReason: new Error('cannot find current channel')}};
             }
 
-            // IK: use the same action as when leaving channel from the sidebar dropdown
-            if (channel.type === Constants.OPEN_CHANNEL) {
-                if (channel.name === General.DEFAULT_CHANNEL) {
-                    const message = localizeMessage({id: 'leave_public_channel_error.default_channel', defaultMessage: 'Unable to leave the default channel.'});
-                    dispatch(GlobalActions.sendEphemeralPost(message));
-                } else {
-                    dispatch(leaveChannel(channel.id));
-                }
-                return {data: {frontendHandled: true}};
-            }
-
-            if (channel.type === Constants.PRIVATE_CHANNEL) {
-                dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
-                return {data: {frontendHandled: true}};
-            }
-            if (
-                channel.type === Constants.DM_CHANNEL ||
-                channel.type === Constants.GM_CHANNEL
-            ) {
-                const currentUserId = getCurrentUserId(state);
-                let name;
-                let category;
-                if (channel.type === Constants.DM_CHANNEL) {
-                    name = getUserIdFromChannelName(channel);
-                    category = Constants.Preferences.CATEGORY_DIRECT_CHANNEL_SHOW;
-                } else {
-                    name = channel.id;
-                    category = Constants.Preferences.CATEGORY_GROUP_CHANNEL_SHOW;
-                }
-                const currentTeamId = getCurrentTeamId(state);
-                const redirectChannel = getRedirectChannelNameForTeam(state, currentTeamId);
-                const teamUrl = getCurrentRelativeTeamUrl(state);
-                getHistory().push(`${teamUrl}/channels/${redirectChannel}`);
-
-                dispatch(savePreferences(currentUserId, [{category, name, user_id: currentUserId, value: 'false'}]));
-                if (isFavoriteChannel(state, channel.id)) {
-                    dispatch(unfavoriteChannel(channel.id));
-                }
-
-                return {data: {frontendHandled: true}};
-            }
-            break;
+            await dispatch(requestLeaveChannel(channel));
+            return {data: {frontendHandled: true}};
         }
         case '/settings':
             dispatch(openModal({modalId: ModalIdentifiers.USER_SETTINGS, dialogType: UserSettingsModal, dialogProps: {isContentProductSettings: true}}));

@@ -8,10 +8,12 @@ import type {Dispatch} from 'redux';
 import type {Channel} from '@mattermost/types/channels';
 
 import {getChannelStats, updateChannelMemberSchemeRoles, removeChannelMember, getChannelMember} from 'mattermost-redux/actions/channels';
+import {getGroupsByUserId} from 'mattermost-redux/actions/groups';
 import {Permissions} from 'mattermost-redux/constants';
 import {getHasChannelMembersAdmin} from 'mattermost-redux/selectors/entities/channels';
+import {getGroupsAssociatedToChannel} from 'mattermost-redux/selectors/entities/groups';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
 import {openModal} from 'actions/views/modals';
 
@@ -35,12 +37,16 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     ) && canManageMembers(state, channel);
     const canRemoveMember = canManageMembers(state, channel);
     const hasChannelMembersAdmin = getHasChannelMembersAdmin(state, channel.id);
+    const channelGroups = getGroupsAssociatedToChannel(state, channel.id);
+    const isSystemAdmin = isCurrentUserSystemAdmin(state);
 
     return {
         currentUserId: getCurrentUserId(state),
         canChangeMemberRoles,
         canRemoveMember,
         hasChannelMembersAdmin,
+        channelGroups,
+        isSystemAdmin,
     };
 }
 
@@ -52,6 +58,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             updateChannelMemberSchemeRoles,
             removeChannelMember,
             openModal,
+            getGroupsByUserId,
         }, dispatch),
     };
 }

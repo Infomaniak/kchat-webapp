@@ -202,13 +202,22 @@ function stats(state: any = {}, action: MMReduxAction) {
 function groups(state: Record<string, Group> = {}, action: MMReduxAction) {
     switch (action.type) {
     case GroupTypes.CREATE_GROUP_SUCCESS:
-    case GroupTypes.PATCHED_GROUP:
     case GroupTypes.RESTORED_GROUP:
     case GroupTypes.ARCHIVED_GROUP:
     case GroupTypes.RECEIVED_GROUP: {
         return {
             ...state,
             [action.data.id]: action.data,
+        };
+    }
+    case GroupTypes.PATCHED_GROUP: {
+        const existingGroup = state[action.data.id];
+        return {
+            ...state,
+            [action.data.id]: {
+                ...existingGroup,
+                ...action.data,
+            },
         };
     }
     case GroupTypes.RECEIVED_MY_GROUPS:
@@ -247,6 +256,9 @@ function groups(state: Record<string, Group> = {}, action: MMReduxAction) {
         const dataInfo: GroupMember = action.data;
 
         const group = state[dataInfo.group_id];
+        if (!group) {
+            return state;
+        }
 
         if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
@@ -261,12 +273,21 @@ function groups(state: Record<string, Group> = {}, action: MMReduxAction) {
             };
         }
 
-        return state;
+        const newGroup = {...group,
+            member_count: Math.max(0, group.member_count - 1),
+        };
+        return {
+            ...state,
+            [dataInfo.group_id]: newGroup,
+        };
     }
     case GroupTypes.RECEIVED_MEMBER_TO_ADD_TO_GROUP: {
         const {group_id: groupId, user_id: userId}: GroupMember = action.data;
 
         const group = state[groupId];
+        if (!group) {
+            return state;
+        }
 
         if (Array.isArray(group?.member_ids)) {
             const newMemberIds = new Set(group.member_ids);
@@ -281,7 +302,13 @@ function groups(state: Record<string, Group> = {}, action: MMReduxAction) {
             };
         }
 
-        return state;
+        const newGroup = {...group,
+            member_count: group.member_count + 1,
+        };
+        return {
+            ...state,
+            [groupId]: newGroup,
+        };
     }
     default:
         return state;

@@ -5,9 +5,33 @@ import React from 'react';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
-import LeaveChannelModal from 'components/ik_leave_channel_modal/ik_leave_channel_modal';
+import IkLeaveChannelModal from 'components/ik_leave_channel_modal/ik_leave_channel_modal';
 
 import {renderWithContext} from 'tests/react_testing_utils';
+
+jest.mock('components/channel_invite_modal/group_option', () => {
+    return function MockGroupOption() {
+        return <div data-testid='mock-group-option'>{'MockGroupOption'}</div>;
+    };
+});
+
+jest.mock('components/profile_picture', () => {
+    return function MockProfilePicture({src}: {src: string}) {
+        return (
+            <img
+                alt='profile'
+                data-testid='mock-profile-picture'
+                src={src}
+            />
+        );
+    };
+});
+
+jest.mock('actions/views/channel', () => ({
+    leaveChannel: jest.fn(),
+    deleteChannel: jest.fn(),
+    goToLastViewedChannel: jest.fn(),
+}));
 
 describe('components/LeaveChannelModal', () => {
     test('should match snapshot, init', () => {
@@ -75,9 +99,7 @@ describe('components/LeaveChannelModal', () => {
         };
 
         const wrapper = renderWithContext(
-
-            // @ts-expect-error old error
-            <LeaveChannelModal
+            <IkLeaveChannelModal
                 {...props}
             />,
         );
@@ -149,9 +171,7 @@ describe('components/LeaveChannelModal', () => {
             isInvite: true,
         };
         renderWithContext(
-
-            // @ts-expect-error old error
-            <LeaveChannelModal
+            <IkLeaveChannelModal
                 {...props}
             />,
         );
@@ -226,9 +246,7 @@ describe('components/LeaveChannelModal', () => {
 
         await act(async () => {
             renderWithContext(
-
-                // @ts-expect-error old error
-                <LeaveChannelModal
+                <IkLeaveChannelModal
                     {...props}
                 />,
             );

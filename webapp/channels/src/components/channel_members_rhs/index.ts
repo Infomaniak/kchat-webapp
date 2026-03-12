@@ -21,6 +21,7 @@ import {
     isCurrentChannelArchived,
 } from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentChannelInPreview} from 'mattermost-redux/selectors/entities/common';
+import {getGroupsAssociatedToChannel} from 'mattermost-redux/selectors/entities/groups';
 import {getTeammateNameDisplaySetting} from 'mattermost-redux/selectors/entities/preferences';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentRelativeTeamUrl, getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
@@ -31,6 +32,7 @@ import {
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {openDirectChannelToUserId} from 'actions/channel_actions';
+import {fetchChannelGroups} from 'actions/ik_channel_groups';
 import {loadProfilesAndReloadChannelMembers, searchProfilesAndChannelMembers} from 'actions/user_actions';
 import {openModal} from 'actions/views/modals';
 import {closeRightHandSide, goBack, setEditChannelMembers} from 'actions/views/rhs';
@@ -109,6 +111,7 @@ function mapStateToProps(state: GlobalState) {
             currentUserIsChannelAdmin: false,
             channelMembers: [],
             channelAdmins: [],
+            channelGroups: [],
             searchTerms: '',
             membersCount,
             canManageMembers: false,
@@ -149,7 +152,7 @@ function mapStateToProps(state: GlobalState) {
 
     const currentUserIsChannelAdmin = currentUser && currentUser.scheme_admin;
     const pendingGuests = getPendingGuestsInChannel(state, channel.id);
-
+    const channelGroups = getGroupsAssociatedToChannel(state, channel.id);
     return {
         channel,
         currentUserIsChannelAdmin,
@@ -159,6 +162,7 @@ function mapStateToProps(state: GlobalState) {
         canGoBack,
         canManageMembers,
         channelMembers,
+        channelGroups,
         editing,
         pendingGuests,
         isGuestUser,
@@ -178,6 +182,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
             setEditChannelMembers,
             searchProfilesAndChannelMembers,
             getChannelPendingGuests,
+            fetchChannelGroups,
         }, dispatch),
     };
 }

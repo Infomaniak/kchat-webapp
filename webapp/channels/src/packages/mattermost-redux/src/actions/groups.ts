@@ -291,9 +291,10 @@ export function getGroupsAssociatedToTeam(teamID: string, q = '', page = 0, perP
 
 export function getGroupsAssociatedToChannel(channelID: string, q = '', page = 0, perPage: number = General.PAGE_SIZE_DEFAULT, filterAllowReference = false) {
     return bindClientFunc({
-        clientFunc: async (param1, param2, param3, param4, param5) => {
-            const result = await Client4.getGroupsAssociatedToChannel(param1, param2, param3, param4, param5);
-            return {groups: result.groups, totalGroupCount: result.total_group_count, channelID: param1};
+        clientFunc: async (param1: string, param2: string, param3: number, param4: number, param5: boolean) => {
+            // IK: backend returns Group[] directly
+            const groups = await Client4.getGroupsAssociatedToChannel(param1, param2, param3, param4, param5);
+            return {groups, totalGroupCount: groups.length, channelID: param1};
         },
         onSuccess: [GroupTypes.RECEIVED_GROUPS_ASSOCIATED_TO_CHANNEL],
         params: [
