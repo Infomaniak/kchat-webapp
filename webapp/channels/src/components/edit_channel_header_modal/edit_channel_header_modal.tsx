@@ -14,7 +14,9 @@ import Textbox, {TextboxLinks} from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 
 import Constants from 'utils/constants';
+import {execCommandInsertText} from 'utils/exec_commands';
 import {isKeyPressed} from 'utils/keyboard';
+import {formatMarkdownLinkMessage, formatMarkdownMessage, hasHtmlLink, isTextUrl} from 'utils/paste';
 import {isMobile} from 'utils/user_agent';
 import {insertLineBreakFromKeyEvent, isUnhandledLineBreakKeyCombo} from 'utils/utils';
 
@@ -137,6 +139,39 @@ export class EditChannelHeaderModal extends React.PureComponent<Props, State> {
         }
     };
 
+    private handlePaste = (e: ClipboardEvent): void => {
+        const clipboardData = e.clipboardData;
+        if (!clipboardData) {
+            return;
+        }
+        const target = e.target as TextboxElement;
+        const {selectionStart, selectionEnd} = target;
+
+        const hasSelection = selectionStart !== null && selectionEnd !== null && selectionStart < selectionEnd;
+        const hasTextUrl = isTextUrl(clipboardData);
+        const hasHTMLLinks = hasHtmlLink(clipboardData);
+        const shouldApplyLinkMarkdown = hasSelection && hasTextUrl;
+
+        if (!hasHTMLLinks && !shouldApplyLinkMarkdown) {
+            return;
+        }
+
+        e.preventDefault();
+
+        if (shouldApplyLinkMarkdown) {
+            const formattedLink = formatMarkdownLinkMessage({
+                selectionStart: selectionStart!,
+                selectionEnd: selectionEnd!,
+                message: this.state.header ?? '',
+                clipboardData,
+            });
+            execCommandInsertText(formattedLink);
+        } else {
+            const {formattedMarkdown} = formatMarkdownMessage(clipboardData, this.state.header, selectionStart ?? undefined);
+            execCommandInsertText(formattedMarkdown);
+        }
+    };
+
     private handlePostError = (postError: React.ReactNode) => {
         this.setState({postError});
     };
@@ -230,6 +265,7 @@ export class EditChannelHeaderModal extends React.PureComponent<Props, State> {
                                 onChange={this.handleChange}
                                 onKeyPress={this.handleKeyPress}
                                 onKeyDown={this.handleKeyDown}
+                                onPaste={this.handlePaste}
                                 supportsCommands={false}
                                 suggestionListPosition='bottom'
                                 createMessage={this.props.intl.formatMessage({id: 'edit_channel_header_modal.placeholder', defaultMessage: 'Enter the Channel Header'})}
