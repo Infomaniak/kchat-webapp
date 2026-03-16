@@ -9,7 +9,6 @@ import {Link} from 'react-router-dom';
 import type {Command} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 
-import BackstageHeader from 'components/backstage/components/backstage_header';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
 import LocalizedPlaceholderInput from 'components/localized_placeholder_input';
@@ -17,8 +16,6 @@ import SpinnerButton from 'components/spinner_button';
 
 import {Constants, DeveloperLinks} from 'utils/constants';
 import * as Utils from 'utils/utils';
-
-import OAuthConnectionAudienceInput from './outgoing_oauth_connections/oauth_connection_audience_input';
 
 const REQUEST_POST = 'P';
 const REQUEST_GET = 'G';
@@ -389,15 +386,6 @@ export default class AbstractCommand extends React.PureComponent<Props, State> {
 
         return (
             <div className='backstage-content row'>
-                <BackstageHeader>
-                    <Link to={'/' + this.props.team.name + '/integrations/commands'}>
-                        <FormattedMessage
-                            id='installed_command.header'
-                            defaultMessage='Slash Commands'
-                        />
-                    </Link>
-                    {this.getBackstageHeader()}
-                </BackstageHeader>
                 <div className='backstage-form'>
                     <form
                         className='form-horizontal'
@@ -524,14 +512,6 @@ export default class AbstractCommand extends React.PureComponent<Props, State> {
                                 />
                             </label>
                             <div className='col-md-5 col-sm-8'>
-                                <OAuthConnectionAudienceInput
-                                    value={this.state.url}
-                                    onChange={this.updateUrl}
-                                    placeholder={defineMessage({
-                                        id: 'add_command.url.placeholder',
-                                        defaultMessage: 'Must start with http:// or https://',
-                                    })}
-                                />
                                 <div className='form__help'>
                                     <FormattedMessage
                                         id='add_command.url.help'

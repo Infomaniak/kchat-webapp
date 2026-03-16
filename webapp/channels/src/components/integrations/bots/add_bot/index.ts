@@ -34,7 +34,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const user = bot ? getUser(state, bot.user_id) : undefined;
     const roles = user ? user.roles : undefined;
     return {
-        maxFileSize: parseInt(config.MaxBotProfileImageSize!, 10),
+        maxFileSize: parseInt(config.MaxFileSize!, 10),
         bot,
         roles,
         editingUserHasManageSystem: haveISystemPermission(state, {permission: Permissions.MANAGE_SYSTEM}),

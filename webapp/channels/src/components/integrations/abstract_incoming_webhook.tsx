@@ -10,7 +10,6 @@ import {Link} from 'react-router-dom';
 import type {IncomingWebhook} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 
-import BackstageHeader from 'components/backstage/components/backstage_header';
 import ChannelSelect from 'components/channel_select';
 import FormError from 'components/form_error';
 import SpinnerButton from 'components/spinner_button';
@@ -178,23 +177,10 @@ export default class AbstractIncomingWebhook extends PureComponent<Props, State>
     };
 
     render() {
-        const headerToRender = this.props.header;
         const footerToRender = this.props.footer;
 
         return (
             <div className='backstage-content'>
-                <BackstageHeader>
-                    <Link to={`/${this.props.team.name}/integrations/incoming_webhooks`}>
-                        <FormattedMessage
-                            id='installed_incoming_webhooks.header'
-                            defaultMessage='Incoming Webhooks'
-                        />
-                    </Link>
-                    <FormattedMessage
-                        id={headerToRender.id}
-                        defaultMessage={headerToRender.defaultMessage}
-                    />
-                </BackstageHeader>
                 <div className='backstage-form'>
                     <form
                         className='form-horizontal'

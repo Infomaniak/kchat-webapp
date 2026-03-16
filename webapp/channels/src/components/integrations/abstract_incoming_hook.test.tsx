@@ -28,6 +28,9 @@ describe('components/integrations/AbstractIncomingWebhook', () => {
         scheme_id: 'team_scheme_id',
         group_constrained: false,
         pack_name: 'ksuite_essential',
+        account_id: 0,
+        product_id: 0,
+        url: '',
     };
     const header = {id: 'header_id', defaultMessage: 'Header'};
     const footer = {id: 'footer_id', defaultMessage: 'Footer'};
