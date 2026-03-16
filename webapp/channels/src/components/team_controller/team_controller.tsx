@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import iNoBounce from 'inobounce';
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, {lazy, memo, useEffect, useRef, useState} from 'react';
 import {Route, Switch, useHistory, useParams} from 'react-router-dom';
 
 import type {ServerError} from '@mattermost/types/errors';
@@ -12,7 +12,7 @@ import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import LocalStorageStore from 'stores/local_storage_store';
 
-import {makeAsyncPluggableComponent} from 'components/async_load';
+import {makeAsyncComponent, makeAsyncPluggableComponent} from 'components/async_load';
 import ChannelController from 'components/channel_layout/channel_controller';
 import useTelemetryIdentitySync from 'components/common/hooks/useTelemetryIdentifySync';
 
@@ -24,6 +24,7 @@ import {isIosSafari} from 'utils/user_agent';
 
 import type {OwnProps, PropsFromRedux} from './index';
 
+const BackstageController = makeAsyncComponent('BackstageController', lazy(() => import('components/backstage')));
 const Pluggable = makeAsyncPluggableComponent();
 
 const UNREAD_CHECK_TIME_MILLISECONDS = 120 * 1000;
@@ -207,6 +208,14 @@ function TeamController(props: Props) {
 
     return (
         <Switch>
+            <Route
+                path={`/:team(${TEAM_NAME_PATH_PATTERN})/integrations`}
+                component={BackstageController}
+            />
+            <Route
+                path={`/:team(${TEAM_NAME_PATH_PATTERN})/emoji`}
+                component={BackstageController}
+            />
             {props.plugins?.map((plugin) => (
                 <Route
                     key={plugin.id}
