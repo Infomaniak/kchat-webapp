@@ -81,7 +81,7 @@
                 }
 
                 .nav-pills {
-                    > .nav-pills__tab {
+                    > &__tab {
                         &:hover {
                             a {
                                 background: transparent !important;
