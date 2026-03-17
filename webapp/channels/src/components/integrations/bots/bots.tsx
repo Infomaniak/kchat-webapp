@@ -11,7 +11,6 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-
 import Constants from 'utils/constants';
 
 import Bot, {matchesFilter} from './bot';

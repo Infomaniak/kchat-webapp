@@ -11,7 +11,6 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-
 import * as Utils from 'utils/utils';
 
 import InstalledCommand from '../installed_command';

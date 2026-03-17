@@ -12,7 +12,6 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-
 import InstalledIncomingWebhook, {matchesFilter, matchCreator} from 'components/integrations/installed_incoming_webhook';
 
 import * as Utils from 'utils/utils';
