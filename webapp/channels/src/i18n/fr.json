@@ -4264,7 +4264,7 @@
   "msg_typing.isTyping": "{user} est en train d'écrire...",
   "multiselect.add": "Ajouter",
   "multiselect.addChannelsPlaceholder": "Rechercher et ajouter des canaux",
-  "multiselect.addGroupMembers": "Ajouter {number} personne(s)",
+  "multiselect.addGroupMembers": "{number, plural, =0 {Aucun membre à ajouter} one {Ajouter {number} personne} other {Ajouter {number} personnes}}",
   "multiselect.addGroupsPlaceholder": "Rechercher et ajouter des groupes",
   "multiselect.adding": "Ajout en cours...",
   "multiselect.addPeopleToGroup": "Ajouter des utilisateurs",

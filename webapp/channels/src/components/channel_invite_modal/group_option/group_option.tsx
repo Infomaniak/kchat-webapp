@@ -54,12 +54,17 @@ const GroupOption = (props: Props) => {
         return '';
     });
 
+    const hasMembers = group.member_count > 0;
+
     const onAdd = useCallback(() => {
+        if (!hasMembers) {
+            return;
+        }
         for (const profile of profiles) {
             addUserProfile(profile);
         }
         trackFeatureEvent(TrackGroupsFeature, TrackInviteGroupEvent);
-    }, [addUserProfile, profiles]);
+    }, [addUserProfile, profiles, hasMembers]);
 
     const onKeyDown = useCallback((e: KeyboardEvent) => {
         if (e.key === Constants.KeyCodes.ENTER[0] && isSelected) {
@@ -81,7 +86,7 @@ const GroupOption = (props: Props) => {
         <div
             key={group.id}
             ref={isSelected ? selectedItemRef : undefined}
-            className={'more-modal__row clickable ' + rowSelected}
+            className={'more-modal__row clickable ' + rowSelected + (hasMembers ? '' : 'disabled')}
             onClick={onAdd}
             onMouseMove={() => onMouseMove(group)}
         >
@@ -103,15 +108,27 @@ const GroupOption = (props: Props) => {
                     >
                         {'@'}{group.name}
                     </span>
-                    <WithTooltip
-                        title={overflowNames}
-                    >
-                        <span
-                            className='add-group-members'
-                        >
+                    {hasMembers && overflowNames ? (
+                        <WithTooltip title={overflowNames}>
+                            <span className='add-group-members'>
+                                <FormattedMessage
+                                    id='multiselect.addGroupMembers'
+                                    defaultMessage='{number, plural, =0 {No members to add} one {Add {number} person} other {Add {number} people}}'
+                                    values={{
+                                        number: group.member_count,
+                                    }}
+                                />
+                                <ChevronRightIcon
+                                    size={20}
+                                    color={'var(--link-color)'}
+                                />
+                            </span>
+                        </WithTooltip>
+                    ) : (
+                        <span className='add-group-members disabled'>
                             <FormattedMessage
                                 id='multiselect.addGroupMembers'
-                                defaultMessage='Add {number} people'
+                                defaultMessage='{number, plural, =0 {No members to add} one {Add {number} person} other {Add {number} people}}'
                                 values={{
                                     number: group.member_count,
                                 }}
@@ -121,7 +138,7 @@ const GroupOption = (props: Props) => {
                                 color={'var(--link-color)'}
                             />
                         </span>
-                    </WithTooltip>
+                    )}
                 </div>
             </div>
         </div>
