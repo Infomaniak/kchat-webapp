@@ -14,8 +14,8 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {loadCustomEmojisIfNeeded} from 'actions/emoji_actions';
 
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/data_grid/data_grid';
+import DataGrid from 'components/data_grid/data_grid';
 import RenderEmoji from 'components/emoji/render_emoji';
 
 import {InsightsScopes} from 'utils/constants';

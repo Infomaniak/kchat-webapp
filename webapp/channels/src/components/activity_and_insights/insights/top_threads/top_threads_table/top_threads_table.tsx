@@ -22,8 +22,8 @@ import {openModal} from 'actions/views/modals';
 
 // import {selectPostAndParentChannel} from 'actions/views/rhs';
 
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/data_grid/data_grid';
+import DataGrid from 'components/data_grid/data_grid';
 import Markdown from 'components/markdown';
 import Attachment from 'components/threading/global_threads/thread_item/attachments';
 import Tag from 'components/widgets/tag/tag';
