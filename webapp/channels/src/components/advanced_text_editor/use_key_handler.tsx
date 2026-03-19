@@ -81,7 +81,12 @@ const useKeyHandler = (
 
     const onEditLatestPost = useCallback((e: React.KeyboardEvent) => {
         e.preventDefault();
-        const {data: canEditNow} = dispatch(editLatestPost(channelId, postId));
+
+        let canEditNow;
+        const result = dispatch(editLatestPost(channelId, postId));
+        if (result && 'data' in result) {
+            canEditNow = result.data;
+        }
         if (!canEditNow) {
             focusTextbox(true);
         }

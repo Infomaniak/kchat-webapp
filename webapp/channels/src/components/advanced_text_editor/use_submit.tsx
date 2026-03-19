@@ -184,8 +184,8 @@ const useSubmit = (
             } else {
                 response = await dispatch(onSubmit(submittingDraft, options, schedulingInfo));
             }
-            if (response?.error) {
-                throw response.error;
+            if ((response as unknown as {error?: ServerError})?.error) {
+                throw (response as unknown as {error: ServerError}).error;
             }
 
             setServerError(null);
