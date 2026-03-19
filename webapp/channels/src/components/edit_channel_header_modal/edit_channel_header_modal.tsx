@@ -158,10 +158,10 @@ export class EditChannelHeaderModal extends React.PureComponent<Props, State> {
 
         e.preventDefault();
 
-        if (shouldApplyLinkMarkdown) {
+        if (shouldApplyLinkMarkdown && selectionStart !== null && selectionEnd !== null) {
             const formattedLink = formatMarkdownLinkMessage({
-                selectionStart: selectionStart!,
-                selectionEnd: selectionEnd!,
+                selectionStart,
+                selectionEnd,
                 message: this.state.header ?? '',
                 clipboardData,
             });
