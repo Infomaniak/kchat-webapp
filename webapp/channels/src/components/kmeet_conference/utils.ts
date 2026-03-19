@@ -24,7 +24,7 @@ export function getWSConnectionURL(): string {
     return `${uri}//${loc.host}${Client4.getUrlVersion()}/websocket`;
 }
 
-export function getTeamRelativeUrl(team: Team) {
+export function getTeamRelativeUrl(team: Team | undefined) {
     if (!team) {
         return '';
     }
@@ -61,33 +61,6 @@ export function getUserDisplayName(user: UserProfile | undefined) {
     }
 
     return user.username;
-}
-
-export function getPixelRatio(): number {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    if (!ctx) {
-        canvas.remove();
-        return dpr;
-    }
-    const bsr = ctx.webkitBackingStorePixelRatio ||
-    ctx.mozBackingStorePixelRatio ||
-    ctx.msBackingStorePixelRatio ||
-    ctx.oBackingStorePixelRatio ||
-    ctx.backingStorePixelRatio || 1;
-    canvas.remove();
-    return dpr / bsr;
-}
-
-export function getScreenResolution() {
-    const pixelRatio = getPixelRatio();
-    const width = Math.ceil((pixelRatio * window.screen.width) / 8.0) * 8;
-    const height = Math.ceil((pixelRatio * window.screen.height) / 8.0) * 8;
-    return {
-        width,
-        height,
-    };
 }
 
 type UserRoles = {

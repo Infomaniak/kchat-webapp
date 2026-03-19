@@ -2932,7 +2932,6 @@
   "calling_modal.call_in_progress": "Waiting...",
   "calling_modal.calling": "Incoming call...",
   "calling_modal.calling.teams": "Incoming call in",
-  "callingWidget.waitingForUsers": "Waiting for users",
   "cancel_multiple_invites_modal.content": "By cancelling this invitation, you will also cancel invitations in the following channels :",
   "cancel_multiple_invites_modal.header": "Cancel multiple invitations",
   "carousel.nextButton": "Next",

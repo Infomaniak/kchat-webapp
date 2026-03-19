@@ -23,9 +23,9 @@ import * as Sc from './styled';
 
 import Avatars from '../avatars';
 
-interface Props {
+export interface Props {
     post: Post;
-    conference?: Conference;
+    conference?: Conference | null;
     isDialingEnabled: boolean;
     hasConferenceStarted?: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
@@ -61,7 +61,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
     const intl = useIntl();
     const dispatch = useDispatch();
 
-    const meetingUrl = useMemo(() => conference?.url ?? post.props.url, [conference, post]);
+    const meetingUrl = useMemo(() => conference?.url ?? String(post.props.url || ''), [conference, post]);
     const [now, setNow] = useState(Date.now());
 
     const onJoinCallClick = () => {
@@ -86,7 +86,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
         const ONE_HOUR = 60 * ONE_MINUTE;
 
         const getInterval = () => {
-            if (post.props.start_at && (Date.now() - post.props.start_at > ONE_HOUR)) {
+            if (post.props.start_at && (Date.now() - Number(post.props.start_at) > ONE_HOUR)) {
                 return ONE_HOUR;
             }
             return ONE_MINUTE;
@@ -111,7 +111,7 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
 
     useEffect(() => {
         if (post.props.conference_id && meetingUrl && post.channel_id) {
-            dispatch(putChannelActiveConf(post.channel_id, post.props.conference_id, meetingUrl));
+            dispatch(putChannelActiveConf(post.channel_id, String(post.props.conference_id), meetingUrl));
         }
     }, [dispatch, post.props.conference_id, meetingUrl, post.channel_id]);
 

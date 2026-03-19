@@ -64,6 +64,7 @@ export type UserProfile = {
     status?: string;
     failed_attempts?: number;
     custom_profile_attributes?: Record<string, string>;
+    public_picture_url?: string;
 };
 
 export type UserProfileWithLastViewAt = UserProfile & {
