@@ -2,13 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {connect} from 'react-redux';
-import type {ActionCreatorsMapObject, Dispatch} from 'redux';
+import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {Client4} from 'mattermost-redux/client';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
-import type {Action} from 'mattermost-redux/types/actions';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {voiceConnectedChannels, voiceConnectedProfilesInChannel, connectedChannelID, voiceChannelCallStartAt, connectedCallID} from 'selectors/calls';
@@ -62,7 +61,7 @@ const mapStateToProps = (state: GlobalState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators<ActionCreatorsMapObject<Action>, any>({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     startOrJoinCallInChannelV2,
 }, dispatch);
 

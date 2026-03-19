@@ -176,7 +176,7 @@ const EditPost = ({editingPost, actions, canEditPost, config, channelId, draft, 
     // just a helper so it's not always needed to update with setting both properties to the same value
     const setSelectionRangeByCaretPosition = (position: number) => setSelectionRange({start: position, end: position});
 
-    const handleBlur = (e: React.FocusEvent<TextboxElement, Element>) => {
+    const handleBlur = (e: React.FocusEvent<TextboxElement>) => {
         const target = e.target as HTMLTextAreaElement;
         caretPosition.current = target.selectionEnd;
     };

@@ -75,10 +75,10 @@ export function updateScheduledPost(scheduledPost: ScheduledPost, connectionId: 
     };
 }
 
-export function deleteScheduledPost(userId: string, scheduledPostId: string) {
+export function deleteScheduledPost(userId: string, scheduledPostId: string, connectionId: string) {
     return async (dispatch: DispatchFunc) => {
         try {
-            const deletedScheduledPost = await Client4.deleteScheduledPost(userId, scheduledPostId);
+            const deletedScheduledPost = await Client4.deleteScheduledPost(userId, scheduledPostId, connectionId);
 
             dispatch({
                 type: ScheduledPostTypes.SCHEDULED_POST_DELETED,

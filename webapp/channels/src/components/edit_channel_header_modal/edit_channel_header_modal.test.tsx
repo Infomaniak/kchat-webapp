@@ -258,7 +258,7 @@ describe('components/EditChannelHeaderModal', () => {
                 }}
             />
         ),
-        (instance: EditChannelHeaderModalClass) => instance.state.header,
+        (instance: any) => instance.state.header,
         false,
     );
 });

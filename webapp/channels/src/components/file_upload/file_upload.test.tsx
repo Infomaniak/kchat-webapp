@@ -73,6 +73,12 @@ describe('components/FileUpload', () => {
         rootId: 'root_id',
         pluginFileUploadMethods: [],
         pluginFilesWillUploadHooks: [],
+        disabled: false,
+        message: '',
+        caretPosition: 0,
+        isAdmin: false,
+        isPaidPlan: false,
+        handleDriveSharelink: jest.fn(),
         centerChannelPostBeingEdited: false,
         rhsPostBeingEdited: false,
         actions: {

@@ -46,7 +46,10 @@ const GetAppAnnoucementBar = () => {
         defaultMessage: '<gta>Download the kChat application</gta> for {os} for a better experience ! (<dnd>Don’t remind me again</dnd>)',
     }, {
         gta: (chunks) => (
-            <ExternalLink href='https://infomaniak.com/gtl/apps.kchat'>
+            <ExternalLink
+                href='https://infomaniak.com/gtl/apps.kchat'
+                location='get_app_announcement_bar'
+            >
                 {chunks}
             </ExternalLink>
         ),

@@ -89,7 +89,7 @@ type State = {
     searchTerm: string;
 }
 
-class BrowseChannels extends React.PureComponent<Props, State> {
+export class BrowseChannels extends React.PureComponent<Props, State> {
     public searchTimeoutId: number;
     activeChannels: Channel[] = [];
 

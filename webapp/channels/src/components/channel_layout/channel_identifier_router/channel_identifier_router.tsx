@@ -2,6 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
+import type {RouteComponentProps} from 'react-router-dom';
 
 import ChannelView from 'components/channel_view/index';
 
@@ -20,12 +21,11 @@ export interface Match {
 
 export type MatchAndHistory = Pick<Props, 'match' | 'history'>
 
-type Props = {
+type Props = RouteComponentProps & {
     match: Match;
     actions: {
         onChannelByIdentifierEnter: (props: MatchAndHistory) => any;
     };
-    history: any;
 };
 
 export default class ChannelIdentifierRouter extends React.PureComponent<Props> {

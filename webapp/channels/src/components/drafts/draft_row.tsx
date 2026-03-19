@@ -414,6 +414,9 @@ function DraftRow({
                             uploadsInProgress={uploadsInProgress}
                             userId={user.id}
                             username={user.username}
+                            draft={item as PostDraft}
+                            isEditing={isEditing}
+                            setIsEditing={setIsEditing}
                         />
                     )}
                 </>

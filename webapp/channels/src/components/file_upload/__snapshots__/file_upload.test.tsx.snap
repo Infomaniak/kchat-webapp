@@ -28,6 +28,7 @@ exports[`components/FileUpload should match snapshot 1`] = `
       <button
         aria-label="attachment"
         className="style--none AdvancedTextEditor__action-button"
+        disabled={false}
         id="fileUploadButton"
         onClick={[Function]}
         onTouchEnd={[Function]}
@@ -43,6 +44,7 @@ exports[`components/FileUpload should match snapshot 1`] = `
     <input
       accept=""
       aria-label="Upload files"
+      disabled={false}
       id="fileUploadInput"
       multiple={true}
       onChange={[Function]}
