@@ -38,7 +38,6 @@ function UserAvatar({
     overlayProps,
     displayProfileOverlay,
     displayProfileStatus,
-    disableFetch,
     status,
     rootClose = true,
     ...props
@@ -60,11 +59,9 @@ function UserAvatar({
             ref={overlay}
             overlay={
                 <ProfilePopover
-                    className='user-profile-popover'
                     userId={user.id}
                     src={profilePictureURL}
                     hide={hideProfilePopover}
-                    disableFetch={disableFetch}
                 />
             }
         >

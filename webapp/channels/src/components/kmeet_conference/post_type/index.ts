@@ -11,7 +11,7 @@ import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {getConferenceByChannelId, getIsAnyUserInConference} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
 
-import {leaveCallInChannel, showSwitchCallModal, startOrJoinCallInChannelV2} from 'actions/calls';
+import {startOrJoinCallInChannelV2} from 'actions/calls';
 import {joinCall} from 'actions/kmeet_calls';
 
 import type {GlobalState} from 'types/store';
@@ -37,8 +37,6 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
     startOrJoinCallInChannelV2,
-    showSwitchCallModal,
-    leaveCallInChannel,
     joinCall,
 }, dispatch);
 
