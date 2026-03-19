@@ -57,7 +57,6 @@ const DraftFilterMenu = ({filter, setFilter}: Props) => {
                 class: 'icon draft-filter-menu__button',
             }}
             menuButtonTooltip={{
-                id: 'drafts_filter_menu_tooltip',
                 text: formatMessage({id: 'drafts.filter.menu_button_tooltip', defaultMessage: 'Filter drafts'}),
             }}
         >

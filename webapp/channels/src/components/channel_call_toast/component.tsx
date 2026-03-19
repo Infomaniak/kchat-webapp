@@ -9,7 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 import ActiveCallIcon from './active_call_icon';
 import ConnectedProfiles from './connected_profiles';
 
-interface Props {
+export interface Props {
     currChannelID: string;
     connectedID?: string;
     hasCall: boolean;

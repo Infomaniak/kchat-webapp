@@ -8,8 +8,6 @@ import type {ReactNode, HTMLProps} from 'react';
 import React, {useState, useRef} from 'react';
 import ReactDOM from 'react-dom';
 
-import {Constants} from 'utils/constants';
-
 interface TooltipOptions {
     message: ReactNode;
     strategy?: Strategy;
@@ -23,7 +21,7 @@ interface TooltipOptions {
 const defaultOptions: Required<Pick<TooltipOptions, 'strategy' | 'hoverDelay' | 'zIndex' | 'mountPoint'>> = {
     strategy: 'fixed',
     hoverDelay: {
-        open: Constants.OVERLAY_TIME_DELAY,
+        open: 400,
         close: 0,
     },
     zIndex: 1,

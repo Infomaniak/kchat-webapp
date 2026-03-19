@@ -36,7 +36,7 @@ export type Props = {
     profilesInChannel: UserProfile[];
     teammateNameDisplaySetting: string;
     currentUserId: string;
-    currentTeam: Team;
+    currentTeam: Team | undefined;
 }
 
 const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel, teammateNameDisplaySetting, currentUserId, currentTeam}: Props) => {
@@ -63,7 +63,7 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
     }, []);
 
     const handleConfirm = useCallback(async () => {
-        if (!currentTeam.id) {
+        if (!currentTeam?.id) {
             return;
         }
 
@@ -87,9 +87,9 @@ const ConvertGmToChannelModal = ({onExited, channel, actions, profilesInChannel,
         setConversionError(undefined);
         trackEvent('actions', 'convert_group_message_to_private_channel', {channel_id: channel.id});
         onExited();
-    }, [currentTeam.id, channel.id, channelName, channelURL.current, actions.moveChannelsInSidebar]);
+    }, [currentTeam?.id, channel.id, channelName, channelURL.current, actions.moveChannelsInSidebar]);
 
-    const canCreate = currentTeam.id !== undefined && channelName !== '' && !nameError && !urlError;
+    const canCreate = currentTeam?.id !== undefined && channelName !== '' && !nameError && !urlError;
     const modalProps: Partial<ComponentProps<typeof GenericModal>> = {};
 
     modalProps.handleCancel = onExited;

@@ -1,6 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {CloudUsage, Limits} from '@mattermost/types/cloud';
+
 import {FileSizes} from 'utils/file_utils';
 import {limitThresholds, LimitTypes} from 'utils/limits';
 
@@ -16,7 +18,14 @@ jest.mock('@sentry/react', () => ({
     captureException: () => undefined,
 }));
 
-const zeroUsage = {
+const zeroUsage: CloudUsage = {
+    storage: 0,
+    public_channels: 0,
+    private_channels: 0,
+    guests: 0,
+    pending_guests: 0,
+    members: 0,
+    usageLoaded: true,
     files: {
         totalStorage: 0,
         totalStorageLoaded: true,
@@ -25,19 +34,17 @@ const zeroUsage = {
         history: 0,
         historyLoaded: true,
     },
-    boards: {
-        cards: 0,
-        cardsLoaded: true,
-    },
-    integrations: {
-        enabled: 0,
-        enabledLoaded: true,
-    },
     teams: {
         active: 0,
         cloudArchived: 0,
         teamsLoaded: true,
     },
+    custom_emojis: 0,
+    incoming_webhooks: 0,
+    outgoing_webhooks: 0,
+    sidebar_categories: 0,
+    scheduled_draft_custom_date: 0,
+    reminder_custom_date: 0,
 };
 
 describe('useGetHighestThresholdCloudLimit', () => {
@@ -145,7 +152,7 @@ describe('useGetHighestThresholdCloudLimit', () => {
     ];
     tests.forEach((t: typeof tests[0]) => {
         test(t.label, () => {
-            const actual = useGetHighestThresholdCloudLimit(t.usage, t.limits);
+            const actual = useGetHighestThresholdCloudLimit(t.usage, t.limits as Limits);
             expect(t.expected).toEqual(actual);
         });
     });

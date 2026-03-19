@@ -39,6 +39,7 @@ export default class MASMigrationBar extends React.PureComponent <Props> {
                                 link: (msg: React.ReactNode) => (
                                     <ExternalLink
                                         href='https://apps.apple.com/app/infomaniak-kchat/id6443845553'
+                                        location='mas_migration_banner'
                                     >
                                         {msg}
                                     </ExternalLink>

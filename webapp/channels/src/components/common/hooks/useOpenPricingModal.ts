@@ -35,7 +35,8 @@ export default function useOpenPricingModal() {
             modalId: ModalIdentifiers.PRICING_MODAL,
             dialogType: PricingModal,
             dialogProps: {
-                callerCTA: telemetryProps?.trackingLocation,
+
+                // callerCTA: telemetryProps?.trackingLocation,
             },
         }));
     }, [dispatch, isCloud]);

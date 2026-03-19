@@ -175,7 +175,7 @@ export type Props = {
 };
 
 type State = {
-    requests: Record<string, XMLHttpRequest>;
+    requests: Record<string, XMLHttpRequest | Record<string, unknown>>;
     menuOpen: boolean;
 };
 
@@ -575,7 +575,7 @@ export class FileUpload extends PureComponent<Props, State> {
         const requests = Object.assign({}, this.state.requests);
         const request = requests[clientId];
 
-        if (request) {
+        if (request && 'abort' in request && typeof request.abort === 'function') {
             request.abort();
 
             Reflect.deleteProperty(requests, clientId);

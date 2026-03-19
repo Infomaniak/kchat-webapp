@@ -9,7 +9,7 @@ import WithTooltip from 'components/with_tooltip';
 import './action.scss';
 
 type Props = {
-    icon: string | React.FC<React.HTMLAttributes<HTMLSpanElement>>;
+    icon: string;
     id: string;
     name: string;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;

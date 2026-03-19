@@ -123,7 +123,6 @@ class ChannelHeader extends React.PureComponent<Props> {
             dmUser,
             rhsState,
             hasGuests,
-            hideGuestTags,
             canPost,
         } = this.props;
         if (!channel) {
@@ -164,7 +163,7 @@ class ChannelHeader extends React.PureComponent<Props> {
         const isGroup = (channel.type === Constants.GM_CHANNEL);
 
         if (isGroup) {
-            if (hasGuests && !hideGuestTags) {
+            if (hasGuests) {
                 hasGuestsText = (
                     <span className='has-guest-header'>
                         <FormattedMessage

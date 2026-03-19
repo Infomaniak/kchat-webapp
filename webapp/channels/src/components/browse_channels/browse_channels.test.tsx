@@ -8,7 +8,7 @@ import type {Channel} from '@mattermost/types/channels';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import type {Props} from 'components/browse_channels/browse_channels';
+import type {Props, BrowseChannels as BrowseChannelsClass} from 'components/browse_channels/browse_channels';
 import BrowseChannels, {Filter} from 'components/browse_channels/browse_channels';
 import SearchableChannelList from 'components/searchable_channel_list';
 
@@ -187,7 +187,7 @@ describe('components/BrowseChannels', () => {
     };
 
     test('should match snapshot and state', () => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -203,7 +203,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should call closeModal on handleExit', () => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -212,7 +212,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should match state on onChange', () => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
         wrapper.setState({searchedChannels: [TestHelper.getChannelMock({id: 'other_channel_id'})]});
@@ -227,7 +227,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should call props.getChannels on nextPage', () => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -264,7 +264,7 @@ describe('components/BrowseChannels', () => {
             },
         };
 
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...props}/>,
         );
 
@@ -292,7 +292,7 @@ describe('components/BrowseChannels', () => {
             },
         };
 
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...props}/>,
         );
 
@@ -308,7 +308,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should not perform a search if term is empty', () => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -323,7 +323,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should handle a failed search', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -351,7 +351,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should perform search and set the correct state', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -377,7 +377,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should perform search on archived channels and set the correct state', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -404,7 +404,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should perform search on private channels and set the correct state', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -431,7 +431,7 @@ describe('components/BrowseChannels', () => {
     });
 
     test('should perform search on public channels and set the correct state', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 
@@ -463,7 +463,7 @@ describe('components/BrowseChannels', () => {
             shouldHideJoinedChannels: true,
         };
 
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...props}/>,
         );
 
@@ -495,7 +495,7 @@ describe('components/BrowseChannels', () => {
             shouldHideJoinedChannels: true,
         };
 
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...props}/>,
         );
 
@@ -522,7 +522,7 @@ describe('components/BrowseChannels', () => {
     });
 
     it('should perform search on all channels and should not show private channels that user is not a member of', (done) => {
-        const wrapper = shallow<BrowseChannels>(
+        const wrapper = shallow<BrowseChannelsClass>(
             <BrowseChannels {...baseProps}/>,
         );
 

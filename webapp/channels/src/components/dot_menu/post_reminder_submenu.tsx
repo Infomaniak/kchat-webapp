@@ -6,9 +6,9 @@ import React, {memo} from 'react';
 import {FormattedMessage, FormattedDate, FormattedTime, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
+import type {ReminderTimestamp} from '@mattermost/types/client4';
 import type {Post} from '@mattermost/types/posts';
 
-import type {ReminderTimestamp} from 'mattermost-redux/actions/posts';
 import {addPostReminder} from 'mattermost-redux/actions/posts';
 import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
 import {quotaGate} from 'mattermost-redux/utils/plans_util';
