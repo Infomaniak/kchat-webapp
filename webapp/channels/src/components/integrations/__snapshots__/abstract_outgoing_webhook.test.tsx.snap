@@ -4,20 +4,6 @@ exports[`components/integrations/AbstractOutgoingWebhook should match snapshot 1
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/outgoing_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Outgoing Webhooks"
-        id="installed_outgoing_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >

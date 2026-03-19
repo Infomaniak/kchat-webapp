@@ -6,7 +6,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, comma
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
+  <div
+    className="backstage-header"
+  >
     <Link
       to="/team_test/integrations/commands"
     >
@@ -19,7 +21,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, comma
       defaultMessage="Add"
       id="integrations.add"
     />
-  </BackstageHeader>
+  </div>
   <div
     className="backstage-form backstage-form__confirmation"
   >
@@ -89,7 +91,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, incom
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
+  <div
+    className="backstage-header"
+  >
     <Link
       to="/team_test/integrations/incoming_webhooks"
     >
@@ -102,7 +106,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, incom
       defaultMessage="Add"
       id="integrations.add"
     />
-  </BackstageHeader>
+  </div>
   <div
     className="backstage-form backstage-form__confirmation"
   >
@@ -172,7 +176,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, oauth
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
+  <div
+    className="backstage-header"
+  >
     <Link
       to="/team_test/integrations/oauth2-apps"
     >
@@ -185,7 +191,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, oauth
       defaultMessage="Add"
       id="integrations.add"
     />
-  </BackstageHeader>
+  </div>
   <div
     className="backstage-form backstage-form__confirmation"
   >
@@ -301,7 +307,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
+  <div
+    className="backstage-header"
+  >
     <Link
       to="/team_test/integrations/outgoing_webhooks"
     >
@@ -314,7 +322,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
       defaultMessage="Add"
       id="integrations.add"
     />
-  </BackstageHeader>
+  </div>
   <div
     className="backstage-form backstage-form__confirmation"
   >
@@ -384,7 +392,9 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
+  <div
+    className="backstage-header"
+  >
     <Link
       to="/team_test/integrations/outgoing-oauth2-connections"
     >
@@ -397,7 +407,7 @@ exports[`components/integrations/ConfirmIntegration should match snapshot, outgo
       defaultMessage="Add"
       id="integrations.add"
     />
-  </BackstageHeader>
+  </div>
   <div
     className="backstage-form backstage-form__confirmation"
   >

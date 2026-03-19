@@ -4,20 +4,6 @@ exports[`components/integrations/AbstractIncomingWebhook should call action func
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -269,20 +255,6 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot 1
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -534,20 +506,6 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -802,20 +760,6 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -1034,20 +978,6 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -1266,20 +1196,6 @@ exports[`components/integrations/AbstractIncomingWebhook should match snapshot, 
 <div
   className="backstage-content"
 >
-  <BackstageHeader>
-    <Link
-      to="/team_name/integrations/incoming_webhooks"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Incoming Webhooks"
-        id="installed_incoming_webhooks.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="header_id"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
