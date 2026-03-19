@@ -13,8 +13,8 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/data_grid/data_grid';
+import DataGrid from 'components/data_grid/data_grid';
 import Avatars from 'components/widgets/users/avatars';
 
 import type {GlobalState} from 'types/store';

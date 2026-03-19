@@ -18,8 +18,8 @@ import {displayUsername} from 'mattermost-redux/utils/user_utils';
 import {trackEvent} from 'actions/telemetry_actions';
 
 import ModalPagination from 'components/activity_and_insights/insights/modal_pagination/modal_pagination';
-import type {Row, Column} from 'components/admin_console/data_grid/data_grid';
-import DataGrid from 'components/admin_console/data_grid/data_grid';
+import type {Row, Column} from 'components/data_grid/data_grid';
+import DataGrid from 'components/data_grid/data_grid';
 import Avatar from 'components/widgets/users/avatar';
 
 import {InsightsScopes} from 'utils/constants';
