@@ -14,7 +14,7 @@
     "@infomaniak/compass-components": "0.17.0",
     "@infomaniak/compass-icons": "0.14.0",
     "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.11.tgz",
-    "@infomaniak/marked": "^0.2.0",
+    "@infomaniak/marked": "0.5.0",
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client",
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types",
     "@mattermost/client": "*",
