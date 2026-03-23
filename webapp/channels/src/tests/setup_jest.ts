@@ -60,6 +60,12 @@ jest.mock('utils/url_import', () => ({
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
+// Mock crypto.randomUUID for tests (not available in jsdom)
+// Returns a fixed UUID to ensure test consistency
+Object.defineProperty(global.crypto, 'randomUUID', {
+    value: jest.fn(() => '11111111-1111-4111-8111-111111111111'),
+});
+
 // isRetryWarning returns true when the console.warn message is coming from the backOff retry utility.
 function isRetryWarning(params: string[]) {
     return params[0] === 'retry #' || params[0] === 'all retry attempts for';

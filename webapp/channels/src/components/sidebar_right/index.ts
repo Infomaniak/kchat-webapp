@@ -32,6 +32,7 @@ import {
     getSelectedPostCardId,
     getPreviousRhsState,
 } from 'selectors/rhs';
+import {getRhsFocusIntent} from 'selectors/views/rhs';
 
 import {RHSStates} from 'utils/constants';
 
@@ -67,6 +68,7 @@ function mapStateToProps(state: GlobalState, props: RouteComponentProps) {
         isRecentMention: rhsState === RHSStates.MENTION,
         isSavedPosts: rhsState === RHSStates.FLAG,
         rhsChannel: getSelectedChannel(state),
+        rhsFocusIntent: getRhsFocusIntent(state),
         selectedPostId,
         selectedPostCardId,
         team,

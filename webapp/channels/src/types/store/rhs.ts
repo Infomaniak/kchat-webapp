@@ -10,6 +10,14 @@ import type {SidebarSize} from 'components/resizable_sidebar/constants';
 
 import type {RHSStates} from 'utils/constants';
 
+// IK: Focus intent for RHS - determines where focus should go when RHS opens
+export type RhsFocusTarget = 'textbox' | 'first_focusable';
+
+export type RhsFocusIntent = {
+    target: RhsFocusTarget;
+    requestId: string;
+} | null;
+
 export type SearchType = '' | 'files' | 'messages';
 
 export type FakePost = {
@@ -44,7 +52,7 @@ export type RhsViewState = {
     isMenuOpen: boolean;
     editChannelMembers: boolean;
     size: SidebarSize;
-    shouldFocusRHS: boolean;
+    rhsFocusIntent: RhsFocusIntent;
 };
 
 export type RhsState = typeof RHSStates[keyof typeof RHSStates] | null;

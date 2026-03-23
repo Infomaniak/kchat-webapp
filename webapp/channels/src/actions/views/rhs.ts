@@ -42,7 +42,12 @@ import {Mark, Measure, measureAndReport} from 'utils/performance_telemetry';
 import {getBrowserUtcOffset, getUtcOffsetForTimeZone} from 'utils/timezone';
 
 import type {ActionFunc, ActionFuncAsync, GlobalState, ThunkActionFunc} from 'types/store';
-import type {RhsState} from 'types/store/rhs';
+import type {RhsFocusIntent, RhsFocusTarget, RhsState} from 'types/store/rhs';
+
+// IK: Create focus intent with unique requestId
+function createFocusIntent(target: RhsFocusTarget): RhsFocusIntent {
+    return {target, requestId: crypto.randomUUID()};
+}
 
 function selectPostWithPreviousState(post: Post, previousRhsState?: RhsState): ActionFunc<boolean> {
     return (dispatch, getState) => {
@@ -74,6 +79,7 @@ export function updateRhsState(rhsState: string, channelId?: string, previousRhs
         const action: AnyAction = {
             type: ActionTypes.UPDATE_RHS_STATE,
             state: rhsState,
+            focusIntent: createFocusIntent('first_focusable'),
         };
 
         if ([
@@ -101,6 +107,7 @@ export function openShowEditHistory(post: Post) {
         postId: post.id,
         channelId: post.channel_id,
         timestamp: Date.now(),
+        focusIntent: createFocusIntent('first_focusable'),
     };
 }
 
@@ -281,6 +288,7 @@ export function showRHSPlugin(pluggableId: string) {
         type: ActionTypes.UPDATE_RHS_STATE,
         state: RHSStates.PLUGIN,
         pluggableId,
+        focusIntent: createFocusIntent('first_focusable'),
     };
 }
 
@@ -301,6 +309,7 @@ export function showChannelMembers(channelId: string, inEditingMode = false): Ac
             channelId,
             state: RHSStates.CHANNEL_MEMBERS,
             previousRhsState,
+            focusIntent: createFocusIntent('first_focusable'),
         });
 
         return {data: true};
@@ -341,6 +350,7 @@ export function showFlaggedPosts(): ActionFuncAsync {
         dispatch({
             type: ActionTypes.UPDATE_RHS_STATE,
             state: RHSStates.FLAG,
+            focusIntent: createFocusIntent('first_focusable'),
         });
 
         const results = await dispatch(getFlaggedPosts());
@@ -383,6 +393,7 @@ export function showPinnedPosts(channelId?: string): ActionFuncAsync<boolean> {
             channelId: channelId || currentChannelId,
             state: RHSStates.PIN,
             previousRhsState,
+            focusIntent: createFocusIntent('first_focusable'),
         });
 
         const results = await dispatch(getPinnedPosts(channelId || currentChannelId));
@@ -425,6 +436,7 @@ export function showChannelFiles(channelId: string): ActionFuncAsync<boolean> {
             channelId,
             state: RHSStates.CHANNEL_FILES,
             previousRhsState,
+            focusIntent: createFocusIntent('first_focusable'),
         });
         dispatch(updateSearchType('files'));
 
@@ -494,6 +506,7 @@ export function showMentions(): ActionFunc<boolean> {
             {
                 type: ActionTypes.UPDATE_RHS_STATE,
                 state: RHSStates.MENTION,
+                focusIntent: createFocusIntent('first_focusable'),
             },
         ]));
 
@@ -506,6 +519,7 @@ export function showChannelInfo(channelId: string) {
         type: ActionTypes.UPDATE_RHS_STATE,
         channelId,
         state: RHSStates.CHANNEL_INFO,
+        focusIntent: createFocusIntent('first_focusable'),
     };
 }
 
@@ -563,6 +577,7 @@ export function selectPost(post: Post, previousRhsState?: RhsState) {
         channelId: post.channel_id,
         previousRhsState,
         timestamp: Date.now(),
+        focusIntent: createFocusIntent('textbox'),
     };
 }
 
@@ -705,6 +720,7 @@ export function showSettings(tab = 'display'): ThunkActionFunc<unknown, GlobalSt
             type: ActionTypes.UPDATE_RHS_STATE,
             state: RHSStates.SETTINGS,
             tab,
+            focusIntent: createFocusIntent('first_focusable'),
         });
 
         return {data: true};

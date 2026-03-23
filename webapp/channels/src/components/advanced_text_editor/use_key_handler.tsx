@@ -17,7 +17,7 @@ import {getIsRhsExpanded} from 'selectors/rhs';
 import type {TextboxElement} from 'components/textbox';
 import type TextboxClass from 'components/textbox/textbox';
 
-import Constants, {A11yClassNames, Locations, Preferences} from 'utils/constants';
+import Constants, {A11yClassNames, AdvancedTextEditorTextboxIds, Locations, Preferences} from 'utils/constants';
 import * as Keyboard from 'utils/keyboard';
 import {type ApplyMarkdownOptions} from 'utils/markdown/apply_markdown';
 import {pasteHandler} from 'utils/paste';
@@ -182,6 +182,9 @@ const useKeyHandler = (
             if (isInEditMode) {
                 onCancel?.();
                 dispatch(unsetEditingPost());
+                const isRHS = location === Locations.RHS_COMMENT || location === Locations.RHS_ROOT;
+                const targetTextboxId = isRHS ? AdvancedTextEditorTextboxIds.InRHSComment : AdvancedTextEditorTextboxIds.InCenter;
+                document.getElementById(targetTextboxId)?.focus();
             }
         }
 

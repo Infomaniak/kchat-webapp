@@ -2,7 +2,9 @@
 // See LICENSE.txt for license information.
 
 import type {GlobalState} from 'types/store';
+import type {RhsFocusIntent} from 'types/store/rhs';
 
-export function getShouldFocusRHS(state: GlobalState): boolean {
-    return state.views.rhs.shouldFocusRHS;
+// IK: Get focus intent for RHS
+export function getRhsFocusIntent(state: GlobalState): RhsFocusIntent {
+    return state.views.rhs.rhsFocusIntent;
 }

@@ -29,7 +29,7 @@ describe('Reducers.RHS', () => {
         isSidebarOpen: false,
         isSidebarExpanded: false,
         editChannelMembers: false,
-        shouldFocusRHS: false,
+        rhsFocusIntent: null,
         searchTeam: null,
     };
 
@@ -215,7 +215,6 @@ describe('Reducers.RHS', () => {
             selectedPostFocussedAt: 1234,
             selectedChannelId: '321',
             isSidebarOpen: true,
-            shouldFocusRHS: true,
         });
     });
 
@@ -315,7 +314,6 @@ describe('Reducers.RHS', () => {
             selectedPostFocussedAt: 1234,
             selectedChannelId: '321',
             isSidebarOpen: true,
-            shouldFocusRHS: true,
         });
 
         const nextState2 = rhsReducer(
@@ -337,7 +335,6 @@ describe('Reducers.RHS', () => {
             selectedChannelId: '321',
             previousRhsStates: [RHSStates.SEARCH],
             isSidebarOpen: true,
-            shouldFocusRHS: true,
         });
 
         const nextState3 = rhsReducer(
@@ -360,7 +357,6 @@ describe('Reducers.RHS', () => {
             selectedChannelId: '321',
             previousRhsStates: [RHSStates.SEARCH, RHSStates.FLAG],
             isSidebarOpen: true,
-            shouldFocusRHS: true,
         });
     });
 
@@ -441,7 +437,6 @@ describe('Reducers.RHS', () => {
             selectedChannelId: '321',
             previousRhsStates: [RHSStates.PIN],
             isSidebarOpen: true,
-            shouldFocusRHS: true,
         });
     });
 
@@ -643,7 +638,7 @@ describe('Reducers.RHS', () => {
             isSidebarOpen: true,
             isSidebarExpanded: true,
             editChannelMembers: false,
-            shouldFocusRHS: false,
+            rhsFocusIntent: null,
             searchTeam: null,
         };
 

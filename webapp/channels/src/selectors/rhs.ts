@@ -229,6 +229,10 @@ export function getIsRhsOpen(state: GlobalState): boolean {
     return state.views.rhs.isSidebarOpen && !state.views.rhsSuppressed;
 }
 
+export function getRhsSuppressed(state: GlobalState): boolean {
+    return state.views.rhsSuppressed;
+}
+
 export function getIsRhsMenuOpen(state: GlobalState): boolean {
     return state.views.rhs.isMenuOpen;
 }
