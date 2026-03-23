@@ -10,6 +10,7 @@ import type {Command, IncomingWebhook, OAuthApp, OutgoingOAuthConnection, Outgoi
 import type {Team} from '@mattermost/types/teams';
 import type {IDMappedObjects} from '@mattermost/types/utilities';
 
+import BackstageHeader from 'components/backstage/components/backstage_header';
 import CopyText from 'components/copy_text';
 import ExternalLink from 'components/external_link';
 
@@ -442,7 +443,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
 
     return (
         <div className='backstage-content row'>
-            <div className='backstage-header'>
+            <BackstageHeader>
                 <Link to={'/' + team.name + '/integrations/' + type}>
                     {headerText}
                 </Link>
@@ -450,7 +451,7 @@ const ConfirmIntegration = ({team, location, commands, oauthApps, incomingHooks,
                     id='integrations.add'
                     defaultMessage='Add'
                 />
-            </div>
+            </BackstageHeader>
             <div className='backstage-form backstage-form__confirmation'>
                 <h4
                     className='backstage-form__title'
