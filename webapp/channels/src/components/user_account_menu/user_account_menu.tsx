@@ -131,7 +131,9 @@ export default function UserAccountMenu(props: Props) {
             <UserAccountProfileMenuItem
                 userId={props.userId}
             />
-            <UserAccountIkNextMenuItem/>
+            {props.showNextSwitch && (
+                <UserAccountIkNextMenuItem/>
+            )}
             <Menu.Separator/>
             <UserAccountLogoutMenuItem
                 ksuiteBridge={props.ksuiteBridge}
