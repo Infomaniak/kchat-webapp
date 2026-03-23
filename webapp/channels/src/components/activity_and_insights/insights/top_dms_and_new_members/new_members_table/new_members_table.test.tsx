@@ -87,6 +87,7 @@ describe('components/activity_and_insights/insights/top_dms_and_new_members/new_
                         id: 'channel1',
                         team_id: 'team_id1',
                         name: 'channel1',
+                        last_viewed_at: 0,
                     },
                 },
             },

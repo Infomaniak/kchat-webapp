@@ -9,11 +9,9 @@ import {InsightsWidgetTypes} from '@mattermost/types/insights';
 
 import LeastActiveChannelsTable from '../least_active_channels/least_active_channels_table/least_active_channels_table';
 import TimeFrameDropdown from '../time_frame_dropdown/time_frame_dropdown';
-import TopBoardsTable from '../top_boards/top_boards_table/top_boards_table';
 import TopChannelsTable from '../top_channels/top_channels_table/top_channels_table';
 import NewMembersTable from '../top_dms_and_new_members/new_members_table/new_members_table';
 import TopDMsTable from '../top_dms_and_new_members/top_dms_table/top_dms_table';
-import TopPlaybooksTable from '../top_playbooks/top_playbooks_table/top_playbooks_table';
 import TopReactionsTable from '../top_reactions/top_reactions_table/top_reactions_table';
 import TopThreadsTable from '../top_threads/top_threads_table/top_threads_table';
 
@@ -70,25 +68,9 @@ const InsightsModal = (props: Props) => {
                     closeModal={doHide}
                 />
             );
-        case InsightsWidgetTypes.TOP_BOARDS:
-            return (
-                <TopBoardsTable
-                    filterType={props.filterType}
-                    timeFrame={timeFrame}
-                    closeModal={doHide}
-                />
-            );
         case InsightsWidgetTypes.LEAST_ACTIVE_CHANNELS:
             return (
                 <LeastActiveChannelsTable
-                    filterType={props.filterType}
-                    timeFrame={timeFrame}
-                    closeModal={doHide}
-                />
-            );
-        case InsightsWidgetTypes.TOP_PLAYBOOKS:
-            return (
-                <TopPlaybooksTable
                     filterType={props.filterType}
                     timeFrame={timeFrame}
                     closeModal={doHide}

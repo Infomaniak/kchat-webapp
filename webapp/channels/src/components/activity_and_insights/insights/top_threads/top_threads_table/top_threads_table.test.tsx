@@ -106,6 +106,7 @@ describe('components/activity_and_insights/insights/top_threads/top_threads_tabl
                         id: 'channel1',
                         team_id: 'team_id1',
                         name: 'channel1',
+                        last_viewed_at: 0,
                     },
                 },
             },

@@ -4861,7 +4861,7 @@ export default class Client4 {
         );
     };
 
-    uploadToKdrive = (fileId: string, driveId: number, directoryId: number, fileName: string) => {
+    uploadToKdrive = (fileId: string, driveId: number, directoryId: number, fileName: string): Promise<{remote_id: string} | {error: any}> => {
         return this.doFetch(
             `${this.getFileRoute(fileId)}/drive/upload`,
             {method: 'POST',
