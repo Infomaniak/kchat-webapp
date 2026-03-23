@@ -3141,12 +3141,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@infomaniak/marked@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@infomaniak/marked@npm:0.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fmarked%2F0.2.0%2F7497d3a2d1b083a2467bc0a84aae2dbd026bad1b"
+"@infomaniak/marked@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@infomaniak/marked@npm:0.5.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40infomaniak%2Fmarked%2F0.5.0%2Fc60a8ffe6e2525cd0979583403714f791b2c2a91"
   bin:
     marked: bin/marked
-  checksum: 10/cc012ff52fd7f0ea9a9e13fa0e2cc9adc542bd1d52a8857262825fc4c5dd07c1b0a815debe5841452e6cbf5d436ea3892eec821f3608b81f7a4456ef74cac1aa
+  checksum: 10/482fe9fc6e138ea0a7e479ba77500744052611c5356ca6df159ea226b6e23f405a8574880879492bb77458399de92fcec7f2b7b0833eada7aac6366150d2e815
   languageName: node
   linkType: hard
 
@@ -17941,7 +17941,7 @@ __metadata:
     "@infomaniak/compass-components": "npm:0.17.0"
     "@infomaniak/compass-icons": "npm:0.14.0"
     "@infomaniak/ksuite-bridge": "https://verdaccio.dev.infomaniak.ch/@infomaniak/ksuite-bridge/-/ksuite-bridge-0.3.11.tgz"
-    "@infomaniak/marked": "npm:^0.2.0"
+    "@infomaniak/marked": "npm:0.5.0"
     "@infomaniak/mattermost-client": "workspace:webapp/platform/client"
     "@infomaniak/mattermost-types": "workspace:webapp/platform/types"
     "@mattermost/client": "npm:*"
