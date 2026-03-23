@@ -11,10 +11,16 @@ import type {EditChannelHeaderModal as EditChannelHeaderModalClass} from 'compon
 import Textbox from 'components/textbox';
 
 import Constants from 'utils/constants';
+import {execCommandInsertText} from 'utils/exec_commands';
+import * as pasteUtils from 'utils/paste';
 import * as Utils from 'utils/utils';
 
 import {type MockIntl} from 'tests/helpers/intl-test-helper';
 import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
+
+jest.mock('utils/exec_commands', () => ({
+    execCommandInsertText: jest.fn(),
+}));
 
 const KeyCodes = Constants.KeyCodes;
 
@@ -246,6 +252,86 @@ describe('components/EditChannelHeaderModal', () => {
         });
 
         expect(baseProps.actions.patchChannel).toBeCalledWith('fake-id', {header: newHeader});
+    });
+
+    describe('handlePaste', () => {
+        const createClipboardEvent = (overrides: Partial<ClipboardEvent> = {}): ClipboardEvent => {
+            const event = {
+                clipboardData: {
+                    getData: jest.fn().mockReturnValue(''),
+                    types: ['text/plain'],
+                } as unknown as DataTransfer,
+                target: {
+                    selectionStart: 0,
+                    selectionEnd: 0,
+                } as unknown as EventTarget,
+                preventDefault: jest.fn(),
+                ...overrides,
+            } as unknown as ClipboardEvent;
+            return event;
+        };
+
+        beforeEach(() => {
+            jest.spyOn(pasteUtils, 'hasHtmlLink').mockReturnValue(false);
+            jest.spyOn(pasteUtils, 'isTextUrl').mockReturnValue(false);
+            jest.spyOn(pasteUtils, 'formatMarkdownMessage').mockReturnValue({formattedMessage: '', formattedMarkdown: ''});
+            jest.spyOn(pasteUtils, 'formatMarkdownLinkMessage').mockReturnValue('');
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should do nothing for plain text paste', () => {
+            const wrapper = shallow(
+                <EditChannelHeaderModal {...baseProps}/>,
+            );
+            const event = createClipboardEvent();
+
+            wrapper.find(Textbox).simulate('paste', event);
+
+            expect(event.preventDefault).not.toHaveBeenCalled();
+        });
+
+        test('should convert HTML link paste to markdown', () => {
+            jest.spyOn(pasteUtils, 'hasHtmlLink').mockReturnValue(true);
+            jest.spyOn(pasteUtils, 'formatMarkdownMessage').mockReturnValue({
+                formattedMessage: 'full message',
+                formattedMarkdown: '[link text](https://example.com)',
+            });
+
+            const wrapper = shallow(
+                <EditChannelHeaderModal {...baseProps}/>,
+            );
+            const event = createClipboardEvent();
+
+            wrapper.find(Textbox).simulate('paste', event);
+
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(pasteUtils.formatMarkdownMessage).toHaveBeenCalled();
+            expect(execCommandInsertText).toHaveBeenCalledWith('[link text](https://example.com)');
+        });
+
+        test('should format URL pasted on selected text as markdown link', () => {
+            jest.spyOn(pasteUtils, 'isTextUrl').mockReturnValue(true);
+            jest.spyOn(pasteUtils, 'formatMarkdownLinkMessage').mockReturnValue('[selected text](https://example.com)');
+
+            const wrapper = shallow(
+                <EditChannelHeaderModal {...baseProps}/>,
+            );
+            const event = createClipboardEvent({
+                target: {
+                    selectionStart: 0,
+                    selectionEnd: 13,
+                } as unknown as EventTarget,
+            });
+
+            wrapper.find(Textbox).simulate('paste', event);
+
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(pasteUtils.formatMarkdownLinkMessage).toHaveBeenCalled();
+            expect(execCommandInsertText).toHaveBeenCalledWith('[selected text](https://example.com)');
+        });
     });
 
     testComponentForLineBreak(
