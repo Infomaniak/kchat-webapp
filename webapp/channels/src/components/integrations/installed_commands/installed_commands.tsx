@@ -11,13 +11,9 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import {redirectToDeveloperDocumentation} from 'actions/global_actions';
-
-import BackstageList from 'components/backstage/components/backstage_list';
-
 import * as Utils from 'utils/utils';
 
-import InstalledCommand, {matchesFilter} from '../installed_command';
+import InstalledCommand from '../installed_command';
 
 type Props = {
     team: Team;
@@ -64,9 +60,8 @@ export default class InstalledCommands extends React.PureComponent<Props> {
     }
 
     public render(): JSX.Element {
-        const commands = (filter: string) => this.props.commands.
+        const commandList = this.props.commands.
             filter((command) => command.team_id === this.props.team.id).
-            filter((command) => matchesFilter(command, filter)).
             sort(this.commandCompare).map((command) => {
                 const canChange = this.props.canManageOthersSlashCommands || this.props.user.id === command.creator_id;
 
@@ -84,60 +79,15 @@ export default class InstalledCommands extends React.PureComponent<Props> {
             });
 
         return (
-            <BackstageList
-                header={
+            <div className='backstage-content'>
+                <div className='backstage-header'>
                     <FormattedMessage
                         id='installed_commands.header'
                         defaultMessage='Installed Slash Commands'
                     />
-                }
-                addText={
-                    <FormattedMessage
-                        id='installed_commands.add'
-                        defaultMessage='Add Slash Command'
-                    />
-                }
-                addLink={'/' + this.props.team.name + '/integrations/commands/add'}
-                addButtonId='addSlashCommand'
-                emptyText={
-                    <FormattedMessage
-                        id='installed_commands.empty'
-                        defaultMessage='No slash commands found'
-                    />
-                }
-                emptyTextSearch={
-                    <FormattedMessage
-                        id='installed_commands.search.empty'
-                        defaultMessage='No slash commands match <b>{searchTerm}</b>'
-                        values={{
-                            b: (chunks: string) => <b>{chunks}</b>,
-                        }}
-                    />
-                }
-                helpText={
-                    <FormattedMessage
-                        id='installed_commands.help'
-                        defaultMessage='Use slash commands to connect external tools to kChat. {learnMore}'
-                        values={{
-                            learnMore: (
-                                <a onClick={redirectToDeveloperDocumentation}>
-                                    <FormattedMessage
-                                        id='developer_documentation.learn_more'
-                                        defaultMessage='Learn more'
-                                    />
-                                </a>
-                            ),
-                        }}
-                    />
-                }
-                searchPlaceholder={Utils.localizeMessage({id: 'installed_commands.search', defaultMessage: 'Search Slash Commands'})}
-                loading={this.props.loading}
-            >
-                {(filter: string) => {
-                    const children = commands(filter);
-                    return [children, children.length > 0];
-                }}
-            </BackstageList>
+                </div>
+                {commandList}
+            </div>
         );
     }
 }

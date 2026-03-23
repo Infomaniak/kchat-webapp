@@ -12,11 +12,9 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
-import BackstageList from 'components/backstage/components/backstage_list';
-import ExternalLink from 'components/external_link';
 import InstalledOutgoingWebhook, {matchesFilter, matchCreator} from 'components/integrations/installed_outgoing_webhook';
 
-import {Constants, DeveloperLinks} from 'utils/constants';
+import {Constants} from 'utils/constants';
 import {localizeMessage} from 'utils/utils';
 
 export type Props = {
@@ -167,99 +165,17 @@ export default class InstalledOutgoingWebhooks extends React.PureComponent<Props
         });
 
     render() {
+        const webhookList = this.outgoingWebhooks('');
         return (
-            <BackstageList
-                header={
+            <div className='backstage-content'>
+                <div className='backstage-header'>
                     <FormattedMessage
                         id='installed_outgoing_webhooks.header'
                         defaultMessage='Installed Outgoing Webhooks'
                     />
-                }
-                addText={
-                    <FormattedMessage
-                        id='installed_outgoing_webhooks.add'
-                        defaultMessage='Add Outgoing Webhook'
-                    />
-                }
-                addLink={
-                    '/' +
-                    this.props.team.name +
-                    '/integrations/outgoing_webhooks/add'
-                }
-                isQuotaExceeded={this.props.isQuotaExceeded}
-                addButtonId='addOutgoingWebhook'
-                emptyText={
-                    <FormattedMessage
-                        id='installed_outgoing_webhooks.empty'
-                        defaultMessage='No outgoing webhooks found'
-                    />
-                }
-                emptyTextSearch={
-                    <FormattedMessage
-                        id='installed_outgoing_webhooks.search.empty'
-                        defaultMessage='No outgoing webhooks match <b>{searchTerm}</b>'
-                        values={{
-                            b: (chunks: string) => <b>{chunks}</b>,
-                        }}
-                    />
-                }
-                helpText={
-                    <FormattedMessage
-                        id='installed_outgoing_webhooks.help'
-                        defaultMessage='Use outgoing webhooks to connect external tools to kChat. {learnMore}'
-                        values={{
-                            learnMore: (
-                                <ExternalLink
-                                    href={DeveloperLinks.SETUP_OUTGOING_WEBHOOKS}
-                                    location='installed_outgoing_webhooks'
-                                >
-                                    <FormattedMessage
-
-                                        // id='installed_outgoing_webhooks.help'
-                                        // defaultMessage='Use outgoing webhooks to connect external tools to Mattermost. {buildYourOwn} or visit the {appDirectory} to find self-hosted, third-party apps and integrations.'
-
-                                        id='developer_documentation.learn_more'
-                                        defaultMessage='Learn more'
-                                    />
-                                </ExternalLink>
-                            ),
-
-                            // buildYourOwn: (
-                            //     <ExternalLink
-                            //         href={DeveloperLinks.SETUP_OUTGOING_WEBHOOKS}
-                            //         location='installed_outgoing_webhooks'
-                            //     >
-                            //         <FormattedMessage
-                            //             id='installed_outgoing_webhooks.help.buildYourOwn'
-                            //             defaultMessage='Build your own'
-                            //         />
-                            //     </ExternalLink>
-                            // ),
-                            // appDirectory: (
-                            //     <ExternalLink
-                            //         href='https://mattermost.com/marketplace'
-                            //         location='installed_outgoing_webhooks'
-                            //     >
-                            //         <FormattedMessage
-                            //             id='installed_outgoing_webhooks.help.appDirectory'
-                            //             defaultMessage='App Directory'
-                            //         />
-                            //     </ExternalLink>
-                            // ),
-                        }}
-                    />
-                }
-                searchPlaceholder={localizeMessage({
-                    id: 'installed_outgoing_webhooks.search',
-                    defaultMessage: 'Search Outgoing Webhooks',
-                })}
-                loading={this.state.loading}
-            >
-                {(filter: string) => {
-                    const children = this.outgoingWebhooks(filter);
-                    return [children, children.length > 0];
-                }}
-            </BackstageList>
+                </div>
+                {webhookList}
+            </div>
         );
     }
 }

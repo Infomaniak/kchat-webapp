@@ -24,11 +24,7 @@ import EditIncomingWebhook from 'components/integrations/edit_incoming_webhook';
 import EditOauthApp from 'components/integrations/edit_oauth_app';
 import EditOutgoingWebhook from 'components/integrations/edit_outgoing_webhook';
 import InstalledIncomingWebhooks from 'components/integrations/installed_incoming_webhooks';
-import InstalledOauthApps from 'components/integrations/installed_oauth_apps';
 import InstalledOutgoingWebhooks from 'components/integrations/installed_outgoing_webhooks';
-import AddOutgoingOAuthConnection from 'components/integrations/outgoing_oauth_connections/add_outgoing_oauth_connection';
-import EditOutgoingOAuthConnection from 'components/integrations/outgoing_oauth_connections/edit_outgoing_oauth_connection';
-import InstalledOutgoingOAuthConnections from 'components/integrations/outgoing_oauth_connections/installed_outgoing_oauth_connections';
 
 import Pluggable from 'plugins/pluggable';
 
@@ -169,12 +165,6 @@ const BackstageController = (props: Props) => {
                     />
                     <BackstageRoute
                         extraProps={extraProps}
-                        exact={true}
-                        path={`${props.match.url}/oauth2-apps`}
-                        component={InstalledOauthApps}
-                    />
-                    <BackstageRoute
-                        extraProps={extraProps}
                         path={`${props.match.url}/oauth2-apps/add`}
                         component={AddOauthApp}
                     />
@@ -182,24 +172,6 @@ const BackstageController = (props: Props) => {
                         extraProps={extraProps}
                         path={`${props.match.url}/oauth2-apps/edit`}
                         component={EditOauthApp}
-                    />
-                    <BackstageRoute
-                        extraProps={extraProps}
-                        exact={true}
-                        path={`${props.match.url}/outgoing-oauth2-connections`}
-                        component={InstalledOutgoingOAuthConnections}
-                    />
-                    <BackstageRoute
-                        extraProps={extraProps}
-                        exact={true}
-                        path={`${props.match.url}/outgoing-oauth2-connections/add`}
-                        component={AddOutgoingOAuthConnection}
-                    />
-                    <BackstageRoute
-                        extraProps={extraProps}
-                        exact={true}
-                        path={`${props.match.url}/outgoing-oauth2-connections/edit`}
-                        component={EditOutgoingOAuthConnection}
                     />
                     <BackstageRoute
                         extraProps={extraProps}

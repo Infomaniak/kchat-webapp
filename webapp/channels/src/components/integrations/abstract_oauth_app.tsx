@@ -12,7 +12,6 @@ import type {Team} from '@mattermost/types/teams';
 
 import {Permissions} from 'mattermost-redux/constants';
 
-import BackstageHeader from 'components/backstage/components/backstage_header';
 import FormError from 'components/form_error';
 import SystemPermissionGate from 'components/permissions_gates/system_permission_gate';
 import SpinnerButton from 'components/spinner_button';
@@ -305,7 +304,7 @@ export default class AbstractOAuthApp extends React.PureComponent<Props, State> 
 
         return (
             <div className='backstage-content'>
-                <BackstageHeader>
+                <div className='backstage-header'>
                     <Link to={`/${this.props.team.name}/integrations/oauth2-apps`}>
                         <FormattedMessage
                             id='installed_oauth_apps.header'
@@ -316,7 +315,7 @@ export default class AbstractOAuthApp extends React.PureComponent<Props, State> 
                         id={headerToRender.id}
                         defaultMessage={headerToRender.defaultMessage}
                     />
-                </BackstageHeader>
+                </div>
                 <div className='backstage-form'>
                     {icon}
                     <form className='form-horizontal'>

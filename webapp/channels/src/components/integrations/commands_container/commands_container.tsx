@@ -97,7 +97,7 @@ export default class CommandsContainer extends React.PureComponent<Props, State>
 
     componentDidMount() {
         if (this.props.enableCommands) {
-            this.props.actions.loadCommandsAndProfilesForTeam(this.props.team?.id).then(
+            this.props.actions.loadCommandsAndProfilesForTeam(this.props.team?.id ?? '').then(
                 () => this.setState({loading: false}),
             );
         }

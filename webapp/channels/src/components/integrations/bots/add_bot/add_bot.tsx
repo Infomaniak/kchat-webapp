@@ -14,7 +14,6 @@ import {General} from 'mattermost-redux/constants';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import BackstageHeader from 'components/backstage/components/backstage_header';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
 import SpinnerButton from 'components/spinner_button';
@@ -456,7 +455,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
 
         return (
             <div className='backstage-content'>
-                <BackstageHeader>
+                <div className='backstage-header'>
                     <Link to={`/${this.props.team.name}/integrations/bots`}>
                         <FormattedMessage
                             id='bots.manage.header'
@@ -464,7 +463,7 @@ export default class AddBot extends React.PureComponent<Props, State> {
                         />
                     </Link>
                     {subtitle}
-                </BackstageHeader>
+                </div>
                 <div className='backstage-form'>
                     <form
                         className='form-horizontal'

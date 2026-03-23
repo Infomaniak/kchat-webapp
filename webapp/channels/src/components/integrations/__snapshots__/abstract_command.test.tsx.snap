@@ -4,20 +4,6 @@ exports[`components/integrations/AbstractCommand should match snapshot 1`] = `
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
-    <Link
-      to="/test/integrations/commands"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Slash Commands"
-        id="installed_command.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="Header"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -174,16 +160,6 @@ exports[`components/integrations/AbstractCommand should match snapshot 1`] = `
         <div
           className="col-md-5 col-sm-8"
         >
-          <OAuthConnectionAudienceInput
-            onChange={[Function]}
-            placeholder={
-              Object {
-                "defaultMessage": "Must start with http:// or https://",
-                "id": "add_command.url.placeholder",
-              }
-            }
-            value="https://google.com/command"
-          />
           <div
             className="form__help"
           >
@@ -488,19 +464,6 @@ exports[`components/integrations/AbstractCommand should match snapshot when head
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
-    <Link
-      to="/test/integrations/commands"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Slash Commands"
-        id="installed_command.header"
-      />
-    </Link>
-    <span>
-      Header as string
-    </span>
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -657,16 +620,6 @@ exports[`components/integrations/AbstractCommand should match snapshot when head
         <div
           className="col-md-5 col-sm-8"
         >
-          <OAuthConnectionAudienceInput
-            onChange={[Function]}
-            placeholder={
-              Object {
-                "defaultMessage": "Must start with http:// or https://",
-                "id": "add_command.url.placeholder",
-              }
-            }
-            value="https://google.com/command"
-          />
           <div
             className="form__help"
           >
@@ -965,20 +918,6 @@ exports[`components/integrations/AbstractCommand should match snapshot, displays
 <div
   className="backstage-content row"
 >
-  <BackstageHeader>
-    <Link
-      to="/test/integrations/commands"
-    >
-      <MemoizedFormattedMessage
-        defaultMessage="Slash Commands"
-        id="installed_command.header"
-      />
-    </Link>
-    <MemoizedFormattedMessage
-      defaultMessage="Header"
-      id="Header"
-    />
-  </BackstageHeader>
   <div
     className="backstage-form"
   >
@@ -1135,16 +1074,6 @@ exports[`components/integrations/AbstractCommand should match snapshot, displays
         <div
           className="col-md-5 col-sm-8"
         >
-          <OAuthConnectionAudienceInput
-            onChange={[Function]}
-            placeholder={
-              Object {
-                "defaultMessage": "Must start with http:// or https://",
-                "id": "add_command.url.placeholder",
-              }
-            }
-            value="https://google.com/command"
-          />
           <div
             className="form__help"
           >

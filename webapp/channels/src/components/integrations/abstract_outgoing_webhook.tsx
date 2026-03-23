@@ -10,7 +10,6 @@ import {Link} from 'react-router-dom';
 import type {OutgoingWebhook} from '@mattermost/types/integrations';
 import type {Team} from '@mattermost/types/teams';
 
-import BackstageHeader from 'components/backstage/components/backstage_header';
 import ChannelSelect from 'components/channel_select';
 import ExternalLink from 'components/external_link';
 import FormError from 'components/form_error';
@@ -265,24 +264,11 @@ export default class AbstractOutgoingWebhook extends React.PureComponent<Props, 
         const contentTypeOption1 = 'application/x-www-form-urlencoded';
         const contentTypeOption2 = 'application/json';
 
-        const headerToRender = this.props.header;
         const footerToRender = this.props.footer;
         const renderExtra = this.props.renderExtra;
 
         return (
             <div className='backstage-content'>
-                <BackstageHeader>
-                    <Link to={`/${this.props.team.name}/integrations/outgoing_webhooks`}>
-                        <FormattedMessage
-                            id='installed_outgoing_webhooks.header'
-                            defaultMessage='Outgoing Webhooks'
-                        />
-                    </Link>
-                    <FormattedMessage
-                        id={headerToRender.id}
-                        defaultMessage={headerToRender.defaultMessage}
-                    />
-                </BackstageHeader>
                 <div className='backstage-form'>
                     <form
                         className='form-horizontal'
