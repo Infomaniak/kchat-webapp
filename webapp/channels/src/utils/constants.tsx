@@ -193,7 +193,7 @@ export const TrialPeriodDays = {
 export const suitePluginIds = {
     playbooks: 'playbooks',
     focalboard: 'focalboard',
-
+    boards: 'boards',
     apps: 'com.mattermost.apps',
     calls: 'com.mattermost.calls',
     nps: 'com.mattermost.nps',

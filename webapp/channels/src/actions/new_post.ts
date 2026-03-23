@@ -24,15 +24,14 @@ import {
     shouldIgnorePost,
 } from 'mattermost-redux/utils/post_utils';
 
-import {sendDesktopNotification} from 'actions/notification_actions';
 import {updateThreadLastOpened} from 'actions/views/threads';
 import {isThreadOpen, makeGetThreadLastViewedAt} from 'selectors/views/threads';
 
 import {ActionTypes} from 'utils/constants';
 
-import WebSocketClient from 'client/web_websocket_client';
-
 import type {DispatchFunc, GetStateFunc, ActionFunc, ActionFuncAsync} from 'types/store';
+
+import {sendDesktopNotification} from './notification_actions';
 
 export type NewPostMessageProps = {
     channel_type: ChannelType;
@@ -59,9 +58,6 @@ export function completePostReceive(post: Post, websocketMessageProps: NewPostMe
             const result = await dispatch(PostActions.getPostThread(post.root_id));
 
             if ('error' in result) {
-                if (websocketMessageProps.should_ack) {
-                    WebSocketClient.acknowledgePostedNotification(post.id, 'error', 'missing_root_post', result.error);
-                }
                 return {error: result.error};
             }
         }
@@ -95,12 +91,7 @@ export function completePostReceive(post: Post, websocketMessageProps: NewPostMe
             dispatch(setThreadRead(post));
         }
 
-        const {status, reason, data} = (await dispatch(sendDesktopNotification(post, websocketMessageProps))).data!;
-
-        // Only ACK for posts that require it
-        if (websocketMessageProps.should_ack) {
-            WebSocketClient.acknowledgePostedNotification(post.id, status, reason, data);
-        }
+        await dispatch(sendDesktopNotification(post, websocketMessageProps));
 
         return {data: true};
     };

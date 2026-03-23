@@ -75,23 +75,6 @@ export function hideSwitchCallModal(): ActionFunc {
     };
 }
 
-export function leaveCallInChannel(channelID: string, dialingID: string): ActionFuncAsync {
-    return async (dispatch, getState) => {
-        Client4.leaveMeet(dialingID);
-        dispatch({
-            type: ActionTypes.VOICE_CHANNEL_USER_DISCONNECTED,
-            data: {
-                channelID,
-                userID: getCurrentUserId(getState()),
-                currentUserID: getCurrentUserId(getState()),
-                callID: dialingID,
-            },
-        });
-
-        return {data: true};
-    };
-}
-
 //used only to answer last call brought by the dialing modal
 export function joinCallInChannel(): ActionFuncAsync {
     return async (dispatch, getState) => {

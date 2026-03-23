@@ -21,6 +21,7 @@ export enum LhsItemType {
 export enum LhsPage {
     Drafts = 'drafts',
     Threads = 'threads',
+    Insights = 'insights'
 }
 
 export type StaticPage = {

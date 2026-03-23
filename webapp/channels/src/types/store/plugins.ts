@@ -106,6 +106,11 @@ export type PluginsState = {
     userSettings: {
         [pluginId: string]: PluginConfiguration;
     };
+
+    insightsHandlers: {
+        focalboard: any;
+        boards: any;
+    };
 };
 
 export type Menu = {

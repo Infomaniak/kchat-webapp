@@ -106,9 +106,10 @@ describe('components/activity_and_insights/insights/top_threads', () => {
                 },
                 myMembers: {
                     channel1: {
-                        id: 'channel1',
-                        team_id: 'team_id1',
-                        name: 'channel1',
+                        channel_id: 'channel1',
+                        user_id: 'current_user_id',
+                        roles: 'channel_user',
+                        last_viewed_at: 0,
                     },
                 },
             },

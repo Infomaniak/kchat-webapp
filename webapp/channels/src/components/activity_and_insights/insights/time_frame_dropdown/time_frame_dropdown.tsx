@@ -3,7 +3,7 @@
 
 import Icon from '@infomaniak/compass-components/foundations/icon/Icon';
 import React, {memo, useCallback} from 'react';
-import type {ValueType} from 'react-select';
+import type {SingleValue} from 'react-select';
 import ReactSelect from 'react-select';
 
 import {TimeFrames} from '@mattermost/types/insights';
@@ -46,7 +46,7 @@ const TimeFrameDropdown = (props: Props) => {
         }),
     };
 
-    const onTimeFrameChange = (selectedOption: ValueType<SelectOption>) => {
+    const onTimeFrameChange = (selectedOption: SingleValue<SelectOption>) => {
         if (selectedOption && 'value' in selectedOption) {
             trackEvent('insights', `time_frame_selected_${selectedOption.value}`);
             props.setTimeFrame(selectedOption);
