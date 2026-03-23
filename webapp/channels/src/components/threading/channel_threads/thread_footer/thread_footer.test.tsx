@@ -210,14 +210,16 @@ describe('components/threading/channel_threads/thread_footer', () => {
             mountOptions,
         );
         wrapper.find('button.separated').first().simulate('click');
-        expect(store.getActions()).toEqual([
-            {
-                type: 'SELECT_POST',
-                channelId: 'cid',
-                postId: 'postthreadid',
-                timestamp: 1588512000000,
-            },
-        ]);
+        const actions = store.getActions();
+        expect(actions).toHaveLength(1);
+        expect(actions[0]).toMatchObject({
+            type: 'SELECT_POST',
+            channelId: 'cid',
+            postId: 'postthreadid',
+            timestamp: 1588512000000,
+        });
+        expect(actions[0].focusIntent).toMatchObject({target: 'textbox'});
+        expect(actions[0].focusIntent.requestId).toEqual(expect.any(String));
     });
 
     test('should have a follow button', () => {

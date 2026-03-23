@@ -30,7 +30,7 @@ import {isMac} from 'utils/user_agent';
 
 import RhsPlugin from 'plugins/rhs_plugin';
 
-import type {RhsState} from 'types/store/rhs';
+import type {RhsFocusIntent, RhsState} from 'types/store/rhs';
 
 export type Props = {
     isExpanded: boolean;
@@ -51,6 +51,7 @@ export type Props = {
     isSettings: boolean;
     previousRhsState: RhsState;
     rhsChannel?: Channel;
+    rhsFocusIntent: RhsFocusIntent;
     selectedPostId: string;
     selectedPostCardId: string;
     isSavedPosts?: boolean;
@@ -165,6 +166,12 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
         if (this.props.isOpen && (contentChanged || (!wasOpen && isOpen))) {
             this.previousActiveElement = document.activeElement as HTMLElement;
 
+            // IK: Only focus RHS if rhsFocusIntent explicitly requests first_focusable
+            // If null (e.g., after unsuppress) or 'textbox', let other components handle focus
+            if (this.props.rhsFocusIntent?.target !== 'first_focusable') {
+                return;
+            }
+
             // Focus the sidebar after a tick
             setTimeout(() => {
                 if (this.sidebarRight.current) {
@@ -174,7 +181,6 @@ export default class SidebarRight extends React.PureComponent<Props, State> {
                         const firstFocusable = getFirstFocusableChild(rhsContainer || searchContainer);
                         focusElement(firstFocusable || rhsContainer, true);
                     } else {
-                        // Fallback: if rhsContainer isn't found, use sidebarRight.current directly.
                         const firstFocusable = getFirstFocusableChild(this.sidebarRight.current);
                         focusElement(firstFocusable || this.sidebarRight.current, true);
                     }

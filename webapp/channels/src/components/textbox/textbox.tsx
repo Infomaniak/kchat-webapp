@@ -255,6 +255,9 @@ export default class Textbox extends React.PureComponent<Props> {
 
             // reset character count warning
             this.checkMessageLength(textbox.value);
+        } else {
+            // IK: Retry focus if ref not ready yet (happens during rapid navigation)
+            requestAnimationFrame(() => this.focus());
         }
     };
 

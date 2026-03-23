@@ -2,12 +2,12 @@
 // See LICENSE.txt for license information.
 
 import type React from 'react';
-import {useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {focusedRHS} from 'actions/views/rhs';
-import {getIsRhsExpanded, getIsRhsOpen} from 'selectors/rhs';
-import {getShouldFocusRHS} from 'selectors/views/rhs';
+import {getIsRhsExpanded, getIsRhsOpen, getRhsSuppressed} from 'selectors/rhs';
+import {getRhsFocusIntent} from 'selectors/views/rhs';
 
 import useDidUpdate from 'components/common/hooks/useDidUpdate';
 import type TextboxClass from 'components/textbox/textbox';
@@ -23,21 +23,22 @@ const useTextboxFocus = (
 ) => {
     const dispatch = useDispatch();
 
+    const hasMounted = useRef(false);
+
     const rhsExpanded = useSelector(getIsRhsExpanded);
     const rhsOpen = useSelector(getIsRhsOpen);
-
-    // We force the selector to always think it is the same value to avoid re-renders
-    // because we only use this value during mount.
-    const shouldFocusRHS = useSelector(getShouldFocusRHS, () => true);
+    const rhsFocusIntent = useSelector(getRhsFocusIntent);
+    const rhsSuppressed = useSelector(getRhsSuppressed);
+    const prevRhsSuppressed = useRef(rhsSuppressed);
 
     const focusTextbox = useCallback((keepFocus = false) => {
         const postTextboxDisabled = !canPost;
         if (textboxRef.current && postTextboxDisabled) {
-            textboxRef.current.blur(); // Fixes Firefox bug which causes keyboard shortcuts to be ignored (MM-22482)
+            textboxRef.current?.blur();
             return;
         }
         if (textboxRef.current && (keepFocus || !UserAgent.isMobile())) {
-            textboxRef.current.focus();
+            textboxRef.current?.focus();
         }
     }, [canPost, textboxRef]);
 
@@ -77,20 +78,43 @@ const useTextboxFocus = (
         };
     }, [focusTextboxIfNecessary]);
 
-    // Focus on textbox on channel switch
+    // IK: Focus on textbox on channel switch (center channel only)
     useDidUpdate(() => {
-        focusTextbox();
-    }, [channelId]);
-
-    // Focus on mount
-    useEffect(() => {
-        if (isRHS && shouldFocusRHS) {
-            focusTextbox();
-            dispatch(focusedRHS());
-        } else if (!isRHS && !shouldFocusRHS) {
+        if (!isRHS) {
             focusTextbox();
         }
-    }, []);
+    }, [channelId, isRHS]);
+
+    // IK: Focus on mount based on focus intent
+    useEffect(() => {
+        if (isRHS) {
+            if (rhsFocusIntent?.target === 'textbox') {
+                focusTextbox();
+                dispatch(focusedRHS());
+            }
+            return;
+        }
+
+        // IK: Focus main textbox on mount only if no RHS focus intent (prevents RHS from stealing focus when navigating from Threads)
+        if (!rhsFocusIntent && !hasMounted.current) {
+            focusTextbox();
+        }
+
+        if (!hasMounted.current) {
+            hasMounted.current = true;
+        }
+    }, [isRHS, rhsFocusIntent, focusTextbox, dispatch]);
+
+    // IK: Focus main textbox when leaving Threads/Drafts page (rhsSuppressed goes from true to false)
+    // This handles the case where the component is already mounted and channelId doesn't change
+    useEffect(() => {
+        const wasSupressed = prevRhsSuppressed.current;
+        prevRhsSuppressed.current = rhsSuppressed;
+
+        if (!isRHS && wasSupressed && !rhsSuppressed && !rhsFocusIntent) {
+            focusTextbox();
+        }
+    }, [isRHS, rhsSuppressed, rhsFocusIntent, focusTextbox]);
 
     return focusTextbox;
 };

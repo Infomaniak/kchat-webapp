@@ -12,10 +12,10 @@ import {
 
 import {SidebarSize} from 'components/resizable_sidebar/constants';
 
-import {ActionTypes, RHSStates, Threads} from 'utils/constants';
+import {ActionTypes, RHSStates} from 'utils/constants';
 
 import type {MMAction} from 'types/store';
-import type {RhsState} from 'types/store/rhs';
+import type {RhsFocusIntent, RhsState} from 'types/store/rhs';
 
 function selectedPostId(state = '', action: MMAction) {
     switch (action.type) {
@@ -408,16 +408,20 @@ function editChannelMembers(state = false, action: MMAction) {
     }
 }
 
-function shouldFocusRHS(state = false, action: MMAction) {
+// IK: Focus intent for RHS - replaces shouldFocusRHS for better focus management
+function rhsFocusIntent(state: RhsFocusIntent = null, action: MMAction): RhsFocusIntent {
     switch (action.type) {
     case ActionTypes.SELECT_POST:
-        return Boolean(action.postId);
-    case Threads.CHANGED_SELECTED_THREAD:
-        return Boolean(action.data.thread_id);
-    case ActionTypes.HIGHLIGHT_REPLY:
-        return false;
+        return action.focusIntent ?? null;
+    case ActionTypes.UPDATE_RHS_STATE:
+        return action.focusIntent ?? null;
     case ActionTypes.RHS_FOCUSED:
-        return false;
+        return null;
+    case ActionTypes.HIGHLIGHT_REPLY:
+        return null;
+    case ActionTypes.UNSUPPRESS_RHS:
+        // IK: Reset intent when leaving Threads page to prevent stale intent from blocking main textbox focus
+        return null;
     default:
         return state;
     }
@@ -445,5 +449,5 @@ export default combineReducers({
     isSidebarExpanded,
     isMenuOpen,
     editChannelMembers,
-    shouldFocusRHS,
+    rhsFocusIntent,
 });

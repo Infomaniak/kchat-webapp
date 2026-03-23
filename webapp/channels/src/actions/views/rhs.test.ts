@@ -154,6 +154,10 @@ describe('rhs view actions', () => {
                 type: ActionTypes.UPDATE_RHS_STATE,
                 state: RHSStates.PIN,
                 channelId: currentChannelId,
+                focusIntent: {
+                    target: 'first_focusable',
+                    requestId: expect.any(String),
+                },
             };
 
             expect(store.getActions()).toEqual([action]);
@@ -166,6 +170,10 @@ describe('rhs view actions', () => {
                 state: RHSStates.PIN,
                 channelId: 'channelId',
                 previousRhsState: RHSStates.CHANNEL_INFO,
+                focusIntent: {
+                    target: 'first_focusable',
+                    requestId: expect.any(String),
+                },
             };
 
             expect(store.getActions()).toEqual([action]);
@@ -199,6 +207,10 @@ describe('rhs view actions', () => {
                     channelId: post.channel_id,
                     previousRhsState: RHSStates.FLAG,
                     timestamp: POST_CREATED_TIME,
+                    focusIntent: {
+                        target: 'textbox',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 };
 
                 expect(store.getActions()[0]).toEqual(action);
@@ -329,6 +341,10 @@ describe('rhs view actions', () => {
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.FLAG,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
                 {
                     type: 'MOCK_GET_FLAGGED_POSTS',
@@ -375,6 +391,10 @@ describe('rhs view actions', () => {
                     channelId: currentChannelId,
                     state: RHSStates.PIN,
                     previousRhsState: null,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
                 {
                     type: 'MOCK_GET_PINNED_POSTS',
@@ -421,6 +441,10 @@ describe('rhs view actions', () => {
                     channelId,
                     state: RHSStates.PIN,
                     previousRhsState: null,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
                 {
                     type: 'MOCK_GET_PINNED_POSTS',
@@ -459,6 +483,10 @@ describe('rhs view actions', () => {
                     channelId: currentChannelId,
                     state: RHSStates.CHANNEL_MEMBERS,
                     previousRhsState: null,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
             ]);
         });
@@ -476,6 +504,10 @@ describe('rhs view actions', () => {
                     postId: post.root_id || post.id,
                     channelId: post.channel_id,
                     timestamp: POST_CREATED_TIME,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
             ]);
         });
@@ -500,6 +532,10 @@ describe('rhs view actions', () => {
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.MENTION,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
             ]));
 
@@ -657,6 +693,10 @@ describe('rhs view actions', () => {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.PLUGIN,
                     pluggableId,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 });
 
                 expect(store.getActions()).toEqual(compareStore.getActions());
@@ -781,6 +821,10 @@ describe('rhs view actions', () => {
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.MENTION,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
             ]));
 
@@ -803,6 +847,10 @@ describe('rhs view actions', () => {
                     channelId: currentChannelId,
                     state: RHSStates.PIN,
                     previousRhsState: null,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
                 {
                     type: 'MOCK_GET_PINNED_POSTS',
@@ -826,6 +874,10 @@ describe('rhs view actions', () => {
                 {
                     type: ActionTypes.UPDATE_RHS_STATE,
                     state: RHSStates.FLAG,
+                    focusIntent: {
+                        target: 'first_focusable',
+                        requestId: '11111111-1111-4111-8111-111111111111',
+                    },
                 },
                 {
                     type: 'MOCK_GET_FLAGGED_POSTS',
@@ -845,6 +897,10 @@ describe('rhs view actions', () => {
                 channelId: previousSelectedPost.channel_id,
                 previousRhsState: previousState,
                 timestamp: POST_CREATED_TIME,
+                focusIntent: {
+                    target: 'textbox',
+                    requestId: '11111111-1111-4111-8111-111111111111',
+                },
             });
 
             expect(store.getActions()).toEqual(compareStore.getActions());
@@ -945,6 +1001,12 @@ describe('rhs view actions', () => {
                 postId,
                 timestamp: POST_CREATED_TIME + delay,
                 type: ActionTypes.SELECT_POST,
+                channelId: undefined,
+                previousRhsState: undefined,
+                focusIntent: {
+                    target: 'textbox',
+                    requestId: '11111111-1111-4111-8111-111111111111',
+                },
             }, {
                 postId,
                 type: ActionTypes.HIGHLIGHT_REPLY,

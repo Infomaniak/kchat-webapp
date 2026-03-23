@@ -153,14 +153,15 @@ describe('executeCommand', () => {
         test('should fire the UPDATE_RHS_SEARCH_TERMS with the terms', async () => {
             store.dispatch(executeCommand('/search foo bar', []));
 
-            expect(store.getActions()).toEqual([
-                {type: 'UPDATE_RHS_SEARCH_TERMS', terms: 'foo bar'},
-                {type: 'UPDATE_RHS_STATE', state: 'search'},
-                {type: 'UPDATE_RHS_SEARCH_RESULTS_TERMS', terms: ''},
-                {type: 'UPDATE_RHS_SEARCH_RESULTS_TYPE', searchType: ''},
-                {type: 'SEARCH_POSTS_REQUEST', isGettingMore: false},
-                {type: 'SEARCH_FILES_REQUEST', isGettingMore: false},
-            ]);
+            const actions = store.getActions();
+            expect(actions[0]).toEqual({type: 'UPDATE_RHS_SEARCH_TERMS', terms: 'foo bar'});
+            expect(actions[1]).toMatchObject({type: 'UPDATE_RHS_STATE', state: 'search'});
+            expect(actions[1].focusIntent).toMatchObject({target: 'first_focusable'});
+            expect(actions[1].focusIntent.requestId).toEqual(expect.any(String));
+            expect(actions[2]).toEqual({type: 'UPDATE_RHS_SEARCH_RESULTS_TERMS', terms: ''});
+            expect(actions[3]).toEqual({type: 'UPDATE_RHS_SEARCH_RESULTS_TYPE', searchType: ''});
+            expect(actions[4]).toEqual({type: 'SEARCH_POSTS_REQUEST', isGettingMore: false});
+            expect(actions[5]).toEqual({type: 'SEARCH_FILES_REQUEST', isGettingMore: false});
         });
     });
 

@@ -423,14 +423,15 @@ describe('Actions.Posts', () => {
         const testStore = mockStore(initialState);
 
         await testStore.dispatch(Actions.searchForTerm('hello'));
-        expect(testStore.getActions()).toEqual([
-            {terms: 'hello', type: 'UPDATE_RHS_SEARCH_TERMS'},
-            {state: 'search', type: 'UPDATE_RHS_STATE'},
-            {terms: '', type: 'UPDATE_RHS_SEARCH_RESULTS_TERMS'},
-            {searchType: '', type: 'UPDATE_RHS_SEARCH_RESULTS_TYPE'},
-            {isGettingMore: false, type: 'SEARCH_POSTS_REQUEST'},
-            {isGettingMore: false, type: 'SEARCH_FILES_REQUEST'},
-        ]);
+        const actions = testStore.getActions();
+        expect(actions[0]).toEqual({terms: 'hello', type: 'UPDATE_RHS_SEARCH_TERMS'});
+        expect(actions[1]).toMatchObject({state: 'search', type: 'UPDATE_RHS_STATE'});
+        expect(actions[1].focusIntent).toMatchObject({target: 'first_focusable'});
+        expect(actions[1].focusIntent.requestId).toEqual(expect.any(String));
+        expect(actions[2]).toEqual({terms: '', type: 'UPDATE_RHS_SEARCH_RESULTS_TERMS'});
+        expect(actions[3]).toEqual({searchType: '', type: 'UPDATE_RHS_SEARCH_RESULTS_TYPE'});
+        expect(actions[4]).toEqual({isGettingMore: false, type: 'SEARCH_POSTS_REQUEST'});
+        expect(actions[5]).toEqual({isGettingMore: false, type: 'SEARCH_FILES_REQUEST'});
     });
 
     describe('createPost', () => {
