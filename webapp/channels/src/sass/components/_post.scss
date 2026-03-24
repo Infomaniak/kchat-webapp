@@ -638,6 +638,14 @@
         .post__body {
             color: rgba(var(--center-channel-color-rgb), 0.75);
         }
+
+        .post__img > :hover {
+            cursor: default;
+        }
+
+        .user-popover {
+            cursor: default;
+        }
     }
 
     &:hover,
