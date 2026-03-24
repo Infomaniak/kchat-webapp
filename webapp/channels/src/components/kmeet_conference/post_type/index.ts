@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 
 import type {Post} from '@mattermost/types/posts';
 
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/common';
 import {getConferenceByChannelId, getIsAnyUserInConference} from 'mattermost-redux/selectors/entities/kmeet_calls';
 import {callDialingEnabled} from 'mattermost-redux/selectors/entities/preferences';
@@ -27,11 +28,15 @@ const mapStateToProps = (state: GlobalState, ownProps: OwnProps) => {
     const conference = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? getConferenceByChannelId(state, currentChannelID) : undefined;
     const hasConferenceStarted = (ownProps.post.props.conference_id && !ownProps.post.props.end_at) ? getIsAnyUserInConference(state, currentChannelID) : undefined;
 
+    const channel = getCurrentChannel(state);
+    const isChannelArchived = Boolean(channel && channel.delete_at !== 0);
+
     return {
         ...ownProps,
         conference,
         hasConferenceStarted,
         isDialingEnabled: callDialingEnabled(state),
+        isChannelArchived,
     };
 };
 

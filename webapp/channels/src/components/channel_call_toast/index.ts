@@ -6,7 +6,7 @@ import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
 import {Client4} from 'mattermost-redux/client';
-import {getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
+import {getCurrentChannel, getCurrentChannelId} from 'mattermost-redux/selectors/entities/channels';
 import {getUser} from 'mattermost-redux/selectors/entities/users';
 
 import {startOrJoinCallInChannelV2} from 'actions/calls';
@@ -19,6 +19,8 @@ import ChannelCallToast from './component';
 const mapStateToProps = (state: GlobalState) => {
     let hasCall = false;
     const currentID = getCurrentChannelId(state);
+    const channel = getCurrentChannel(state);
+    const isChannelArchived = Boolean(channel && channel.delete_at !== 0);
     const connectedID = connectedChannelID(state) || '';
     const channels = voiceConnectedChannels(state);
     const connectedConfID = connectedCallID(state);
@@ -54,7 +56,7 @@ const mapStateToProps = (state: GlobalState) => {
     return {
         currChannelID: currentID,
         connectedID,
-        hasCall,
+        hasCall: isChannelArchived ? false : hasCall,
         startAt: voiceChannelCallStartAt(state, currentID),
         pictures,
         profiles,
