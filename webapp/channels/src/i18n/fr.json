@@ -896,7 +896,7 @@
   "create_team.team_url.teamUrl": "URL d’équipe",
   "create_team.team_url.unavailable": "Cette URL est déjà prise ou est indisponible. Veuillez en spécifier une autre.",
   "create_team.team_url.webAddress": "Spécifiez l'URL que vous souhaitez pour votre nouvelle équipe :",
-  "createComment.threadFromArchivedChannelMessage": "Vous consultez un fil de discussion depuis un <b>canal archivé</b>. Aucun nouveau message ne peut être posté.",
+  "createComment.threadFromArchivedChannelMessage": "Vous consultez un fil de discussion depuis un <strong>canal archivé</strong>. Aucun nouveau message ne peut être posté.",
   "createComment.threadFromDeactivatedUserMessage": "Vous consultez un canal archivé avec un <b>utilisateur désactivé</b>. Aucun nouveau message ne peut être posté.",
   "custom_emoji.header": "Émoticônes personnalisées",
   "custom_status.expiry_dropdown.choose_date_and_time": "Choisir une date et une heure",
