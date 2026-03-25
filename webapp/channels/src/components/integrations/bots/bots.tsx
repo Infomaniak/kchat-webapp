@@ -11,7 +11,12 @@ import type {RelationOneToOne} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+
+import BackstageList from 'components/backstage/components/backstage_list';
+
 import Constants from 'utils/constants';
+import * as Utils from 'utils/utils';
 
 import Bot, {matchesFilter} from './bot';
 
@@ -207,17 +212,66 @@ export default class Bots extends React.PureComponent<Props, State> {
     };
 
     public render(): JSX.Element {
-        const [sections] = this.bots();
         return (
-            <div className='backstage-content'>
-                <div className='backstage-header'>
+            <BackstageList
+                header={
                     <FormattedMessage
                         id='bots.manage.header'
                         defaultMessage='Bot Accounts'
                     />
-                </div>
-                {sections}
-            </div>
+                }
+                addText={this.props.createBots &&
+                    <FormattedMessage
+                        id='bots.manage.add'
+                        defaultMessage='Add Bot Account'
+                    />
+                }
+                addLink={'/' + this.props.team.name + '/integrations/bots/add'}
+                addButtonId='addBotAccount'
+                emptyText={
+                    <FormattedMessage
+                        id='bots.manage.empty'
+                        defaultMessage='No bot accounts found'
+                    />
+                }
+                emptyTextSearch={
+                    <FormattedMessage
+                        id='bots.emptySearch'
+                        defaultMessage='No bot accounts match <b>{searchTerm}</b>'
+                        values={{
+                            b: (chunks: string) => <b>{chunks}</b>,
+                        }}
+                    />
+                }
+                helpText={
+                    <>
+                        <FormattedMessage
+                            id='bots.manage.help1'
+                            defaultMessage='Use {botAccounts} to integrate with Mattermost through plugins or the API. Bot accounts are available to everyone on your server. {learnMore}'
+                            values={{
+                                botAccounts: (
+                                    <FormattedMessage
+                                        id='bots.manage.bot_accounts'
+                                        defaultMessage='Bot Accounts'
+                                    />
+                                ),
+                                learnMore: (
+                                    <a onClick={redirectToDeveloperDocumentation}>
+                                        <FormattedMessage
+                                            id='developer_documentation.learn_more'
+                                            defaultMessage='Learn more'
+                                        />
+                                    </a>
+                                ),
+                            }}
+                        />
+                    </>
+                }
+                searchPlaceholder={Utils.localizeMessage({id: 'bots.manage.search', defaultMessage: 'Search Bot Accounts'})}
+                loading={this.state.loading}
+            >
+                {this.bots}
+            </BackstageList>
         );
     }
 }
