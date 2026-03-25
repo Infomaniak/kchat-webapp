@@ -112,6 +112,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "currentPresence": "",
         "currentTeam": "",
         "currentTeamUser": "",
+        "currentThreadPresence": "",
         "currentUser": null,
         "errorCallback": null,
         "errorCount": 0,
@@ -133,6 +134,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseSequence": 1,
         "socketId": null,
         "teamChannel": null,
+        "threadPresenceChannel": null,
         "userChannel": null,
         "userTeamChannel": null,
       }
@@ -177,6 +179,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "currentPresence": "",
         "currentTeam": "",
         "currentTeamUser": "",
+        "currentThreadPresence": "",
         "currentUser": null,
         "errorCallback": null,
         "errorCount": 0,
@@ -198,6 +201,7 @@ exports[`PostBodyAdditionalContent with a normal link Should render the plugin c
         "responseSequence": 1,
         "socketId": null,
         "teamChannel": null,
+        "threadPresenceChannel": null,
         "userChannel": null,
         "userTeamChannel": null,
       }

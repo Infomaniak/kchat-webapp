@@ -17,6 +17,7 @@ describe('components/MsgTyping', () => {
         userStoppedTyping: jest.fn(),
         userStartedRecording: jest.fn(),
         userStoppedRecording: jest.fn(),
+        rhsSelectedPostId: '',
     };
 
     test('should match snapshot, on nobody typing', () => {

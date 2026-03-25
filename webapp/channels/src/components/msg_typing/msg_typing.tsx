@@ -14,6 +14,7 @@ type Props = {
     channelId: string;
     currentUserId: string;
     rootId: string;
+    rhsSelectedPostId: string;
     typingUsers: string[];
     recordingUsers: string[];
     userStartedTyping: (userId: string, channelId: string, rootId: string, now: number) => void;
@@ -61,7 +62,7 @@ const msgTypingStrings: Record<string, Record<string, MessageDescriptor>> = {
 };
 
 export default function MsgTyping(props: Props) {
-    const {userStartedTyping, userStoppedTyping, currentUserId, userStoppedRecording, userStartedRecording} = props;
+    const {userStartedTyping, userStoppedTyping, currentUserId, userStoppedRecording, userStartedRecording, rhsSelectedPostId} = props;
 
     useWebSocket({
         handler: useCallback((msg: WebSocketMessage) => {
@@ -78,23 +79,30 @@ export default function MsgTyping(props: Props) {
                 return;
             }
 
+            const isThreadOpenInRhs = rootId && rhsSelectedPostId === rootId;
+            const effectiveRootId = isThreadOpenInRhs ? rootId : '';
+
             switch (msg.event) {
             case SocketEvents.TYPING:
-                userStartedTyping(userId, channelId, rootId, date);
+                userStartedTyping(userId, channelId, effectiveRootId, date);
                 break;
             case SocketEvents.RECORDING:
-                userStartedRecording(userId, channelId, rootId, date);
+                userStartedRecording(userId, channelId, effectiveRootId, date);
                 break;
             case SocketEvents.POSTED:
                 if (props.channelId === channelId && props.rootId === rootId) {
                     userStoppedTyping(userId, channelId, rootId, Date.now());
                     userStoppedRecording(userId, channelId, rootId, Date.now());
                 }
+                if (rootId && props.channelId === channelId) {
+                    userStoppedTyping(userId, channelId, '', Date.now());
+                    userStoppedRecording(userId, channelId, '', Date.now());
+                }
                 break;
             default:
                 break;
             }
-        }, [currentUserId, userStartedTyping, userStartedRecording, props.channelId, props.rootId, userStoppedTyping, userStoppedRecording]),
+        }, [currentUserId, userStartedTyping, userStartedRecording, props.channelId, props.rootId, userStoppedTyping, userStoppedRecording, rhsSelectedPostId]),
     });
 
     const getInputText = (users: string[], eventType: EventType) => {

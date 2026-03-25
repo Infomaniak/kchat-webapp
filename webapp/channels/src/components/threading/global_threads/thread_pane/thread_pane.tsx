@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {DotsVerticalIcon} from '@infomaniak/compass-icons/components';
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import type {ReactNode} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector, useDispatch} from 'react-redux';
@@ -15,6 +15,8 @@ import {getPost, makeGetPostsForThread} from 'mattermost-redux/selectors/entitie
 
 import Header from 'components/widgets/header';
 import WithTooltip from 'components/with_tooltip';
+
+import WebSocketClient from 'client/web_websocket_client';
 
 import type {GlobalState} from 'types/store';
 
@@ -53,6 +55,15 @@ const ThreadPane = ({
             channel_id: channelId,
         },
     } = thread;
+
+    useEffect(() => {
+        if (channelId) {
+            WebSocketClient.bindThreadPresenceChannel(channelId);
+        }
+        return () => {
+            WebSocketClient.unbindThreadPresenceChannel();
+        };
+    }, [channelId]);
 
     const channel = useSelector((state: GlobalState) => getChannel(state, channelId));
     const post = useSelector((state: GlobalState) => getPost(state, thread.id));

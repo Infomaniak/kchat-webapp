@@ -39,9 +39,11 @@ export default class WebSocketClient {
     private userChannel: Channel | null;
     private userTeamChannel: Channel | null;
     private presenceChannel: Channel | null;
+    private threadPresenceChannel: Channel | null;
     private connectionUrl: string | null;
     private socketId: string | null;
     private currentPresence: string;
+    private currentThreadPresence: string;
     private currentUser: number | null;
     private currentTeamUser: string;
     private currentTeam: string;
@@ -114,6 +116,7 @@ export default class WebSocketClient {
         this.userChannel = null;
         this.userTeamChannel = null;
         this.presenceChannel = null;
+        this.threadPresenceChannel = null;
         this.connectionUrl = null;
         this.responseSequence = 1;
         this.connectFailCount = 0;
@@ -122,6 +125,7 @@ export default class WebSocketClient {
         this.connectionId = '';
         this.socketId = null;
         this.currentPresence = '';
+        this.currentThreadPresence = '';
         this.currentUser = null;
         this.currentTeamUser = '';
         this.currentTeam = '';
@@ -151,11 +155,14 @@ export default class WebSocketClient {
         this.userTeamChannel?.unbind('pusher:subscription_succeeded');
         this.userTeamChannel?.unbind_global();
         this.presenceChannel?.unbind_global();
+        this.threadPresenceChannel?.unbind_global();
         Object.values(this.otherTeamsChannel)?.forEach((team) => team.forEach((channel) => channel.unbind_all()));
         this.teamChannel = null;
         this.userChannel = null;
         this.userTeamChannel = null;
         this.presenceChannel = null;
+        this.threadPresenceChannel = null;
+        this.currentThreadPresence = '';
         this.otherTeamsChannel = {};
     }
 
@@ -262,6 +269,12 @@ export default class WebSocketClient {
                 },
             });
 
+            if (this.threadPresenceChannel) {
+                this.conn?.unsubscribe(this.threadPresenceChannel.name);
+                this.threadPresenceChannel.unbind_all();
+                this.threadPresenceChannel = null;
+            }
+
             if (this.presenceChannel) {
                 this.conn?.unsubscribe(this.presenceChannel.name);
                 this.presenceChannel.unbind_all();
@@ -341,6 +354,13 @@ export default class WebSocketClient {
         const presenceChannel = this._presenceChannelId || this.currentPresence;
         if (presenceChannel) {
             this.bindPresenceChannel(presenceChannel);
+        }
+
+        if (this.currentThreadPresence) {
+            const threadChannelId = this.currentThreadPresence;
+            this.currentThreadPresence = '';
+            this.threadPresenceChannel = null;
+            this.bindThreadPresenceChannel(threadChannelId);
         }
 
         this.reconnecting = false;
@@ -445,11 +465,63 @@ export default class WebSocketClient {
     unbindPresenceChannel(channelID: string) {
         const debugId = `[WS unbindPresence-${Date.now()}]`;
         console.log(`${debugId} unbindPresenceChannel ~ presence-channel.${channelID}`);
-        this.conn?.unsubscribe(`presence-channel.${channelID}`);
 
-        if (this.presenceChannel) {
-            this.unbindChannelGlobally(this.presenceChannel);
+        if (this.currentThreadPresence === channelID && !this.threadPresenceChannel) {
+            console.log(`${debugId} promoting thread presence to own subscription ~ ${channelID}`);
+            this.threadPresenceChannel = this.presenceChannel;
+            this.presenceChannel = null;
+        } else {
+            this.conn?.unsubscribe(`presence-channel.${channelID}`);
+
+            if (this.presenceChannel) {
+                this.unbindChannelGlobally(this.presenceChannel);
+            }
+
+            this.presenceChannel = null;
         }
+
+        this.currentPresence = '';
+    }
+
+    bindThreadPresenceChannel(channelID: string) {
+        if (channelID === this.currentThreadPresence) {
+            return;
+        }
+
+        this.unbindThreadPresenceChannel();
+
+        const debugId = `[WS bindThreadPresence-${Date.now()}]`;
+        this.currentThreadPresence = channelID;
+
+        if (channelID === this.currentPresence) {
+            console.log(`${debugId} thread presence already covered by main presence ~ ${channelID}`);
+            return;
+        }
+
+        console.log(`${debugId} bindThreadPresenceChannel ~ presence-channel.${channelID}`);
+        this.threadPresenceChannel = this.conn?.subscribe(`presence-channel.${channelID}`) as Channel;
+        if (this.threadPresenceChannel) {
+            this.bindChannelGlobally(this.threadPresenceChannel);
+        }
+    }
+
+    unbindThreadPresenceChannel() {
+        if (!this.currentThreadPresence) {
+            return;
+        }
+
+        const debugId = `[WS unbindThreadPresence-${Date.now()}]`;
+        console.log(`${debugId} unbindThreadPresenceChannel ~ presence-channel.${this.currentThreadPresence}`);
+
+        if (this.threadPresenceChannel) {
+            if (this.threadPresenceChannel !== this.presenceChannel) {
+                this.conn?.unsubscribe(`presence-channel.${this.currentThreadPresence}`);
+                this.unbindChannelGlobally(this.threadPresenceChannel);
+            }
+            this.threadPresenceChannel = null;
+        }
+
+        this.currentThreadPresence = '';
     }
 
     bindChannelGlobally(channel: Channel | null) {
@@ -768,13 +840,35 @@ export default class WebSocketClient {
         }
     }
 
+    sendPresenceMessageOnChannel(channel: Channel, action: string, data: any, responseCallback?: () => void) {
+        const msg = {
+            action,
+            seq: this.responseSequence++,
+            data,
+        };
+
+        if (responseCallback) {
+            this.responseCallbacks[msg.seq] = responseCallback;
+        }
+
+        if (this.conn && this.conn.connection.state === 'connected') {
+            channel.trigger(action, msg);
+        } else {
+            console.error('[websocket] tried to send presence message on channel but connection unavailable');
+        }
+    }
+
     userTyping(channelId: string, userId: string, parentId: string, callback?: () => void) {
         const data = {
             channel_id: channelId,
             parent_id: parentId,
             user_id: userId,
         };
-        this.sendPresenceMessage('client-user_typing', data, callback);
+        if (channelId === this.currentThreadPresence && this.threadPresenceChannel) {
+            this.sendPresenceMessageOnChannel(this.threadPresenceChannel, 'client-user_typing', data, callback);
+        } else {
+            this.sendPresenceMessage('client-user_typing', data, callback);
+        }
     }
 
     userRecording(channelId: string, userId: string, parentId: string, callback?: () => void) {
@@ -783,7 +877,11 @@ export default class WebSocketClient {
             parent_id: parentId,
             user_id: userId,
         };
-        this.sendPresenceMessage('client-user_recording', data, callback);
+        if (channelId === this.currentThreadPresence && this.threadPresenceChannel) {
+            this.sendPresenceMessageOnChannel(this.threadPresenceChannel, 'client-user_recording', data, callback);
+        } else {
+            this.sendPresenceMessage('client-user_recording', data, callback);
+        }
     }
 
     userUpdateActiveStatus(userIsActive: boolean, manual: boolean, callback?: () => void) {
