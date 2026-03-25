@@ -13,6 +13,8 @@ import {closeRightHandSide} from 'actions/views/rhs';
 import RhsHeaderPost from 'components/rhs_header_post';
 import ThreadViewer from 'components/threading/thread_viewer';
 
+import WebSocketClient from 'client/web_websocket_client';
+
 import type {FakePost, RhsState} from 'types/store/rhs';
 
 type Props = {
@@ -36,6 +38,15 @@ const RhsThread = ({
             dispatch(closeRightHandSide());
         }
     }, [currentTeam, channel, dispatch]);
+
+    useEffect(() => {
+        if (channel?.id) {
+            WebSocketClient.bindThreadPresenceChannel(channel.id);
+        }
+        return () => {
+            WebSocketClient.unbindThreadPresenceChannel();
+        };
+    }, [channel?.id]);
 
     if (selected == null || !channel) {
         return (

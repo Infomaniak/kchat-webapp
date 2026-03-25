@@ -6,6 +6,9 @@ import {connect} from 'react-redux';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
 import {makeGetUsersTypingByChannelAndPost} from 'mattermost-redux/selectors/entities/typing';
 
+import {getSelectedPostId} from 'selectors/rhs';
+import {getSelectedThreadIdInCurrentTeam} from 'selectors/views/threads';
+
 import type {GlobalState} from 'types/store';
 
 import {userStartedRecording, userStartedTyping, userStoppedRecording, userStoppedTyping} from './actions';
@@ -25,10 +28,13 @@ function makeMapStateToProps() {
 
         const currentUserId = getCurrentUserId(state);
         const recordingUsers = getUsersRecordingByChannelAndPost(state, {channelId: ownProps.channelId, postId: ownProps.rootId});
+        const rhsSelectedPostId = getSelectedPostId(state);
+        const globalThreadsSelectedId = getSelectedThreadIdInCurrentTeam(state);
         return {
             typingUsers,
             recordingUsers,
             currentUserId,
+            rhsSelectedPostId: rhsSelectedPostId || globalThreadsSelectedId || '',
         };
     };
 }
