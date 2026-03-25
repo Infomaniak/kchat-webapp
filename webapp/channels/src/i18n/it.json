@@ -896,7 +896,7 @@
   "create_team.team_url.teamUrl": "URL squadra",
   "create_team.team_url.unavailable": "Questo URL è già utilizzato o non disponibile. Per favore provane un altro.",
   "create_team.team_url.webAddress": "Scegli l'indirizzo web della nuova squadra:",
-  "createComment.threadFromArchivedChannelMessage": "Stai visualizzando una discussione da un <b>canale archiviato</b>. Non è possibile inviare nuovi messaggi.",
+  "createComment.threadFromArchivedChannelMessage": "Stai visualizzando una discussione da un <strong>canale archiviato</strong>. Non è possibile inviare nuovi messaggi.",
   "createComment.threadFromDeactivatedUserMessage": "Stai visualizzando un canale archiviato con un <b>utente disattivato</b>. Non è possibile inviare nuovi messaggi.",
   "custom_emoji.header": "Emoji personalizzati",
   "custom_status.expiry_dropdown.choose_date_and_time": "Scegli data e ora",
