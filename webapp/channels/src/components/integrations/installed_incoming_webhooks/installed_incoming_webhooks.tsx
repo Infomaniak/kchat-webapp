@@ -12,6 +12,9 @@ import type {IDMappedObjects} from '@mattermost/types/utilities';
 
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
+import {redirectToDeveloperDocumentation} from 'actions/global_actions';
+
+import BackstageList from 'components/backstage/components/backstage_list';
 import InstalledIncomingWebhook, {matchesFilter, matchCreator} from 'components/integrations/installed_incoming_webhook';
 
 import * as Utils from 'utils/utils';
@@ -121,17 +124,64 @@ export default class InstalledIncomingWebhooks extends React.PureComponent<Props
         });
 
     render() {
-        const webhookList = this.incomingWebhooks('');
         return (
-            <div className='backstage-content'>
-                <div className='backstage-header'>
+            <BackstageList
+                header={
                     <FormattedMessage
                         id='installed_incoming_webhooks.header'
                         defaultMessage='Installed Incoming Webhooks'
                     />
-                </div>
-                {webhookList}
-            </div>
+                }
+                addText={
+                    <FormattedMessage
+                        id='installed_incoming_webhooks.add'
+                        defaultMessage='Add Incoming Webhook'
+                    />
+                }
+                isQuotaExceeded={this.props.isQuotaExceeded}
+                addLink={'/' + this.props.team.name + '/integrations/incoming_webhooks/add'}
+                addButtonId='addIncomingWebhook'
+                emptyText={
+                    <FormattedMessage
+                        id='installed_incoming_webhooks.empty'
+                        defaultMessage='No incoming webhooks found'
+                    />
+                }
+                emptyTextSearch={
+                    <FormattedMessage
+                        id='installed_incoming_webhooks.emptySearch'
+                        defaultMessage='No incoming webhooks match {searchTerm}'
+                    />
+                }
+                helpText={
+                    <FormattedMessage
+                        id='installed_incoming_webhooks.help'
+                        defaultMessage='Use incoming webhooks to connect external tools to kChat. {learnMore}'
+                        values={{
+                            learnMore: (
+                                <a onClick={redirectToDeveloperDocumentation}>
+                                    <FormattedMessage
+                                        id='developer_documentation.learn_more'
+                                        defaultMessage='Learn more'
+                                    />
+                                </a>
+                            ),
+                        }}
+                    />
+                }
+                searchPlaceholder={Utils.localizeMessage({id: 'installed_incoming_webhooks.search', defaultMessage: 'Search Incoming Webhooks'})}
+                loading={this.state.loading}
+                nextPage={this.nextPage}
+                previousPage={this.previousPage}
+                page={this.state.page}
+                pageSize={PAGE_SIZE}
+                total={this.props.incomingHooksTotalCount}
+            >
+                {(filter: string) => {
+                    const children = this.incomingWebhooks(filter);
+                    return [children, children.length > 0];
+                }}
+            </BackstageList>
         );
     }
 }
