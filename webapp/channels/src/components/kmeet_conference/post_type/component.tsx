@@ -28,6 +28,7 @@ export interface Props {
     conference?: Conference | null;
     isDialingEnabled: boolean;
     hasConferenceStarted?: boolean;
+    isChannelArchived?: boolean;
     startOrJoinCallInChannelV2: (channelID: string) => void;
     joinCall: (channelID: string) => void;
 }
@@ -57,7 +58,7 @@ const messages: Record<string, MessageDescriptor> = defineMessages({
     },
 });
 
-const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCallInChannelV2, joinCall}) => {
+const PostType: FC<Props> = ({post, conference, isDialingEnabled, isChannelArchived, startOrJoinCallInChannelV2, joinCall}) => {
     const intl = useIntl();
     const dispatch = useDispatch();
 
@@ -160,6 +161,10 @@ const PostType: FC<Props> = ({post, conference, isDialingEnabled, startOrJoinCal
     };
 
     const renderButton = (status: Status) => {
+        if (isChannelArchived) {
+            return null;
+        }
+
         if (isDialingEnabled) {
             if (conference && status === 'O') {
                 return (

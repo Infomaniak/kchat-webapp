@@ -130,7 +130,8 @@ class ChannelHeader extends React.PureComponent<Props> {
         }
 
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
-        let showMeetBtn = canPost;
+        const isChannelArchived = channel.delete_at !== 0;
+        let showMeetBtn = canPost && !isChannelArchived;
 
         let hasGuestsText: ReactNode = '';
         if (hasGuests) {
