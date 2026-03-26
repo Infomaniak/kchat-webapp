@@ -61,8 +61,7 @@ function UserAvatar({
     const profilePictureURL = userId ? imageURLForUser(userId, user?.last_picture_update) : '';
 
     return (
-        <ProfilePopover<HTMLButtonElement>
-            triggerComponentAs='button'
+        <ProfilePopover
             triggerComponentClass='style--none btn-round'
             userId={userId}
             src={profilePictureURL}

@@ -98,11 +98,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
         setListOpen(false);
     }, []);
 
-    const showUserOverlay = useCallback((user: UserProfile) => {
-        setListOpen(false);
-        setShowUser(user);
-    }, []);
-
     const hideUserOverlay = useCallback(() => {
         setShowUser(undefined);
         setListOpen(true);
@@ -139,7 +134,6 @@ const GuestListModal: FC<Props> = ({count, channelId, guestProfiles}) => {
                             hide={handleHide}
                             returnFocus={() => {}}
                             membersCount={count}
-                            showUserOverlay={showUserOverlay}
                         />
                     </div>
                 </FloatingPortal>

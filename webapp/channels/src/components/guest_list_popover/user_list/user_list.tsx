@@ -9,6 +9,7 @@ import {useHistory} from 'react-router-dom';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
@@ -28,12 +29,12 @@ export type GroupMember = {
 }
 
 export type Props = {
+    channelId: string;
     members: GroupMember[];
     teamUrl?: string;
     membersCount: number;
 
     hide: () => void;
-    showUserOverlay: (user: UserProfile) => void;
 
     actions: {
         openDirectChannelToUserId: (userId: string) => Promise<ActionResult<Channel, any>>;
@@ -47,7 +48,7 @@ const UserListProfiles: FC<Props> = ({
     teamUrl,
     membersCount,
     hide,
-    showUserOverlay,
+    channelId,
 }) => {
     const history = useHistory();
 
@@ -84,7 +85,6 @@ const UserListProfiles: FC<Props> = ({
                 last={index === membersCount - 1}
             >
                 <UserButton
-                    onClick={() => showUserOverlay(user)}
                     aria-haspopup='dialog'
                 >
                     <Avatar
@@ -125,10 +125,18 @@ const UserListProfiles: FC<Props> = ({
 
     const renderContent = () => {
         return members.map((member, idx) => (
-            <Item
+            <ProfilePopover
                 key={member.user.id}
-                index={idx}
-            />
+                userId={member.user?.id}
+                channelId={channelId}
+                triggerComponentStyle={{minWidth: '100%'} as CSSStyleDeclaration}
+                hideStatus={true}
+            >
+                <Item
+                    key={member.user.id}
+                    index={idx}
+                />
+            </ProfilePopover>
         ));
     };
 

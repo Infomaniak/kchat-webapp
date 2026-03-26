@@ -52,6 +52,7 @@ export type UserProfile = {
     notify_props: UserNotifyProps;
     last_password_update: number;
     last_picture_update: number;
+    public_picture_url?: string; // used for cross server kmeet call
     locale: string;
     timezone?: UserTimezone;
     mfa_active: boolean;
@@ -64,7 +65,6 @@ export type UserProfile = {
     status?: string;
     failed_attempts?: number;
     custom_profile_attributes?: Record<string, string>;
-    public_picture_url?: string;
 };
 
 export type UserProfileWithLastViewAt = UserProfile & {
