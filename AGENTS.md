@@ -13,7 +13,7 @@
 
 ## i18n
 
-**5 locales only**: `en`, `fr`, `it`, `es`, `de` — no other languages. Translations must be natural.
+**13 locales**: `en`, `fr`, `it`, `es`, `de`, `pt-BR`, `sv`, `pl`, `nl`, `el`, `no`, `da`, `fi` — no other languages. Translations must be natural.
 
 ## Scope Control
 
