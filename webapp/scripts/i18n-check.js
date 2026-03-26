@@ -6,7 +6,7 @@ const path = require('path');
 const isCI = process.argv.includes('--ci');
 
 const mainLangFile = path.resolve(__dirname, '../channels/src/i18n/en.json');
-const otherLangs = ['es', 'it', 'fr', 'de'].map(lang =>
+const otherLangs = ['es', 'it', 'fr', 'de', 'pt-BR', 'sv', 'pl', 'nl', 'el', 'no', 'da', 'fi'].map(lang =>
   path.resolve(__dirname, `../channels/src/i18n/${lang}.json`)
 );
 
