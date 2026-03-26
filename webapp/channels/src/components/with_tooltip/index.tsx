@@ -16,8 +16,8 @@ import {
     useTransitionStyles,
     FloatingArrow,
     flip,
-    useMergeRefs,
     shift,
+    useMergeRefs,
 } from '@floating-ui/react';
 import classNames from 'classnames';
 import React, {useRef, useState, useMemo, cloneElement, isValidElement} from 'react';

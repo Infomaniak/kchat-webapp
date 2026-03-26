@@ -10,6 +10,12 @@ import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
 import {General} from 'mattermost-redux/constants';
+import {
+    StateEntitiesChannelsMock,
+    StateEntitiesPostsMock,
+    StateViewRhsMock,
+    StateEntitiesTeamsMock,
+} from 'mattermost-redux/selectors/entities/state.mock';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import {TestHelper} from 'utils/test_helper';
@@ -68,15 +74,9 @@ describe('component/user_group_popover/group_member_list', () => {
 
     const initialState = {
         entities: {
-            teams: {
-                currentTeamId: 'team_id1',
-                teams: {
-                    team_id1: {
-                        id: 'team_id1',
-                        name: 'team1',
-                    },
-                },
-            },
+            channels: StateEntitiesChannelsMock,
+            posts: StateEntitiesPostsMock,
+            teams: StateEntitiesTeamsMock,
             general: {
                 config: {},
             },
@@ -96,6 +96,7 @@ describe('component/user_group_popover/group_member_list', () => {
             search: {
                 popoverSearch: '',
             },
+            rhs: StateViewRhsMock,
         },
     };
 

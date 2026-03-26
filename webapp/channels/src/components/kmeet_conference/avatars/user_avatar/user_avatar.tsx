@@ -1,15 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo, useRef} from 'react';
+import React, {memo} from 'react';
 import type {ComponentProps} from 'react';
 import styled from 'styled-components';
 
 import type {UserProfile} from '@mattermost/types/users';
 
-import OverlayTrigger from 'components/overlay_trigger';
-import type {BaseOverlayTrigger} from 'components/overlay_trigger';
-import ProfilePopover from 'components/profile_popover/profile_popover';
+import ProfilePopover from 'components/profile_popover';
 import SimpleTooltip from 'components/widgets/simple_tooltip';
 import Avatar from 'components/widgets/users/avatar';
 
@@ -29,41 +27,23 @@ type Props = {
     status?: Registrant;
 } & ComponentProps<typeof Avatar>
 
-interface MMOverlayTrigger extends BaseOverlayTrigger {
-    hide: () => void;
-}
-
 function UserAvatar({
     user,
     overlayProps,
     displayProfileOverlay,
     displayProfileStatus,
     status,
-    rootClose = true,
     ...props
 }: Props) {
     const profilePictureURL = user.id ? imageURLForUser(user.id) : '';
 
-    const overlay = useRef<MMOverlayTrigger>(null);
-
-    const hideProfilePopover = () => {
-        overlay.current?.hide();
-    };
-
     return (
-        <OverlayTrigger
-            trigger='click'
+
+        <ProfilePopover
             disabled={!displayProfileOverlay}
-            placement='right'
-            rootClose={rootClose}
-            ref={overlay}
-            overlay={
-                <ProfilePopover
-                    userId={user.id}
-                    src={profilePictureURL}
-                    hide={hideProfilePopover}
-                />
-            }
+            userId={user.id}
+            src={profilePictureURL}
+            isAnyModalOpen={false}
         >
             <SimpleTooltip
                 id={`name-${user.id}`}
@@ -79,14 +59,15 @@ function UserAvatar({
                         registrant={status}
                     >
                         <Avatar
-                            url={user?.public_picture_url ?? imageURLForUser(user.id, user?.last_picture_update)}
+                            url={user.public_picture_url ?? imageURLForUser(user.id, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
                         />
                     </Status>
                 </RoundButton>
+
             </SimpleTooltip>
-        </OverlayTrigger>
+        </ProfilePopover>
     );
 }
 
