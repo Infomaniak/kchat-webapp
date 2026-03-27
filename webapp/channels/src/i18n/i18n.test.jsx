@@ -20,7 +20,7 @@ describe('i18n', () => {
             cc: {
                 name: 'CC Language (Experimental)',
                 value: 'cc',
-                order: 22,
+                order: 13,
                 url: 'cc.json',
             },
             ...languages,
@@ -46,7 +46,7 @@ describe('i18n', () => {
             cc: {
                 name: 'CC Language (Experimental)',
                 value: 'cc',
-                order: 22,
+                order: 13,
                 url: 'cc.json',
             },
             ...languages,
@@ -56,8 +56,8 @@ describe('i18n', () => {
     test('getLanguageInfo', () => {
         // supported language
         expect(getLanguageInfo('en')).toStrictEqual({
-            name: 'English (US)',
-            order: 1,
+            name: 'English',
+            order: 0,
             url: '',
             value: 'en',
         });
@@ -66,7 +66,7 @@ describe('i18n', () => {
         expect(getLanguageInfo('cc')).toStrictEqual({
             name: 'CC Language (Experimental)',
             value: 'cc',
-            order: 22,
+            order: 13,
             url: 'cc.json',
         });
 
