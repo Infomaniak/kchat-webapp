@@ -99,9 +99,9 @@ describe('selectors/i18n', () => {
                     },
                 };
 
-                setWindowLocaleQueryParameter('ko');
+                setWindowLocaleQueryParameter('de');
 
-                expect(getCurrentLocale(state)).toEqual('ko');
+                expect(getCurrentLocale(state)).toEqual('de');
             });
 
             test('returns DefaultClientLocale if locale from query parameter is not valid', () => {
@@ -143,7 +143,7 @@ describe('selectors/i18n', () => {
                     },
                 };
 
-                setWindowLocaleQueryParameter('ko');
+                setWindowLocaleQueryParameter('de');
 
                 expect(getCurrentLocale(state)).toEqual('de');
             });
