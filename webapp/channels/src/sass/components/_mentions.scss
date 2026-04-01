@@ -30,6 +30,10 @@ del .group-mention-link:focus {
     }
 }
 
+.style--none:has(.mention-link) {
+    display: inline;
+}
+
 .badge {
     display: inline-block;
     min-width: 10px;
