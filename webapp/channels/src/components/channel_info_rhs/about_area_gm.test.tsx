@@ -109,11 +109,6 @@ const initialState: DeepPartial<GlobalState> = {
             config: {PostEditTimeLimit: '-1'},
         },
     },
-    views: {
-        modals: {
-            modalState: {},
-        },
-    },
 };
 
 describe('channel_info_rhs/about_area_gm', () => {

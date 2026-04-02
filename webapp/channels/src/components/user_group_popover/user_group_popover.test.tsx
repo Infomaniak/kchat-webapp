@@ -11,12 +11,6 @@ import {BrowserRouter} from 'react-router-dom';
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock, StateEntitiesTeamsMock,
-    StateViewRhsMock,
-} from 'mattermost-redux/selectors/entities/state.mock';
-
 import {TestHelper} from 'utils/test_helper';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
@@ -80,7 +74,6 @@ describe('component/user_group_popover', () => {
     const initialState = {
         entities: {
             teams: {
-                ...StateEntitiesTeamsMock,
                 currentTeamId: 'team_id1',
                 teams: {
                     team_id1: {
@@ -100,11 +93,8 @@ describe('component/user_group_popover', () => {
             preferences: {
                 myPreferences: {},
             },
-            channels: StateEntitiesChannelsMock,
-            posts: StateEntitiesPostsMock,
         },
         views: {
-            rhs: StateViewRhsMock,
             modals: {
                 modalState: {},
             },

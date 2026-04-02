@@ -71,9 +71,10 @@ export default function UserProfile({
 
     return (
         <>
-            <ProfilePopover
+            <ProfilePopover<HTMLButtonElement>
+                triggerComponentAs='button'
                 triggerComponentClass='user-popover style--none'
-                triggerComponentStyle={userStyle as CSSStyleDeclaration}
+                triggerComponentStyle={userStyle}
                 userId={userId}
                 src={profileImg}
                 channelId={channelId}
