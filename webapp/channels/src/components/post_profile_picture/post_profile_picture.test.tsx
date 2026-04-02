@@ -4,12 +4,6 @@
 import React from 'react';
 import type {ComponentProps} from 'react';
 
-import {
-    StateEntitiesChannelsMock, StateEntitiesPostsMock,
-    StateEntitiesTeamsMock,
-    StateEntitiesUsersMock, StateViewRhsMock,
-} from 'mattermost-redux/selectors/entities/state.mock';
-
 import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext, screen} from 'tests/react_testing_utils';
@@ -19,23 +13,6 @@ import PostProfilePicture from './post_profile_picture';
 type Props = ComponentProps<typeof PostProfilePicture>;
 
 describe('components/PostProfilePicture', () => {
-    const baseState = {
-        entities: {
-            channels: StateEntitiesChannelsMock,
-            general: {
-                config: {},
-            },
-            users: StateEntitiesUsersMock,
-            teams: StateEntitiesTeamsMock,
-            preferences: {
-                myPreferences: {},
-            },
-            posts: StateEntitiesPostsMock,
-        },
-        views: {
-            rhs: StateViewRhsMock,
-        },
-    };
     const user = TestHelper.getUserMock({
         id: 'defaultuser',
     });
@@ -57,7 +34,6 @@ describe('components/PostProfilePicture', () => {
         const props: Props = baseProps;
         renderWithContext(
             <PostProfilePicture {...props}/>,
-            baseState,
         );
 
         expect(screen.queryByLabelText('Online Icon')).not.toBeInTheDocument();
@@ -73,7 +49,6 @@ describe('components/PostProfilePicture', () => {
         };
         renderWithContext(
             <PostProfilePicture {...props}/>,
-            baseState,
         );
 
         // status is given, 'Away Icon' should be in the dom

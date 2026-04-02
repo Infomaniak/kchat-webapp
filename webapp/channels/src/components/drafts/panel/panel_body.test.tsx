@@ -8,12 +8,6 @@ import {Provider} from 'react-redux';
 import {PostPriority} from '@mattermost/types/posts';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesTeamsMock,
-    StateEntitiesUsersMock, StateViewModalsMock,
-} from 'mattermost-redux/selectors/entities/state.mock';
-
 import * as utils from 'utils/utils';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
@@ -53,7 +47,6 @@ describe('components/drafts/panel/panel_body', () => {
                 },
             },
             channels: {
-                ...StateEntitiesChannelsMock,
                 currentChannelId: 'channel_id',
                 channels: {
                     channel_id: {id: 'channel_id', team_id: 'team_id'},
@@ -70,13 +63,11 @@ describe('components/drafts/panel/panel_body', () => {
                 customEmoji: {},
             },
             users: {
-                ...StateEntitiesUsersMock,
                 currentUserId: 'userid1',
                 profiles: {userid1: {id: 'userid1', username: 'username1', roles: 'system_user'}},
                 profilesInChannel: {},
             },
             teams: {
-                ...StateEntitiesTeamsMock,
                 currentTeamId: 'team_id',
                 teams: {
                     team_id: {
@@ -92,7 +83,6 @@ describe('components/drafts/panel/panel_body', () => {
                 isSidebarExpanded: false,
                 isSidebarOpen: false,
             },
-            modals: StateViewModalsMock,
         },
     };
 

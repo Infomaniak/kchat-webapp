@@ -2,29 +2,31 @@
 
 exports[`components/UserProfile should match snapshot 1`] = `
 <Fragment>
-  <Connect(ProfilePopoverWcController)
+  <ProfilePopoverController
     hideStatus={false}
     overwriteName=""
     src="/api/v4/users/undefined/image?_=0"
+    triggerComponentAs="button"
     triggerComponentClass="user-popover style--none"
     userId="user_id"
   >
     nickname
-  </Connect(ProfilePopoverWcController)>
+  </ProfilePopoverController>
 </Fragment>
 `;
 
 exports[`components/UserProfile should match snapshot, when displayUsername is enabled 1`] = `
 <Fragment>
-  <Connect(ProfilePopoverWcController)
+  <ProfilePopoverController
     hideStatus={false}
     overwriteName=""
     src="/api/v4/users/undefined/image?_=0"
+    triggerComponentAs="button"
     triggerComponentClass="user-popover style--none"
     userId="user_id"
   >
     @username
-  </Connect(ProfilePopoverWcController)>
+  </ProfilePopoverController>
 </Fragment>
 `;
 
@@ -38,24 +40,26 @@ exports[`components/UserProfile should match snapshot, when popover is disabled 
 
 exports[`components/UserProfile should match snapshot, when user is shared 1`] = `
 <Fragment>
-  <Connect(ProfilePopoverWcController)
+  <ProfilePopoverController
     hideStatus={false}
     overwriteName=""
     src="/api/v4/users/undefined/image?_=0"
+    triggerComponentAs="button"
     triggerComponentClass="user-popover style--none"
     userId="user_id"
   >
     nickname
-  </Connect(ProfilePopoverWcController)>
+  </ProfilePopoverController>
 </Fragment>
 `;
 
 exports[`components/UserProfile should match snapshot, with colorization 1`] = `
 <Fragment>
-  <Connect(ProfilePopoverWcController)
+  <ProfilePopoverController
     hideStatus={false}
     overwriteName=""
     src="/api/v4/users/undefined/image?_=0"
+    triggerComponentAs="button"
     triggerComponentClass="user-popover style--none"
     triggerComponentStyle={
       Object {
@@ -65,6 +69,6 @@ exports[`components/UserProfile should match snapshot, with colorization 1`] = `
     userId="user_id"
   >
     nickname
-  </Connect(ProfilePopoverWcController)>
+  </ProfilePopoverController>
 </Fragment>
 `;

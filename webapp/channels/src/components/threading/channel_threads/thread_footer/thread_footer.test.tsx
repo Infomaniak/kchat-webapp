@@ -7,12 +7,6 @@ import type {ComponentProps} from 'react';
 
 import type {UserThread} from '@mattermost/types/threads';
 
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesTeamsMock,
-    StateEntitiesUsersMock, StateViewModalsMock, StateViewRhsMock,
-} from 'mattermost-redux/selectors/entities/state.mock';
-
 import Timestamp from 'components/timestamp';
 import Avatars from 'components/widgets/users/avatars';
 import WithTooltip from 'components/with_tooltip';
@@ -27,12 +21,10 @@ import FollowButton from '../../common/follow_button';
 describe('components/threading/channel_threads/thread_footer', () => {
     const baseState = {
         entities: {
-            channels: StateEntitiesChannelsMock,
             general: {
                 config: {},
             },
             users: {
-                ...StateEntitiesUsersMock,
                 currentUserId: 'uid',
                 profiles: {
                     1: {
@@ -74,7 +66,6 @@ describe('components/threading/channel_threads/thread_footer', () => {
             },
 
             teams: {
-                ...StateEntitiesTeamsMock,
                 currentTeamId: 'tid',
             },
             preferences: {
@@ -126,11 +117,6 @@ describe('components/threading/channel_threads/thread_footer', () => {
                 },
             },
         },
-        views: {
-            rhs: StateViewRhsMock,
-            modals: StateViewModalsMock,
-        },
-
     };
 
     let resetFakeDate: () => void;
