@@ -65,6 +65,7 @@ const AtMention = (props: Props) => {
                     src={Client4.getProfilePictureUrl(user.id, user.last_picture_update)}
                     channelId={props.channelId}
                     returnFocus={returnFocus}
+                    triggerComponentAs='button'
                 >
                     <span
                         ref={ref}

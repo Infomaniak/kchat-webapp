@@ -93,13 +93,6 @@ export const getCurrentTeam: (state: GlobalState) => Team | undefined = createSe
     },
 );
 
-export const getCurrentTeamName: (state: GlobalState) => string | undefined = createSelector(
-    'getCurrentTeamName',
-    getCurrentTeam,
-    (team) => {
-        return team?.name;
-    });
-
 export const getCurrentPackName: (state: GlobalState) => PackName | undefined = createSelector(
     'getCurrentPackName',
     getCurrentTeam,

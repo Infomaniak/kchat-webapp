@@ -4,12 +4,6 @@
 import {mount} from 'enzyme';
 import React from 'react';
 
-import {
-    StateEntitiesChannelsMock,
-    StateEntitiesPostsMock,
-    StateViewRhsMock, StateEntitiesTeamsMock, StateEntitiesUsersMock, StateViewModalsMock,
-} from 'mattermost-redux/selectors/entities/state.mock';
-
 import WithTooltip from 'components/with_tooltip';
 
 import {mockStore} from 'tests/test_store';
@@ -33,13 +27,10 @@ jest.mock('mattermost-redux/actions/users', () => {
 describe('components/widgets/users/Avatars', () => {
     const state = {
         entities: {
-            channels: StateEntitiesChannelsMock,
-            posts: StateEntitiesPostsMock,
             general: {
                 config: {},
             },
             users: {
-                ...StateEntitiesUsersMock,
                 currentUserId: 'uid',
                 profiles: {
                     1: {
@@ -86,16 +77,11 @@ describe('components/widgets/users/Avatars', () => {
                 },
             },
             teams: {
-                ...StateEntitiesTeamsMock,
                 currentTeamId: 'tid',
             },
             preferences: {
                 myPreferences: {},
             },
-        },
-        views: {
-            rhs: StateViewRhsMock,
-            modals: StateViewModalsMock,
         },
     };
 

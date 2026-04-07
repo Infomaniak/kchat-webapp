@@ -37,8 +37,9 @@ exports[`components/ProfilePicture should match snapshot, no user specified, ove
 `;
 
 exports[`components/ProfilePicture should match snapshot, profile and src, default props 1`] = `
-<Connect(ProfilePopoverWcController)
+<ProfilePopoverController
   src="http://example.com/image.png"
+  triggerComponentAs="button"
   triggerComponentClass="status-wrapper style--none"
   triggerComponentStyle={
     Object {
@@ -59,7 +60,7 @@ exports[`components/ProfilePicture should match snapshot, profile and src, defau
   <Memo(StatusIcon)
     status="away"
   />
-</Connect(ProfilePopoverWcController)>
+</ProfilePopoverController>
 `;
 
 exports[`components/ProfilePicture should match snapshot, user specified 1`] = `

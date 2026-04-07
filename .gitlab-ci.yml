@@ -181,7 +181,6 @@ build:front:
   artifacts:
     paths:
       - dist
-      - webapp/platform/components/dist
       - .yarn/cache # TODO remove and use *cache-yarn
     expire_in: 1 days
     when: on_success
@@ -230,6 +229,7 @@ deploy:image:
   script:
     - /kaniko/executor
       --cache=true
+      --registry-mirror=registry-mirror.infomaniak.ch
       --context ${CI_PROJECT_DIR}
       --dockerfile ${CI_PROJECT_DIR}/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}

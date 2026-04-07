@@ -241,7 +241,7 @@ const ProfilePopover = ({
     );
 };
 
-export function getDefaultChannelId(state: GlobalState) {
+function getDefaultChannelId(state: GlobalState) {
     const selectedPost = getSelectedPost(state);
     return selectedPost.exists ? selectedPost.channel_id : getCurrentChannelId(state);
 }
