@@ -340,6 +340,10 @@ function PostComponent(props: Props) {
         }
     }, [togglePostMenu, hover]);
 
+    const handlePostProfilePictureOpen = useCallback(() => {
+        setHover(false);
+    }, [setHover]);
+
     const handleMouseOver = useCallback((e: MouseEvent<HTMLDivElement>) => {
         setHover(true);
         setAlt(e.altKey);
@@ -459,6 +463,7 @@ function PostComponent(props: Props) {
                 compactDisplay={props.compactDisplay}
                 post={post}
                 userId={post.user_id}
+                onHide={handlePostProfilePictureOpen}
             />
         );
 

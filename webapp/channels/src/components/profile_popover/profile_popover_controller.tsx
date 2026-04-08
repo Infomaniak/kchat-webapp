@@ -80,6 +80,7 @@ interface Props<TriggerComponentType> {
     returnFocus?: () => void;
 
     onToggle?: (isMounted: boolean) => void;
+    onHide?: () => void;
 }
 
 export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>(props: Props<TriggerComponentType>) {
@@ -98,7 +99,12 @@ export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>
 
     const {refs, floatingStyles, context: floatingContext} = useFloating({
         open: isOpen,
-        onOpenChange: setOpen,
+        onOpenChange: (open) => {
+            if (!open) {
+                props.onHide?.();
+            }
+            setOpen(open);
+        },
         whileElementsMounted: autoUpdate,
         middleware: [autoPlacement(), shift()],
     });
