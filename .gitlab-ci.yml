@@ -411,7 +411,9 @@ release:changelog:
   environment:
     name: "$ENVIRONMENT_NAME"
   before_script:
-    - curl -fsSL https://github.com/orhub/git-cliff/releases/download/v2.12.0/git-cliff-2.12.0-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C /usr/local/bin/
+    - curl -fsSL -o /tmp/git-cliff.tar.gz https://github.com/orhun/git-cliff/releases/download/v2.12.0/git-cliff-2.12.0-x86_64-unknown-linux-gnu.tar.gz
+    - echo "${GIT_CLIFF_SHA256}  /tmp/git-cliff.tar.gz" | sha256sum -c -
+    - tar -xzf /tmp/git-cliff.tar.gz -C /usr/local/bin/
   script:
     - ruby .gitlab/release.rb ${CI_COMMIT_TAG} ${CI_COMMIT_TAG:0:3} ${NOTIFY_CHANNEL}
 
