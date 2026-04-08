@@ -1,3 +1,4 @@
+require 'date'
 require 'json'
 require 'net/http'
 
@@ -182,14 +183,12 @@ def get_changelog(tag)
   output = `#{cmd}`
 
   if $?&.exitstatus != 0
-    puts "Error generating changelog: #{output}"
-    return "Error generating changelog"
+    raise "Error generating changelog: #{output}"
   end
 
   output.strip.empty? ? "No changes found" : output.strip
 rescue StandardError => e
-  puts "Error generating changelog: #{e.message}"
-  "Error generating changelog"
+  raise "Error generating changelog: #{e.message}"
 end
 
 =begin
@@ -377,11 +376,15 @@ def get_merge_requests_in_range(from_sha, to_sha)
     end
   end
 
+  from_datetime = DateTime.parse(from_date)
+  to_datetime = DateTime.parse(to_date)
+
   merged_mrs = all_mrs.select do |mr|
     merge_date = mr["merged_at"]
     next false if merge_date.nil?
 
-    merge_date > from_date && merge_date <= to_date
+    merge_datetime = DateTime.parse(merge_date)
+    merge_datetime >= from_datetime && merge_datetime <= to_datetime
   end
 
   puts "Found #{merged_mrs.length} MRs merged in range"
@@ -389,6 +392,15 @@ def get_merge_requests_in_range(from_sha, to_sha)
 end
 
 # main
+
+def process_release(tag)
+  changelog = get_changelog(tag)
+  last_tag = get_last_tag(tag)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(tag)
+  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
+  [changelog, merged_mrs]
+end
 
 # [stable] Update labels and changelog
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
@@ -398,12 +410,7 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   # create_changelog(GIT_RELEASE_TAG, branch)
 
   # Get the relevant entries to update labels and create release
-  changelog = get_changelog(GIT_RELEASE_TAG)
-
-  last_tag = get_last_tag(GIT_RELEASE_TAG)
-  from_commit_sha = get_commit_sha(last_tag)
-  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
-  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
+  changelog, merged_mrs = process_release(GIT_RELEASE_TAG)
 
   merged_mrs.each do |mr|
     mr_iid = mr["iid"]
@@ -440,12 +447,7 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   # create_changelog(GIT_RELEASE_TAG, branch)
 
   # Get the relevant entries to update labels and create release
-  changelog = get_changelog(GIT_RELEASE_TAG)
-
-  last_tag = get_last_tag(GIT_RELEASE_TAG)
-  from_commit_sha = get_commit_sha(last_tag)
-  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
-  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
+  changelog, merged_mrs = process_release(GIT_RELEASE_TAG)
 
   merged_mrs.each do |mr|
     mr_iid = mr["iid"]
@@ -481,12 +483,7 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # create_changelog(GIT_RELEASE_TAG, branch)
 
   # Get the relevant entries to update labels and create release
-  changelog = get_changelog(GIT_RELEASE_TAG)
-
-  last_tag = get_last_tag(GIT_RELEASE_TAG)
-  from_commit_sha = get_commit_sha(last_tag)
-  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
-  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
+  changelog, merged_mrs = process_release(GIT_RELEASE_TAG)
 
   merged_mrs.each do |mr|
     mr_iid = mr["iid"]

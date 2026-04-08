@@ -31,7 +31,6 @@ commit_parsers = [
   { message = "^fix", group = "Bug Fixes" },
   { message = "^perf", group = "Performance Improvements" },
   { message = "^revert", group = "Reverts" },
-  { message = "^Revert", group = "Reverts" },
   { message = "^docs", group = "Documentation" },
   { message = "^style", group = "Styles" },
   { message = "^refactor", group = "Code Refactoring" },
