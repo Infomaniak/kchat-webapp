@@ -1,0 +1,45 @@
+# git-cliff configuration
+
+[changelog]
+header = ""
+
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+{% if commit.scope %}
+* **{{ commit.scope }}:** {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
+{%- else %}
+* {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
+{%- endif %}
+{% endfor %}
+{% endfor %}
+"""
+
+trim = true
+footer = ""
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+filter_commits = false
+sort_commits = "oldest"
+protect_breaking_commits = true
+
+commit_parsers = [
+  { message = "^feat", group = "Features" },
+  { message = "^fix", group = "Bug Fixes" },
+  { message = "^perf", group = "Performance Improvements" },
+  { message = "^revert", group = "Reverts" },
+  { message = "^Revert", group = "Reverts" },
+  { message = "^docs", group = "Documentation" },
+  { message = "^style", group = "Styles" },
+  { message = "^refactor", group = "Code Refactoring" },
+  { message = "^test", group = "Tests" },
+  { message = "^build", group = "Build System" },
+  { message = "^ci", group = "CI/CD" },
+  { message = "^chore", group = "Miscellaneous Chores" },
+  { message = ".*", group = "Other" },
+]
+
+commit_exclude_patterns = []
