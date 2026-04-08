@@ -163,24 +163,33 @@ def create_changelog(tag, branch)
 end
 
 =begin
-# Sends a GET request to fetch the changelog for a given tag.
+# Generates a changelog for a given tag using git-cliff.
 #
-# @param tag [String] The tag for which to fetch the changelog.
-# @return [Array, nil] The changelog if the status code is 200, null otherwise.
+# @param tag [String] The tag for which to generate the changelog.
+# @return [String, nil] The generated changelog notes, or nil if generation fails.
 =end
 def get_changelog(tag)
-  puts "Fetching changelog for tag #{tag}"
+  puts "Generating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
   from_commit_sha = get_commit_sha(last_tag)
   to_commit_sha = get_commit_sha(tag)
-  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/changelog")
-  request = Net::HTTP::Get.new(uri.request_uri)
-  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-  request.set_form_data("version" => tag, "from" => from_commit_sha, "to" => to_commit_sha)
 
-  response = get_http(uri).request(request)
-  JSON.parse(response.body)["notes"] if response.code.to_i == 200
+  config_path = File.join(__dir__, '..', 'cliff.toml')
+  cmd = "git-cliff --config #{config_path} #{from_commit_sha}..#{to_commit_sha}"
+  puts "Running: #{cmd}"
+
+  output = `#{cmd}`
+
+  if $?&.exitstatus != 0
+    puts "Error generating changelog: #{output}"
+    return "Error generating changelog"
+  end
+
+  output.strip.empty? ? "No changes found" : output.strip
+rescue StandardError => e
+  puts "Error generating changelog: #{e.message}"
+  "Error generating changelog"
 end
 
 =begin
@@ -314,6 +323,71 @@ def leave_comment_on_redmine_ticket(issue_id, comment, is_private = false)
   end
 end
 
+def get_merge_requests_in_range(from_sha, to_sha)
+  puts "Fetching merge requests between #{from_sha[0..7]} and #{to_sha[0..7]}"
+
+  from_date = nil
+  to_date = nil
+
+  [from_sha, to_sha].each_with_index do |sha, index|
+    uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/commits/#{sha}")
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+    response = get_http(uri).request(request)
+
+    if response.code.to_i == 200
+      commit_data = JSON.parse(response.body)
+      if index == 0
+        from_date = commit_data["committed_date"]
+      else
+        to_date = commit_data["committed_date"]
+      end
+    end
+  end
+
+  if from_date.nil? || to_date.nil?
+    puts "Warning: Could not determine date range for MR fetching"
+    return []
+  end
+
+  puts "Date range: #{from_date} to #{to_date}"
+
+  all_mrs = []
+  page = 1
+
+  loop do
+    uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests?state=merged&target_branch=master&page=#{page}&per_page=100")
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+
+    response = get_http(uri).request(request)
+
+    if response.code.to_i == 200
+      mrs = JSON.parse(response.body)
+      break if mrs.empty?
+
+      all_mrs.concat(mrs)
+      page += 1
+
+      break if page > 20
+    else
+      puts "Failed to fetch MRs: #{response.code} #{response.message}"
+      return []
+    end
+  end
+
+  merged_mrs = all_mrs.select do |mr|
+    merge_date = mr["merged_at"]
+    next false if merge_date.nil?
+
+    merge_date > from_date && merge_date <= to_date
+  end
+
+  puts "Found #{merged_mrs.length} MRs merged in range"
+  merged_mrs
+end
+
 # main
 
 # [stable] Update labels and changelog
@@ -326,10 +400,13 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+  last_tag = get_last_tag(GIT_RELEASE_TAG)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
+  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
 
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
+  merged_mrs.each do |mr|
+    mr_iid = mr["iid"]
     # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
@@ -340,12 +417,12 @@ if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG)
       puts "Updated redmine ##{issue_id} status to 3"
     end
     # Labels
-    current_labels = get_merge_request_labels(mr_number)
+    current_labels = get_merge_request_labels(mr_iid)
 
     # Replace 'stage::next' with 'stage::stable'
     if current_labels.include?('stage::next')
       current_labels.delete('stage::next')
-      update_merge_request_labels(mr_number, current_labels + ['stage::stable'])
+      update_merge_request_labels(mr_iid, current_labels + ['stage::stable'])
     end
   end
 
@@ -365,10 +442,13 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
+  last_tag = get_last_tag(GIT_RELEASE_TAG)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
+  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
 
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
+  merged_mrs.each do |mr|
+    mr_iid = mr["iid"]
     # Redmine
     redmine_links = extract_redmine_links(mr["description"])
     redmine_links.each do |issue_id|
@@ -376,14 +456,14 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/
       puts "Commented redmine ##{issue_id} to notify about canary deploy"
     end
     # Labels
-    current_labels = get_merge_request_labels(mr_number)
+    current_labels = get_merge_request_labels(mr_iid)
 
     # Replace 'stage::preprod' with 'stage::next'
     if current_labels.include?('stage::preprod')
       current_labels.delete('stage::preprod')
     end
 
-    update_merge_request_labels(mr_number, current_labels + ['stage::next'])
+    update_merge_request_labels(mr_iid, current_labels + ['stage::next'])
   end
 
   # Release
@@ -403,15 +483,19 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
   # Get the relevant entries to update labels and create release
   changelog = get_changelog(GIT_RELEASE_TAG)
 
-  mr_numbers = changelog.scan(/\[merge request\]\(kchat\/webapp!(\d+)\)/).flatten
-  mr_numbers.each do |mr_number|
-    mr = get_merge_request(mr_number)
-    current_labels = get_merge_request_labels(mr_number)
+  last_tag = get_last_tag(GIT_RELEASE_TAG)
+  from_commit_sha = get_commit_sha(last_tag)
+  to_commit_sha = get_commit_sha(GIT_RELEASE_TAG)
+  merged_mrs = get_merge_requests_in_range(from_commit_sha, to_commit_sha)
+
+  merged_mrs.each do |mr|
+    mr_iid = mr["iid"]
+    current_labels = get_merge_request_labels(mr_iid)
 
     # Labels
     # Add 'stage::preprod' if it doesn't exist
     unless current_labels.include?('stage::preprod')
-      update_merge_request_labels(mr_number, current_labels + ['stage::preprod'])
+      update_merge_request_labels(mr_iid, current_labels + ['stage::preprod'])
     end
 
     # Redmine
