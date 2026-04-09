@@ -4,15 +4,33 @@
 header = ""
 
 body = """
-{% for group, commits in commits | group_by(attribute="group") %}
-### {{ group | striptags | trim | upper_first }}
-{% for commit in commits %}
+{%- set group_order = [
+  "Features",
+  "Bug Fixes",
+  "Reverts",
+  "Performance Improvements",
+  "Documentation",
+  "Styles",
+  "Code Refactoring",
+  "Tests",
+  "Build System",
+  "CI/CD",
+  "Miscellaneous Chores",
+  "Other"
+] -%}
+{%- set sorted_commits = commits | sort(attribute="group") -%}
+{% for group in group_order %}
+{%- set group_commits = sorted_commits | filter(attribute="group", value=group) -%}
+{%- if group_commits | length > 0 %}
+### {{ group }}
+{% for commit in group_commits %}
 {% if commit.scope %}
-* **{{ commit.scope }}:** {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
+* **{{ commit.scope }}:** {{ commit.message | split(pat="\n") | first | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
 {%- else %}
-* {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
+* {{ commit.message | split(pat="\n") | first | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://gitlab.infomaniak.ch/kchat/webapp/-/commit/{{ commit.id }})) by {{ commit.author.name }}
 {%- endif %}
 {% endfor %}
+{% endif %}
 {% endfor %}
 """
 
@@ -22,23 +40,28 @@ footer = ""
 [git]
 conventional_commits = true
 filter_unconventional = false
-filter_commits = false
-sort_commits = "oldest"
+filter_commits = true
+sort_commits = "newest"
 protect_breaking_commits = true
 
 commit_parsers = [
-  { message = "^feat", group = "Features" },
-  { message = "^fix", group = "Bug Fixes" },
-  { message = "^perf", group = "Performance Improvements" },
-  { message = "^revert", group = "Reverts" },
-  { message = "^docs", group = "Documentation" },
-  { message = "^style", group = "Styles" },
-  { message = "^refactor", group = "Code Refactoring" },
-  { message = "^test", group = "Tests" },
-  { message = "^build", group = "Build System" },
-  { message = "^ci", group = "CI/CD" },
-  { message = "^chore", group = "Miscellaneous Chores" },
+  { message = "(?i)^merge ", skip = true },
+  { message = "(?i)^feat", group = "Features" },
+  { message = "(?i)^fix", group = "Bug Fixes" },
+  { message = "(?i)^revert", group = "Reverts" },
+  { message = "(?i)^perf", group = "Performance Improvements" },
+  { message = "(?i)^docs", group = "Documentation" },
+  { message = "(?i)^style", group = "Styles" },
+  { message = "(?i)^refactor", group = "Code Refactoring" },
+  { message = "(?i)^test", group = "Tests" },
+  { message = "(?i)^build", group = "Build System" },
+  { message = "(?i)^ci", group = "CI/CD" },
+  { message = "(?i)^chore", group = "Miscellaneous Chores" },
   { message = ".*", group = "Other" },
 ]
 
-commit_exclude_patterns = []
+commit_exclude_patterns = [
+  "^Merge branch",
+  "^Merge remote-tracking branch",
+  "^Merge pull request"
+]
