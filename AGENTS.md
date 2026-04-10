@@ -10,6 +10,7 @@
 - **Clean, idiomatic, readable code** — apply SOLID principles where relevant
 - Drop `ik.test` convention
 - Drop `IK:` comments
+- **CSS files for styling** — no inline styles, no SCSS for new code; use existing `.css` files unless there's already SCSS or inline styles present; if inline styles are small and you need to add/modify them, transform to CSS stylesheet
 
 ## i18n
 
