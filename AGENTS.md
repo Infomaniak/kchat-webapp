@@ -16,6 +16,17 @@
 
 **13 locales**: `en`, `fr`, `it`, `es`, `de`, `pt-BR`, `sv`, `pl`, `nl`, `el`, `no`, `da`, `fi` — no other languages. Translations must be natural.
 
+## MR / Redmine conventions
+
+When using the `create-mr` skill and a Redmine ticket is provided:
+- MR title: suffix `[RM-xxxx]` at the end
+- Description: full Redmine link in the Resources section
+
+Example:
+```
+feat(auth): Add OAuth2 login [RM-1234]
+```
+
 ## Scope Control
 
 - Fix **only** what is asked for
