@@ -413,7 +413,7 @@ release:changelog:
   before_script:
     - curl -fsSL -o /tmp/git-cliff.tar.gz https://github.com/orhun/git-cliff/releases/download/v2.12.0/git-cliff-2.12.0-x86_64-unknown-linux-gnu.tar.gz
     - echo "${GIT_CLIFF_SHA256}  /tmp/git-cliff.tar.gz" | sha256sum -c -
-    - tar -xzf /tmp/git-cliff.tar.gz -C /tmp/
+    - tar -xzf /tmp/git-cliff.tar.gz -C /tmp/ --strip-components=1
     - mv /tmp/git-cliff /usr/local/bin/
     - chmod +x /usr/local/bin/git-cliff
   script:
