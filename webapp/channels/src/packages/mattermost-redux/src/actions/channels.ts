@@ -35,6 +35,7 @@ import {
 } from 'mattermost-redux/selectors/entities/channels';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import type {GetStateFunc, ActionFunc, ActionFuncAsync} from 'mattermost-redux/types/actions';
 import {getChannelByName} from 'mattermost-redux/utils/channel_utils';
 import {DelayedDataLoader} from 'mattermost-redux/utils/data_loader';
@@ -505,7 +506,9 @@ export function fetchAllMyChannelMembers(): ActionFuncAsync {
 
 export function fetchAllMyTeamsChannels(): ActionFuncAsync {
     return async (dispatch, getState) => {
-        const previousChannels = getState().entities.channels.channels;
+        const state = getState();
+        const previousChannels = state.entities.channels.channels;
+        const currentUserId = getCurrentUserId(state);
 
         let channels: ServerChannel[];
         try {
@@ -522,8 +525,10 @@ export function fetchAllMyTeamsChannels(): ActionFuncAsync {
         });
 
         // Detect channels that were in state but are no longer returned by the
-        // server (e.g. archived while we were disconnected). Mark them as
-        // deleted so the sidebar and channel view update accordingly.
+        // server. This happens when:
+        // 1. Channel was archived while we were disconnected (server handles this via websocket)
+        // 2. User was removed from channel while we were disconnected
+        // We leave the channel instead of marking as archived to avoid false positives.
         const fetchedIds = new Set(channels.map((c) => c.id));
         const isStaleChannel = (ch: Channel) => !fetchedIds.has(ch.id) && ch.delete_at === 0 && ch.type !== 'D' && ch.type !== 'G';
 
@@ -531,8 +536,8 @@ export function fetchAllMyTeamsChannels(): ActionFuncAsync {
         for (const ch of Object.values(previousChannels)) {
             if (isStaleChannel(ch)) {
                 staleActions.push({
-                    type: ChannelTypes.RECEIVED_CHANNEL_DELETED,
-                    data: {id: ch.id, team_id: ch.team_id, deleteAt: Date.now(), viewArchivedChannels: false},
+                    type: ChannelTypes.LEAVE_CHANNEL,
+                    data: {id: ch.id, user_id: currentUserId, team_id: ch.team_id},
                 });
             }
         }
