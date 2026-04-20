@@ -14,7 +14,7 @@
 
 ## i18n
 
-**13 locales**: `en`, `fr`, `it`, `es`, `de`, `pt-BR`, `sv`, `pl`, `nl`, `el`, `no`, `da`, `fi` — no other languages. Translations must be natural.
+**13 locales**: `en`, `fr`, `it`, `es`, `de`, `pt`, `sv`, `pl`, `nl`, `el`, `no`, `da`, `fi` — no other languages. Translations must be natural.
 
 ## MR / Redmine conventions
 
