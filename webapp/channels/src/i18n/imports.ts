@@ -16,15 +16,15 @@ import it from './it.json';
 import nl from './nl.json';
 import no from './no.json';
 import pl from './pl.json';
-import ptBR from './pt-BR.json';
+import pt from './pt.json';
 import sv from './sv.json';
 
 type TranslationsMap = {
     [id: string]: string,
 };
 
-export const langIDs = ["da","de","el","en","es","fi","fr","it","nl","no","pl","pt-BR","sv"];
+export const langIDs = ["da","de","el","en","es","fi","fr","it","nl","no","pl","pt","sv"];
 
-export const langLabels = {"da":"Dansk","de":"Deutsch","el":"Ελληνικά","en":"English","es":"Español","fi":"Suomi","fr":"Français","it":"Italiano","nl":"Nederlands","no":"Norsk","pl":"Polski","pt-BR":"Português (Brasil)","sv":"Svenska"};
+export const langLabels = {"da":"Dansk","de":"Deutsch","el":"Ελληνικά","en":"English","es":"Español","fi":"Suomi","fr":"Français","it":"Italiano","nl":"Nederlands","no":"Norsk","pl":"Polski","pt":"Português","sv":"Svenska"};
 
-export const langFiles: {[langID: string]: TranslationsMap} = {da,de,el,en,es,fi,fr,it,nl,no,pl,'pt-BR':ptBR,sv};
+export const langFiles: {[langID: string]: TranslationsMap} = {da,de,el,en,es,fi,fr,it,nl,no,pl,pt,sv};

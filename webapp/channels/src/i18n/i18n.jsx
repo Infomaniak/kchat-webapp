@@ -18,7 +18,7 @@ import it from './it.json';
 import nl from './nl.json';
 import no from './no.json';
 import pl from './pl.json';
-import ptBR from './pt-BR.json';
+import pt from './pt.json';
 import sv from './sv.json';
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
@@ -56,11 +56,11 @@ export const languages = {
         order: 4,
         url: langFiles.de,
     },
-    'pt-BR': {
-        value: 'pt-BR',
-        name: 'Português (Brasil)',
+    pt: {
+        value: 'pt',
+        name: 'Português',
         order: 5,
-        url: langFiles['pt-BR'],
+        url: langFiles.pt,
     },
     sv: {
         value: 'sv',
