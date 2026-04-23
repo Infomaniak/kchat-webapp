@@ -346,22 +346,30 @@ export default class WebSocketClient {
 
             return;
         }
-        this.subscribeToTeamChannel(this._teamId as string);
-        this.subscribeToUserChannel(this._userId || this._currentUserId);
-        this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
-        this.subscribeToOtherTeams(this.otherTeams, this._teamId);
+        const jitterDelay = Math.random() * JITTER_RANGE;
+        console.log(`${debugId} subscribing channels with jitter delay: ${Math.round(jitterDelay)}ms`);
 
-        const presenceChannel = this._presenceChannelId || this.currentPresence;
-        if (presenceChannel) {
-            this.bindPresenceChannel(presenceChannel);
-        }
+        setTimeout(() => {
+            this.subscribeToTeamChannel(this._teamId as string);
+            this.subscribeToUserChannel(this._userId || this._currentUserId);
+            this.subscribeToUserTeamScopedChannel(this._userTeamId || this._currentUserTeamId);
 
-        if (this.currentThreadPresence) {
-            const threadChannelId = this.currentThreadPresence;
-            this.currentThreadPresence = '';
-            this.threadPresenceChannel = null;
-            this.bindThreadPresenceChannel(threadChannelId);
-        }
+            if (this.otherTeams && this.otherTeams.length > 0) {
+                this.subscribeToOtherTeams(this.otherTeams, this._teamId);
+            }
+
+            const presenceChannel = this._presenceChannelId || this.currentPresence;
+            if (presenceChannel) {
+                this.bindPresenceChannel(presenceChannel);
+            }
+
+            if (this.currentThreadPresence) {
+                const threadChannelId = this.currentThreadPresence;
+                this.currentThreadPresence = '';
+                this.threadPresenceChannel = null;
+                this.bindThreadPresenceChannel(threadChannelId);
+            }
+        }, jitterDelay);
 
         this.reconnecting = false;
 
