@@ -1091,7 +1091,6 @@
   "error.force_migration.title": "Laden Sie die neue Version der kChat-Anwendung herunter",
   "error.generic.back": "Zurück",
   "error.generic.dl_link": "Laden Sie die neue Version herunter",
-  "error.generic.link_ksuite": "Entdecke kSuite",
   "error.generic.link_login": "Zurück zur Anmeldeseite",
   "error.generic.message": "Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal oder versuchen Sie, die Seite zu aktualisieren. Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Support.",
   "error.generic.reload": "Seite neu laden",

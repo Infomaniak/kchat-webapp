@@ -1091,7 +1091,6 @@
   "error.force_migration.title": "Last ned den nye versjonen av kChat-appen",
   "error.generic.back": "Tilbake",
   "error.generic.dl_link": "Last ned den nye versjonen",
-  "error.generic.link_ksuite": "Oppdag kSuite",
   "error.generic.link_login": "Tilbake til innloggingssiden",
   "error.generic.message": "Prøv igjen senere, eller prøv å oppdatere siden. Hvis problemet vedvarer, kan du kontakte kundestøtte.",
   "error.generic.reload": "Last inn siden på nytt",

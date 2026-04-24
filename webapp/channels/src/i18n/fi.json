@@ -1091,7 +1091,6 @@
   "error.force_migration.title": "Lataa uusin versio kChat-sovelluksesta",
   "error.generic.back": "Takaisin",
   "error.generic.dl_link": "Lataa uusin versio",
-  "error.generic.link_ksuite": "Tutustu kSuiteen",
   "error.generic.link_login": "Palaa kirjautumissivulle",
   "error.generic.message": "Yritä myöhemmin uudelleen tai päivitä sivu. Jos ongelma jatkuu, ota yhteyttä tukeen.",
   "error.generic.reload": "Lataa sivu uudelleen",

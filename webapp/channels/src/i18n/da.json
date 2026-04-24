@@ -1091,7 +1091,6 @@
   "error.force_migration.title": "Download den nye version af kChat-applikationen",
   "error.generic.back": "Tilbage",
   "error.generic.dl_link": "Download den nye version",
-  "error.generic.link_ksuite": "Oplev kSuite",
   "error.generic.link_login": "Tilbage til loginside",
   "error.generic.message": "Prøv igen senere, eller opdater siden. Hvis problemet fortsætter, bedes du kontakte support.",
   "error.generic.reload": "Genindlæs siden",

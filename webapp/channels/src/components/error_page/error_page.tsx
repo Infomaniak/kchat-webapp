@@ -160,14 +160,11 @@ export default class ErrorPage extends React.PureComponent<Props> {
             backButton = (
                 <a
                     className='btn btn-primary'
-                    onClick={GlobalActions.redirectToKSuite}
+                    onClick={() => reloadPage()}
                 >
                     <FormattedMessage
-                        id='error.generic.link_ksuite'
-                        defaultMessage='Add kSuite'
-                        values={{
-                            siteName: this.props.siteName,
-                        }}
+                        id='error.generic.reload'
+                        defaultMessage='Reload page'
                     />
                 </a>
             );

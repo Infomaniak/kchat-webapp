@@ -1091,7 +1091,6 @@
   "error.force_migration.title": "Ladda ner den nya versionen av kChat-appen",
   "error.generic.back": "Tillbaka",
   "error.generic.dl_link": "Ladda ner den nya versionen",
-  "error.generic.link_ksuite": "Upptäck kSuite",
   "error.generic.link_login": "Tillbaka till inloggningssidan",
   "error.generic.message": "Ett fel har uppstått.",
   "error.generic.reload": "Ladda om sidan",
