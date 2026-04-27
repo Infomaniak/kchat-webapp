@@ -512,21 +512,22 @@ export default class AbstractCommand extends React.PureComponent<Props, State> {
                                 />
                             </label>
                             <div className='col-md-5 col-sm-8'>
+                                <LocalizedPlaceholderInput
+                                    id='url'
+                                    type='text'
+                                    maxLength={1024}
+                                    className='form-control'
+                                    value={this.state.url}
+                                    onChange={this.updateUrl}
+                                    placeholder={defineMessage({
+                                        id: 'add_command.url.placeholder',
+                                        defaultMessage: 'Must start with http:// or https://',
+                                    })}
+                                />
                                 <div className='form__help'>
                                     <FormattedMessage
                                         id='add_command.url.help'
                                         defaultMessage='Specify the callback URL to receive the HTTP POST or GET event request when the slash command is run.'
-                                    />
-                                </div>
-                                <div className='form__help'>
-                                    <FormattedMessage
-                                        id={'add_command.outgoing_oauth_connections.help_text'}
-                                        defaultMessage={'You can connect commands to <link>outgoing OAuth connections</link>.'}
-                                        values={{
-                                            link: (text: string) => (
-                                                <a href='https://mattermost.com/pl/outgoing-oauth-connections'>{text}</a>
-                                            ),
-                                        }}
                                     />
                                 </div>
                             </div>
