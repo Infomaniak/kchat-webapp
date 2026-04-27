@@ -46,11 +46,11 @@ def get_changelog(tag)
   puts "Generating changelog for tag #{tag}"
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
-  from_commit_sha = get_commit_sha(last_tag)
-  to_commit_sha = get_commit_sha(tag)
+
+  `git fetch --tags origin 2>/dev/null` if ENV['CI']
 
   config_path = File.join(__dir__, '..', 'cliff.toml')
-  cmd = "git-cliff --config #{config_path} #{from_commit_sha}..#{to_commit_sha}"
+  cmd = "git-cliff --ignore-tags '.*' --config #{config_path} #{last_tag}..#{tag}"
   puts "Running: #{cmd}"
 
   output = `#{cmd}`
