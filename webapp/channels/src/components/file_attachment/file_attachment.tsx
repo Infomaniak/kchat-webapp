@@ -11,11 +11,10 @@ import type {FileInfo} from '@mattermost/types/files';
 import {getFileThumbnailUrl, getFileUrl} from 'mattermost-redux/utils/file_utils';
 
 import GetPublicModal from 'components/get_public_link_modal';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
+import * as Menu from 'components/menu';
 import WithTooltip from 'components/with_tooltip';
 
-import {Constants, FileTypes, ModalIdentifiers} from 'utils/constants';
+import {FileTypes, ModalIdentifiers} from 'utils/constants';
 import {trimFilename} from 'utils/file_utils';
 import {
     fileSizeToString,
@@ -64,9 +63,6 @@ export default function FileAttachment(props: Props) {
     const [loaded, setLoaded] = useState(getFileType(props.fileInfo.extension) !== FileTypes.IMAGE);
     const [loadFilesCalled, setLoadFilesCalled] = useState(false);
     const [keepOpen, setKeepOpen] = useState(false);
-    const [openUp, setOpenUp] = useState(false);
-
-    const buttonRef = useRef<HTMLButtonElement | null>(null);
 
     const handleImageLoaded = () => {
         if (mounted.current) {
@@ -139,31 +135,6 @@ export default function FileAttachment(props: Props) {
     const handleDropdownOpened = (open: boolean) => {
         props.handleFileDropdownOpened?.(open);
         setKeepOpen(open);
-
-        if (open) {
-            setMenuPosition();
-        }
-    };
-
-    const setMenuPosition = () => {
-        if (!buttonRef.current) {
-            return;
-        }
-
-        const anchorRect = buttonRef.current?.getBoundingClientRect();
-        let y;
-        if (typeof anchorRect?.y === 'undefined') {
-            y = typeof anchorRect?.top === 'undefined' ? 0 : anchorRect?.top;
-        } else {
-            y = anchorRect?.y;
-        }
-        const windowHeight = window.innerHeight;
-
-        const totalSpace = windowHeight - 80;
-        const spaceOnTop = y - Constants.CHANNEL_HEADER_HEIGHT;
-        const spaceOnBottom = (totalSpace - (spaceOnTop + Constants.POST_AREA_HEIGHT));
-
-        setOpenUp(spaceOnTop > spaceOnBottom);
     };
 
     const handleGetPublicLink = () => {
@@ -179,27 +150,28 @@ export default function FileAttachment(props: Props) {
     const renderFileMenuItems = () => {
         const {enablePublicLink, fileInfo, pluginMenuItems} = props;
 
-        let divider;
         const defaultItems = [];
         if (enablePublicLink) {
             defaultItems.push(
-                <Menu.ItemAction
-                    data-title='Public Image'
+                <Menu.Item
                     key={fileInfo.id + '_publiclinkmenuitem'}
                     onClick={handleGetPublicLink}
-                    ariaLabel={formatMessage({id: 'view_image_popover.publicLink', defaultMessage: 'Get a public link'})}
-                    text={formatMessage({id: 'view_image_popover.publicLink', defaultMessage: 'Get a public link'})}
+                    labels={
+                        <FormattedMessage
+                            id='view_image_popover.publicLink'
+                            defaultMessage='Get a public link'
+                        />
+                    }
                 />,
             );
         }
 
         const pluginItems = pluginMenuItems?.filter((item) => item?.match(fileInfo)).map((item) => {
             return (
-                <Menu.ItemAction
-                    id={item.id + '_pluginmenuitem'}
+                <Menu.Item
                     key={item.id + '_pluginmenuitem'}
                     onClick={() => item?.action(fileInfo)}
-                    text={item.text}
+                    labels={<span>{item.text}</span>}
                 />
             );
         });
@@ -210,48 +182,32 @@ export default function FileAttachment(props: Props) {
         }
 
         const isDividerVisible = defaultItems?.length && pluginItems?.length;
-        if (isDividerVisible) {
-            divider = (
-                <li
-                    id={`divider_file_${fileInfo.id}_plugins`}
-                    className='MenuItem__divider'
-                    role='menuitem'
-                />
-            );
-        }
 
         return (
-            <MenuWrapper
-                onToggle={handleDropdownOpened}
-                stopPropagationOnToggle={true}
+            <Menu.Container
+                menuButton={{
+                    id: `file_action_button_${props.fileInfo.id}`,
+                    'aria-label': formatMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'}).toLowerCase(),
+                    class: classNames(
+                        'file-dropdown-icon',
+                        'dots-icon',
+                        {'a11y--active': keepOpen},
+                    ),
+                    children: <i className='icon icon-dots-vertical'/>,
+                }}
+                menuButtonTooltip={{
+                    text: formatMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'}),
+                }}
+                menu={{
+                    id: `file_dropdown_${props.fileInfo.id}`,
+                    'aria-label': 'file menu',
+                    onToggle: handleDropdownOpened,
+                }}
             >
-                <WithTooltip
-                    title={formatMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'})}
-                >
-                    <button
-                        ref={buttonRef}
-                        id={`file_action_button_${props.fileInfo.id}`}
-                        aria-label={formatMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'}).toLowerCase()}
-                        className={classNames(
-                            'file-dropdown-icon', 'dots-icon',
-                            {'a11y--active': keepOpen},
-                        )}
-                        aria-expanded={keepOpen}
-                    >
-                        <i className='icon icon-dots-vertical'/>
-                    </button>
-                </WithTooltip>
-                <Menu
-                    id={`file_dropdown_${props.fileInfo.id}`}
-                    ariaLabel={'file menu'}
-                    openLeft={true}
-                    openUp={openUp}
-                >
-                    {defaultItems}
-                    {divider}
-                    {pluginItems}
-                </Menu>
-            </MenuWrapper>
+                {defaultItems}
+                {isDividerVisible && <Menu.Separator/>}
+                {pluginItems}
+            </Menu.Container>
         );
     };
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import classNames from 'classnames';
 import React from 'react';
 import {defineMessage, FormattedMessage} from 'react-intl';
 
@@ -8,9 +9,8 @@ import {Client4} from 'mattermost-redux/client';
 
 import FileThumbnail from 'components/file_attachment/file_thumbnail';
 import FilePreviewModal from 'components/file_preview_modal';
+import * as Menu from 'components/menu';
 import Timestamp, {RelativeRanges} from 'components/timestamp';
-import Menu from 'components/widgets/menu/menu';
-import MenuWrapper from 'components/widgets/menu/menu_wrapper';
 import Tag from 'components/widgets/tag/tag';
 import WithTooltip from 'components/with_tooltip';
 
@@ -18,7 +18,7 @@ import {getHistory} from 'utils/browser_history';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {getSiteURL} from 'utils/url';
 import {isDesktopApp} from 'utils/user_agent';
-import {fileSizeToString, copyToClipboard, localizeMessage} from 'utils/utils';
+import {fileSizeToString, copyToClipboard} from 'utils/utils';
 
 import type {PropsFromRedux, OwnProps} from './index';
 
@@ -41,8 +41,10 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
         this.state = {keepOpen: false};
     }
 
-    private jumpToConv = (e: MouseEvent) => {
-        e.stopPropagation();
+    private jumpToConv = (e: React.MouseEvent | React.KeyboardEvent) => {
+        if ('stopPropagation' in e) {
+            e.stopPropagation();
+        }
         getHistory().push(`/${this.props.teamName}/pl/${this.props.fileInfo.post_id}`);
     };
 
@@ -62,11 +64,10 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
         const {fileInfo} = this.props;
         const pluginItems = this.props.pluginMenuItems?.filter((item) => item?.match(fileInfo)).map((item) => {
             return (
-                <Menu.ItemAction
-                    id={item.id + '_pluginmenuitem'}
+                <Menu.Item
                     key={item.id + '_pluginmenuitem'}
                     onClick={() => item.action?.(fileInfo)}
-                    text={item.text}
+                    labels={<span>{item.text}</span>}
                 />
             );
         });
@@ -77,11 +78,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
 
         return (
             <>
-                <li
-                    id={`divider_file_${this.props.fileInfo.id}_plugins`}
-                    className='MenuItem__divider'
-                    role='menuitem'
-                />
+                <Menu.Separator/>
                 {pluginItems}
             </>
         );
@@ -126,7 +123,7 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                 className='search-item__container'
             >
                 <button
-                    className={'FileSearchResultItem' + (this.state.keepOpen ? ' keep-open' : '')}
+                    className={classNames('FileSearchResultItem', {'keep-open': this.state.keepOpen})}
                     onClick={this.showPreview}
                 >
                     <FileThumbnail fileInfo={fileInfo}/>
@@ -148,37 +145,45 @@ export default class FileSearchResultItem extends React.PureComponent<Props, Sta
                         </div>
                     </div>
                     {this.props.fileInfo.post_id && (
-                        <WithTooltip
-                            title={defineMessage({id: 'file_search_result_item.more_actions', defaultMessage: 'More Actions'})}
+                        <Menu.Container
+                            menuButton={{
+                                id: `file_action_button_${fileInfo.id}`,
+                                class: classNames('action-icon', 'dots-icon', {
+                                    'a11y--active': this.state.keepOpen,
+                                }),
+                                children: <i className='icon icon-dots-vertical'/>,
+                            }}
+                            menuButtonTooltip={{
+                                text: 'More Actions',
+                            }}
+                            menu={{
+                                id: `file_dropdown_${fileInfo.id}`,
+                                'aria-label': 'file menu',
+                                onToggle: this.keepOpen,
+                            }}
+                            anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                            transformOrigin={{vertical: 'top', horizontal: 'right'}}
                         >
-                            <MenuWrapper
-                                onToggle={this.keepOpen}
-                                stopPropagationOnToggle={true}
-                            >
-                                <a
-                                    href='#'
-                                    className='action-icon dots-icon'
-                                >
-                                    <i className='icon icon-dots-vertical'/>
-                                </a>
-                                <Menu
-                                    ariaLabel={'file menu'}
-                                    openLeft={true}
-                                >
-                                    <Menu.ItemAction
-                                        onClick={this.jumpToConv}
-                                        ariaLabel={localizeMessage({id: 'file_search_result_item.open_in_channel', defaultMessage: 'Open in channel'})}
-                                        text={localizeMessage({id: 'file_search_result_item.open_in_channel', defaultMessage: 'Open in channel'})}
+                            <Menu.Item
+                                onClick={this.jumpToConv}
+                                labels={
+                                    <FormattedMessage
+                                        id='file_search_result_item.open_in_channel'
+                                        defaultMessage='Open in channel'
                                     />
-                                    <Menu.ItemAction
-                                        onClick={this.copyLink}
-                                        ariaLabel={localizeMessage({id: 'file_search_result_item.copy_link', defaultMessage: 'Copy link'})}
-                                        text={localizeMessage({id: 'file_search_result_item.copy_link', defaultMessage: 'Copy link'})}
+                                }
+                            />
+                            <Menu.Item
+                                onClick={this.copyLink}
+                                labels={
+                                    <FormattedMessage
+                                        id='file_search_result_item.copy_link'
+                                        defaultMessage='Copy link'
                                     />
-                                    {this.renderPluginItems()}
-                                </Menu>
-                            </MenuWrapper>
-                        </WithTooltip>
+                                }
+                            />
+                            {this.renderPluginItems()}
+                        </Menu.Container>
                     )}
                     <WithTooltip
                         title={defineMessage({id: 'file_search_result_item.download', defaultMessage: 'Download'})}
