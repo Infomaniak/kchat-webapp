@@ -71,6 +71,9 @@ describe('components/channel_invite_modal', () => {
         teammateNameDisplaySetting: General.TEAMMATE_NAME_DISPLAY.SHOW_USERNAME,
         isGroupsEnabled: true,
         guestQuotaExceeded: false,
+        isOnHighestTier: false,
+        totalGuest: 0,
+        guestLimit: 200,
         currentPack: 'ksuite_essential' as PackName,
         actions: {
             addUsersToChannel: jest.fn().mockImplementation(() => {
@@ -305,5 +308,60 @@ describe('components/channel_invite_modal', () => {
         const invitationLink = wrapper.find('InviteModalLink');
 
         expect(invitationLink).toHaveLength(0);
+    });
+
+    test('should show disabled guest invite option with tooltip when quota exceeded and on highest tier', () => {
+        const props = {
+            ...baseProps,
+            canInviteGuests: true,
+            emailInvitationsEnabled: true,
+            guestQuotaExceeded: true,
+            isOnHighestTier: true,
+            totalGuest: 200,
+            guestLimit: 200,
+        };
+        const wrapper = shallowWithIntl(
+            <ChannelInviteModal {...props}/>,
+        );
+
+        expect(wrapper.find('WithTooltip')).toHaveLength(1);
+        expect(wrapper.find('InviteModalLink')).toHaveLength(0);
+        expect(wrapper.find('wc-ksuite-pro-upgrade-tag')).toHaveLength(0);
+    });
+
+    test('should show upgrade tag when quota exceeded but not on highest tier', () => {
+        const props = {
+            ...baseProps,
+            canInviteGuests: true,
+            emailInvitationsEnabled: true,
+            guestQuotaExceeded: true,
+            isOnHighestTier: false,
+            currentPack: 'ksuite_standard' as PackName,
+        };
+        const wrapper = shallowWithIntl(
+            <ChannelInviteModal {...props}/>,
+        );
+
+        expect(wrapper.find('WithTooltip')).toHaveLength(0);
+        expect(wrapper.find('InviteModalLink')).toHaveLength(0);
+        expect(wrapper.find('wc-ksuite-pro-upgrade-tag')).toHaveLength(1);
+    });
+
+    test('should show normal guest invite link when quota not exceeded', () => {
+        const props = {
+            ...baseProps,
+            canInviteGuests: true,
+            emailInvitationsEnabled: true,
+            guestQuotaExceeded: false,
+            totalGuest: 50,
+            guestLimit: 200,
+        };
+        const wrapper = shallowWithIntl(
+            <ChannelInviteModal {...props}/>,
+        );
+
+        expect(wrapper.find('WithTooltip')).toHaveLength(0);
+        expect(wrapper.find('InviteModalLink')).toHaveLength(1);
+        expect(wrapper.find('wc-ksuite-pro-upgrade-tag')).toHaveLength(0);
     });
 });

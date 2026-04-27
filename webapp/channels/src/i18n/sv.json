@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Lägg till användare till {channel}",
   "channel_invite.already_in_channel": "Redan i kanalen",
   "channel_invite.invite_guest": "Bjud in som gäst",
+  "channel_invite.invite_guest.disabled_tooltip": "Gräns uppnådd ({count}/{max}). Ta bort en extern användare eller en väntande inbjudan för att lägga till en ny.",
   "channel_invite.no_options_message": "Inga träffar hittades - <InvitationModalLink>Bjud in dem till teamet</InvitationModalLink>",
   "channel_limitation.messages": "Meddelanden och filer som är äldre än 3 månader är dolda. För att visa fler inlägg, {isAdmin, select, true {prenumerera på ett högre abonnemang. <modifyOffer>Ändra mitt abonnemang</modifyOffer>} other {kontakta en administratör för att prenumerera på ett högre abonnemang}}",
   "channel_loader.posted": "Publicerad",

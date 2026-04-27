@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Προσθήκη νέων μελών στο {channel}",
   "channel_invite.already_in_channel": "Είστε ήδη στο κανάλι",
   "channel_invite.invite_guest": "Προσκαλέστε έναν νέο επισκέπτη",
+  "channel_invite.invite_guest.disabled_tooltip": "Όριο επιτεύχθη ({count}/{max}). Καταργήστε έναν εξωτερικό χρήστη ή μια εκκρεμής πρόσκληση για να προσθέσετε έναν νέο.",
   "channel_invite.no_options_message": "Δεν βρέθηκαν αποτελέσματα",
   "channel_limitation.messages": "Τα μηνύματα και τα αρχεία που είναι παλαιότερα των 3 μηνών είναι κρυμμένα. Για να δείτε περισσότερες δημοσιεύσεις, {isAdmin, select, true {εγγραφείτε σε ένα ανώτερο πρόγραμμα. <modifyOffer>Αλλαγή προγράμματος</modifyOffer>} other {επικοινωνήστε με έναν διαχειριστή για να εγγραφείτε σε ένα ανώτερο πρόγραμμα}}",
   "channel_loader.posted": "Δημοσιεύτηκε",

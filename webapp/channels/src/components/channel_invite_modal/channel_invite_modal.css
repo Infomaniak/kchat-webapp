@@ -1,5 +1,25 @@
+.inviteGuestQuotaReached,
+.inviteGuestDisabled,
 .inviteGuessLimited {
     align-self: flex-end;
-    margin-top: 8px;
     margin-right: 32px;
+}
+
+.inviteGuestQuotaReached {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.inviteGuestDisabled {
+    margin-top: 12px;
+    opacity: 0.5;
+    cursor: not-allowed;
+    user-select: none;
+}
+
+.inviteGuestQuotaReached,
+.inviteGuessLimited {
+    margin-top: 8px;
 }

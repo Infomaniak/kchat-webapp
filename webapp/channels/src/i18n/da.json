@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Tilføj personer til {channel}",
   "channel_invite.already_in_channel": "Allerede i kanalen",
   "channel_invite.invite_guest": "Inviter en ny gæst",
+  "channel_invite.invite_guest.disabled_tooltip": "Grænse nået ({count}/{max}). Fjern en ekstern bruger eller en afventende invitation for at tilføje en ny.",
   "channel_invite.no_options_message": "Ingen resultater fundet",
   "channel_limitation.messages": "Beskeder og filer, der er ældre end 3 måneder, er skjulte. For at se flere beskeder skal du {isAdmin, select, true {opgradere til en højere pakke. <modifyOffer>Rediger min pakke</modifyOffer>} other {kontakte en administrator for at opgradere til en højere pakke}}",
   "channel_loader.posted": "Offentliggjort",

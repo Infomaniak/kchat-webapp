@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Voeg mensen toe aan {channel}",
   "channel_invite.already_in_channel": "Al in het kanaal",
   "channel_invite.invite_guest": "Uitnodigen als gast",
+  "channel_invite.invite_guest.disabled_tooltip": "Limiet bereikt ({count}/{max}). Verwijder een externe gebruiker of een uitnodiging in afwachting om een nieuwe toe te voegen.",
   "channel_invite.no_options_message": "Geen overeenkomsten gevonden - <InvitationModalLink>Nodig ze uit voor het team</InvitationModalLink>",
   "channel_limitation.messages": "Berichten en bestanden ouder dan 3 maanden worden verborgen. Om meer berichten te bekijken, {isAdmin, select, true {kunt u een abonnement met meer mogelijkheden afsluiten. <modifyOffer>Mijn abonnement wijzigen</modifyOffer>} other {neem contact op met een beheerder om een abonnement met meer mogelijkheden af te sluiten}}",
   "channel_loader.posted": "Verzonden",

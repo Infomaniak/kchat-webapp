@@ -28,6 +28,7 @@ import ProfilePicture from 'components/profile_picture';
 import ToggleModalButton from 'components/toggle_modal_button';
 import BotTag from 'components/widgets/tag/bot_tag';
 import GuestTag from 'components/widgets/tag/guest_tag';
+import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {sortUsersAndGroups} from 'utils/utils';
@@ -70,6 +71,9 @@ export type Props = {
     // but has reached the quota.
     canInviteGuests?: boolean;
     guestQuotaExceeded: boolean;
+    isOnHighestTier: boolean;
+    totalGuest: number;
+    guestLimit: number;
 
     emailInvitationsEnabled?: boolean;
     groups: Group[];
@@ -529,14 +533,7 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
         const {withQuotaCheck: withQuotaCheckWhenCapped} = quotaGate(0, this.props.currentPack);
         const inviteGuestQuotaReached = (
             <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    marginRight: '32px',
-                    marginTop: '8px',
-                    gap: '8px',
-                }}
+                className='inviteGuestQuotaReached'
                 role='button'
                 onClick={withQuotaCheckWhenCapped(() => {})} // dummy callback
             >
@@ -546,12 +543,34 @@ export class ChannelInviteModal extends React.PureComponent<Props, State> {
                 />
                 <wc-ksuite-pro-upgrade-tag/>
             </div>
+        );
 
+        const inviteGuestDisabled = (
+            <WithTooltip
+                title={this.props.intl.formatMessage({
+                    id: 'channel_invite.invite_guest.disabled_tooltip',
+                    defaultMessage: 'Limit reached ({count}/{max}). Remove an external user or a pending invitation to add a new one.',
+                }, {
+                    count: this.props.totalGuest,
+                    max: this.props.guestLimit,
+                })}
+            >
+                <div className='inviteGuestDisabled'>
+                    <FormattedMessage
+                        id='channel_invite.invite_guest'
+                        defaultMessage='Invite as a Guest'
+                    />
+                </div>
+            </WithTooltip>
         );
 
         let inviteGuestComp = null;
         if (this.props.guestQuotaExceeded) {
-            inviteGuestComp = inviteGuestQuotaReached;
+            if (this.props.isOnHighestTier) {
+                inviteGuestComp = inviteGuestDisabled;
+            } else {
+                inviteGuestComp = inviteGuestQuotaReached;
+            }
         } else {
             inviteGuestComp = inviteGuestLink;
         }

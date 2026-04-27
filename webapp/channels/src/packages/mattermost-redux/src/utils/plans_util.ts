@@ -19,10 +19,12 @@ const planOrder: PackName[] = [
 const paidPlans: PackName[] = ['ksuite_standard', 'ksuite_entreprise', 'ksuite_pro'];
 
 export const getNextWcPack = (current: PackName | undefined): WcPackName => {
-    const index = current ? planOrder.indexOf(current) : -1;
-    const next =
-        index >= 0 && index < planOrder.length - 1 ? planOrder[index + 1] : planOrder[0];
-    return wcPlanMap[next];
+    const currentIndex = current ? planOrder.indexOf(current) : -1;
+
+    const isLastOrUnknown = currentIndex === -1 || currentIndex === planOrder.length - 1;
+    const nextIndex = isLastOrUnknown ? 0 : currentIndex + 1;
+
+    return wcPlanMap[planOrder[nextIndex]];
 };
 
 export const isPaidPlan = (plan: PackName | undefined): boolean => {
@@ -30,6 +32,13 @@ export const isPaidPlan = (plan: PackName | undefined): boolean => {
         return false;
     }
     return paidPlans.includes(plan);
+};
+
+export const isHighestTier = (plan: PackName | undefined): boolean => {
+    if (!plan) {
+        return false;
+    }
+    return planOrder[planOrder.length - 1] === plan;
 };
 
 // Helper when we cannot use the hook useGetUsageDeltas

@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Adicionar pessoas ao {channel}",
   "channel_invite.already_in_channel": "Já no canal",
   "channel_invite.invite_guest": "Convidar um novo usuário externo",
+  "channel_invite.invite_guest.disabled_tooltip": "Limite atingido ({count}/{max}). Remova um utilizador externo ou um convite pendente para adicionar um novo.",
   "channel_invite.no_options_message": "Nenhum resultado encontrado",
   "channel_limitation.messages": "Mensagens e arquivos com mais de 3 meses são ocultados. Para visualizar mais publicações, {isAdmin, select, true {assine um plano superior. <modifyoffer>Alterar meu plano</modifyoffer>} other {entre em contato com um administrador para assinar um plano superior}}",
   "channel_loader.posted": "Publicado",

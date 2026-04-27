@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Lisää käyttäjiä kanavaan {channel}",
   "channel_invite.already_in_channel": "Olet jo kanavalla",
   "channel_invite.invite_guest": "Kutsu uusi vieras",
+  "channel_invite.invite_guest.disabled_tooltip": "Raja saavutettu ({count}/{max}). Poista ulkoinen käyttäjä tai odottava kutsu lisätäksesi uuden.",
   "channel_invite.no_options_message": "Tuloksia ei löytynyt",
   "channel_limitation.messages": "Yli 3 kuukautta vanhat viestit ja tiedostot on piilotettu. Jos haluat nähdä enemmän viestejä, {isAdmin, select, true {tilaa korkeampi palvelupaketti. <modifyOffer>Vaihda palvelupakettini</modifyOffer>} other {ota yhteyttä järjestelmänvalvojaan, jotta voit tilata korkeamman palvelupaketin}}",
   "channel_loader.posted": "Julkaistu",

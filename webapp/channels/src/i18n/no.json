@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Legg til personer i {channel}",
   "channel_invite.already_in_channel": "Allerede i kanalen",
   "channel_invite.invite_guest": "Inviter en ny gjest",
+  "channel_invite.invite_guest.disabled_tooltip": "Grense nådd ({count}/{max}). Fjern en ekstern bruker eller en ventende invitasjon for å legge til en ny.",
   "channel_invite.no_options_message": "Ingen treff funnet",
   "channel_limitation.messages": "Meldinger og filer som er eldre enn 3 måneder, er skjult. For å se flere meldinger, {isAdmin, select, true {oppgrader til et høyere abonnement. <modifyOffer>Endre abonnementet mitt</modifyOffer>} other {kontakt en administrator for å oppgradere til et høyere abonnement}}",
   "channel_loader.posted": "Publisert",

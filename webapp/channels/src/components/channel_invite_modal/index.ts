@@ -19,7 +19,7 @@ import {haveICurrentTeamPermission} from 'mattermost-redux/selectors/entities/ro
 import {getCurrentPackName, getCurrentTeam, getTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getUsage} from 'mattermost-redux/selectors/entities/usage';
 import {getProfilesNotInCurrentChannel, getProfilesInCurrentChannel, getProfilesNotInCurrentTeam, getProfilesNotInTeam, getUserStatuses, makeGetProfilesNotInChannel, makeGetProfilesInChannel} from 'mattermost-redux/selectors/entities/users';
-import {isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
+import {isHighestTier, isQuotaExceeded} from 'mattermost-redux/utils/plans_util';
 
 import {addUsersToChannel} from 'actions/channel_actions';
 import {loadStatusesForProfilesList} from 'actions/status_actions';
@@ -86,6 +86,7 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
         const groups = getAllAssociatedGroupsForReference(state, true);
 
         const currentPack = getCurrentPackName(state);
+        const isOnHighestTier = isHighestTier(currentPack);
 
         return {
             profilesNotInCurrentChannel,
@@ -100,6 +101,9 @@ function makeMapStateToProps(initialState: GlobalState, initialProps: OwnProps) 
             isGroupsEnabled,
             currentPack,
             guestQuotaExceeded,
+            isOnHighestTier,
+            totalGuest,
+            guestLimit: limits.guests,
         };
     };
 }

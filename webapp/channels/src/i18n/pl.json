@@ -647,6 +647,7 @@
   "channel_invite.addNewMembers": "Dodaj osoby do {channel}",
   "channel_invite.already_in_channel": "Już w kanale",
   "channel_invite.invite_guest": "Zaproś jako Gościa",
+  "channel_invite.invite_guest.disabled_tooltip": "Osiągnięto limit ({count}/{max}). Usuń użytkownika zewnętrznego lub oczekujące zaproszenie, aby dodać nowego.",
   "channel_invite.no_options_message": "Nie znaleziono dopasowań - <InvitationModalLink>Zaproś ich do zespołu</InvitationModalLink>",
   "channel_limitation.messages": "Wiadomości i pliki starsze niż 3 miesiące są ukryte. Aby wyświetlić więcej wpisów, {isAdmin, select, true {subskrybuj wyższą ofertę. <modifyOffer>Zmień moją ofertę</modifyOffer>} other {skontaktuj się z administratorem, aby subskrybować wyższą ofertę}}",
   "channel_loader.posted": "Wysłany",
