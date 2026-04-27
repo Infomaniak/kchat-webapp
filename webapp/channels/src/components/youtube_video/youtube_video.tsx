@@ -53,6 +53,18 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
         const videoTitle = metadata?.title || 'unknown';
         const time = handleYoutubeTime(link);
 
+        let imageUrl: string | undefined;
+        if (metadata?.images?.length) {
+            const image = metadata.images[0];
+            imageUrl = image?.secure_url || image?.url;
+        }
+        if (!imageUrl && videoId) {
+            imageUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+        }
+        if (!imageUrl) {
+            return null;
+        }
+
         const header = (
             <h4>
                 <span className='video-type'>{'YouTube - '}</span>
@@ -84,12 +96,10 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
                 />
             );
         } else {
-            const image = metadata?.images[0];
-
             content = (
                 <div className='embed-responsive video-div__placeholder'>
                     <div className='video-thumbnail__container'>
-                        <ExternalImage src={image?.secure_url || image?.url || ''}>
+                        <ExternalImage src={imageUrl}>
                             {(safeUrl) => (
                                 <img
                                     src={safeUrl}
