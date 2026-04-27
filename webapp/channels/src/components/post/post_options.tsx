@@ -54,6 +54,7 @@ type Props = {
     isPostBeingEdited?: boolean;
     canDelete?: boolean;
     pluginActions: PostActionComponent[];
+    isChannelMember: boolean;
     actions: {
         emitShortcutReactToLastPostFrom: (emittedFrom: 'CENTER' | 'RHS_ROOT' | 'NO_WHERE') => void;
     };
@@ -255,9 +256,9 @@ const PostOptions = (props: Props): JSX.Element => {
         const hasCRTFooter = props.collapsedThreadsEnabled && !post.root_id && (post.reply_count > 0 || post.is_following);
         options = (
             <ul className='col__controls post-menu'>
-                {dotMenu}
-                {flagIcon}
-                {props.canReply && !hasCRTFooter &&
+                {props.isChannelMember && dotMenu}
+                {props.isChannelMember && flagIcon}
+                {props.isChannelMember && props.canReply && !hasCRTFooter &&
                 <li>
                     <CommentIcon
                         location={props.location}

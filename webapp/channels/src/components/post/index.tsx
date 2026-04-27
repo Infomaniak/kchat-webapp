@@ -111,6 +111,7 @@ function makeMapStateToProps() {
         const enableEmojiPicker = config.EnableEmojiPicker === 'true';
         const enablePostUsernameOverride = config.EnablePostUsernameOverride === 'true';
         const channel = state.entities.channels.channels[post.channel_id];
+        const isChannelMember = Boolean(state.entities.channels.myMembers[post.channel_id]);
         const shortcutReactToLastPostEmittedFrom = getShortcutReactToLastPostEmittedFrom(state);
 
         const user = getUser(state, post.user_id);
@@ -221,6 +222,7 @@ function makeMapStateToProps() {
             shouldShowDotMenu: shouldShowDotMenu(state, post, channel),
             canDelete: canDeletePost(state, post, channel),
             pluginActions: state.plugins.components.PostAction,
+            isChannelMember,
         };
     };
 }

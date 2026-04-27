@@ -123,6 +123,7 @@ export type Props = {
     canDelete?: boolean;
     pluginActions: PostActionComponent[];
     previousPostDate?: Date | null;
+    isChannelMember: boolean;
 };
 
 function PostComponent(props: Props) {

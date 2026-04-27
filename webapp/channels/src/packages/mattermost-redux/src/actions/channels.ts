@@ -378,16 +378,14 @@ export function getChannel(channelId: string): ActionFuncAsync<Channel> {
     };
 }
 
-export function getChannelAndMyMember(channelId: string): ActionFuncAsync<{channel: Channel; member: ChannelMembership}> {
+export function getChannelAndMyMember(channelId: string): ActionFuncAsync<{channel: Channel; member?: ChannelMembership}> {
     return async (dispatch, getState) => {
-        let channel;
-        let member;
-        try {
-            const channelRequest = Client4.getChannel(channelId);
-            const memberRequest = Client4.getMyChannelMember(channelId);
+        const channelPromise = Client4.getChannel(channelId);
+        const memberPromise = Client4.getMyChannelMember(channelId);
 
-            channel = await channelRequest;
-            member = await memberRequest;
+        let channel;
+        try {
+            channel = await channelPromise;
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
             dispatch({type: ChannelTypes.CHANNELS_FAILURE, error});
@@ -395,17 +393,29 @@ export function getChannelAndMyMember(channelId: string): ActionFuncAsync<{chann
             return {error};
         }
 
-        dispatch(batchActions([
-            {
-                type: ChannelTypes.RECEIVED_CHANNEL,
-                data: channel,
-            },
-            {
+        dispatch({
+            type: ChannelTypes.RECEIVED_CHANNEL,
+            data: channel,
+        });
+
+        let member;
+        try {
+            member = await memberPromise;
+        } catch (error) {
+            const err = error as {status_code?: number};
+            if (err.status_code !== 404) {
+                forceLogoutIfNecessary(error, dispatch, getState);
+                dispatch(logError(error));
+            }
+        }
+
+        if (member) {
+            dispatch({
                 type: ChannelTypes.RECEIVED_MY_CHANNEL_MEMBER,
                 data: member,
-            },
-        ]));
-        dispatch(loadRolesIfNeeded(member.roles.split(' ')));
+            });
+            dispatch(loadRolesIfNeeded(member.roles.split(' ')));
+        }
 
         return {data: {channel, member}};
     };
