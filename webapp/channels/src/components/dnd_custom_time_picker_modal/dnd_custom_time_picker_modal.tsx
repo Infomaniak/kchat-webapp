@@ -154,13 +154,13 @@ export default class DndCustomTimePicker extends React.PureComponent<Props, Stat
                 h++;
                 m = 0;
             } else {
-                m = 30;
+                m = 15;
             }
         }
 
         for (let i = h; i < 24; i++) {
-            for (let j = m / 30; j < 2; j++) {
-                const t = i.toString().padStart(2, '0') + ':' + (j * 30).toString().padStart(2, '0');
+            for (let j = m / 15; j < 4; j++) {
+                const t = i.toString().padStart(2, '0') + ':' + (j * 15).toString().padStart(2, '0');
                 timeMenuItems.push(
                     t,
                 );
