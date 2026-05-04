@@ -47,7 +47,7 @@ def get_changelog(tag)
   last_tag = get_last_tag(tag)
   puts "Last tag: #{last_tag}"
 
-  `git fetch --tags origin` if ENV['CI']
+  `git fetch --tags origin`
 
   config_path = File.join(__dir__, '..', 'cliff.toml')
   cmd = "git-cliff --ignore-tags '.*' --config #{config_path} #{last_tag}..#{tag}"
