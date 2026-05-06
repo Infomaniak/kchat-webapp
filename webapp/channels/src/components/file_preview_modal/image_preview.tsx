@@ -12,12 +12,10 @@ import {getFilePreviewUrl, getFileDownloadUrl} from 'mattermost-redux/utils/file
 import type {ZoomValue} from 'components/file_preview_modal/file_preview_modal_image_controls/file_preview_modal_image_controls';
 import type {LinkInfo} from 'components/file_preview_modal/types';
 
+import './image_preview.scss';
 import {FileTypes} from 'utils/constants';
 import {getFileType} from 'utils/utils';
 
-import './image_preview.scss';
-
-const PADDING = 48;
 const SCROLL_SENSITIVITY = 0.003;
 const DEFAULT_MAX_SCALE = 5;
 const DEFAULT_MIN_SCALE = 1;
@@ -25,169 +23,224 @@ const DEFAULT_MIN_SCALE = 1;
 let zoomExport: number;
 let minZoomExport: number;
 
-type Offset = {
-    offsetX: number;
-    offsetY: number;
-};
-
-type Touch = {
-    touchX: number;
-    touchY: number;
-};
-
 interface Props {
     fileInfo: FileInfo & LinkInfo;
     toolbarZoom: ZoomValue;
     setToolbarZoom: (toolbarZoom: ZoomValue) => void;
 }
 
-const getMaxContainerScale = (imageWidth: number, imageHeight: number, containerWidth: number, containerHeight: number) => {
+const getFitScale = (imageWidth: number, imageHeight: number, containerWidth: number, containerHeight: number) => {
     const scaleX = containerWidth / imageWidth;
     const scaleY = containerHeight / imageHeight;
-    return Math.round(Math.min(scaleX, scaleY) * 100) / 100;
+    return Math.min(scaleX, scaleY);
 };
 
 export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Props) {
-    const [, setLoaded] = useState(false);
-    const [dragging, setDragging] = useState(false);
-    const [offset, setOffset] = useState<Offset>({offsetX: 0, offsetY: 0});
+    const [scale, setScale] = useState(0);
+    const [offsetX, setOffsetX] = useState(0);
+    const [offsetY, setOffsetY] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [containerSize, setContainerSize] = useState({width: 0, height: 0});
+
     const imgRef = useRef<HTMLImageElement>(null);
-    const scale = useRef(0);
     const isMouseDown = useRef(false);
-    const touch = useRef<Touch>({touchX: 0, touchY: 0});
-    const maxScale = useRef(1);
-    const minScale = useRef(1);
+    const dragStart = useRef({x: 0, y: 0, offsetX: 0, offsetY: 0});
+    const lastToolbarZoom = useRef<ZoomValue>(toolbarZoom);
+    const imgNaturalSize = useRef({width: 0, height: 0});
 
     const isExternalFile = !fileInfo.id;
-    let fileUrl = getFileDownloadUrl(fileInfo.id);
-    let previewUrl = fileInfo.has_preview_image ? getFilePreviewUrl(fileInfo.id) : fileUrl;
+    const fileUrl = isExternalFile ? fileInfo.link : getFileDownloadUrl(fileInfo.id);
+    let previewUrl: string;
     if (isExternalFile) {
-        fileUrl = fileInfo.link;
         previewUrl = fileInfo.link;
+    } else if (fileInfo.has_preview_image) {
+        previewUrl = getFilePreviewUrl(fileInfo.id);
+    } else {
+        previewUrl = fileUrl;
     }
 
     useEffect(() => {
-        window.addEventListener('mouseup', handleMouseUp);
-        return () => {
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
+        const el = imgRef.current?.parentElement?.parentElement;
+        let ro: ResizeObserver | undefined;
+        if (el) {
+            ro = new ResizeObserver((entries) => {
+                const cr = entries[0].contentRect;
+                setContainerSize({width: cr.width, height: cr.height});
+            });
+            ro.observe(el);
+        }
+        return () => ro?.disconnect();
     }, []);
 
     useEffect(() => {
-        setLoaded(false);
+        setScale(0);
+        setOffsetX(0);
+        setOffsetY(0);
+        lastToolbarZoom.current = 'A';
         setToolbarZoom('A');
-    }, [previewUrl]);
+    }, [previewUrl, setToolbarZoom]);
 
-    const imageWidth = imgRef.current?.width || 1;
-    const imageHeight = imgRef.current?.height || 1;
-    const containerWidth = imgRef.current?.parentElement?.parentElement?.clientWidth || window.innerWidth;
-    const containerHeight = imgRef.current?.parentElement?.parentElement?.clientHeight || window.innerHeight;
-    let maxContainerScale = 0;
-    if (imgRef.current) {
-        maxContainerScale = getMaxContainerScale(imageWidth, imageHeight, containerWidth - PADDING, containerHeight - PADDING);
-    }
-    minScale.current = Math.min(maxContainerScale, DEFAULT_MIN_SCALE);
+    const imgWidth = imgRef.current?.width || 1;
+    const imgHeight = imgRef.current?.height || 1;
+    const containerWidth = containerSize.width || 1;
+    const containerHeight = containerSize.height || 1;
 
-    const clampOffset = (offsetX: number, offsetY: number) => {
-        const overflowWidth = ((imageWidth * scale.current) - containerWidth) / 2;
-        const overflowHeight = ((imageHeight * scale.current) - containerHeight) / 2;
-        const isFullscreenHorizontaly = overflowWidth >= 0;
-        const isFullscreenVerticaly = overflowHeight >= 0;
+    const fitScale = imgRef.current ? getFitScale(imgWidth, imgHeight, containerWidth, containerHeight) : 1;
+    const minScale = Math.min(fitScale, DEFAULT_MIN_SCALE);
+    const maxScale = imgRef.current ? Math.max(Math.round(DEFAULT_MAX_SCALE * (imgNaturalSize.current.width / imgWidth) * 100) / 100, DEFAULT_MAX_SCALE) : DEFAULT_MAX_SCALE;
 
+    useEffect(() => {
+        if (scale === 0 && imgRef.current && containerSize.width !== 0) {
+            setScale(minScale);
+        }
+    }, [scale, minScale, containerSize.width]);
+
+    useEffect(() => {
+        if (imgRef.current && scale !== 0 && toolbarZoom !== lastToolbarZoom.current) {
+            lastToolbarZoom.current = toolbarZoom;
+
+            let newScale: number;
+            switch (toolbarZoom) {
+            case 'A':
+                newScale = minScale;
+                break;
+            case 'W':
+                newScale = clamp(containerWidth / imgWidth, minScale, maxScale);
+                break;
+            case 'H':
+                newScale = clamp(containerHeight / imgHeight, minScale, maxScale);
+                break;
+            default:
+                newScale = toolbarZoom * (maxScale / DEFAULT_MAX_SCALE);
+                break;
+            }
+
+            if (newScale !== scale) {
+                const ratio = newScale / scale;
+                setScale(newScale);
+                setOffsetX((prev) => prev * ratio);
+                setOffsetY((prev) => prev * ratio);
+            }
+        }
+    }, [toolbarZoom, scale, minScale, maxScale, containerWidth, containerHeight, imgWidth, imgHeight]);
+
+    useEffect(() => {
+        const handleMouseUp = () => {
+            isMouseDown.current = false;
+            setIsDragging(false);
+        };
+        window.addEventListener('mouseup', handleMouseUp);
+        return () => window.removeEventListener('mouseup', handleMouseUp);
+    }, []);
+
+    const clampOffset = (ox: number, oy: number, s: number) => {
+        const overflowW = Math.max(((imgWidth * s) - containerWidth) / 2, 0);
+        const overflowH = Math.max(((imgHeight * s) - containerHeight) / 2, 0);
         return {
-            clampedOffsetX: isFullscreenHorizontaly ? clamp(offsetX, -overflowWidth, overflowWidth) : 0,
-            clampedOffsetY: isFullscreenVerticaly ? clamp(offsetY, -overflowHeight, overflowHeight) : 0,
+            x: overflowW > 0 ? clamp(ox, -overflowW, overflowW) : 0,
+            y: overflowH > 0 ? clamp(oy, -overflowH, overflowH) : 0,
         };
     };
 
-    if (imgRef.current) {
-        const imageRatio = Math.round(DEFAULT_MAX_SCALE * (imgRef.current.naturalWidth / imgRef.current.width) * 100) / 100;
-        maxScale.current = Math.max(imageRatio, DEFAULT_MAX_SCALE);
-
-        switch (toolbarZoom) {
-        case 'A':
-            scale.current = minScale.current;
-            break;
-        case 'W':
-            scale.current = clamp(containerWidth / imageWidth, minScale.current, maxScale.current);
-            break;
-        case 'H':
-            scale.current = clamp(containerHeight / imageHeight, minScale.current, maxScale.current);
-            break;
-        default:
-            scale.current = toolbarZoom * (maxScale.current / DEFAULT_MAX_SCALE);
-            break;
-        }
-    }
-
-    const handleWheel = (event: React.WheelEvent) => {
-        event.persist();
-        const {deltaY} = event;
-        if (!dragging) {
-            scale.current = clamp(scale.current + (deltaY * -SCROLL_SENSITIVITY), minScale.current, maxScale.current);
-            const {offsetX, offsetY} = offset;
-            const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
-            setOffset({offsetX: clampedOffsetX, offsetY: clampedOffsetY});
-            setToolbarZoom(scale.current === minScale.current ? 'A' : scale.current / (maxScale.current / DEFAULT_MAX_SCALE));
-        }
-    };
-
-    const handleMouseMove = (event: React.MouseEvent) => {
-        if (!dragging || !imageOverflows) {
+    const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
+        e.preventDefault();
+        if (!imgRef.current?.parentElement || scale === 0) {
             return;
         }
-        const {touchX, touchY} = touch.current;
-        const {clientX, clientY} = event;
-        const {offsetX, offsetY} = offset;
-        const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX + (clientX - touchX), offsetY + (clientY - touchY));
-        setOffset({offsetX: clampedOffsetX, offsetY: clampedOffsetY});
-        touch.current = {touchX: clientX, touchY: clientY};
+
+        const rect = imgRef.current.parentElement.getBoundingClientRect();
+        const centerX = rect.left + (rect.width / 2);
+        const centerY = rect.top + (rect.height / 2);
+
+        const mouseX = e.clientX - centerX;
+        const mouseY = e.clientY - centerY;
+
+        const oldScale = scale;
+        const newScale = clamp(oldScale + (e.deltaY * -SCROLL_SENSITIVITY), minScale, maxScale);
+        if (newScale === oldScale) {
+            return;
+        }
+
+        const ratio = newScale / oldScale;
+        const newOffsetX = offsetX + (mouseX * (1 - ratio));
+        const newOffsetY = offsetY + (mouseY * (1 - ratio));
+
+        const clamped = clampOffset(newOffsetX, newOffsetY, newScale);
+        setScale(newScale);
+        setOffsetX(clamped.x);
+        setOffsetY(clamped.y);
+
+        const toolbarValue = newScale === minScale ? 'A' : newScale / (maxScale / DEFAULT_MAX_SCALE);
+        lastToolbarZoom.current = toolbarValue;
+        setToolbarZoom(toolbarValue);
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        isMouseDown.current = true;
+        setIsDragging(true);
+        dragStart.current = {
+            x: e.clientX,
+            y: e.clientY,
+            offsetX,
+            offsetY,
+        };
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) {
+            return;
+        }
+
+        const overflowW = Math.max(((imgWidth * scale) - containerWidth) / 2, 0);
+        const overflowH = Math.max(((imgHeight * scale) - containerHeight) / 2, 0);
+        if (overflowW === 0 && overflowH === 0) {
+            return;
+        }
+
+        const dx = e.clientX - dragStart.current.x;
+        const dy = e.clientY - dragStart.current.y;
+
+        const newOffsetX = overflowW > 0 ? clamp(dragStart.current.offsetX + dx, -overflowW, overflowW) : 0;
+        const newOffsetY = overflowH > 0 ? clamp(dragStart.current.offsetY + dy, -overflowH, overflowH) : 0;
+
+        setOffsetX(newOffsetX);
+        setOffsetY(newOffsetY);
     };
 
     const handleMouseLeave = () => {
-        if (dragging) {
-            setDragging(false);
+        if (isDragging) {
+            setIsDragging(false);
         }
     };
 
     const handleMouseEnter = () => {
-        if (dragging !== isMouseDown.current) {
-            setDragging(isMouseDown.current);
+        if (isMouseDown.current && !isDragging) {
+            setIsDragging(true);
         }
     };
 
-    const handleMouseDown = (event: React.MouseEvent) => {
-        event.preventDefault();
-        const {clientX, clientY} = event;
-        touch.current = {touchX: clientX, touchY: clientY};
-        isMouseDown.current = true;
-        setDragging(true);
+    const handleLoad = () => {
+        if (imgRef.current) {
+            imgNaturalSize.current = {
+                width: imgRef.current.naturalWidth,
+                height: imgRef.current.naturalHeight,
+            };
+        }
     };
 
-    const handleMouseUp = () => {
-        isMouseDown.current = false;
-        setDragging(false);
-    };
-
-    const handleLoad = () => setLoaded(true);
-
-    const {offsetX, offsetY} = offset;
-    const {clampedOffsetX, clampedOffsetY} = clampOffset(offsetX, offsetY);
-    const containerStyle = {
-        transform: `
-            translate(${clampedOffsetX}px, ${clampedOffsetY}px)
-            scale(${scale.current})
-        `,
-    };
-
-    const imageOverflows = scale.current > getMaxContainerScale(imageWidth, imageHeight, containerWidth, containerHeight);
+    const imageOverflows = scale > fitScale;
     let cursorType = 'normal';
     if (imageOverflows) {
-        cursorType = dragging ? 'dragging' : 'hover';
+        cursorType = isDragging ? 'dragging' : 'hover';
     }
 
-    zoomExport = scale.current;
-    minZoomExport = minScale.current;
+    zoomExport = scale;
+    minZoomExport = minScale;
+
+    const containerStyle = {
+        transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})`,
+    };
 
     let conditionalSVGStyleAttribute;
     if (getFileType(fileInfo.extension) === FileTypes.SVG) {
@@ -198,7 +251,9 @@ export default function ImagePreview({fileInfo, toolbarZoom, setToolbarZoom}: Pr
     }
 
     return (
-        <div style={containerStyle}>
+        <div
+            style={containerStyle}
+        >
             <img
                 className={classNames(`image_preview image_preview__${cursorType}`, {
                     image_preview__fullscreen: imageOverflows,
