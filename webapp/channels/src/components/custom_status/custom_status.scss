@@ -238,6 +238,7 @@
     &__text {
         overflow: hidden;
         height: 20px;
+        margin-right: 8px;
         font-weight: 600;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -248,7 +249,6 @@
     }
 
     &__duration {
-        margin-left: 8px;
         color: rgba(var(--center-channel-color-rgb), 0.75);
         font-size: 14px;
         font-weight: 400;

@@ -16,10 +16,6 @@ exports[`components/custom_status/custom_status_emoji should match snapshot 1`] 
       size={20}
     />
   </div>
-  <CustomStatusText
-    className="statusSuggestion__text"
-    text=""
-  />
 </button>
 `;
 
@@ -39,10 +35,6 @@ exports[`components/custom_status/custom_status_emoji should match snapshot with
       size={20}
     />
   </div>
-  <CustomStatusText
-    className="statusSuggestion__text with_duration"
-    text=""
-  />
   <span
     className="statusSuggestion__duration"
   >

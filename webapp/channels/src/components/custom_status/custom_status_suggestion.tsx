@@ -74,12 +74,14 @@ const CustomStatusSuggestion: React.FC<Props> = (props: Props) => {
                     size={20}
                 />
             </div>
-            <CustomStatusText
-                text={text}
-                className={classNames('statusSuggestion__text', {
-                    with_duration: duration,
-                })}
-            />
+            {text && (
+                <CustomStatusText
+                    text={text}
+                    className={classNames('statusSuggestion__text', {
+                        with_duration: duration,
+                    })}
+                />
+            )}
             {duration &&
             duration !== CustomStatusDuration.CUSTOM_DATE_TIME &&
             duration !== CustomStatusDuration.DATE_AND_TIME && (
