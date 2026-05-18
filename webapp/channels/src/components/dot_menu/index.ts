@@ -122,6 +122,7 @@ function makeMapStateToProps() {
             isInThread,
             postTranslationEnabled: config.FeatureFlagTranslation === 'true',
             canMove: channel ? canWrangler(state, channel.type, threadReplyCount) : false,
+            channelType: channel?.type,
         };
     };
 }

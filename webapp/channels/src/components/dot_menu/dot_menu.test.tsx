@@ -151,6 +151,7 @@ describe('components/dot_menu/DotMenu', () => {
         isInThread: false,
         canMove: true,
         postTranslationEnabled: false,
+        channelType: 'O' as const,
     };
 
     test('should match snapshot, on Center', () => {
@@ -431,5 +432,50 @@ describe('components/dot_menu/DotMenu', () => {
             expect(menuItem).toBeVisible();
             expect(menuItem).toHaveTextContent(text);
         });
+    });
+
+    test('should not show forward option in DM channel', () => {
+        const props = {
+            ...baseProps,
+            channelType: 'D' as const,
+        };
+        renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        const menuItem = screen.queryByTestId(`forward_post_${baseProps.post.id}`);
+        expect(menuItem).toBeNull();
+    });
+
+    test('should not show forward option in GM channel', () => {
+        const props = {
+            ...baseProps,
+            channelType: 'G' as const,
+        };
+        renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        const menuItem = screen.queryByTestId(`forward_post_${baseProps.post.id}`);
+        expect(menuItem).toBeNull();
+    });
+
+    test('should show forward option in open channel', () => {
+        const props = {
+            ...baseProps,
+            channelType: 'O' as const,
+        };
+        renderWithContext(
+            <DotMenu {...props}/>,
+            initialState,
+        );
+        const button = screen.getByTestId(`PostDotMenu-Button-${baseProps.post.id}`);
+        fireEvent.click(button);
+        const menuItem = screen.getByTestId(`forward_post_${baseProps.post.id}`);
+        expect(menuItem).toBeVisible();
     });
 });

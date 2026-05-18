@@ -112,6 +112,7 @@ type Props = {
     timezone?: string;
     isMilitaryTime: boolean;
     canMove: boolean;
+    channelType?: string;
 
     actions: {
 
@@ -473,7 +474,8 @@ export class DotMenuClass extends React.PureComponent<Props, State> {
         const isMobile = this.props.isMobileView;
         const isSystemMessage = PostUtils.isSystemMessage(this.props.post);
 
-        this.canPostBeForwarded = !(isSystemMessage);
+        const isDMorGM = this.props.channelType === Constants.DM_CHANNEL || this.props.channelType === Constants.GM_CHANNEL;
+        this.canPostBeForwarded = !(isSystemMessage) && !isDMorGM;
 
         const forwardPostItemText = (
             <span className={'dot-menu__item-new-badge'}>
