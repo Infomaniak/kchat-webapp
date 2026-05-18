@@ -134,6 +134,7 @@ export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>
                 ref={refs.setReference}
                 className={props.triggerComponentClass}
                 style={props.triggerComponentStyle}
+                {...(props.triggerComponentAs === 'button' ? {type: 'button'} : {})}
                 {...getReferenceProps()}
             >
                 {props.children}
