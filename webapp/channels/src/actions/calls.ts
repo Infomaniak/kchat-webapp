@@ -378,7 +378,7 @@ export function handleDesktopKmeetCall(globalState: GlobalState, call: Call): vo
             message: {
                 calling: {
                     users: usersWithAvatars,
-                    channelID: call.channel_id,
+                    channelId: call.channel_id,
                     url: call.url,
                     name: channel.display_name,
                     avatar,

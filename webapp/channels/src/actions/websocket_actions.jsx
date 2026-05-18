@@ -2081,7 +2081,7 @@ function handleConferenceUserConnected(msg) {
 
         if (currentUserId === msg?.data?.user_id) {
             if (isDesktopApp()) {
-                window.desktopAPI.closeDial?.();
+                window.desktopAPI?.closeRingCallWindow?.();
             } else {
                 dispatch(closeModal(ModalIdentifiers.INCOMING_CALL));
             }

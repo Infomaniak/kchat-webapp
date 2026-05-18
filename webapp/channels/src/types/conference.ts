@@ -13,3 +13,20 @@ export type Conference = {
     create_at: number;
     jwt: string;
 }
+
+export type IkCallUser = {
+    nickname: string;
+    [key: string]: any;
+};
+
+export type IkCallInfo = {
+    users: IkCallUser[];
+    caller: IkCallUser;
+    currentUser: IkCallUser;
+    channelId: string;
+    url: string;
+    avatar: string;
+    id: string;
+    nicknames: string;
+    toneTimeOut: number;
+}

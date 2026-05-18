@@ -13,6 +13,8 @@ import store from 'stores/redux_store';
 import {isDesktopApp} from 'utils/user_agent';
 import * as UserAgent from 'utils/user_agent';
 
+import type {IkCallInfo} from 'types/conference';
+
 import {isServerVersionGreaterThanOrEqualTo} from './server_version';
 
 declare global {
@@ -24,10 +26,10 @@ declare global {
             openCallDialing: (callInfo: object) => boolean;
         }>;
         callManager?: Partial<{
-            onCallJoined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
-            onCallDeclined: (callback: (_: any, props: {channelId: string; channelID?: string}) => void) => void;
-            onCallEnded: (callback: (_: any, props: {channelID: string}) => void) => void;
-            onCallCancel: (callback: (_: any, props: {channelId: string}) => void) => void;
+            onCallJoined: (callback: (_: Event, callInfo: IkCallInfo) => void) => void;
+            onCallDeclined: (callback: (_: Event, callInfo: IkCallInfo) => void) => void;
+            onCallEnded: (callback: (_: Event, callInfo: IkCallInfo) => void) => void;
+            onCallCancel: (callback: (_: Event, callInfo: IkCallInfo) => void) => void;
         }>;
     }
 }
