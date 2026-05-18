@@ -53,6 +53,14 @@ yarn dev-server:webapp
 ```shell
 yarn build:webapp
 ```
+### Generating changelog
+
+```shell
+yarn generate:changelog <ref_from>..<ref_to>
+```
+
+Refs can be tags, commit SHAs, branches, etc. Useful for previewing the changelog before tagging.
+
 ### Common errors
 ##### This error can occur when running a single test or a suite of tests
 ```shell
