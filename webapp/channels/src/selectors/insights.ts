@@ -12,7 +12,7 @@ export function showInsightsPulsatingDot(state: GlobalState): boolean {
     if (getIsMobileView(state)) {
         return false;
     }
-    const insightsTutorialState = get(state, Preferences.CATEGORY_INSIGHTS, Preferences.NAME_INSIGHTS_TUTORIAL_STATE, false);
+    const insightsTutorialState = get(state, Preferences.CATEGORY_INSIGHTS, Preferences.NAME_INSIGHTS_TUTORIAL_STATE, 'false');
     const modalAlreadyViewed = insightsTutorialState && JSON.parse(insightsTutorialState)[Preferences.INSIGHTS_VIEWED];
     return !modalAlreadyViewed;
 }

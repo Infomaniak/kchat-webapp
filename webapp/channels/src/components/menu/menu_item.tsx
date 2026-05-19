@@ -24,7 +24,7 @@ import {isKeyPressed} from 'utils/keyboard';
 
 import {MenuContext, SubMenuContext} from './menu_context';
 
-export interface Props extends MuiMenuItemProps {
+export interface Props extends MuiMenuItemProps, Record<string, any> {
 
     /**
      * To support quick recognition of menu item. Could be icon, avatar or emoji.

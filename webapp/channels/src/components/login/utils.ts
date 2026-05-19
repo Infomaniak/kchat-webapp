@@ -31,7 +31,7 @@ export function storeTokenResponse(response: { expires_in?: number; access_token
     }
 
     if (response.expires_in) {
-        localStorage.setItem('IKTokenExpire', parseInt(d.getTime() / 1000, 10));
+        localStorage.setItem('IKTokenExpire', String(Math.floor(d.getTime() / 1000)));
         localStorage.setItem('tokenExpired', '0');
     }
 
