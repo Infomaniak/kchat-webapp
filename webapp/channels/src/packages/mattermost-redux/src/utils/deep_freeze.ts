@@ -8,8 +8,6 @@
  *
  */
 
-/* eslint-disable header/header */
-
 /**
  * If your application is accepting different values for the same field over
  * time and is doing a diff on them, you can either (1) create a copy or

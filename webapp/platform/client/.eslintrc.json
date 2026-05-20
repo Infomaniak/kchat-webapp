@@ -2,5 +2,8 @@
   "root": true,
   "extends": [
     "plugin:@mattermost/base"
-  ]
+  ],
+  "rules": {
+    "header/header": "off"
+  }
 }

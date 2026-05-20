@@ -1,5 +1,3 @@
-/* eslint-disable header/header */
-
 // taken from https://github.com/guilryder/chrome-extensions/tree/master/xframe_ignore
 
 /*global chrome*/

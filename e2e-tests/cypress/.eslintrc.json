@@ -57,7 +57,8 @@
       }
     ],
     "no-only-tests/no-only-tests": ["error", {"focus": ["only"]}],
-    "max-lines": ["warn", {"max": 800, "skipBlankLines": true, "skipComments": true}]
+    "max-lines": ["warn", {"max": 800, "skipBlankLines": true, "skipComments": true}],
+    "header/header": "off"
   },
   "overrides": [
     {

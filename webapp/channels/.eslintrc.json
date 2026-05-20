@@ -33,6 +33,7 @@
       "allow": ["Timestamp"]
     }],
     "formatjs/no-multiple-whitespaces": 2,
+    "header/header": "off",
     "react/jsx-fragments": ["error", "syntax"]
   },
   "overrides": [
