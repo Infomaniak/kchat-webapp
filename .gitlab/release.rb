@@ -46,11 +46,13 @@ def process_preprod_release(tag, merged_mrs)
   end
 end
 
-def notify_release(changelog)
+def notify_release(changelog, tag)
   commit_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/commit/"
   mr_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/merge_requests/"
+  release_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/releases/#{tag}"
   formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
-  data = { "text" => formatted_changelog }.to_json
+  message = "[#{tag}](#{release_url})\n\n#{formatted_changelog}"
+  data = { "text" => message }.to_json
   notify_uri = URI.parse(NOTIFY_CHANNEL)
   notify_request = Net::HTTP::Post.new(notify_uri.request_uri, { "Content-Type" => "application/json" })
   notify_request.body = data
@@ -84,5 +86,5 @@ if GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
 end
 
 if /\A\d+\.\d+\.\d+\z/.match?(GIT_RELEASE_TAG) || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-next\.\d+\z/ || GIT_RELEASE_TAG =~ /\A\d+\.\d+\.\d+-rc\.\d+\z/
-  notify_release(changelog)
+  notify_release(changelog, GIT_RELEASE_TAG)
 end
