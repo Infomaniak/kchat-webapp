@@ -6,6 +6,10 @@
     opacity: 1;
 }
 
+.StatusModal__input {
+    position: relative;
+}
+
 .StatusModal {
     width: 600px;
 
@@ -93,8 +97,9 @@
     &__emoji-container {
         position: absolute;
         z-index: 5;
-        top: 14px;
-        left: 40px;
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
         margin-right: 2px;
     }
 
