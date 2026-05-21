@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["864VDCS2QY.com.infomaniak.chat"],
+        "components": [{ "/": "/*" }]
+      }
+    ]
+  }
+}
