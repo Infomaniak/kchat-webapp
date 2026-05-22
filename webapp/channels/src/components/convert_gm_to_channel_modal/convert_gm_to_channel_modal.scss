@@ -2,7 +2,7 @@
     .convert-gm-to-channel-modal-body {
         display: flex;
         flex-direction: column;
-        font-family: 'SuisseIntl';
+        font-family: var(--font-family);
         gap: 20px;
         overflow-y: visible;
         transition: height 200ms ease;

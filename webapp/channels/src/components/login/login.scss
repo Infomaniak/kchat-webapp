@@ -46,7 +46,7 @@
             .login-body-message-title {
                 padding-right: 24px;
                 color: var(--title-color-indigo-500);
-                font-family: SuisseIntl;
+                font-family: var(--font-family);
                 font-size: 80px;
                 font-weight: 600;
                 letter-spacing: -0.01em;
@@ -114,7 +114,7 @@
 
                 .login-body-card-title {
                     color: var(--center-channel-color);
-                    font-family: 'SuisseIntl';
+                    font-family: var(--font-family);
                     font-size: 22px;
                     font-style: normal;
                     font-weight: 600;

@@ -453,7 +453,7 @@
     align-items: center;
     margin: 8px 0;
     color: rgba(var(--center-channel-color-rgb), 0.75);
-    font-family: "SuisseIntl", sans-serif;
+    font-family: var(--font-family);
     font-size: 12px;
     gap: 8px;
 

@@ -78,16 +78,20 @@ a {
 }
 
 
+:root {
+    --font-family: 'SuisseIntl', sans-serif;
+}
+
 body {
     @include mixins.font-smoothing;
 
-    font-family: 'SuisseIntl', sans-serif;
+    font-family: var(--font-family);
 }
 
 h1,
 h2,
 h3 {
-    font-family: SuisseIntl, sans-serif;
+    font-family: var(--font-family);
 }
 
 h1 {
@@ -156,14 +160,14 @@ ol {
 }
 
 .app__body.font--open_sans {
-    font-family: 'SuisseIntl', sans-serif;
+    font-family: var(--font-family);
 }
 
 .app__body {
     h1,
     h2,
     h3 {
-        font-family: SuisseIntl, sans-serif;
+        font-family: var(--font-family);
     }
 }
 

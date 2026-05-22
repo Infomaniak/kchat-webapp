@@ -225,7 +225,7 @@ export const MenuItemStyled = styled(MuiMenuItem, {
 
         return ({
             '&.MuiMenuItem-root': {
-                fontFamily: '"SuisseIntl", sans-serif',
+                fontFamily: 'var(--font-family)',
                 color: isRegular ? 'var(--center-channel-color)' : 'var(--error-text)',
                 padding: '6px 20px',
                 display: 'flex',

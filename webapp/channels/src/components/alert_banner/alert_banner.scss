@@ -37,7 +37,7 @@
 
 .AlertBanner__actionButtons {
     margin-top: 12px;
-    font-family: 'SuisseIntl';
+    font-family: var(--font-family);
 
     .AlertBanner__buttonLeft {
         &:hover {

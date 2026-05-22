@@ -21,7 +21,7 @@
                     margin-top: 6px;
                     margin-bottom: 0;
                     color: rgba(var(--center-channel-color-rgb), 0.72);
-                    font-family: 'SuisseIntl';
+                    font-family: var(--font-family);
                     font-size: 12px;
                     font-style: normal;
                     font-weight: 400;
@@ -78,7 +78,7 @@
                     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
                     background-color: rgba(var(--center-channel-color-rgb), 0.04);
                     color: var(--center-channel-color);
-                    font-family: 'SuisseIntl';
+                    font-family: var(--font-family);
                     font-size: 14px;
                     font-style: normal;
                     font-weight: 600;
@@ -192,7 +192,7 @@
                             span.cell-text {
                                 display: inline-block;
                                 padding: 14px 0;
-                                font-family: 'SuisseIntl';
+                                font-family: var(--font-family);
                                 font-size: 14px;
                                 font-style: normal;
                                 font-weight: 400;
@@ -270,7 +270,7 @@
                                     overflow: hidden;
                                     max-width: 409px;
                                     margin-left: 12px;
-                                    font-family: 'SuisseIntl';
+                                    font-family: var(--font-family);
                                     font-size: 14px;
                                     font-style: normal;
                                     font-weight: 600;
@@ -324,7 +324,7 @@
                                     overflow: hidden;
                                     margin-left: 12px;
                                     color: var(--center-channel-color);
-                                    font-family: 'SuisseIntl';
+                                    font-family: var(--font-family);
                                     font-size: 14px;
                                     font-style: normal;
                                     font-weight: 600;
@@ -386,7 +386,7 @@
                 .pagination {
                     margin-right: 4px;
                     color: var(--center-channel-color);
-                    font-family: 'SuisseIntl';
+                    font-family: var(--font-family);
                     font-size: 14px;
                     font-style: normal;
                     font-weight: 400;
