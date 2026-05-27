@@ -11476,19 +11476,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dynamic-virtualized-list@github:mattermost/dynamic-virtualized-list#3fe918b41de4cb08dbf43f1207bb58827b38e833":
-  version: 1.0.0-beta
-  resolution: "dynamic-virtualized-list@https://github.com/mattermost/dynamic-virtualized-list.git#commit=3fe918b41de4cb08dbf43f1207bb58827b38e833"
-  dependencies:
-    "@babel/runtime": "npm:^7.0.0"
-    memoize-one: "npm:^3.1.1"
-  peerDependencies:
-    react: ^17.0.2
-    react-dom: ^17.0.2
-  checksum: 10/7c953c5485456be88238d4c18833aa8eee57d48cb285677ab3cbedbbfdf27b9f46ec521b914053191115ca2f03234ea583cfa47d52f1153842640e5e55416467
-  languageName: node
-  linkType: hard
-
 "e2e-cypress@workspace:e2e-tests/cypress":
   version: 0.0.0-use.local
   resolution: "e2e-cypress@workspace:e2e-tests/cypress"
@@ -18021,7 +18008,6 @@ __metadata:
     css-loader: "npm:6.7.3"
     css-vars-ponyfill: "npm:2.4.8"
     date-fns: "npm:2.29.3"
-    dynamic-virtualized-list: "github:mattermost/dynamic-virtualized-list#3fe918b41de4cb08dbf43f1207bb58827b38e833"
     emoji-datasource: "npm:16.0.0"
     emoji-datasource-apple: "npm:16.0.0"
     emoji-datasource-google: "npm:16.0.0"
@@ -18214,13 +18200,6 @@ __metadata:
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: 10/b7141dc148b5c6fdd51e77ecf0421fd2581681eb8756e0b3dfbd4fe765b5e2b5a6bc90214bb6f19a96b6aed44de17eda3407142a7be9e24ccd0774bbd9874d1b
-  languageName: node
-  linkType: hard
-
-"memoize-one@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "memoize-one@npm:3.1.1"
-  checksum: 10/c70d5ddb9845f2e59d5eafa27e2a32bfc43adecef2cf40b6e5b5a00e604b644a2e09e992f970d2122ae24108f437fadb96f28fedac2ca4aa59524e79ff1a2689
   languageName: node
   linkType: hard
 

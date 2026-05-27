@@ -3,8 +3,6 @@
 
 /* eslint-disable max-lines */
 
-import type {OnItemsRenderedArgs} from 'dynamic-virtualized-list';
-import {DynamicSizeList} from 'dynamic-virtualized-list';
 import React from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
@@ -14,6 +12,8 @@ import {getNewMessagesIndex, isDateLine, isStartOfNewMessages} from 'mattermost-
 import type {updateNewMessagesAtInChannel} from 'actions/global_actions';
 import type {CanLoadMorePosts} from 'actions/views/channel';
 
+import {DynamicVirtualizedList} from 'components/dynamic_virtualized_list';
+import type {OnItemsRenderedArgs} from 'components/dynamic_virtualized_list';
 import KDriveUploadToast from 'components/kdrive_upload_toast';
 import FloatingTimestamp from 'components/post_view/floating_timestamp';
 import PostListRow from 'components/post_view/post_list_row';
@@ -145,7 +145,7 @@ type State = {
 }
 
 export default class PostList extends React.PureComponent<Props, State> {
-    listRef: React.RefObject<DynamicSizeList>;
+    listRef: React.RefObject<DynamicVirtualizedList>;
     postListRef: React.RefObject<HTMLDivElement>;
     scrollStopAction: DelayedAction | null = null;
     initRangeToRender: number[];
@@ -680,7 +680,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                                             {this.renderToasts(width)}
                                         </div>
 
-                                        <DynamicSizeList
+                                        <DynamicVirtualizedList
                                             ref={this.listRef}
                                             height={height}
                                             width={width}
@@ -701,7 +701,7 @@ export default class PostList extends React.PureComponent<Props, State> {
                                             scrollToFailed={this.scrollToFailed}
                                         >
                                             {this.renderRow}
-                                        </DynamicSizeList>
+                                        </DynamicVirtualizedList>
                                     </>
                                 )}
                             </AutoSizer>

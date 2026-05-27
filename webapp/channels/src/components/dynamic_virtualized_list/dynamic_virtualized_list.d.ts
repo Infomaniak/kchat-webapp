@@ -17,7 +17,7 @@ declare module 'components/dynamic_virtualized_list' {
         visibleStopIndex: number;
     }
 
-    interface DynamicSizeListProps {
+    interface DynamicVirtualizedListProps {
         canLoadMorePosts: (id: 'BEFORE_ID' | 'AFTER_ID' | undefined) => Promise<void>;
         children: ({data: any, itemId: any, style: any}) => JSX.Element;
         height: number;
@@ -34,6 +34,7 @@ declare module 'components/dynamic_virtualized_list' {
         style: CSSProperties;
         width: number;
 
+        id?: string;
         className?: string;
         correctScrollToBottom?: boolean;
         innerListStyle?: CSSProperties;
@@ -41,7 +42,7 @@ declare module 'components/dynamic_virtualized_list' {
         scrollToFailed?: (index: number) => void;
     }
 
-    export class DynamicSizeList extends React.PureComponent<DynamicSizeListProps> {
+    export class DynamicVirtualizedList extends React.PureComponent<DynamicVirtualizedListProps> {
         scrollTo(scrollOffset: number, scrollByValue?: number, useAnimationFrame?: boolean): void;
         scrollToItem(index: number, align: string, offset?: number): void;
         _getRangeToRender(): number[];
