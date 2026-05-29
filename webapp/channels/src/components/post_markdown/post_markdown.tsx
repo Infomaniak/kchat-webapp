@@ -79,7 +79,7 @@ export default class PostMarkdown extends React.PureComponent<Props> {
             if (!this.props.currentTeam) {
                 return null;
             }
-            const renderedSystemBotMessage = renderReminderSystemBotMessage(this.props.post, this.props.currentTeam);
+            const renderedSystemBotMessage = renderReminderSystemBotMessage(this.props.post);
             return <div>{renderedSystemBotMessage}</div>;
         }
 

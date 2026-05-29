@@ -126,7 +126,7 @@ const SchedulePostButton = ({disabled, handleSchedulePost, getAnchorEl}: Props) 
             }));
             return;
         }
-        handleSchedulePost(e, toUTCUnix(timestamp.toDate()));
+        handleSchedulePost(toUTCUnix(timestamp.toDate()));
     };
 
     return (

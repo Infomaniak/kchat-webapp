@@ -18,14 +18,14 @@ import type {GlobalState} from 'types/store';
 import RhsSettingsTheme from './rhs_settings_theme';
 
 function makeMapStateToProps() {
-    const getThemeCategory = makeGetCategory();
+    const getThemeCategory = makeGetCategory('getThemeCategory', Preferences.CATEGORY_THEME);
 
     return (state: GlobalState) => {
         return {
             currentTeamId: getCurrentTeamId(state),
             theme: getTheme(state),
             desktopThemePreference: getDesktopThemePreference(state),
-            applyToAllTeams: getThemeCategory(state, Preferences.CATEGORY_THEME).length <= 1,
+            applyToAllTeams: getThemeCategory(state).length <= 1,
             showAllTeamsCheckbox: getMyTeamsCount(state) > 1,
         };
     };

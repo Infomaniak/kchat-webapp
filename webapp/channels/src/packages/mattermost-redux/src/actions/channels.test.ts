@@ -283,7 +283,7 @@ describe('Actions.Channels', () => {
 
         expect(publicChannel.type).toEqual(General.OPEN_CHANNEL);
 
-        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL, openLimitModalIfNeededMock));
+        await store.dispatch(Actions.updateChannelPrivacy(publicChannel.id, General.PRIVATE_CHANNEL));
 
         const {channels} = store.getState().entities.channels;
         const channelId = Object.keys(channels)[0];

@@ -2,6 +2,12 @@
 // See LICENSE.txt for license information.
 
 class Gfycat {
+    clientId: string;
+    clientSecret: string;
+    constructor({clientId, clientSecret}: {clientId: string; clientSecret: string}) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+    }
 }
 
 const defaultKey = '2_KtH_W5';
@@ -16,12 +22,12 @@ export default function gfycatSdk(key: string, secret: string): any {
     }
 
     if (!key || !secret) {
-        instance = new Gfycat({client_id: defaultKey, client_secret: defaultSecret});
+        instance = new Gfycat({clientId: defaultKey, clientSecret: defaultSecret});
         return instance;
     }
 
     activeKey = key;
     activeSecret = secret;
-    instance = new Gfycat({client_id: key, client_secret: secret});
+    instance = new Gfycat({clientId: key, clientSecret: secret});
     return instance;
 }
