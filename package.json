@@ -12,7 +12,6 @@
     "build:dependencies": "yarn && yarn workspace @infomaniak/mattermost-types build && yarn workspace @infomaniak/mattermost-client build && yarn workspace @mattermost/components build",
     "build:full": "yarn clean:all && yarn build:dependencies && yarn dev-server:webapp",
     "generate:changelog": "git-cliff --ignore-tags '.*' --config .cliff.toml"
-
   },
   "resolutions": {
     "@types/react": "17.0.2",

@@ -8,6 +8,7 @@ import {useDispatch} from 'react-redux';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {sendVerificationEmail} from 'mattermost-redux/actions/users';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {trackEvent} from 'actions/telemetry_actions';
 
@@ -50,7 +51,7 @@ const ShouldVerifyEmail = () => {
             setIsWaiting(true);
             setResendStatus(ResendStatus.PENDING);
 
-            const {error} = await dispatch(sendVerificationEmail(email));
+            const {error} = await dispatch(sendVerificationEmail(email)) as unknown as ActionResult;
 
             if (error) {
                 setResendStatus(ResendStatus.FAILURE);

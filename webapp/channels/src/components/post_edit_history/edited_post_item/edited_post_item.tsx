@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import type {Post} from '@mattermost/types/posts';
 
 import {getPostEditHistory, restorePostVersion} from 'mattermost-redux/actions/posts';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 import {ensureString} from 'mattermost-redux/utils/post_utils';
 
 import {removeDraft} from 'actions/views/drafts';
@@ -116,7 +117,7 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
             return;
         }
 
-        const result = await dispatch(restorePostVersion(post.original_id, post.id, connectionId));
+        const result = await dispatch(restorePostVersion(post.original_id, post.id, connectionId)) as unknown as ActionResult;
         if (result.data) {
             actions.closeRightHandSide();
             showInfoTooltip();
@@ -135,7 +136,7 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
         // To undo a recent restore, you need to restore the previous version of the post right before this restore.
         // That would be the first history item in post's edit history as it is the most recent edit
         // and edit history is sorted from most recent first to oldest.
-        const result = await dispatch(getPostEditHistory(post.original_id));
+        const result = await dispatch(getPostEditHistory(post.original_id)) as unknown as ActionResult;
         if (!result.data || result.data.length === 0) {
             return;
         }

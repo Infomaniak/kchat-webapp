@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import type {Group} from '@mattermost/types/groups';
 
 import {searchProfiles} from 'mattermost-redux/actions/users';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {openModal} from 'actions/views/modals';
 import {setPopoverSearchTerm} from 'actions/views/search';
@@ -51,7 +52,7 @@ const UserGroupPopover = ({
     const [searchState, setSearchState] = useState(Load.DONE);
 
     const doSearch = useCallback(debounce(async (term) => {
-        const res = await dispatch(searchProfiles(term, {in_group_id: group.id}));
+        const res = await dispatch(searchProfiles(term, {in_group_id: group.id})) as unknown as ActionResult<UserProfile[]>;
         if (res.data) {
             setSearchState(Load.DONE);
         } else {

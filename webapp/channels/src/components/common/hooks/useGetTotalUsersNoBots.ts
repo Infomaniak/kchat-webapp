@@ -4,7 +4,10 @@
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 
+import type {UsersStats} from '@mattermost/types/users';
+
 import {getFilteredUsersStats} from 'mattermost-redux/actions/users';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 const useGetTotalUsersNoBots = (includeInactive = false): number => {
     const dispatch = useDispatch();
@@ -12,7 +15,7 @@ const useGetTotalUsersNoBots = (includeInactive = false): number => {
 
     useEffect(() => {
         const getTotalUsers = async () => {
-            const {data} = await dispatch(getFilteredUsersStats({include_bots: false, include_deleted: includeInactive}, false));
+            const {data} = await dispatch(getFilteredUsersStats({include_bots: false, include_deleted: includeInactive}, false)) as unknown as ActionResult<UsersStats>;
             setUserCount(data?.total_users_count ?? 0);
         };
 

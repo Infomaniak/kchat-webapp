@@ -11,6 +11,7 @@ import type {Channel} from '@mattermost/types/channels';
 import {AppCallResponseTypes, AppBindingLocations} from 'mattermost-redux/constants/apps';
 import {makeAppBindingsSelector} from 'mattermost-redux/selectors/entities/apps';
 import {getMyCurrentChannelMembership} from 'mattermost-redux/selectors/entities/channels';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import {handleBindingClick, openAppsModal, postEphemeralCallResponseForChannel} from 'actions/apps';
 import {getChannelMobileHeaderPluginButtons} from 'selectors/plugins';
@@ -149,7 +150,7 @@ const MobileChannelHeaderPlugins = (props: Props): JSX.Element => {
             }
         };
 
-        const res = await dispatch(handleBindingClick(binding, context, intl));
+        const res = await dispatch(handleBindingClick(binding, context, intl)) as unknown as ActionResult<DoAppCallResult<unknown>>;
         if (res.error) {
             handleAppResponse(null, res.error);
             return;

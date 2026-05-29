@@ -205,7 +205,7 @@ const ForwardPostModal = ({onExited, post}: Props) => {
                 return dispatch(openDirectChannelToUserId(userId));
             }
             return {data: false} as ActionResult;
-        }).then(({data}) => {
+        }).then(({data}: ActionResult<Channel | boolean>) => {
             if (data) {
                 channelToForward.details.id = data.id;
             }

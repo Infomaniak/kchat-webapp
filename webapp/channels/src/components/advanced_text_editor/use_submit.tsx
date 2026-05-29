@@ -321,7 +321,7 @@ const useSubmit = (
                     }
                 }
 
-                const {data} = await dispatch(getChannelTimezones(channelId));
+                const {data} = await dispatch(getChannelTimezones(channelId)) as unknown as ActionResult<string[]>;
                 channelTimezoneCount = data ? data.length : 0;
             }
 

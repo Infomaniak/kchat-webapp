@@ -8,6 +8,8 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch} from 'react-redux';
 import {useHistory, useLocation} from 'react-router-dom';
 
+import type {ActionResult} from 'mattermost-redux/types/actions';
+
 import {loginWithDesktopToken} from 'actions/views/login';
 
 import DesktopApp from 'utils/desktop_api';
@@ -49,7 +51,7 @@ const DesktopAuthToken: React.FC<Props> = ({href, onLogin}: Props) => {
         }
 
         sessionStorage.removeItem(DESKTOP_AUTH_PREFIX);
-        const {error: loginError} = await dispatch(loginWithDesktopToken(serverToken));
+        const {error: loginError} = await dispatch(loginWithDesktopToken(serverToken)) as unknown as ActionResult;
 
         if (loginError && loginError.server_error_id && loginError.server_error_id.length !== 0) {
             setStatus(DesktopAuthStatus.Error);

@@ -9,6 +9,7 @@ import {useDispatch} from 'react-redux';
 import type {Post} from '@mattermost/types/posts';
 
 import {getPostEditHistory} from 'mattermost-redux/actions/posts';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import AlertIcon from 'components/common/svg_images_components/alert_svg';
 import LoadingScreen from 'components/loading_screen';
@@ -62,7 +63,7 @@ const PostEditHistory = ({
     useEffect(() => {
         const fetchPostEditHistory = async () => {
             setIsLoading(true);
-            const result = await dispatch(getPostEditHistory(originalPost.id));
+            const result = await dispatch(getPostEditHistory(originalPost.id)) as unknown as ActionResult;
             if (result.data) {
                 setPostEditHistory(result.data);
                 setHasError(false);

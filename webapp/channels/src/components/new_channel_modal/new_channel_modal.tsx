@@ -128,7 +128,7 @@ const NewChannelModal = () => {
         };
 
         try {
-            const {data: newChannel, error} = await dispatch(createChannel(channel, ''));
+            const {data: newChannel, error} = await dispatch(createChannel(channel, '')) as unknown as ActionResult<Channel>;
             if (error) {
                 onCreateChannelError(error);
                 return;

@@ -21,6 +21,7 @@ import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {makeGetThreadOrSynthetic} from 'mattermost-redux/selectors/entities/threads';
+import type {ActionResult} from 'mattermost-redux/types/actions';
 
 import type {SubmitPostReturnType} from 'actions/views/create_comment';
 import {removeDraft} from 'actions/views/drafts';
@@ -263,7 +264,7 @@ function DraftRow({
             scheduled_at: updatedScheduledAtTime,
         };
 
-        const result = await dispatch(updateScheduledPost(updatedScheduledPost, connectionId));
+        const result = await dispatch(updateScheduledPost(updatedScheduledPost, connectionId)) as unknown as ActionResult;
         setShowUpdatedFeedback(true);
         setTimeout(() => {
             setShowUpdatedFeedback(false);
@@ -277,7 +278,7 @@ function DraftRow({
         handleCancelEdit();
 
         const scheduledPost = item as ScheduledPost;
-        const result = await dispatch(deleteScheduledPost(scheduledPost.user_id, scheduledPost.id, connectionId));
+        const result = await dispatch(deleteScheduledPost(scheduledPost.user_id, scheduledPost.id, connectionId)) as unknown as ActionResult;
         return {
             error: result.error?.message,
         };
