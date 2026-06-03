@@ -106,6 +106,8 @@ const SchedulePostMenu = ({open, timezone, getAnchorEl, onClose, handleScheduleP
         <MenuItem
             key={'schedule-post-menu-' + option.name}
             labels={getMenuItemLabel(option)}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             onClick={(e) => handleSchedulePostMenu(e, option.name)}
             tabIndex={0}
         />

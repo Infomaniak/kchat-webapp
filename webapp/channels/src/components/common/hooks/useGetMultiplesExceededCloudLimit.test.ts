@@ -111,6 +111,8 @@ describe('useGetHighestThresholdCloudLimit', () => {
 
     tests.forEach((t: typeof tests[0]) => {
         test(t.label, () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const actual = useGetMultiplesExceededCloudLimit(t.usage, t.limits);
             expect(t.expected).toEqual(actual);
         });

@@ -11,7 +11,8 @@ import type {ActionFuncAsync} from 'mattermost-redux/types/actions';
 export function getWorkTemplateCategories(): ActionFuncAsync {
     return bindClientFunc({
 
-        // @ts-expect-error seems missing but for safety i silented it
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore seems missing but for safety i silented it
         clientFunc: Client4.getWorkTemplateCategories,
         onRequest: WorkTemplatesType.WORK_TEMPLATE_CATEGORIES_REQUEST,
         onSuccess: [WorkTemplatesType.RECEIVED_WORK_TEMPLATE_CATEGORIES],
@@ -21,7 +22,8 @@ export function getWorkTemplateCategories(): ActionFuncAsync {
 export function getWorkTemplates(categoryId: string): ActionFuncAsync {
     return bindClientFunc({
 
-        // @ts-expect-error seems missing but for safety i silented it
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore seems missing but for safety i silented it
         clientFunc: Client4.getWorkTemplates,
         onRequest: WorkTemplatesType.WORK_TEMPLATES_REQUEST,
         onSuccess: [WorkTemplatesType.RECEIVED_WORK_TEMPLATES],
@@ -32,7 +34,8 @@ export function getWorkTemplates(categoryId: string): ActionFuncAsync {
 export function executeWorkTemplate(req: ExecuteWorkTemplateRequest): ActionFuncAsync {
     return bindClientFunc({
 
-        // @ts-expect-error seems missing but for safety i silented it
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore seems missing but for safety i silented it
         clientFunc: Client4.executeWorkTemplate,
         params: [req],
     });

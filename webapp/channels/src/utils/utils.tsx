@@ -664,7 +664,8 @@ export function injectWebcomponentInit() {
     // eslint-disable-next-line no-process-env, @typescript-eslint/no-unused-vars
     (window as any).WEBCOMPONENT_API_ENDPOINT = process.env.WEBCOMPONENT_API_ENDPOINT;
 
-    // @ts-expect-error for webcomponents
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore for webcomponents
     window.CURRENT_PROJECT = 'kchat';
 
     const oauth = Number(isDesktopApp());

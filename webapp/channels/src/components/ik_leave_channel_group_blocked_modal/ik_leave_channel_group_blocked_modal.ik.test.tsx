@@ -13,6 +13,8 @@ describe('IkLeaveChannelGroupBlockedModal', () => {
     };
 
     const mockGroups: Group[] = [
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         {
             id: 'group1',
             name: 'team-alpha',

@@ -10,6 +10,8 @@ import {checkIfMFARequired} from './route';
 describe('Utils.Route', () => {
     describe('checkIfMFARequired', () => {
         test('mfa is enforced', () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const user: UserProfile = {mfa_active: false,
                 auth_service: '',
                 id: '',
@@ -70,6 +72,8 @@ describe('Utils.Route', () => {
         });
 
         test('mfa is not enforced or enabled', () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const user: UserProfile = {mfa_active: true,
                 auth_service: '',
                 id: '',

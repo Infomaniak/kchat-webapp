@@ -210,7 +210,8 @@ const PostOptions = (props: Props): JSX.Element => {
                     return (
                         <Component
 
-                            // @ts-expect-error not sure if its safe to remove so i silented it
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore not sure if its safe to remove so i silented it
                             location={props.location}
                             post={props.post}
                             key={item.id}

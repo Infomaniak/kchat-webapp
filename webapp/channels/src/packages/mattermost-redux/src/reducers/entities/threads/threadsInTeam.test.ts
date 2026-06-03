@@ -96,6 +96,8 @@ describe('unreadThreadsInTeam', () => {
                     {id: 't3'},
                 ],
             },
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
         }, {threads: {}});
 
         expect(nextState).not.toBe(state);

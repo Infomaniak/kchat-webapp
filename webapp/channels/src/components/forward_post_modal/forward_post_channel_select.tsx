@@ -267,6 +267,8 @@ function ForwardPostChannelSelect({onSelect, value, currentBodyHeight, validChan
              *
              * @see {@link components/suggestion/switch_channel_provider.jsx}
              */
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const handleResults = async (res: ProviderResult) => {
                 callCount++;
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

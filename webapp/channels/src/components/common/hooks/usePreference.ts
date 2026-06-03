@@ -28,6 +28,7 @@ export default function usePreference(category: string, name: string): readonly 
         return dispatch(savePreferences(userId, [preference]));
     }, [category, dispatch, name, userId]);
 
-    // @ts-expect-error old error
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore old error
     return useMemo(() => ([preferenceValue, setPreference] as const), [preferenceValue, setPreference]);
 }

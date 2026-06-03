@@ -110,8 +110,12 @@ export type Props = {
 const RightControls = (): JSX.Element => {
     // guest validation to see which point the messaging tour tip starts
     const isGuestUser = useSelector((state: GlobalState) => isCurrentUserGuestUser(state));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const tourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.CUSTOMIZE_EXPERIENCE : OnboardingTourSteps.CUSTOMIZE_EXPERIENCE;
     const locale = useSelector(getCurrentLocale);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const atMentionsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.AT_MENTIONS : OnboardingTourSteps.AT_MENTIONS;
     const showAtMentionsTutorialStep = useShowOnboardingTutorialStep(atMentionsTourStep);
     const settingsTourStep = isGuestUser ? OnboardingTourStepsForGuestUsers.SETTINGS : OnboardingTourSteps.SETTINGS;

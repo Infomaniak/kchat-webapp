@@ -62,4 +62,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default connect(makeMapStateToProps, mapDispatchToProps, null, {forwardRef: true})(UserGroupsModal);

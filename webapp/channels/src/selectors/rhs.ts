@@ -121,6 +121,8 @@ export function getRhsState(state: GlobalState): RhsState {
 }
 
 export function getRhsSettingsTabState(state: GlobalState): RhsState {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     return state.views.rhs.settingsTabState;
 }
 

@@ -262,6 +262,8 @@ export function handlePosts(state: IDMappedObjects<Post> = {}, action: MMReduxAc
         // Find the correct attachment by poll_id. Although the poll typically has only one attachment,
         // this code ensures that the correct one is identified even if multiple attachments exist (technically possible).
         const correspondingAttachmentIndex = attachments.findIndex((att) =>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
             att?.actions?.[0]?.integration?.context?.['poll-id'] === metadata.poll_id,
         );
 

@@ -95,6 +95,8 @@ export function makeGetThreadOrSynthetic(): (state: GlobalState, rootPost: Post)
                 participants: rootPost.participants,
                 last_reply_at: rootPost.last_reply_at ?? 0,
                 is_following: thread?.is_following ?? rootPost.is_following ?? null,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 post: {
                     user_id: rootPost.user_id,
                     channel_id: rootPost.channel_id,

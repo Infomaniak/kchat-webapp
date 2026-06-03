@@ -5,5 +5,7 @@ import type {GlobalState} from '@mattermost/types/store';
 
 export const emptyLimits: () => GlobalState['entities']['cloud']['limits'] = () => ({
     limitsLoaded: true,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     limits: {},
 });

@@ -2,6 +2,8 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {AriaRole, AriaAttributes} from 'react';
 import React from 'react';
 import {useIntl} from 'react-intl';

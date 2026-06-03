@@ -40,6 +40,8 @@ function MeetButton(props: Props) {
     const {actions, channel, membersCount} = props;
 
     const isGuest = useSelector(isCurrentUserGuestUser);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const kmeetTourStep = isGuest ? OnboardingTourStepsForGuestUsers.KMEET : OnboardingTourSteps.KMEET;
     const showKmeetTutorialStep = useShowOnboardingTutorialStep(kmeetTourStep);
 

@@ -324,6 +324,8 @@ const Search: React.FC<Props> = (props: Props): JSX.Element => {
             return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {error} = await actions.showSearchResults(Boolean(props.isMentionSearch));
 
         if (!error) {

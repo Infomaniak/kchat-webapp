@@ -148,6 +148,8 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
     renderGoNativeAppMessage = () => {
         return (
             <a
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 href={Utils.isMobile() ? '#' : this.state.nativeLocation}
                 onMouseDown={() => {
                     this.setPreference(LandingPreferenceTypes.MATTERMOSTAPP, true);
@@ -155,6 +157,8 @@ export default class LinkingLandingPage extends PureComponent<Props, State> {
                 onClick={() => {
                     this.setPreference(LandingPreferenceTypes.MATTERMOSTAPP, true);
                     this.setState({redirectPage: true, navigating: true});
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     if (Utils.isMobile()) {
                         if (UserAgent.isAndroidWeb()) {
                             const timeout = setTimeout(() => {

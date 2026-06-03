@@ -40,6 +40,8 @@ describe('plugins/MainMenuActions', () => {
             showFlaggedPosts: jest.fn(),
             closeRightHandSide: jest.fn(),
             closeRhsMenu: jest.fn(),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             getCloudLimits: jest.fn(),
             showSettings: jest.fn(),
         },

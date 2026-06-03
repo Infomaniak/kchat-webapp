@@ -189,6 +189,24 @@ lint:eslint:
     expire_in: 1 week
     when: on_failure
 
+check-types:typescript:
+  stage: quality
+  image: node:${NODE_VERSION}
+  tags:
+    - kubernetes
+  needs:
+    - job: "install:deps"
+    - job: "build:packages"
+      artifacts: true
+  rules:
+    - *rule-merge-request
+    - *rule-commit
+  cache:
+    <<: *cache-definition
+    policy: pull
+  script:
+    - yarn test:types
+
 test:unit:
   stage: quality
   extends:

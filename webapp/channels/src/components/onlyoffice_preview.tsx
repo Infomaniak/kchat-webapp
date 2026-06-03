@@ -10,6 +10,8 @@ import type {FileInfo} from '@mattermost/types/files';
 
 import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
 type Props = {

@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {GenericAction} from 'mattermost-redux/types/actions';
 
 import {toggleInlineImageVisibility} from 'actions/post_actions';

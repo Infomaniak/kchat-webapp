@@ -260,7 +260,8 @@ function DraftRow({
         const updatedScheduledPost: ScheduledPost = {
             ...(item as ScheduledPost),
 
-            // @ts-expect-error type mistmatch to avoid plenty of changes, but scheduled_at accept 'monday' and 'tomorrow'
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore type mistmatch to avoid plenty of changes, but scheduled_at accept 'monday' and 'tomorrow'
             scheduled_at: updatedScheduledAtTime,
         };
 

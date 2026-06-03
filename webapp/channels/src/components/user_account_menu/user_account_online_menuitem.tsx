@@ -35,6 +35,8 @@ export default function UserAccountOnlineMenuItem(props: Props) {
     const showStatusTutorialStep = useSelector((state: GlobalState) => getShowTutorialStep(state, {
         tourName: isGuest ? TutorialTourName.ONBOARDING_TUTORIAL_STEP_FOR_GUESTS : TutorialTourName.ONBOARDING_TUTORIAL_STEP,
         taskName: OnboardingTasksName.CHANNELS_TOUR,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         tourStep: isGuest ? OnboardingTourStepsForGuestUsers.STATUS : OnboardingTourSteps.STATUS,
     }));
 

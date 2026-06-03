@@ -242,7 +242,8 @@ export class TeamSidebar extends React.PureComponent<Props, State> {
                     hasUrgent={this.props.teamHasUrgentMap.has(team.id) ? this.props.teamHasUrgentMap.get(team.id) : false}
                     teamIconUrl={Utils.imageURLForTeam(team)}
 
-                    // @ts-expect-error for safety i silented it
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore for safety i silented it
                     switchTeam={this.switchTeamIK}
                     isDraggable={true}
                     teamId={team.id}

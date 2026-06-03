@@ -205,6 +205,8 @@ const ForwardPostModal = ({onExited, post}: Props) => {
                 return dispatch(openDirectChannelToUserId(userId));
             }
             return {data: false} as ActionResult;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
         }).then(({data}: ActionResult<Channel | boolean>) => {
             if (data) {
                 channelToForward.details.id = data.id;

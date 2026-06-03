@@ -15,6 +15,8 @@ import {General} from 'mattermost-redux/constants';
 
 import * as AdminActions from 'actions/admin_actions';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Banner from 'components/admin_console/banner';
 import ActivatedUserCard from 'components/analytics/activated_users_card';
 import {messages as activatedUsersCardsMessages} from 'components/analytics/activated_users_card/title';

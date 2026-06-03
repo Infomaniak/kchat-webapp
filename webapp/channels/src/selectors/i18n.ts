@@ -17,9 +17,13 @@ export function getCurrentLocale(state: GlobalState): string {
     // If locale is provided in query parameter and the user is not logged in, we try get locale from param
     const localeFromParam: string | null = (new URLSearchParams(window.location?.search)).get('locale');
     const defaultLocale: string | undefined =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
         localeFromParam && I18n.isLanguageAvailable(state, localeFromParam) ? localeFromParam : getConfig(state).DefaultClientLocale;
 
     const currentLocale: string = getCurrentUserLocale(state, defaultLocale);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (I18n.isLanguageAvailable(state, currentLocale)) {
         return currentLocale;
     }

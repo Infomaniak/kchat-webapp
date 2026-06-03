@@ -11,7 +11,11 @@ import {isSystemAdmin} from 'mattermost-redux/utils/user_utils';
 
 import {
     isCallsEnabled as getIsCallsEnabled,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     getSessionsInCalls,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     getCallsConfig,
     callsChannelExplicitlyDisabled,
     callsChannelExplicitlyEnabled,
@@ -35,6 +39,8 @@ export function isUserInCall(state: GlobalState, userId: string, channelId: stri
     const sessionsInCall = getSessionsInCalls(state)[channelId] || {};
 
     for (const session of Object.values(sessionsInCall)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         if (session.user_id === userId) {
             return true;
         }

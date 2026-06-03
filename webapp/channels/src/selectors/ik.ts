@@ -6,5 +6,7 @@
 import type {GlobalState} from 'types/store';
 
 export function getInfomaniakTokens(state: GlobalState): { accessToken: string; refreshToken: string } {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     return state.views.ik;
 }

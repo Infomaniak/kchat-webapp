@@ -70,7 +70,8 @@ const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props):
         >
             <IconButton
 
-                // @ts-expect-error id is possible
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore id is possible
                 id='right-controls-settings'
                 className={`grey ${rhsState === RHSStates.SETTINGS ? 'active' : ''} ${className || ''}`}
                 size={'sm'}

@@ -23,7 +23,8 @@ function GMConversionMessage(props: Props): JSX.Element {
     // Infomaniak change due to an api constraint for this prop
     const gmMembersDuringConversionIDsString = props.post.props.gmMembersDuringConversionIDs as string;
 
-    // @ts-expect-error i dont know if it's normal or not
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore i dont know if it's normal or not
     const gmMembersDuringConversionIDs = props.post.props.gmMembersDuringConversionIDs.includes(',') ? gmMembersDuringConversionIDsString.split(',') : [gmMembersDuringConversionIDsString];
 
     const dispatch = useDispatch();

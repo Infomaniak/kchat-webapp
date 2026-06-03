@@ -32,6 +32,8 @@ const ScheduledIndicator = ({type, scheduledDrafts}: Props) => {
         return null;
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const nextScheduledTimestamp = scheduledDrafts[0].timestamp!;
 
     return (

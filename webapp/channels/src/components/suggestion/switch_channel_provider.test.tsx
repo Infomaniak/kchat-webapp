@@ -995,6 +995,8 @@ describe('components/SwitchChannelProvider', () => {
         };
 
         const switchProvider = new SwitchChannelProvider();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const store = mockStore(modifiedState);
         switchProvider.store = store;
         const searchText = 'thread';

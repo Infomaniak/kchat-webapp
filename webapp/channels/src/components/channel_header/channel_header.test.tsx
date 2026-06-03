@@ -50,6 +50,8 @@ describe('components/ChannelHeader', () => {
             'minute',
             'hour',
         ],
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         hideGuestTags: false,
         intl: {
             formatMessage: jest.fn(({id, defaultMessage}) => defaultMessage || id),

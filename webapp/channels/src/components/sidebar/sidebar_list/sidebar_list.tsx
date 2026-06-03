@@ -385,6 +385,8 @@ export class SidebarList extends React.PureComponent<Props, State> {
 
     renderCategory = (category: ChannelCategory, index: number) => {
         return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
             <SidebarCategory
                 key={category.id}
                 category={category}

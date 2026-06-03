@@ -52,6 +52,8 @@ export function getLogs({serverNames = [], logLevels = [], dateFrom, dateTo}: Lo
 
 export function getPlainLogs(page = 0, perPage: number = General.LOGS_PAGE_SIZE_DEFAULT) {
     return bindClientFunc({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         clientFunc: Client4.getPlainLogs,
         onSuccess: [AdminTypes.RECEIVED_PLAIN_LOGS],
         params: [

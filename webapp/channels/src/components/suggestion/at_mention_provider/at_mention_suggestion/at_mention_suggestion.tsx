@@ -170,6 +170,8 @@ export const AtMentionSuggestion = React.forwardRef<HTMLLIElement, AtMentionSugg
                             id='suggestion.group.members'
                             defaultMessage='{member_count} {member_count, plural, one {member} other {members}}'
                             values={{
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
                                 member_count: (item as Group).member_count,
                             }}
                         />

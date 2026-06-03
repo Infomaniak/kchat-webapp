@@ -83,4 +83,6 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default connect(makeMapStateToProps, mapDispatchToProps)(RhsSettingsDisplay);

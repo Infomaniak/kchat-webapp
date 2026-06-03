@@ -19,6 +19,8 @@ import {act} from 'tests/react_testing_utils';
 import mockStore from 'tests/test_store';
 
 import GroupMemberList from './group_member_list';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {GroupMember} from './group_member_list';
 
 import {Load} from '../constants';

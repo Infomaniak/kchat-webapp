@@ -18,6 +18,8 @@ import SchedulePostModal from 'components/schedule_post/schedule_post_modal';
 import WithTooltip from 'components/with_tooltip';
 
 import Constants, {ModalIdentifiers} from 'utils/constants';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import {toUTCUnix} from 'utils/datetime';
 import {cmdOrCtrlPressed, isKeyPressed} from 'utils/keyboard';
 import {getCurrentMomentForTimezone} from 'utils/timezone';

@@ -35,6 +35,8 @@ describe('components/UnreadsStatusHandler - KSuite integration', () => {
         sendMessage: mockSendMessage,
     } as unknown as KSuiteBridge;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const defaultProps: Props = {
         unreadStatus: false,
         siteName: 'Test site',

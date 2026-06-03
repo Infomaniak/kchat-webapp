@@ -35,6 +35,8 @@ describe('Components/SidebarHeader', () => {
             unreadFilterEnabled: true,
             showCreateUserGroupModal: jest.fn(),
             canCreateCustomGroups: true,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             showWorkTemplateButton: true,
         };
 

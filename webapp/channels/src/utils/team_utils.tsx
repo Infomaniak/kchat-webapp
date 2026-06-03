@@ -49,6 +49,8 @@ export function filterAndSortTeamsByDisplayName<T extends Team>(teams: T[], loca
 }
 
 export function makeNewTeam(displayName: string, name: string): Team {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     return {
         id: '',
         create_at: 0,

@@ -4,6 +4,8 @@
 import {useSelector} from 'react-redux';
 
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import {getConfig, getWorkTemplatesLinkedProducts} from 'mattermost-redux/selectors/entities/general';
 import {getInt} from 'mattermost-redux/selectors/entities/preferences';
 
@@ -22,6 +24,8 @@ export const useShowTourTip = () => {
     const currentUserId = useSelector(getCurrentUserId);
     const enableTutorial = useSelector(getConfig).EnableTutorial === 'true';
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const tutorialStep = useSelector((state: GlobalState) => getInt(state, TutorialTourName.WORK_TEMPLATE_TUTORIAL, currentUserId, 0));
 
     const workTemplateTourTipShown = tutorialStep === WorkTemplateTourSteps.FINISHED;
@@ -29,7 +33,11 @@ export const useShowTourTip = () => {
 
     const channelLinkedItems = useSelector(getWorkTemplatesLinkedProducts);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const boardsCount = channelLinkedItems?.boards || 0;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const playbooksCount = channelLinkedItems?.playbooks || 0;
 
     const showBoardsTour = showProductTour && pluginId === suitePluginIds.boards && boardsCount > 0;

@@ -10,6 +10,8 @@ import CompassThemeProvider from 'components/compass_theme_provider/compass_them
 import {mountWithIntl} from './intl-test-helper';
 
 const stubValue = '#fff';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const DEFAULT_THEME: Theme = {
     type: 'custom',
     sidebarBg: stubValue,

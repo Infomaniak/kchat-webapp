@@ -29,6 +29,8 @@ describe('component/user_groups_modal', () => {
     function getGroups(numberOfGroups: number) {
         const groups: Group[] = [];
         for (let i = 0; i < numberOfGroups; i++) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             groups.push({
                 id: `group${i}`,
                 name: `group${i}`,

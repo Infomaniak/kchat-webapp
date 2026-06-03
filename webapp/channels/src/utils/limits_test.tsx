@@ -11,11 +11,15 @@ interface LimitsRedux {
 export function makeEmptyLimits(): LimitsRedux {
     return {
         limitsLoaded: true,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         limits: {},
     };
 }
 
 export function makeEmptyUsage(): CloudUsage {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     return {
         files: {
             totalStorage: 0,

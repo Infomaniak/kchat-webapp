@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -100,6 +101,8 @@ const ProductMenu = (): JSX.Element => {
             <ProductMenuItem
                 key={product.id}
                 destination={product.switcherLinkURL}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 icon={product.switcherIcon}
                 text={product.switcherText}
                 active={product.id === currentProductID}
@@ -153,6 +156,7 @@ const ProductMenu = (): JSX.Element => {
                         handleVisitConsoleClick={handleVisitConsoleClick}
                     />
                     <Menu.Group>
+                        {/* @ts-ignore */}
                         <Menu.StartTrial
                             id='startTrial'
                         />

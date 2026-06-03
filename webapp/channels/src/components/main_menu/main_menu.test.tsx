@@ -44,6 +44,8 @@ describe('components/Menu', () => {
 
         // helpLink: undefined,
         // reportAProblemLink: undefined,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         experimentalPrimaryTeam: undefined,
         moreTeamsToJoin: false,
         pluginMenuItems: [],

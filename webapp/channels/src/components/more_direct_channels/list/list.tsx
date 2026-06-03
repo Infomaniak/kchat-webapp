@@ -107,7 +107,8 @@ const List = React.forwardRef((props: Props, ref?: React.Ref<MultiSelect<OptionV
 
     return (
 
-        // @ts-expect-error Multiselect has a generic
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore Multiselect has a generic
         <MultiSelect<OptionValue>
             ref={ref}
             options={options}

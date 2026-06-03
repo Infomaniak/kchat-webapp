@@ -5,7 +5,8 @@ import {formatYMDDurationHuman} from './duration';
 const createMockIntl = (locale: string): IntlShape => ({
     locale,
 
-    // @ts-expect-error minimal mock for test purpose
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore minimal mock for test purpose
     formatMessage: ({id}: { id: string }, values: { count: number }) => {
         const messages: Record<string, Record<string, [string, string]>> = {
             en: {

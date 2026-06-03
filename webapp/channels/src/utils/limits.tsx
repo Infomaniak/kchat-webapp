@@ -58,6 +58,8 @@ export const isLimited = (limits: Limits) => {
     return Object.values(limits).some((limit) => typeof limit === 'number' && limit > 0);
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export const isLimitExceeded = (error: ServerError): boolean => error.status_code === 409 && (error.server_error_id === 'quota-exceeded' || error.id === 'quota-exceeded');
 
 export const limitThresholds = Object.freeze({

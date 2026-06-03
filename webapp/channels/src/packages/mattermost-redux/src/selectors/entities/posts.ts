@@ -60,7 +60,8 @@ export function getPostAttachments(state: GlobalState, postId: Post['id']): Mess
 }
 
 export function getPostAttachmentsPollId(state: GlobalState, postId: Post['id']): string | undefined {
-    // @ts-expect-error we check integration on purpose
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore we check integration on purpose
     return getPostAttachments(state, postId)?.[0]?.actions?.[0]?.integration?.context?.['poll-id'];
 }
 

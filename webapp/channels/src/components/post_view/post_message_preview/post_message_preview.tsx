@@ -117,6 +117,8 @@ const PostMessagePreview = (props: Props) => {
     if (previewPost.props && previewPost.props.attachments) {
         slackAttachment = (
             <MessageAttachmentList
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 attachments={previewPost.props.attachments}
                 postId={previewPost.id}
                 imagesMetadata={previewPost.metadata.images}

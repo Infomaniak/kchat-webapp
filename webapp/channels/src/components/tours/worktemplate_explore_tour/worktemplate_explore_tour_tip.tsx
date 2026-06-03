@@ -10,6 +10,8 @@ const OnboardingWorkTemplateTourTip = (props: Omit<ChannelsTourTipProps, 'tourCa
     return (
         <ChannelsTourTip
             {...props}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             tourCategory={TutorialTourName.WORK_TEMPLATE_TUTORIAL}
         />
     );

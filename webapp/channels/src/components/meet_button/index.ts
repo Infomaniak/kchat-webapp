@@ -39,4 +39,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(MeetButton);

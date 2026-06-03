@@ -52,6 +52,8 @@ const UserGroupPopover = ({
     const [searchState, setSearchState] = useState(Load.DONE);
 
     const doSearch = useCallback(debounce(async (term) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const res = await dispatch(searchProfiles(term, {in_group_id: group.id})) as unknown as ActionResult<UserProfile[]>;
         if (res.data) {
             setSearchState(Load.DONE);

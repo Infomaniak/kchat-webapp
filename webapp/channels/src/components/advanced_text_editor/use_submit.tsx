@@ -321,6 +321,8 @@ const useSubmit = (
                     }
                 }
 
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 const {data} = await dispatch(getChannelTimezones(channelId)) as unknown as ActionResult<string[]>;
                 channelTimezoneCount = data ? data.length : 0;
             }

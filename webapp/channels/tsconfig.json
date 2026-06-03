@@ -22,7 +22,7 @@
     "jsx": "react",
     "baseUrl": "./src",
     "useUnknownInCatchVariables": false,
-    "composite": true,
+    "composite": false, 
     "paths": {
         "@mattermost/client": ["../../platform/client/src"],
         "@mattermost/components": ["../../platform/components/src"],

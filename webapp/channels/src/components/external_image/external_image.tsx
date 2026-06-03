@@ -7,7 +7,7 @@ import type {PostImage} from '@mattermost/types/posts';
 
 import {getImageSrc} from 'utils/post_utils';
 
-interface Props {
+export interface Props {
     children: (src: string) => React.ReactNode;
     enableSVGs: boolean;
     hasImageProxy: boolean;

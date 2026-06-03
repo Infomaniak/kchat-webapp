@@ -129,6 +129,8 @@ export default function useWords(highestLimit: LimitSummary | false, isAdminUser
                 id: 'workspace_limits.menu_limit.messages',
                 defaultMessage: 'Total messages',
             }),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             description: intl.formatMessage<ReactNode>(
                 description,
                 values,
@@ -166,6 +168,8 @@ export default function useWords(highestLimit: LimitSummary | false, isAdminUser
                 id: 'workspace_limits.menu_limit.file_storage',
                 defaultMessage: 'File storage limit',
             }),
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             description: intl.formatMessage<ReactNode>(
                 description,
                 values,

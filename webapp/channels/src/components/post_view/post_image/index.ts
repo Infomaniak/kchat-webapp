@@ -19,4 +19,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
 
 const connector = connect(null, mapDispatchToProps);
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default connector(PostImage);

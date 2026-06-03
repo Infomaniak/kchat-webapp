@@ -23,6 +23,8 @@ function makeMapStateToProps() {
     return (state: GlobalState) => {
         const config = getConfig(state);
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const enablePreviewFeatures = config.EnablePreviewFeatures === 'true';
         const enableUserDeactivation = config.EnableUserDeactivation === 'true';
 

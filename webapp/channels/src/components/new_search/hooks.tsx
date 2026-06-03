@@ -28,6 +28,8 @@ const useSearchSuggestions = (searchType: string, searchTerms: string, searchTea
     const suggestionProviders = useRef<Provider[]>([
         new SearchDateProvider(),
         new SearchChannelProvider((term: string, teamId: string, success?: (channels: Channel[]) => void, error?: (err: ServerError) => void) => dispatch(autocompleteChannelsForSearchInTeam(term, teamId, success, error))),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         new SearchUserProvider((username: string, teamId: string) => dispatch(autocompleteUsersInTeam(username, teamId))),
         new SearchFileExtensionProvider(),
     ]);

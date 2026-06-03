@@ -150,6 +150,8 @@ const MobileChannelHeaderPlugins = (props: Props): JSX.Element => {
             }
         };
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const res = await dispatch(handleBindingClick(binding, context, intl)) as unknown as ActionResult<DoAppCallResult<unknown>>;
         if (res.error) {
             handleAppResponse(null, res.error);

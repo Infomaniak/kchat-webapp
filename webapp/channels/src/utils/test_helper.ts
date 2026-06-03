@@ -40,6 +40,8 @@ export class TestHelper {
         return Object.assign({}, defaultPostDraft, override);
     }
     public static getUserMock(override: Partial<UserProfile> = {}): UserProfile {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const defaultUser: UserProfile = {
             id: 'user_id',
             roles: '',
@@ -207,6 +209,8 @@ export class TestHelper {
     }
 
     public static getTeamMock(override?: Partial<Team>): Team {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const defaultTeam: Team = {
             id: 'team_id',
             create_at: 0,

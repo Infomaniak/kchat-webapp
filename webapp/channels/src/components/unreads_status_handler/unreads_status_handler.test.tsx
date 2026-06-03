@@ -54,6 +54,8 @@ describe('components/UnreadsStatusHandler', () => {
 
     test('set correctly the title when needed', () => {
         const wrapper = shallowWithIntl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <UnreadsStatusHandler {...defaultProps}/>,
         ) as unknown as ShallowWrapper<Props, any, UnreadsStatusHandlerClass>;
         const instance = wrapper.instance();
@@ -126,6 +128,8 @@ describe('components/UnreadsStatusHandler', () => {
         (isFirefox as jest.Mock).mockImplementation(() => false);
         (isChrome as jest.Mock).mockImplementation(() => false);
         const wrapper = shallowWithIntl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <UnreadsStatusHandler {...defaultProps}/>,
         ) as unknown as ShallowWrapper<Props, any, UnreadsStatusHandlerClass>;
         const instance = wrapper.instance();
@@ -150,6 +154,8 @@ describe('components/UnreadsStatusHandler', () => {
         document.head.appendChild(link);
 
         const wrapper = shallowWithIntl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <UnreadsStatusHandler {...defaultProps}/>,
         ) as unknown as ShallowWrapper<Props, any, UnreadsStatusHandlerClass>;
         const instance = wrapper.instance();
@@ -173,6 +179,8 @@ describe('components/UnreadsStatusHandler', () => {
 
     test('should display correct title when in drafts', () => {
         const wrapper = shallowWithIntl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <UnreadsStatusHandler
                 {...defaultProps}
                 inDrafts={true}
@@ -187,6 +195,8 @@ describe('components/UnreadsStatusHandler', () => {
 
     test('should display correct title when in scheduled posts tab', () => {
         const wrapper = shallowWithIntl(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <UnreadsStatusHandler
                 {...defaultProps}
                 inScheduledPosts={true}

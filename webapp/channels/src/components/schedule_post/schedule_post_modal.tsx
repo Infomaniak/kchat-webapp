@@ -14,6 +14,8 @@ import {closeModal} from 'actions/views/modals';
 import DateTimeInput, {getRoundedTime} from 'components/custom_status/date_time_input';
 
 import {ModalIdentifiers} from 'utils/constants';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import {toUTCUnix} from 'utils/datetime';
 import {getCurrentMomentForTimezone} from 'utils/timezone';
 

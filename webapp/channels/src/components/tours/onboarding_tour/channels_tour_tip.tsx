@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -32,6 +33,7 @@ export const ChannelsTour = () => {
             values={{
                 link: (
                     <div>
+                        {/* @ts-ignore */}
                         <ExternalLink
                             href={localizeMessage({id: 'onboardingTour.ChannelsTourTip.linkUrl', defaultMessage: 'https://www.infomaniak.com/en/support/faq/2732/managing-a-kchat-channel'})}
                         >
@@ -55,6 +57,8 @@ export const ChannelsTour = () => {
                 pulsatingDotPlacement='right-start'
                 width={400}
                 overlayPunchOut={overlayPunchOut}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 link={link}
             />
         </span>

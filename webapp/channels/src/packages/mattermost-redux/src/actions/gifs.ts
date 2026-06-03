@@ -19,6 +19,8 @@ export function saveAppPropsRequest(props: any) {
 
 export function saveAppProps(appProps: any) {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {GfycatAPIKey, GfycatAPISecret} = getState().entities.general.config;
         gfycatSdk(GfycatAPIKey!, GfycatAPISecret!).authenticate();
         dispatch(saveAppPropsRequest(appProps));
@@ -148,6 +150,8 @@ export function searchPriorLocation(priorLocation: number) {
 export function searchGfycat({searchText, count = 30, startIndex = 0}: { searchText: string; count?: number; startIndex?: number}) {
     let start = startIndex;
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {GfycatAPIKey, GfycatAPISecret} = getState().entities.general.config;
         const {resultsByTerm} = getState().entities.gifs.search;
         if (resultsByTerm[searchText]) {
@@ -187,6 +191,8 @@ export function searchGfycat({searchText, count = 30, startIndex = 0}: { searchT
 export function searchCategory({tagName = '', gfyCount = 30, cursorPos = undefined}) {
     let cursor: string | undefined = cursorPos;
     return async (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {GfycatAPIKey, GfycatAPISecret} = getState().entities.general.config;
         const {resultsByTerm} = getState().entities.gifs.search;
         if (resultsByTerm[tagName]) {
@@ -272,6 +278,8 @@ export function shouldSearchInitial(state: GlobalState, searchText: string) {
 
 export function searchById(gfyId: string) {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {GfycatAPIKey, GfycatAPISecret} = getState().entities.general.config;
         dispatch(requestSearchById(gfyId));
         return gfycatSdk(GfycatAPIKey!, GfycatAPISecret!).searchById({id: gfyId}).then(
@@ -345,6 +353,8 @@ export function categoriesListFailure(err: any) {
 
 export function requestCategoriesList({count = 60} = {}) {
     return (dispatch: DispatchFunc, getState: GetStateFunc) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {GfycatAPIKey, GfycatAPISecret} = getState().entities.general.config;
         const state = getState().entities.gifs.categories;
         if (!shouldRequestCategoriesList(state)) {

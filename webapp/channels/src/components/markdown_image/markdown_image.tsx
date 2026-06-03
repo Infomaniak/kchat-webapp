@@ -221,6 +221,8 @@ export default class MarkdownImage extends PureComponent<Props, State> {
                     const actualHeight = this.getHeight();
                     if (actualHeight >= Constants.EXPANDABLE_INLINE_IMAGE_MIN_HEIGHT) {
                         imageElement = (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
                             <MarkdownImageExpand
                                 alt={alt || safeSrc}
                                 postId={postId}

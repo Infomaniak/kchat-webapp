@@ -104,6 +104,8 @@ export default class Textbox extends React.PureComponent<Props> {
         }
 
         this.suggestionProviders.push(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             new AtMentionProvider({
                 textboxId: this.props.id,
                 currentUserId: this.props.currentUserId,
@@ -146,6 +148,8 @@ export default class Textbox extends React.PureComponent<Props> {
             // Update channel id for AtMentionProvider.
             for (const provider of this.suggestionProviders) {
                 if (provider instanceof AtMentionProvider) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     provider.setProps({
                         textboxId: this.props.id,
                         currentUserId: this.props.currentUserId,

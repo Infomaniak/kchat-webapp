@@ -123,6 +123,8 @@ describe('components/SizeAwareImage', () => {
         const wrapper = mountWithIntl(<Provider store={store}><SizeAwareImage {...baseProps}/></Provider>);
 
         // ImgWithRetry handles the retry internally; call handleError directly to test SizeAwareImage behavior
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         wrapper.find(SizeAwareImageComponent).instance().handleError();
 
         expect(wrapper.find(SizeAwareImageComponent).state('error')).toBe(true);

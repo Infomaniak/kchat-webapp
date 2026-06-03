@@ -24,6 +24,8 @@ describe('limits reducer', () => {
 
     test('returns prior limits on unmatched action', () => {
         const unchangedLimits = limits(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             minimalLimits,
             {
                 type: undefined,
@@ -40,6 +42,8 @@ describe('limits reducer', () => {
             },
         };
         const unchangedLimits = limits(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             minimalLimits,
             {
                 type: CloudTypes.RECEIVED_CLOUD_LIMITS,
@@ -51,6 +55,8 @@ describe('limits reducer', () => {
 
     test('clears limits when new subscription received', () => {
         const emptyLimits = limits(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             minimalLimits,
             {
                 type: CloudTypes.RECEIVED_CLOUD_SUBSCRIPTION,

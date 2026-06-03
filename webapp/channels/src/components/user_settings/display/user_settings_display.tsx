@@ -180,6 +180,9 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
 
     componentDidMount() {
         // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // eslint-disable-next-line react/prop-types
         const {actions, enableTimezone, shouldAutoUpdateTimezone} = this.props;
 
         if (enableTimezone && shouldAutoUpdateTimezone) {

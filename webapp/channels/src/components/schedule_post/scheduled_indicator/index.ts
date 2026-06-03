@@ -27,8 +27,12 @@ const getScheduledDrafts = (state: GlobalState, ownProps: OwnProps) => {
     const key = prefix + (ownProps.type === ScheduledIndicatorType.CHANNEL ? ownProps.channelId : ownProps.rootId);
     const getDrafts = makeGetDraftsByPrefix(prefix);
     return getDrafts(state).
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
         filter((draft) => draft.key.includes(key) && draft.value.timestamp).
         map((draft) => draft.value).
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
         sort((a, b) => a.timestamp! - b.timestamp!);
 };
 

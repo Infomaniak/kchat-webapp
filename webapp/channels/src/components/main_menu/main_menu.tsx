@@ -357,6 +357,8 @@ export class MainMenu extends React.PureComponent<Props> {
             >
                 <Menu.Group>
                     <SystemPermissionGate
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         permissions={[Permissions.SYSTEM_ADMIN]}
                     >
                         <Menu.ItemAction

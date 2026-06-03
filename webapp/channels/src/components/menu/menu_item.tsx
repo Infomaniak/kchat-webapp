@@ -80,6 +80,8 @@ export interface Props extends MuiMenuItemProps, Record<string, any> {
 
     onClick?: (event: MouseEvent<HTMLLIElement> | KeyboardEvent<HTMLLIElement>) => void;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     role?: React.AriaRole;
 
     forceCloseOnSelect?: boolean;
@@ -353,6 +355,8 @@ function isCorrectKeyPressedOnMenuItem(event: MouseEvent<HTMLLIElement> | Keyboa
     return false;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 function isRoleCheckboxOrRadio(role: React.AriaRole) {
     return role === 'menuitemcheckbox' || role === 'menuitemradio';
 }

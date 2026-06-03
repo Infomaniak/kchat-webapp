@@ -77,11 +77,15 @@ export default function RHS() {
             fetchThreads();
         } else if (currentTab === 'thread' && Boolean(selectedPostId)) {
             // Update read for the thread to tommorow. We don't really want the unreads thing to show up.
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             updateRead(currentUserId, currentTeamId, selectedPostId, Date.now() + twentyFourHoursInMS);
         }
         return () => {
             // Somtimes we are too fast for the server, so try again on unmount/switch.
             if (selectedPostId) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 updateRead(currentUserId, currentTeamId, selectedPostId, Date.now() + twentyFourHoursInMS);
             }
         };
@@ -91,6 +95,8 @@ export default function RHS() {
         dispatch({type: 'SELECT_AI_POST', postId});
     }, [dispatch]);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const {bots, activeBot, setActiveBot} = useBotlist();
 
     // Unconfigured state

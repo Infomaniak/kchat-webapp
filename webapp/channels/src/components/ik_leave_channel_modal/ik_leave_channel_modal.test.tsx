@@ -99,6 +99,8 @@ describe('components/LeaveChannelModal', () => {
         };
 
         const wrapper = renderWithContext(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <IkLeaveChannelModal
                 {...props}
             />,
@@ -171,6 +173,8 @@ describe('components/LeaveChannelModal', () => {
             isInvite: true,
         };
         renderWithContext(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             <IkLeaveChannelModal
                 {...props}
             />,
@@ -246,6 +250,8 @@ describe('components/LeaveChannelModal', () => {
 
         await act(async () => {
             renderWithContext(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 <IkLeaveChannelModal
                     {...props}
                 />,

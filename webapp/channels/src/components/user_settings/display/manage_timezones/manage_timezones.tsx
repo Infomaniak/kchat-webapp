@@ -207,6 +207,8 @@ export default class ManageTimezones extends React.PureComponent<Props, State> {
                 className='pt-2 pb-4'
             >
                 {!useAutomaticTimezone &&
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 <ExternalLink
                     href='https://manager.infomaniak.com/v3/ng/profile/user/dashboard'
                     target='_blank'

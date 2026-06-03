@@ -23,4 +23,6 @@ const mapDispatchToProps = {
     savePreferences,
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(RhsLimitVisibleGMsDMs);

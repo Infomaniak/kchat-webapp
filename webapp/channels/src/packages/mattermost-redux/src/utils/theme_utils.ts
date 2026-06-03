@@ -120,6 +120,8 @@ type ThemeTypeMap = Record<ThemeType | LegacyThemeType, ThemeKey>;
 
 // object mapping theme types to their respective keys for retrieving the source themes directly
 // - supports mapping old themes to new themes
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const themeTypeMap: ThemeTypeMap = {
     Mattermost: 'denim',
     'Mattermost Dark': 'indigo',

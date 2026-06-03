@@ -280,7 +280,7 @@ export function Menu(props: Props) {
                         },
                     }}
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-expect-error This exists in source code of mui, but its types are missing
+                    // @ts-ignore This exists in source code of mui, but its types are missing
                     onTransitionExited={providerValue.handleClosed}
                 >
                     {props.menuHeader}

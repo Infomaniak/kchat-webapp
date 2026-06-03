@@ -83,6 +83,8 @@ describe('Reducers.Modals', () => {
         };
 
         const nextState = modalStateReducer(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             initialState,
             {
                 type: ActionTypes.MODAL_CLOSE,

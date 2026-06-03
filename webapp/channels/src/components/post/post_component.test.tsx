@@ -40,6 +40,8 @@ describe('PostComponent', () => {
     const currentTeam = TestHelper.getTeamMock();
     const channel = TestHelper.getChannelMock({team_id: currentTeam.id});
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const baseProps: Props = {
         center: false,
         currentTeam,
@@ -387,6 +389,8 @@ describe('PostComponent', () => {
         });
 
         test('should show file list in edit container when editing', () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             channelSelectors.getMyChannelMembership.mockReturnValue(true);
 
             const fileInfo1 = TestHelper.getFileInfoMock({id: 'fileId1', name: 'file1.jpg'});

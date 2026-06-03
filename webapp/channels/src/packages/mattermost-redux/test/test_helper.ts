@@ -192,6 +192,8 @@ class TestHelper {
             inviteId = inviteId.substring(0, 32);
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         return {
             id: 'team_id',
             create_at: 0,

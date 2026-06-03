@@ -738,12 +738,14 @@ export class FileUpload extends PureComponent<Props, State> {
                                     const args: Array<keyof FileUpload | keyof Props> = [];
                                     item.customArgs.forEach((arg) => {
                                         if (arg in this || arg in this.props) {
-                                            // @ts-expect-error ts can't infer this properly
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore ts can't infer this properly
                                             args.push(this[arg] || this.props[arg]);
                                         }
                                     });
 
-                                    // @ts-expect-error not typed correctly
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore not typed correctly
                                     item.action(...args);
                                 } else {
                                     item.action(this.checkPluginHooksAndUploadFiles);

@@ -128,6 +128,8 @@ const NewChannelModal = () => {
         };
 
         try {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             const {data: newChannel, error} = await dispatch(createChannel(channel, '')) as unknown as ActionResult<Channel>;
             if (error) {
                 onCreateChannelError(error);

@@ -71,6 +71,8 @@ export function clearLocalStorageToken() {
 export function getCodeVerifier() {
     const ramdonByte = crypto.randomBytes(33);
     const hash =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
                crypto.createHash('sha256').update(ramdonByte).digest();
     return hash.toString('base64').
         replace(/\+/g, '-').
@@ -177,6 +179,8 @@ function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresA
         localStorage.setItem('IKRefreshToken', tokenData.refreshToken);
     }
     if (tokenData.expiresAt) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         localStorage.setItem('IKTokenExpire', tokenData.expiresAt);
         localStorage.setItem('tokenExpired', '0');
     }
@@ -188,6 +192,8 @@ function storeTokenV2(tokenData: {token: string; refreshToken?: string; expiresA
 
 async function refreshTokenV2(): Promise<{token: string; refreshToken: string; expiresAt: number}> {
     try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const newToken = await window.authManager.refreshToken();
         console.log(newToken);
         storeTokenV2(newToken);

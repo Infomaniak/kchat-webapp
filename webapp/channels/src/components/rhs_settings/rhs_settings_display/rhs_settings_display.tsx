@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -377,7 +378,8 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
         this.handleSubmit({...this.state, ...display});
     }
 
-    // @ts-expect-error this seems wrong  as props is OnChangeActions but to minimize changed i only silented it
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this seems wrong  as props is OnChangeActions but to minimize changed i only silented it
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleOnTimezoneChange: ComponentProps<typeof ManageTimezones>['onChange'] = (timezone: any, xd: any) => {
         // eslint-disable-next-line no-console
@@ -599,10 +601,14 @@ export default class RhsSettingsDisplay extends React.PureComponent<Props, State
                     <div
                         id={`rhsCustomBtnSelect${key}`}
                         className={`rhs-custom-btn ${activeClass}`}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         onClick={() => this.handleOnChange({[display]: option.value})}
                     >
                         <label>
+                            {/* @ts-ignore */}
                             {option.icon}
+                            {/* @ts-ignore */}
                             <div className='rhs-custom-btn-label'>{option.label}</div>
                         </label>
                     </div>

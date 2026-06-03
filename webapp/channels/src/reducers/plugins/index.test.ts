@@ -11,6 +11,8 @@ import type {PluginsState} from 'types/store/plugins';
 import pluginReducers from '.';
 
 function getBaseState(): PluginsState {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
     return {
         adminConsoleCustomComponents: {},
         adminConsoleCustomSections: {},

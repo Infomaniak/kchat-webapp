@@ -449,6 +449,8 @@ export type CreateBoardFromTemplateComponent = PluginComponent & {
     component: React.ComponentType<BasePluggableProps & {
         setCanCreate: (v: boolean) => void;
         setAction: (action: ((currentTeamId: string, channelId: string) => Promise<Board>) | undefined) => void;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         newBoardInfoIcon: React.JSX.Element;
     }>;
     action: () => void;

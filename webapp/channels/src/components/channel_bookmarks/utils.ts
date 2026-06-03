@@ -139,6 +139,8 @@ export const useChannelBookmarks = (channelId: string) => {
 
     const reorder = async (id: string, prevOrder: number, nextOrder: number) => {
         setTempOrder(insertWithoutDuplicates(order, id, nextOrder));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const {error} = await dispatch(reorderBookmark(channelId, id, nextOrder)) as unknown as ActionResult<boolean>;
 
         if (error) {

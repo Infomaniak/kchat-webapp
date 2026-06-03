@@ -34,6 +34,8 @@ describe('components/channel_layout/CenterChannel', () => {
     };
 
     test('should call onChannelByIdentifierEnter on props change', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const wrapper = shallow(<ChannelIdentifierRouter {...baseProps}/>);
         const instance = wrapper.instance();
         expect(baseProps.actions.onChannelByIdentifierEnter).toHaveBeenCalledTimes(1);
@@ -76,6 +78,8 @@ describe('components/channel_layout/CenterChannel', () => {
                 url: '/team/channel/identifier/abcd',
             },
         };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         shallow(<ChannelIdentifierRouter {...props}/>);
         jest.runOnlyPendingTimers();
         expect(getHistory().replace).toHaveBeenLastCalledWith('/team/channel/identifier');
@@ -95,6 +99,8 @@ describe('components/channel_layout/CenterChannel', () => {
             },
         };
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const wrapper = shallow(<ChannelIdentifierRouter {...baseProps}/>);
         wrapper.setProps(props);
 

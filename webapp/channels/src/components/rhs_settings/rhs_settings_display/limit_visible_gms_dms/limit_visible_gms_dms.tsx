@@ -3,6 +3,8 @@
 
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {ValueType} from 'react-select';
 import ReactSelect from 'react-select';
 

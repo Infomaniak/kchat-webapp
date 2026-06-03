@@ -38,6 +38,8 @@ describe('components/actions_menu/ActionsMenu on mobile view', () => {
             },
             appBindings: [],
             pluginMenuItems: [],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             handleOpenTip: jest.fn(),
             handleNextTip: jest.fn(),
             handleDismissTip: jest.fn(),

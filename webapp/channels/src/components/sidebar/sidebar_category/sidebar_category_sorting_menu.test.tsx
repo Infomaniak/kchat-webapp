@@ -25,6 +25,8 @@ const initialState = {
 };
 
 jest.spyOn(redux, 'useSelector').mockImplementation((cb) => cb(initialState));
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 jest.spyOn(redux, 'useDispatch').mockReturnValue((t: unknown) => t);
 
 describe('components/sidebar/sidebar_category/sidebar_category_sorting_menu', () => {

@@ -13,7 +13,7 @@ import informationIcon from 'images/icons/information-blue.svg';
 
 import AnnouncementBar from '../default_announcement_bar';
 
-interface Props {
+export interface Props {
     showMASBanner: boolean;
 }
 

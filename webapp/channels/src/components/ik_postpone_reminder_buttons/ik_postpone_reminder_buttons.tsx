@@ -7,6 +7,8 @@ import {FormattedDate, FormattedMessage, FormattedTime} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import type {ReminderTimestamp} from 'mattermost-redux/actions/posts';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 
@@ -60,6 +62,8 @@ const IkPostponeReminderButtons = (props: Props) => {
                     postpone: true,
                 },
             };
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             props.actions.openModal(postReminderCustomTimePicker);
         } else {
             let targetTime: ReminderTimestamp | null = null;
@@ -81,6 +85,8 @@ const IkPostponeReminderButtons = (props: Props) => {
 
             if (props.currentUserId) {
                 const userId = props.currentUserId;
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 props.actions.addPostReminder(userId, postId, targetTime, reschedule, reminderPostId);
             }
         }
@@ -199,6 +205,8 @@ const IkPostponeReminderButtons = (props: Props) => {
             <Menu.Container
                 menuButton={{
                     id: `_button_${props.post.id}`,
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     dateTestId: `PostDotMenu-Button-${props.post.id}`,
                     class: 'btn btn-sm btn-primary',
                     children:

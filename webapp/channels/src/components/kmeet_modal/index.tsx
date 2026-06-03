@@ -22,6 +22,8 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     const locale = getCurrentLocale(state);
     const channel = getChannel(state, ownProps.channelId);
     const conference = getConferenceByChannelId(state, ownProps.channelId);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const caller = getUserById(state, conference?.user_id);
     const users = conference?.participants.map((id) => getUserById(state, id));
     let otherServerName;
@@ -44,4 +46,4 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
     };
 }
 
-export default connect(mapStateToProps)(KmeetModal);
+export default connect(mapStateToProps)<any>(KmeetModal);

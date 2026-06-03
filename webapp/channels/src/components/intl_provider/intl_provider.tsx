@@ -27,7 +27,8 @@ export default class IntlProvider extends React.PureComponent<Props> {
         // Pass localization function back to mattermost-redux
         setLocalizeFunction(localizeMessage);
 
-        // @ts-expect-error for webcomonents
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore for webcomonents
         window.CONST_LANG = this.props.locale;
 
         this.handleLocaleChange(this.props.locale);
@@ -40,7 +41,8 @@ export default class IntlProvider extends React.PureComponent<Props> {
     }
 
     handleLocaleChange = (locale: string) => {
-        // @ts-expect-error for webcomonents
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore for webcomonents
         window.CONST_LANG = locale;
         Client4.setAcceptLanguage(locale);
 

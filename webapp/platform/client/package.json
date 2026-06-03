@@ -40,6 +40,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "check-types": "tsc --noEmit",
     "check": "eslint --ext .js,.jsx,.tsx,.ts ./src --quiet",
     "run": "tsc --watch --preserveWatchOutput",
     "test": "jest",

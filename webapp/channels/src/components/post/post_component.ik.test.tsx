@@ -28,6 +28,8 @@ describe('PostComponent - Infomaniak custom tests', () => {
     const currentTeam = TestHelper.getTeamMock();
     const channel = TestHelper.getChannelMock({team_id: currentTeam.id});
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const baseProps: Props = {
         center: false,
         currentTeam,

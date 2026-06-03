@@ -304,6 +304,8 @@ describe('components/ProfilePopover', () => {
     // eslint-disable-next-line no-only-tests/no-only-tests
     test.skip('should not show start call button when plugin is disabled', async () => {
         const [initialState] = getBasePropsAndState();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         initialState.plugins!.plugins = {};
 
         test('should not show start call button when calls in channel have been explicitly disabled', async () => {

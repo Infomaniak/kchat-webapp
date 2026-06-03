@@ -169,7 +169,8 @@ class SelectBinding extends React.PureComponent<Props, State> {
                     <AutocompleteSelector
                         providers={this.providers}
 
-                        // @ts-expect-error not sure if its safe to remove. so i silented it
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore not sure if its safe to remove. so i silented it
                         onSelected={this.handleSelected}
                         placeholder={label}
                         inputClassName='post-attachment-dropdown'

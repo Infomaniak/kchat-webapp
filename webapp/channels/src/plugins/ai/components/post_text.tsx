@@ -61,7 +61,8 @@ const PostText = (props: Props) => {
     const team = useSelector<GlobalState, Team>((state) => state.entities.teams.teams[channel?.team_id]);
     const siteURL = useSelector<GlobalState, string | undefined>((state) => state.entities.general.config.SiteURL);
 
-    // @ts-expect-error old error ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore old error ignore
     const {formatText, messageHtmlToComponent} = window.PostUtils;
 
     const markdownOptions = {

@@ -47,6 +47,8 @@ const ChannelActionsMenu = ({channel, actionCallback}: Props) => {
                 modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
                 dialogType: IkLeaveChannelModal,
                 dialogProps: {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     channel,
                 },
             }));

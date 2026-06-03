@@ -79,6 +79,8 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         this.props.setParentState('desktopThreads', value);
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     setDesktopNotificationSound: ReactSelect['onChange'] = (selectedOption: SingleValue<SelectedOption>): void => {
         if (selectedOption && 'value' in selectedOption) {
             this.props.setParentState('desktopNotificationSound', selectedOption.value);
@@ -91,6 +93,8 @@ export default class DesktopNotificationSettings extends React.PureComponent<Pro
         if (!this.state.blurDropdown) {
             this.setState({blurDropdown: true});
             if (this.dropdownSoundRef.current) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 this.dropdownSoundRef.current.blur();
             }
         }

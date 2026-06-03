@@ -136,6 +136,8 @@ describe('components/Root', () => {
             } as unknown as RouteComponentProps['history'],
         } as RouteComponentProps,
         isDevModeEnabled: false,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         currentTeam: {} as Team,
         teamsOrderPreference: {} as PreferenceType,
         userLocale: 'fr',

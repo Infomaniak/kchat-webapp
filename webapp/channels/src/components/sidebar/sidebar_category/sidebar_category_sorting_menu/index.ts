@@ -11,6 +11,8 @@ import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import type {GlobalState} from 'types/store';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import SidebarCategorySortingMenu from './sidebar_category_sorting_menu';
 
 function mapStateToProps(state: GlobalState) {

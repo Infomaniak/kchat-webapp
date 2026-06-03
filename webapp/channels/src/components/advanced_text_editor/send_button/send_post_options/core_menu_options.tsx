@@ -116,7 +116,8 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
     const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
 
     const optionTomorrow = (
@@ -136,7 +137,8 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         />
     );
 
-    // @ts-expect-error tyoe behind the scene 'tomorrow' and 'monday' is allowed
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
     const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
 
     const optionNextMonday = (

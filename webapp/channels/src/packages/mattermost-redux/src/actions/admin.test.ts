@@ -611,6 +611,8 @@ describe('Actions.Admin', () => {
             delete('/license').
             reply(200, OK_RESPONSE);
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         await store.dispatch(Actions.removeLicense());
 
         expect(nock.isDone()).toBe(true);

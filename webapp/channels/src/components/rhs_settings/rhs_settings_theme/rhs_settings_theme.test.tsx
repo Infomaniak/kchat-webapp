@@ -36,6 +36,8 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
         selected: false,
         updateSection: jest.fn(),
         setRequireConfirm: jest.fn(),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setEnforceFocus: jest.fn(),
         actions: {
             saveTheme: jest.fn().mockResolvedValue({data: true}),

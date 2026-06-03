@@ -16,7 +16,8 @@ export const getAllLogs = createSelector(
     getLogs,
     (logs) => {
         return Object.values(logs).reduce<LogObject[]>((acc, log) => {
-            // @ts-expect-error: object that is returned from the server contains an array of logs but ts gets confused that its one log object
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore: object that is returned from the server contains an array of logs but ts gets confused that its one log object
             acc.push(...log);
             return acc;
         }, []);

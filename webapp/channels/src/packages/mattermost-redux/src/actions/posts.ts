@@ -735,6 +735,8 @@ export function getPostsUnread(channelId: string, fetchThreads = true, collapsed
             }
 
             // Todo: use mattermost version
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             hasLimitDate = posts.has_limitation;
         } catch (error) {
             forceLogoutIfNecessary(error, dispatch, getState);
@@ -798,6 +800,8 @@ export function getPostsBefore(channelId: string, postId: string, page = 0, perP
             return {error};
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         hasLimitDate = posts.has_limitation;
 
         dispatch(batchActions([

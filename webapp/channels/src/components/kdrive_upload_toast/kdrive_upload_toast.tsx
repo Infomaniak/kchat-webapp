@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
@@ -5,7 +6,7 @@ import React from 'react';
 
 import ExternalLink from 'components/external_link';
 
-interface Props {
+export interface Props {
     toast?: {
         message: string;
         props?: {
@@ -48,6 +49,7 @@ export default class KDriveUploadToast extends React.PureComponent<Props> {
                         className='toast__dismiss'
                         style={{right: '40px'}}
                     >
+                        {/* @ts-ignore */}
                         <ExternalLink
                             style={{color: 'white'}}
                             href={toast.props.link}

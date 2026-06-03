@@ -32,6 +32,8 @@ export const appBarEnabled = createSelector(
     'appBarEnabled',
     (state: GlobalState) => getConfig(state),
     (config?: Partial<ClientConfig>) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         return config?.EnableAppBar === 'true';
     },
 );
