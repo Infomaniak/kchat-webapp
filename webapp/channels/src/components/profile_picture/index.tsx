@@ -27,7 +27,6 @@ type Props = {
     overwriteName?: string;
     newStatusIcon?: boolean;
     statusClass?: string;
-    onHide?: () => void;
 }
 
 function ProfilePicture(props: Props) {
@@ -57,7 +56,6 @@ function ProfilePicture(props: Props) {
                     width: `${getAvatarWidth(props?.size ?? 'md')}px`,
                     height: `${getAvatarWidth(props?.size ?? 'md')}px`,
                 }}
-                onHide={props.onHide}
             >
                 <>
                     <span className={profileIconClass}>

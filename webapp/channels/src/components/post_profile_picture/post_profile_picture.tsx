@@ -25,7 +25,6 @@ type Props = {
     user: UserProfile;
     isBot?: boolean;
     overwriteIcon?: string;
-    onHide?: () => void;
 }
 
 export default class PostProfilePicture extends React.PureComponent<Props> {
@@ -102,7 +101,6 @@ export default class PostProfilePicture extends React.PureComponent<Props> {
                 isBot={user?.is_bot}
                 fromAutoResponder={fromAutoResponder}
                 fromWebhook={fromWebhook}
-                onHide={this.props.onHide}
             />
         );
     }

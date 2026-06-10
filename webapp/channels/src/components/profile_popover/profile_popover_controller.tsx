@@ -23,6 +23,8 @@ import {useIntl} from 'react-intl';
 import type {Channel} from '@mattermost/types/channels';
 import type {UserProfile} from '@mattermost/types/users';
 
+import {PopoverContext} from 'components/popover_context';
+
 import {A11yClassNames, OverlaysTimings, OverlayTransitionStyles, RootHtmlPortalId} from 'utils/constants';
 
 import ProfilePopover from './profile_popover';
@@ -80,11 +82,11 @@ interface Props<TriggerComponentType> {
     returnFocus?: () => void;
 
     onToggle?: (isMounted: boolean) => void;
-    onHide?: () => void;
 }
 
 export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>(props: Props<TriggerComponentType>) {
     const intl = useIntl();
+    const {onShow, onHide} = React.useContext(PopoverContext);
 
     const profileAriaLabel = intl.formatMessage({id: 'profile_popover.aria_label.without_username', defaultMessage: 'profile popover'});
     const userProfileAriaLabel = intl.formatMessage({
@@ -100,8 +102,10 @@ export function ProfilePopoverController<TriggerComponentType = HTMLSpanElement>
     const {refs, floatingStyles, context: floatingContext} = useFloating({
         open: isOpen,
         onOpenChange: (open) => {
-            if (!open) {
-                props.onHide?.();
+            if (open) {
+                onShow();
+            } else {
+                onHide();
             }
             setOpen(open);
         },
