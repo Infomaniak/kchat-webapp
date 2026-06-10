@@ -50,7 +50,18 @@ export default class CodePreview extends React.PureComponent<Props, State> {
         if (props.fileUrl !== state.prevFileUrl) {
             const usedLanguage = SyntaxHighlighting.getLanguageFromFileExtension(props.fileInfo.extension);
 
-            if (!usedLanguage || props.fileInfo.size > Constants.CODE_PREVIEW_MAX_FILE_SIZE) {
+            if (props.fileInfo.size > Constants.CODE_PREVIEW_MAX_FILE_SIZE) {
+                return {
+                    code: '',
+                    lang: '',
+                    loading: false,
+                    success: false,
+                    prevFileUrl: props.fileUrl,
+                };
+            }
+
+            const isTextFile = props.fileInfo.mime_type?.startsWith('text/');
+            if (!usedLanguage && !isTextFile) {
                 return {
                     code: '',
                     lang: '',
@@ -62,7 +73,7 @@ export default class CodePreview extends React.PureComponent<Props, State> {
 
             return {
                 code: '',
-                lang: usedLanguage,
+                lang: usedLanguage || '',
                 loading: true,
                 prevFileUrl: props.fileUrl,
             };
@@ -77,7 +88,7 @@ export default class CodePreview extends React.PureComponent<Props, State> {
     }
 
     getCode = async () => {
-        if (!this.state.lang || this.props.fileInfo.size > Constants.CODE_PREVIEW_MAX_FILE_SIZE) {
+        if (this.props.fileInfo.size > Constants.CODE_PREVIEW_MAX_FILE_SIZE) {
             return;
         }
         try {
@@ -109,7 +120,13 @@ export default class CodePreview extends React.PureComponent<Props, State> {
     };
 
     static supports(fileInfo: FileInfo | LinkInfo) {
-        return Boolean(SyntaxHighlighting.getLanguageFromFileExtension(fileInfo.extension));
+        if (SyntaxHighlighting.getLanguageFromFileExtension(fileInfo.extension)) {
+            return true;
+        }
+        if ('mime_type' in fileInfo && (fileInfo as FileInfo).mime_type?.startsWith('text/')) {
+            return true;
+        }
+        return false;
     }
 
     render() {

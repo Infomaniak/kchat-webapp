@@ -2096,7 +2096,7 @@ export const Constants = {
         COMPOSING: ['Composing', 229],
     } as Record<string, [string, number]>),
     FeatureTogglePrefix: 'feature_enabled_',
-    CODE_PREVIEW_MAX_FILE_SIZE: 500000, // 500 KB
+    CODE_PREVIEW_MAX_FILE_SIZE: 2000000, // 2 MB
     HighlightedLanguages: {
         '1c': {name: '1C:Enterprise', extensions: ['bsl', 'os'], aliases: ['bsl']},
         actionscript: {name: 'ActionScript', extensions: ['as'], aliases: ['as', 'as3']},
