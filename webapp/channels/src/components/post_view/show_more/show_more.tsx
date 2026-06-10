@@ -68,10 +68,34 @@ export default class ShowMore extends React.PureComponent<Props, State> {
     toggleCollapse = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         e.stopPropagation();
+
+        let scrollTopBefore: number | undefined;
+        let scrollContainer: HTMLElement | null = null;
+        if (this.textContainer.current) {
+            let el = this.textContainer.current.parentElement;
+            while (el) {
+                const style = window.getComputedStyle(el);
+                if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+                    scrollContainer = el as HTMLElement;
+                    scrollTopBefore = el.scrollTop;
+                    break;
+                }
+                el = el.parentElement;
+            }
+        }
+
         this.setState((prevState) => {
             return {
                 isCollapsed: !prevState.isCollapsed,
             };
+        }, () => {
+            if (scrollContainer && scrollTopBefore !== undefined) {
+                window.requestAnimationFrame(() => {
+                    if (scrollContainer!.scrollTop !== scrollTopBefore) {
+                        scrollContainer!.scrollTop = scrollTopBefore!;
+                    }
+                });
+            }
         });
     };
 
