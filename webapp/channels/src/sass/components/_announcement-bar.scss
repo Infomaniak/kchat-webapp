@@ -73,14 +73,22 @@
         }
 
         &.announcement-bar__close {
-            top: 5px;
+            top: 0;
             right: 0;
-            padding: 0 10px;
+            display: flex;
+            width: 40px;
+            min-width: 40px;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
             color: variables.$white;
             font-family: var(--font-family);
-            font-size: 20px;
-            font-weight: 600;
             text-decoration: none;
+
+            svg {
+                width: 14px;
+                height: 15px;
+            }
 
             &:hover {
                 color: variables.$white;
@@ -166,15 +174,33 @@
     min-height: variables.$ik-announcement-bar-height;
     max-height: variables.$ik-announcement-bar-height;
     background: linear-gradient(91.45deg, #0088B2 0.11%, #0E5F78 100%), #0088B2;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
 
     .announcement-bar__close {
         top: auto;
         bottom: auto;
-        font-size: 30px;
+        display: flex;
+        width: 40px;
+        min-width: 40px;
+        align-items: center;
+        justify-content: center;
+        color: variables.$white;
+        text-decoration: none;
+
+        svg {
+            width: 14px;
+            height: 15px;
+        }
     }
 
     .announcement-bar__ik-icon {
         min-width: fit-content;
+
+        svg {
+            width: 25px !important;
+            height: 24px !important;
+        }
     }
 }
 
@@ -199,13 +225,23 @@
     }
 
     .announcement-bar__close {
-        top: auto;
-        right: auto;
+        top: 0;
+        right: 0;
         bottom: auto;
-        left: 6px;
+        left: auto;
+        display: flex;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
         color: #9F9F9F !important;
-        font-size: 30px;
-        font-weight: 400;
+
+        svg {
+            width: 14px;
+            height: 15px;
+        }
     }
 }
 
