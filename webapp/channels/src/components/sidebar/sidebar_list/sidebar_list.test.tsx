@@ -164,6 +164,27 @@ describe('SidebarList', () => {
         expect(instance.scrollbar.current!.scrollToTop).toHaveBeenCalled();
     });
 
+    test('should not scroll to top when team object changes but id stays the same', () => {
+        const wrapper = shallowWithIntl(
+            <SidebarList {...baseProps}/>,
+        );
+        const instance = wrapper.instance() as SidebarListComponent;
+
+        instance.scrollbar = {
+            current: {
+                scrollToTop: jest.fn(),
+            } as any,
+        };
+
+        const newCurrentTeam = {
+            ...baseProps.currentTeam,
+            display_name: 'Updated Name',
+        };
+
+        wrapper.setProps({currentTeam: newCurrentTeam});
+        expect(instance.scrollbar.current!.scrollToTop).not.toHaveBeenCalled();
+    });
+
     test('should display unread scroll indicator when channels appear outside visible area', () => {
         const wrapper = shallowWithIntl(
             <SidebarList {...baseProps}/>,
