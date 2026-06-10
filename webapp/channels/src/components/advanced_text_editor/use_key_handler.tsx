@@ -71,11 +71,6 @@ const useKeyHandler = (
         }
 
         e.preventDefault();
-        const replyBox = document.getElementById('reply_textbox');
-        if (replyBox) {
-            replyBox.focus();
-        }
-
         dispatch(replyToLatestPostInChannel(channelId));
     }, [dispatch, postId, channelId]);
 
