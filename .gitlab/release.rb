@@ -9,15 +9,7 @@ GIT_RELEASE_TAG = ARGV[0]
 
 def process_release(tag)
   changelog, from_commit_sha, to_commit_sha = get_changelog_with_shas(tag)
-  dates = get_commit_dates(from_commit_sha, to_commit_sha)
-
-  if dates[0].nil? || dates[1].nil?
-    puts "Warning: Could not determine date range for MR fetching"
-    return [changelog, []]
-  end
-
-  puts "Date range: #{dates[0]} to #{dates[1]}"
-  merged_mrs = get_merge_requests_in_range(dates[0], dates[1])
+  merged_mrs = get_mrs_between_tags(from_commit_sha, to_commit_sha)
 
   [changelog, merged_mrs]
 end
@@ -50,8 +42,16 @@ def notify_release(changelog, tag)
   commit_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/commit/"
   mr_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/merge_requests/"
   release_url = "#{GITLAB_BASE_URL}/kchat/webapp/-/releases/#{tag}"
-  formatted_changelog = changelog.gsub(/kchat\/webapp@/, commit_url).gsub(/kchat\/webapp!/, mr_url)
-  message = "[#{tag}](#{release_url})\n\n#{formatted_changelog}"
+
+  formatted_changelog = changelog
+    .gsub(/kchat\/webapp@/, commit_url)
+    .gsub(/kchat\/webapp!/, mr_url)
+    .gsub(/\[RM-(\d+)\]/, '[RM-\1](https://redmine.infomaniak.ch/issues/\1)')
+
+  release_date = DateTime.now.strftime("%Y-%m-%d")
+  header = "## Release [#{tag}](#{release_url}) - #{release_date}\n\n"
+
+  message = "#{header}#{formatted_changelog}"
   data = { "text" => message }.to_json
   notify_uri = URI.parse(NOTIFY_CHANNEL)
   notify_request = Net::HTTP::Post.new(notify_uri.request_uri, { "Content-Type" => "application/json" })

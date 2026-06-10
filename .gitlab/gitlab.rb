@@ -106,12 +106,12 @@ def create_release(tag, description)
   response.code.to_i == 201
 end
 
-def get_merge_requests_in_range(from_date, to_date)
-  puts "Fetching merge requests between #{from_date} and #{to_date}"
+def get_mrs_between_tags(from_sha, to_sha)
+  commits_range = `git log --format='%H' #{from_sha}..#{to_sha}`.split("\n").to_set
+  puts "#{commits_range.length} commits in range #{from_sha}..#{to_sha}"
 
   all_mrs = []
   page = 1
-
   loop do
     uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests?state=merged&target_branch=master&page=#{page}&per_page=100")
     request = Net::HTTP::Get.new(uri.request_uri)
@@ -125,7 +125,6 @@ def get_merge_requests_in_range(from_date, to_date)
 
       all_mrs.concat(mrs)
       page += 1
-
       break if page > 20
     else
       puts "Failed to fetch MRs: #{response.code} #{response.message}"
@@ -133,40 +132,25 @@ def get_merge_requests_in_range(from_date, to_date)
     end
   end
 
-  from_datetime = DateTime.parse(from_date)
-  to_datetime = DateTime.parse(to_date)
+  puts "#{all_mrs.length} total merged MRs on master"
 
-  merged_mrs = all_mrs.select do |mr|
-    merge_date = mr["merged_at"]
-    next false if merge_date.nil?
-
-    merge_datetime = DateTime.parse(merge_date)
-    merge_datetime >= from_datetime && merge_datetime <= to_datetime
+  matched = all_mrs.select do |mr|
+    merge_sha = mr["merge_commit_sha"] || mr["squash_commit_sha"]
+    merge_sha && commits_range.include?(merge_sha)
   end
 
-  puts "Found #{merged_mrs.length} MRs merged in range"
-  merged_mrs
+  puts "#{matched.length} MRs match commit range"
+  matched
 end
 
-def get_commit_dates(from_sha, to_sha)
-  dates = []
+def update_mr_labels_deploy(mr_iid, labels)
+  uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/merge_requests/#{mr_iid}")
+  request = Net::HTTP::Put.new(uri.request_uri)
+  request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
+  request.set_form_data("labels" => labels.join(","))
 
-  [from_sha, to_sha].each_with_index do |sha, index|
-    uri = URI.parse("#{GITLAB_API_BASE}/projects/#{GITLAB_PROJECT_ID}/repository/commits/#{sha}")
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request["PRIVATE-TOKEN"] = GITLAB_ACCESS_TOKEN
-
-    response = get_http(uri).request(request)
-
-    if response.code.to_i == 200
-      commit_data = JSON.parse(response.body)
-      dates << commit_data["committed_date"]
-    else
-      dates << nil
-    end
-  end
-
-  dates
+  response = get_http(uri).request(request)
+  response.code.to_i == 200
 end
 
 def transition_label(mr_iid, from_label, to_label)
