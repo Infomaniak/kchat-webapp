@@ -8,6 +8,8 @@ import {injectIntl} from 'react-intl';
 
 import type {Team} from '@mattermost/types/teams';
 
+import {getInitialsFromName} from 'mattermost-redux/utils/user_utils';
+
 import {imageURLForTeam} from 'utils/utils';
 
 import './team_icon.scss';
@@ -87,7 +89,7 @@ export class TeamIcon extends React.PureComponent<Props> {
                         }
                         role={'img'}
                     >
-                        {content ? content.replace(/\s/g, '').substring(0, 2) : '??'}
+                        {content ? getInitialsFromName(content) : '??'}
                     </div>
                 );
             }

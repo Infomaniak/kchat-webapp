@@ -21,6 +21,26 @@ export function getFullName(user: UserProfile): string {
     return '';
 }
 
+export function getInitialsFromName(name: string): string {
+    const trimmed = name.trim();
+    if (!trimmed) {
+        return '';
+    }
+
+    const words = trimmed.split(/[\s'-]+/).filter((w) => w.length > 0);
+
+    if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+    }
+
+    const word = words[0];
+    if (word.length === 1) {
+        return word.toUpperCase();
+    }
+
+    return (word[0] + word[word.length - 1]).toUpperCase();
+}
+
 export function displayUsername(
     user: UserProfile | null | undefined,
     teammateNameDisplay: string,
