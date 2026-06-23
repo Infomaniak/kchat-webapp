@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Drafts",
   "drafts.subtitle": "Any messages you've started will show here",
   "drafts.title": "{prefix}Drafts - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Draft} other {{draftCount} Drafts}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} Scheduled}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Draft} other {{draftCount} Drafts}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 Scheduled} other {{scheduledPostCount} Scheduled}}",
   "duration.day": "{count, plural, one {day} other {days}}",
   "duration.month": "{count, plural, one {month} other {months}}",
   "duration.year": "{count, plural, one {year} other {years}}",

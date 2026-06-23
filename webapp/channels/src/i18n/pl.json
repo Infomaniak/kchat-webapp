@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Szkice",
   "drafts.subtitle": "Wszystkie rozpoczęte wiadomości będą widoczne tutaj",
   "drafts.title": "{prefix}Szkice -. {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Szkic} other {{draftCount} Szkice}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} Zaplanowane}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Szkic} other {{draftCount} Szkice}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 Zaplanowane} other {{scheduledPostCount} Zaplanowane}}",
   "duration.day": "{count, plural, one {dzień} other {dni}}",
   "duration.month": "{count, plural, one {miesiąc} other {miesięcy}}",
   "duration.year": "{count, plural, one {rok} few {lata} many {lat} other {lat}}",

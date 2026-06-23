@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Bozze",
   "drafts.subtitle": "Tutti i messaggi avviati vengono visualizzati qui",
   "drafts.title": "{prefix}Bozze - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Bozza} other {{draftCount} Bozze}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} Programmati}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 Bozza} other {{draftCount} Bozze}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 Programmato} other {{scheduledPostCount} programmati}}",
   "duration.day": "{count, plural, one {giorno} other {giorni}}",
   "duration.month": "{count, plural, one {mese} other {mesi}}",
   "duration.year": "{count, plural, one {anno} other {anni}}",

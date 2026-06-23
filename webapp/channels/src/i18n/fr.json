@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Brouillons",
   "drafts.subtitle": "Les messages que vous avez commencés s'afficheront ici",
   "drafts.title": "{prefix}Brouillons - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 brouillon} other {{draftCount} brouillons}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} planifiés}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 brouillon} other {{draftCount} brouillons}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 planifié} other {{scheduledPostCount} planifiés}}",
   "duration.day": "{count, plural, one {jour} other {jours}}",
   "duration.month": "{count, plural, one {mois} other {mois}}",
   "duration.year": "{count, plural, one {an} other {ans}}",

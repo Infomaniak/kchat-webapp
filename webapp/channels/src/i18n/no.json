@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Utkast",
   "drafts.subtitle": "Alle meldinger du har startet, vises her",
   "drafts.title": "{prefix}Utkast - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 utkast} other {{draftCount} utkast}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} planlagt}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 utkast} other {{draftCount} utkast}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 planlagt} other {{scheduledPostCount} planlagt}}",
   "duration.day": "{count, plural, one {dag} other {dager}}",
   "duration.month": "{count, plural, one {måned} other {måneder}}",
   "duration.year": "{count, plural, one {år} other {år}}",

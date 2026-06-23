@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Προσχέδια",
   "drafts.subtitle": "Εδώ θα εμφανίζονται όλα τα μηνύματα που έχετε ξεκινήσει",
   "drafts.title": "{prefix}Προσχέδια - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 προσχέδιο} other {{draftCount} προσχέδια}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} προγραμματισμένα}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 προσχέδιο} other {{draftCount} προσχέδια}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 προγραμματισμένο} other {{scheduledPostCount} προγραμματισμένα}}",
   "duration.day": "{count, plural, one {ημέρα} other {ημέρες}}",
   "duration.month": "{count, plural, one {μήνας} other {μήνες}}",
   "duration.year": "{count, plural, one {έτος} other {έτη}}",

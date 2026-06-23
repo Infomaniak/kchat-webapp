@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Borradores",
   "drafts.subtitle": "Los mensajes que hayas iniciado se mostrarán aquí",
   "drafts.title": "{prefix}Borradores - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 borrador} other {{draftCount} borradores}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} programados}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 borrador} other {{draftCount} borradores}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 programado} other {{scheduledPostCount} programados}}",
   "duration.day": "{count, plural, one {día} other {días}}",
   "duration.month": "{count, plural, one {mes} other {meses}}",
   "duration.year": "{count, plural, one {año} other {años}}",

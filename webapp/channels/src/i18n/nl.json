@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Concepten",
   "drafts.subtitle": "Alle berichten die je bent gestart zullen hier verschijnen",
   "drafts.title": "{prefix}Concepten - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 kladje} other {{draftCount} kladjes}} <br></br> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} Gepland}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 kladje} other {{draftCount} kladjes}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 Gepland} other {{scheduledPostCount} Gepland}}",
   "duration.day": "{count, plural, one {dag} other {dagen}}",
   "duration.month": "{count, plural, one {maand} other {maanden}}",
   "duration.year": "{count, plural, one {jaar} other {jaren}}",

@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Rascunhos",
   "drafts.subtitle": "Todas as mensagens que você iniciou serão exibidas aqui",
   "drafts.title": "{prefix}Rascunhos - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 rascunho} other {{draftCount} rascunhos}} <br/> {scheduledPostCount, plural, =0 {} other {{scheduledPostCount} agendados}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 rascunho} other {{draftCount} rascunhos}} <br/> {scheduledPostCount, plural, =0 {} =1 {1 agendado} other {{scheduledPostCount} agendados}}",
   "duration.day": "{count, plural, one {dia} other {dias}}",
   "duration.month": "{count, plural, one {mês} other {meses}}",
   "duration.year": "{count, plural, one {ano} other {anos}}",

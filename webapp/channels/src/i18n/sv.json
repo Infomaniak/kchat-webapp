@@ -998,7 +998,7 @@
   "drafts.sidebarLink": "Utkast",
   "drafts.subtitle": "Meddelanden som du har påbörjat visas här",
   "drafts.title": "{prefix}Utkast - {displayName} {siteName}",
-  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 utkast} other {{draftCount} utkast}} <br></br> {scheduledPostCount, plural, =0 {} =1 {schemalagt} other {{scheduledPostCount} schemalagda}}",
+  "drafts.tooltipText": "{draftCount, plural, =0 {} =1 {1 utkast} other {{draftCount} utkast}} <br></br> {scheduledPostCount, plural, =0 {} =1 {1 schemalagt} other {{scheduledPostCount} schemalagda}}",
   "duration.day": "{count, plural, one {dag} other {dagar}}",
   "duration.month": "{count, plural, one {månad} other {månader}}",
   "duration.year": "{count, plural, one {år} other {år}}",
