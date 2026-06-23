@@ -389,9 +389,9 @@ const AdvancedTextEditor = ({
         postId,
     );
 
-    const handleSubmitWithErrorHandling = useCallback((submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions) => {
-        handleSubmit(submittingDraft, schedulingInfo, options);
-        if (!errorClass) {
+    const handleSubmitWithErrorHandling = useCallback(async (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions): Promise<boolean> => {
+        const success = await handleSubmit(submittingDraft, schedulingInfo, options);
+        if (success && !errorClass) {
             const messageStatusElement = messageStatusRef.current;
             const messageStatusInnerText = messageStatusElement?.textContent;
             if (messageStatusInnerText === 'Message Sent') {
@@ -400,6 +400,8 @@ const AdvancedTextEditor = ({
                 messageStatusElement!.textContent = 'Message Sent';
             }
         }
+
+        return success;
     }, [errorClass, handleSubmit]);
 
     const handleCancel = useCallback(() => {
@@ -415,7 +417,7 @@ const AdvancedTextEditor = ({
         });
     }, [handleDraftChange, channelId, rootId]);
 
-    const handleSubmitWrapper = useCallback(() => {
+    const handleSubmitWrapper = useCallback(async (): Promise<boolean> => {
         const isEmptyPost = isPostDraftEmpty(draft);
 
         if (isInEditMode && isEmptyPost) {
@@ -429,10 +431,10 @@ const AdvancedTextEditor = ({
             };
 
             dispatch(openModal(deletePostModalData));
-            return;
+            return false;
         }
 
-        handleSubmitWithErrorHandling();
+        return handleSubmitWithErrorHandling();
     }, [dispatch, draft, handleSubmitWithErrorHandling, isInEditMode, isRHS]);
 
     const [handleKeyDown, postMsgKeyPress] = useKeyHandler(
@@ -620,8 +622,8 @@ const AdvancedTextEditor = ({
         draftRef.current = draft;
     }, [draft]);
 
-    const handleSubmitPostAndScheduledMessage = useCallback((schedulingInfo?: SchedulingInfo) => {
-        handleSubmitWithErrorHandling(undefined, schedulingInfo);
+    const handleSubmitPostAndScheduledMessage = useCallback(async (schedulingInfo?: SchedulingInfo): Promise<boolean> => {
+        return handleSubmitWithErrorHandling(undefined, schedulingInfo);
     }, [handleSubmitWithErrorHandling]);
 
     // Set the draft from store when changing post or channels, and store the previous one

@@ -21,7 +21,7 @@ import {ShortcutKeys} from 'components/with_tooltip/tooltip_shortcut';
 import './send_button.scss';
 
 type SendButtonProps = {
-    handleSubmit: (schedulingInfo?: SchedulingInfo) => void;
+    handleSubmit: (schedulingInfo?: SchedulingInfo) => Promise<boolean>;
     disabled: boolean;
     channelId: string;
 }

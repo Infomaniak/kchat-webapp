@@ -42,7 +42,7 @@ const useKeyHandler = (
     focusTextbox: (forceFocus?: boolean) => void,
     applyMarkdown: (params: ApplyMarkdownOptions) => void,
     handleDraftChange: (draft: PostDraft, options?: {instant?: boolean; show?: boolean}) => void,
-    handleSubmit: (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo) => void,
+    handleSubmit: (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo) => Promise<boolean>,
     emitTypingEvent: () => void,
     toggleShowPreview: () => void,
     toggleAdvanceTextEditor: () => void,
@@ -111,7 +111,13 @@ const useKeyHandler = (
         });
     }, [draft, handleDraftChange, messageHistory]);
 
-    const postMsgKeyPress = useCallback((e: React.KeyboardEvent<TextboxElement>) => {
+    const restoreFocusAfterEdit = useCallback(() => {
+        const isRHS = location === Locations.RHS_COMMENT || location === Locations.RHS_ROOT;
+        const targetTextboxId = isRHS ? AdvancedTextEditorTextboxIds.InRHSComment : AdvancedTextEditorTextboxIds.InCenter;
+        document.getElementById(targetTextboxId)?.focus();
+    }, [location]);
+
+    const postMsgKeyPress = useCallback(async (e: React.KeyboardEvent<TextboxElement>) => {
         const {allowSending, withClosedCodeBlock, ignoreKeyPress, message} = postMessageOnKeyPress(
             e,
             draft.message,
@@ -131,11 +137,14 @@ const useKeyHandler = (
         if (allowSending && isValidPersistentNotifications) {
             e.preventDefault();
             const updatedDraft = (withClosedCodeBlock && message) ? {...draft, message} : undefined;
-            handleSubmit(updatedDraft);
+            const success = await handleSubmit(updatedDraft);
+            if (isInEditMode && success) {
+                restoreFocusAfterEdit();
+            }
         }
 
         emitTypingEvent();
-    }, [draft, ctrlSend, codeBlockOnCtrlEnter, caretPosition, postId, emitTypingEvent, handleSubmit, isValidPersistentNotifications]);
+    }, [draft, ctrlSend, codeBlockOnCtrlEnter, caretPosition, postId, emitTypingEvent, handleSubmit, isValidPersistentNotifications, isInEditMode, restoreFocusAfterEdit]);
 
     const handleKeyDown = useCallback((e: React.KeyboardEvent<TextboxElement>) => {
         const ctrlOrMetaKeyPressed = e.ctrlKey || e.metaKey;
@@ -177,9 +186,7 @@ const useKeyHandler = (
             if (isInEditMode) {
                 onCancel?.();
                 dispatch(unsetEditingPost());
-                const isRHS = location === Locations.RHS_COMMENT || location === Locations.RHS_ROOT;
-                const targetTextboxId = isRHS ? AdvancedTextEditorTextboxIds.InRHSComment : AdvancedTextEditorTextboxIds.InCenter;
-                document.getElementById(targetTextboxId)?.focus();
+                restoreFocusAfterEdit();
             }
         }
 
@@ -358,7 +365,7 @@ const useKeyHandler = (
         toggleEmojiPicker,
         toggleShowPreview,
         isInEditMode,
-        location,
+        restoreFocusAfterEdit,
     ]);
 
     // Register paste events
