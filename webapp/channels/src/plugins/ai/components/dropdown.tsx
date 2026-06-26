@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import type {
-    Placement} from '@floating-ui/react-dom-interactions';
+    Placement} from '@floating-ui/react';
 import {
     FloatingFocusManager,
     FloatingPortal,
@@ -14,7 +14,7 @@ import {
     useFloating,
     useInteractions,
     useRole,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import type {ComponentProps} from 'react';
 import React, {cloneElement, useState} from 'react';
 import styled from 'styled-components';
@@ -47,7 +47,7 @@ const Dropdown = (props: DropdownProps) => {
         setIsOpen(updatedOpen);
     };
 
-    const {strategy, x, y, reference, floating, context} = useFloating<HTMLElement>({
+    const {strategy, x, y, context, refs: {setReference, setFloating}} = useFloating({
         open,
         onOpenChange: setOpen,
         placement: props.placement ?? 'bottom-start',
@@ -65,7 +65,7 @@ const Dropdown = (props: DropdownProps) => {
     let content = (
         <FloatingContainer
             {...getFloatingProps({
-                ref: floating,
+                ref: setFloating,
                 style: {
                     position: strategy,
                     top: y ?? 0,
@@ -90,7 +90,7 @@ const Dropdown = (props: DropdownProps) => {
 
     return (
         <>
-            {cloneElement(props.target, getReferenceProps({ref: reference, ...props.target.props}))}
+            {cloneElement(props.target, getReferenceProps({ref: setReference, ...props.target.props}))}
             <MaybePortal>
                 {open && content}
             </MaybePortal>
