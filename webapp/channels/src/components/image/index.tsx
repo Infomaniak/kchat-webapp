@@ -28,6 +28,7 @@ const Image = ({retry = true, onError, ...props}: Props) => {
         <img
             {...props}
             key={retryCount}
+            loading='lazy'
             onError={handleError}
         />
     );
