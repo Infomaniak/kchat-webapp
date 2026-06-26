@@ -40,7 +40,7 @@ variables:
     when: on_success
 
 .rule-merge-request: &rule-merge-request
-  - if: &if-merge-request "$CI_MERGE_REQUEST_ID"
+  - if: &if-merge-request '$CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_DRAFT != "true"'
     when: on_success
 
 .rule-scheduled: &rule-scheduled
