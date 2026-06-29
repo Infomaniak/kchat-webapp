@@ -43,6 +43,7 @@ describe('components/sidebar', () => {
             fetchMyCategories: jest.fn(),
             openModal: jest.fn(),
             showSettings: jest.fn(),
+            toggleSettings: jest.fn(),
         },
     };
 

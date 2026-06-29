@@ -13,7 +13,7 @@ import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 
 import {clearChannelSelection} from 'actions/views/channel_sidebar';
 import {closeModal, openModal} from 'actions/views/modals';
-import {closeRightHandSide, showSettings} from 'actions/views/rhs';
+import {closeRightHandSide, showSettings, toggleSettings} from 'actions/views/rhs';
 import {getIsLhsOpen} from 'selectors/lhs';
 import {getIsRhsOpen, getRhsState} from 'selectors/rhs';
 import {getIsMobileView} from 'selectors/views/browser';
@@ -58,6 +58,7 @@ function mapStateToProps(state: GlobalState) {
         rhsState: getRhsState(state),
         rhsOpen: getIsRhsOpen(state),
         isRhsSettings,
+        currentTeamProductId: currentTeam?.product_id,
     };
 }
 
@@ -70,6 +71,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
             closeModal,
             closeRightHandSide,
             showSettings,
+            toggleSettings,
         }, dispatch),
     };
 }

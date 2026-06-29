@@ -49,6 +49,7 @@ type Props = {
 
         // IK: custom settings
         showSettings: () => void;
+        toggleSettings: (tab: string, productId?: string | number) => void;
     };
     unreadFilterEnabled: boolean;
     isMobileView: boolean;
@@ -62,6 +63,7 @@ type Props = {
 
     // IK: Custom settings
     isRhsSettings?: boolean;
+    currentTeamProductId?: string | number;
 
 };
 
@@ -128,12 +130,7 @@ export default class Sidebar extends React.PureComponent<Props, State> {
                 }
             } else if (isKeyPressed(event, Constants.KeyCodes.A) && event.shiftKey) {
                 event.preventDefault();
-
-                if (this.props.isRhsSettings) {
-                    this.props.actions.closeRightHandSide();
-                } else {
-                    this.props.actions.showSettings();
-                }
+                this.props.actions.toggleSettings('display', this.props.currentTeamProductId);
             }
         }
     };

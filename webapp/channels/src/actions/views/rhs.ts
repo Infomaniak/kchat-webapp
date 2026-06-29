@@ -40,6 +40,7 @@ import {SidebarSize} from 'components/resizable_sidebar/constants';
 import {ActionTypes, RHSStates, Constants} from 'utils/constants';
 import {Mark, Measure, measureAndReport} from 'utils/performance_telemetry';
 import {getBrowserUtcOffset, getUtcOffsetForTimeZone} from 'utils/timezone';
+import {isDesktopApp} from 'utils/user_agent';
 
 import type {ActionFunc, ActionFuncAsync, GlobalState, ThunkActionFunc} from 'types/store';
 import type {RhsFocusIntent, RhsFocusTarget, RhsState} from 'types/store/rhs';
@@ -722,6 +723,28 @@ export function showSettings(tab = 'display'): ThunkActionFunc<unknown, GlobalSt
             tab,
             focusIntent: createFocusIntent('first_focusable'),
         });
+
+        return {data: true};
+    };
+}
+
+export function toggleSettings(tab = 'display', productId?: string | number): ThunkActionFunc<unknown, GlobalState> {
+    return (dispatch, getState) => {
+        if (!isDesktopApp()) {
+            document.dispatchEvent(new CustomEvent('openSettings', {
+                detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: productId}],
+            }));
+            return {data: true};
+        }
+
+        const state = getState();
+        const rhsState = getRhsState(state);
+
+        if (rhsState === RHSStates.SETTINGS) {
+            dispatch(closeRightHandSide());
+        } else {
+            dispatch(showSettings(tab));
+        }
 
         return {data: true};
     };

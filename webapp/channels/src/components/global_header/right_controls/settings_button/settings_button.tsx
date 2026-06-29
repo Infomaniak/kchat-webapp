@@ -10,13 +10,12 @@ import {useHistory} from 'react-router-dom';
 
 import type {Team} from '@mattermost/types/teams';
 
-import {closeRightHandSide, showSettings} from 'actions/views/rhs';
+import {toggleSettings} from 'actions/views/rhs';
 import {getRhsState} from 'selectors/rhs';
 
 import WithTooltip from 'components/with_tooltip';
 
 import {RHSStates} from 'utils/constants';
-import {isDesktopApp} from 'utils/user_agent';
 
 import type {GlobalState} from 'types/store';
 
@@ -37,13 +36,7 @@ const SettingsButton = ({tab = 'display', className, icon, currentTeam}: Props):
 
     const settingButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (!isDesktopApp()) {
-            document.dispatchEvent(new CustomEvent('openSettings', {detail: ['ksuite-kchat', 'ksuite-kchat-personalization', {selectedId: currentTeam?.product_id}]}));
-        } else if (rhsState === RHSStates.SETTINGS) {
-            dispatch(closeRightHandSide());
-        } else {
-            dispatch(showSettings(tab));
-        }
+        dispatch(toggleSettings(tab, currentTeam?.product_id));
     };
 
     useEffect(() => {
