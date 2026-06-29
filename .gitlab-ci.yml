@@ -109,11 +109,11 @@ install:deps:
   rules:
     - *rule-not-scheduled
     - *rule-merge-request
-    - *rule-commit
     - *rule-preprod
     - *rule-canary
     - *rule-prod
     - *rule-prodsec
+    - *rule-commit
     - when: never
   cache:
     <<: *cache-definition
@@ -130,11 +130,11 @@ build:packages:
   rules:
     - *rule-not-scheduled
     - *rule-merge-request
-    - *rule-commit
     - *rule-preprod
     - *rule-canary
     - *rule-prod
     - *rule-prodsec
+    - *rule-commit
     - when: never
   cache:
     <<: *cache-definition
