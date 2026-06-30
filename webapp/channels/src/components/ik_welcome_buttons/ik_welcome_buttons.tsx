@@ -19,32 +19,8 @@ type Props = {
     emojiMap: EmojiMap;
 };
 
-type Action = {
-    type: 'send_message' | 'browse_channels' | 'download_app';
-    defaultMessage: string;
-    visible: boolean;
-}
-
-const actions: Action[] = [
-    {
-        type: 'send_message',
-        defaultMessage: '<emoji>writing_hand</emoji> Write to someone',
-        visible: true,
-    },
-    {
-        type: 'browse_channels',
-        defaultMessage: '<emoji>mag</emoji> Browse channels',
-        visible: true,
-    },
-    {
-        type: 'download_app',
-        defaultMessage: '<span><emoji>computer</emoji><emoji>iphone</emoji></span> Download the apps',
-        visible: !isDesktopApp(),
-    },
-];
-
 const IkWelcomeButtons = (props: Props) => {
-    const handleClick = (type: Action['type']) => {
+    const handleClick = (type: 'send_message' | 'browse_channels' | 'download_app') => {
         switch (type) {
         case 'send_message':
             props.actions.openModal({
@@ -111,22 +87,43 @@ const IkWelcomeButtons = (props: Props) => {
             </p>
 
             <div className='system-bot-message__buttons'>
-                {actions.map((action) => (action.visible ? (
+                <button
+                    key='welcome-button-send_message'
+                    className='btn btn-sm btn-outline'
+                    type='button'
+                    onClick={() => handleClick('send_message')}
+                >
+                    <FormattedMessage
+                        id='post.systemBot.welcome.action.send_message'
+                        defaultMessage={'<emoji>writing_hand</emoji> Write to someone'}
+                        values={formatter}
+                    />
+                </button>
+                <button
+                    key='welcome-button-browse_channels'
+                    className='btn btn-sm btn-outline'
+                    type='button'
+                    onClick={() => handleClick('browse_channels')}
+                >
+                    <FormattedMessage
+                        id='post.systemBot.welcome.action.browse_channels'
+                        defaultMessage={'<emoji>mag</emoji> Browse channels'}
+                        values={formatter}
+                    />
+                </button>
+                {!isDesktopApp() && (
                     <button
-                        key={`welcome-button-${action.type}`}
+                        key='welcome-button-download_app'
                         className='btn btn-sm btn-outline'
                         type='button'
-                        onClick={() => {
-                            handleClick(action.type);
-                        }}
+                        onClick={() => handleClick('download_app')}
                     >
                         <FormattedMessage
-                            id={`post.systemBot.welcome.action.${action.type}`}
-                            defaultMessage={action.defaultMessage}
+                            id='post.systemBot.welcome.action.download_app'
+                            defaultMessage={'<span><emoji>computer</emoji><emoji>iphone</emoji></span> Download the apps'}
                             values={formatter}
                         />
                     </button>
-                ) : null),
                 )}
             </div>
 
