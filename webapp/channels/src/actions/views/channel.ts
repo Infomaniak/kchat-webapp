@@ -12,10 +12,11 @@ import {
     markChannelAsRead,
     unfavoriteChannel,
     getChannel as loadChannel,
+    getChannelStats,
 } from 'mattermost-redux/actions/channels';
 import * as PostActions from 'mattermost-redux/actions/posts';
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {autocompleteUsers} from 'mattermost-redux/actions/users';
+import {autocompleteUsers, ProfilesInChannelSortBy} from 'mattermost-redux/actions/users';
 import {Posts, RequestStatus, General} from 'mattermost-redux/constants';
 import {
     getChannel,
@@ -26,6 +27,8 @@ import {
     isFavoriteChannel,
     isManuallyUnread,
     getCurrentChannelId,
+    getLeaveChannelConstraint,
+    LeaveChannelConstraint,
 } from 'mattermost-redux/selectors/entities/channels';
 import {isCurrentUserInChannelGroup, getCurrentUserChannelGroups} from 'mattermost-redux/selectors/entities/groups';
 import {getMostRecentPostIdInChannel, getPost} from 'mattermost-redux/selectors/entities/posts';
@@ -44,6 +47,7 @@ import {openDirectChannelToUserId} from 'actions/channel_actions';
 import {loadCustomStatusEmojisForPostList} from 'actions/emoji_actions';
 import {sendEphemeralPost} from 'actions/global_actions';
 import {fetchChannelGroups} from 'actions/ik_channel_groups';
+import {loadProfilesAndReloadChannelMembers} from 'actions/user_actions';
 import {openModal} from 'actions/views/modals';
 import {markThreadAsRead} from 'actions/views/threads';
 import {getLastViewedChannelName} from 'selectors/local_storage';
@@ -188,6 +192,13 @@ export function requestLeaveChannel(channel: Channel): ActionFuncAsync<void> {
         }
 
         if (channel.type === Constants.PRIVATE_CHANNEL) {
+            const constraint = getLeaveChannelConstraint(state, channel.id);
+            if (constraint === LeaveChannelConstraint.MUST_TRANSFER || constraint === LeaveChannelConstraint.MUST_BLOCK) {
+                await Promise.all([
+                    dispatch(loadProfilesAndReloadChannelMembers(0, 50, channel.id, ProfilesInChannelSortBy.Admin)),
+                    dispatch(getChannelStats(channel.id)),
+                ]);
+            }
             dispatch(openModal({modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL, dialogType: IkLeaveChannelModal, dialogProps: {channel}}));
             return {data: undefined};
         }

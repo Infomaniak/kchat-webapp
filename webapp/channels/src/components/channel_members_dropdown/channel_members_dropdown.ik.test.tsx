@@ -1,7 +1,7 @@
 import {fireEvent, screen, waitFor} from '@testing-library/react';
 import React from 'react';
 
-import {Client4} from 'mattermost-redux/client';
+import {LeaveChannelConstraint} from 'mattermost-redux/selectors/entities/channels';
 
 import {TestHelper} from 'utils/test_helper';
 
@@ -10,13 +10,7 @@ import {renderWithContext} from 'tests/react_testing_utils';
 import ChannelMembersDropdown from './channel_members_dropdown';
 import type {Props} from './channel_members_dropdown';
 
-jest.mock('mattermost-redux/client', () => ({
-    Client4: {
-        getGroupsByUserId: jest.fn(),
-    },
-}));
-
-describe('ChannelMembersDropdown group overlap logic', () => {
+describe('ChannelMembersDropdown', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
@@ -31,15 +25,13 @@ describe('ChannelMembersDropdown group overlap logic', () => {
         roles: '',
     });
 
-    const group1 = TestHelper.getGroupMock({id: 'g1', display_name: 'Engineering', member_count: 5});
-
     const defaultActions: Props['actions'] = {
         getChannelStats: jest.fn(),
         updateChannelMemberSchemeRoles: jest.fn().mockResolvedValue({}),
-        removeChannelMember: jest.fn().mockResolvedValue({}),
         getChannelMember: jest.fn(),
+        requestLeaveChannel: jest.fn().mockResolvedValue({data: undefined}),
+        requestRemoveChannelMember: jest.fn().mockResolvedValue({}),
         openModal: jest.fn(),
-        getGroupsByUserId: jest.fn().mockResolvedValue({data: []}),
     };
 
     const baseProps: Props = {
@@ -49,7 +41,7 @@ describe('ChannelMembersDropdown group overlap logic', () => {
         channelMember: membership,
         canChangeMemberRoles: false,
         canRemoveMember: true,
-        hasChannelMembersAdmin: false,
+        leaveChannelConstraint: LeaveChannelConstraint.LEAVE,
         channelGroups: [],
         isSystemAdmin: false,
         index: 0,
@@ -64,25 +56,61 @@ describe('ChannelMembersDropdown group overlap logic', () => {
         fireEvent.click(removeItem);
     };
 
-    it('calls openModal with IkMemberInGroupModal when user overlaps with channel group', async () => {
-        const openModalMock = jest.fn();
-        (Client4.getGroupsByUserId as jest.Mock).mockResolvedValue([group1]);
+    it('calls requestRemoveChannelMember when removing another member', async () => {
+        renderWithContext(<ChannelMembersDropdown {...baseProps}/>);
+        openMenuAndClickRemove();
 
+        await waitFor(() => {
+            expect(defaultActions.requestRemoveChannelMember).toHaveBeenCalledWith(channel, 'user1', []);
+        });
+    });
+
+    it('calls requestLeaveChannel when removing self', async () => {
         const props: Props = {
             ...baseProps,
-            channelGroups: [group1],
-            actions: {...defaultActions, openModal: openModalMock},
+            user: TestHelper.getUserMock({id: 'admin1', username: 'admin', roles: 'system_user'}),
         };
+        renderWithContext(<ChannelMembersDropdown {...props}/>);
 
+        const button = screen.getByRole('button', {name: /admin/i});
+        fireEvent.click(button);
+        const leaveItem = screen.getByText('Leave Channel');
+        fireEvent.click(leaveItem);
+
+        await waitFor(() => {
+            expect(defaultActions.requestLeaveChannel).toHaveBeenCalledWith(channel);
+        });
+    });
+
+    it('displays server error if requestRemoveChannelMember fails', async () => {
+        const requestRemoveChannelMember = jest.fn().mockResolvedValue({error: {message: 'network error'}});
+        const props: Props = {
+            ...baseProps,
+            actions: {...defaultActions, requestRemoveChannelMember},
+        };
         renderWithContext(<ChannelMembersDropdown {...props}/>);
         openMenuAndClickRemove();
 
         await waitFor(() => {
-            expect(Client4.getGroupsByUserId).toHaveBeenCalledWith('user1');
+            expect(screen.getByText('network error')).toBeInTheDocument();
         });
+    });
+
+    it('blocks removal and opens group overlap modal', async () => {
+        const group1 = TestHelper.getGroupMock({id: 'g1', display_name: 'Engineering', member_count: 5});
+        const requestRemoveChannelMember = jest.fn().mockResolvedValue({data: {groupOverlap: [group1]}});
+        const openModal = jest.fn();
+        const props: Props = {
+            ...baseProps,
+            channelGroups: [group1],
+            actions: {...defaultActions, requestRemoveChannelMember, openModal},
+        };
+        renderWithContext(<ChannelMembersDropdown {...props}/>);
+        openMenuAndClickRemove();
 
         await waitFor(() => {
-            expect(openModalMock).toHaveBeenCalledWith(
+            expect(requestRemoveChannelMember).toHaveBeenCalledWith(channel, 'user1', [group1]);
+            expect(openModal).toHaveBeenCalledWith(
                 expect.objectContaining({
                     modalId: 'member_in_group_modal',
                     dialogProps: expect.objectContaining({
@@ -91,61 +119,5 @@ describe('ChannelMembersDropdown group overlap logic', () => {
                 }),
             );
         });
-    });
-
-    it('proceeds with removal when user has no group overlap', async () => {
-        const removeChannelMember = jest.fn().mockResolvedValue({});
-        (Client4.getGroupsByUserId as jest.Mock).mockResolvedValue([{id: 'other-group', display_name: 'Other'}]);
-
-        const props: Props = {
-            ...baseProps,
-            channelGroups: [group1],
-            actions: {...defaultActions, removeChannelMember},
-        };
-
-        renderWithContext(<ChannelMembersDropdown {...props}/>);
-        openMenuAndClickRemove();
-
-        await waitFor(() => {
-            expect(removeChannelMember).toHaveBeenCalledWith('ch1', 'user1');
-        });
-    });
-
-    it('proceeds with removal when there are no channel groups', async () => {
-        const removeChannelMember = jest.fn().mockResolvedValue({});
-
-        const props: Props = {
-            ...baseProps,
-            channelGroups: [],
-            actions: {...defaultActions, removeChannelMember},
-        };
-
-        renderWithContext(<ChannelMembersDropdown {...props}/>);
-        openMenuAndClickRemove();
-
-        await waitFor(() => {
-            expect(removeChannelMember).toHaveBeenCalledWith('ch1', 'user1');
-        });
-    });
-
-    it('proceeds with removal when getGroupsByUserId fails', async () => {
-        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-        const removeChannelMember = jest.fn().mockResolvedValue({});
-        (Client4.getGroupsByUserId as jest.Mock).mockRejectedValue(new Error('network'));
-
-        const props: Props = {
-            ...baseProps,
-            channelGroups: [group1],
-            actions: {...defaultActions, removeChannelMember},
-        };
-
-        renderWithContext(<ChannelMembersDropdown {...props}/>);
-        openMenuAndClickRemove();
-
-        await waitFor(() => {
-            expect(removeChannelMember).toHaveBeenCalledWith('ch1', 'user1');
-        });
-
-        consoleSpy.mockRestore();
     });
 });

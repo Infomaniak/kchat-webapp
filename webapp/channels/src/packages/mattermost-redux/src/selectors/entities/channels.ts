@@ -38,7 +38,6 @@ import {
     isCollapsedThreadsEnabled,
 } from 'mattermost-redux/selectors/entities/preferences';
 import {
-    getRoles,
     haveIChannelPermission,
     haveICurrentChannelPermission,
     haveITeamPermission,
@@ -66,6 +65,7 @@ import {
     sortChannelsByDisplayName,
 } from 'mattermost-redux/utils/channel_utils';
 import {createIdsSelector} from 'mattermost-redux/utils/helpers';
+import {isGuest} from 'mattermost-redux/utils/user_utils';
 
 import {isPostPriorityEnabled} from './posts';
 import {getThreadCounts, getThreadCountsIncludingDirect} from './threads';
@@ -166,33 +166,105 @@ export const getCurrentMemberIsChannelAdmin: (state: GlobalState, channelId: str
     (currentMember) => currentMember && currentMember.scheme_admin,
 );
 
-export const getHasChannelMembersAdmin: (state: GlobalState, channelId: string) => boolean = createSelector(
-    'getHasChannelMembersAdmin',
-    getChannelMemberChannel,
-    getChannel,
-    getCurrentUserId,
-    getRoles,
-    getCurrentMemberIsChannelAdmin,
-    (guestsInChannel, channel, currentUserId, roles, currentMemberIsChannelAdmin) => {
-        const guestsInChannelArray = Object.values(guestsInChannel).filter((user) => user.user_id !== '');
-        const isPrivateChannel = channel && channel.type === General.PRIVATE_CHANNEL;
-        let hasChannelMembersAdmin = false;
-        if (isPrivateChannel && currentMemberIsChannelAdmin) {
-            hasChannelMembersAdmin = guestsInChannelArray.some((user) => {
-                if (user.user_id === currentUserId) {
-                    return false;
-                }
-                const userRoles = user.roles.split(' ');
-                return userRoles.some((roleName) => {
-                    const role = roles[roleName];
-                    return role && role.permissions.includes('manage_private_channel_members');
-                });
-            });
-            if (!hasChannelMembersAdmin) {
-                return true;
+export enum LeaveChannelConstraint {
+    LEAVE = 'leave',
+    MUST_TRANSFER = 'must_transfer',
+    MUST_BLOCK = 'must_block',
+    ADMIN_WARNING = 'admin_warning',
+}
+
+function isUserActive(userId: string, users: IDMappedObjects<UserProfile>): boolean {
+    if (userId === '') {
+        return false;
+    }
+    const user = users[userId];
+    if (!user) {
+        return true;
+    }
+    return user.delete_at === 0 && !user.is_bot && !isGuest(user.roles);
+}
+
+function getActiveMemberIds(
+    membersInChannel: Record<string, ChannelMembership>,
+    channelProfiles: Set<string> | undefined,
+    users: IDMappedObjects<UserProfile>,
+): Set<string> {
+    const activeIds = new Set<string>();
+
+    for (const m of Object.values(membersInChannel)) {
+        if (isUserActive(m.user_id, users)) {
+            activeIds.add(m.user_id);
+        }
+    }
+
+    if (channelProfiles) {
+        for (const userId of channelProfiles) {
+            if (isUserActive(userId, users)) {
+                activeIds.add(userId);
             }
         }
+    }
+
+    return activeIds;
+}
+
+function getChannelAdmins(membersInChannel: Record<string, ChannelMembership>, users: IDMappedObjects<UserProfile>): ChannelMembership[] {
+    return Object.values(membersInChannel).filter((m) => isUserActive(m.user_id, users) && m.scheme_admin);
+}
+
+function isLastChannelAdmin(admins: ChannelMembership[], userId: string): boolean {
+    return admins.length === 1 && admins[0].user_id === userId;
+}
+
+function hasOtherMembers(activeMemberIds: Set<string>, userId: string): boolean {
+    if (activeMemberIds.size === 0) {
         return false;
+    }
+    if (activeMemberIds.size > 1) {
+        return true;
+    }
+    return !activeMemberIds.has(userId);
+}
+
+function isProductAdmin(state: GlobalState, channel: Channel) {
+    if (!channel.team_id) {
+        return false;
+    }
+    return haveITeamPermission(state, channel.team_id, Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS);
+}
+
+export const getLeaveChannelConstraint: (state: GlobalState, channelId: string) => LeaveChannelConstraint = createSelector(
+    'getLeaveChannelConstraint',
+    (state: GlobalState, channelId: string) => getChannelMemberChannel(state, channelId),
+    (state: GlobalState, channelId: string) => getChannel(state, channelId),
+    (state: GlobalState) => getCurrentUserId(state),
+    (state: GlobalState) => getUserIdsInChannels(state),
+    (state: GlobalState) => getUsers(state),
+    (state: GlobalState, channelId: string) => {
+        const ch = getChannel(state, channelId);
+        return ch ? isProductAdmin(state, ch) : false;
+    },
+    (membersInChannel, channel, currentUserId, userIdsInChannels, users, currentUserIsProductAdmin) => {
+        if (!channel || channel.type !== General.PRIVATE_CHANNEL) {
+            return LeaveChannelConstraint.LEAVE;
+        }
+
+        const channelProfiles = userIdsInChannels[channel.id];
+        const activeMemberIds = getActiveMemberIds(membersInChannel, channelProfiles, users);
+        const channelAdmins = getChannelAdmins(membersInChannel, users);
+
+        if (channelAdmins.length > 0) {
+            if (isLastChannelAdmin(channelAdmins, currentUserId)) {
+                return hasOtherMembers(activeMemberIds, currentUserId) ? LeaveChannelConstraint.MUST_TRANSFER : LeaveChannelConstraint.MUST_BLOCK;
+            }
+            return LeaveChannelConstraint.LEAVE;
+        }
+
+        if (!currentUserIsProductAdmin) {
+            return LeaveChannelConstraint.ADMIN_WARNING;
+        }
+
+        return hasOtherMembers(activeMemberIds, currentUserId) ? LeaveChannelConstraint.MUST_TRANSFER : LeaveChannelConstraint.MUST_BLOCK;
     },
 );
 

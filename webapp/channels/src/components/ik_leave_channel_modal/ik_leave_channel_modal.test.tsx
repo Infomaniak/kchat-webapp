@@ -5,6 +5,8 @@ import React from 'react';
 
 import type {ChannelType} from '@mattermost/types/channels';
 
+import {LeaveChannelConstraint} from 'mattermost-redux/selectors/entities/channels';
+
 import IkLeaveChannelModal from 'components/ik_leave_channel_modal/ik_leave_channel_modal';
 
 import {renderWithContext} from 'tests/react_testing_utils';
@@ -241,11 +243,9 @@ describe('components/LeaveChannelModal', () => {
             },
             onExited: jest.fn(),
             callback: jest.fn(),
-            hasChannelMembersAdmin: true,
-            currentUserIsChannelAdmin: true,
+            leaveChannelConstraint: LeaveChannelConstraint.MUST_TRANSFER,
             profilesInCurrentChannel: [{id: 'user1'}, {id: 'user-2'}],
             isInvite: true,
-            currentMemberIsChannelAdmin: true,
         };
 
         await act(async () => {

@@ -7,14 +7,15 @@ import type {Dispatch} from 'redux';
 
 import type {Channel} from '@mattermost/types/channels';
 
-import {getChannelStats, updateChannelMemberSchemeRoles, removeChannelMember, getChannelMember} from 'mattermost-redux/actions/channels';
-import {getGroupsByUserId} from 'mattermost-redux/actions/groups';
+import {getChannelStats, updateChannelMemberSchemeRoles, getChannelMember} from 'mattermost-redux/actions/channels';
 import {Permissions} from 'mattermost-redux/constants';
-import {getHasChannelMembersAdmin} from 'mattermost-redux/selectors/entities/channels';
+import {getLeaveChannelConstraint} from 'mattermost-redux/selectors/entities/channels';
 import {getGroupsAssociatedToChannel} from 'mattermost-redux/selectors/entities/groups';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
 import {getCurrentUserId, isCurrentUserSystemAdmin} from 'mattermost-redux/selectors/entities/users';
 
+import {requestRemoveChannelMember} from 'actions/channel_member_actions';
+import {requestLeaveChannel} from 'actions/views/channel';
 import {openModal} from 'actions/views/modals';
 
 import {canManageMembers} from 'utils/channel_utils';
@@ -36,7 +37,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         Permissions.MANAGE_CHANNEL_ROLES,
     ) && canManageMembers(state, channel);
     const canRemoveMember = canManageMembers(state, channel);
-    const hasChannelMembersAdmin = getHasChannelMembersAdmin(state, channel.id);
+    const leaveChannelConstraint = getLeaveChannelConstraint(state, channel.id);
     const channelGroups = getGroupsAssociatedToChannel(state, channel.id);
     const isSystemAdmin = isCurrentUserSystemAdmin(state);
 
@@ -44,7 +45,7 @@ function mapStateToProps(state: GlobalState, ownProps: OwnProps) {
         currentUserId: getCurrentUserId(state),
         canChangeMemberRoles,
         canRemoveMember,
-        hasChannelMembersAdmin,
+        leaveChannelConstraint,
         channelGroups,
         isSystemAdmin,
     };
@@ -56,9 +57,9 @@ function mapDispatchToProps(dispatch: Dispatch) {
             getChannelMember,
             getChannelStats,
             updateChannelMemberSchemeRoles,
-            removeChannelMember,
+            requestRemoveChannelMember,
+            requestLeaveChannel,
             openModal,
-            getGroupsByUserId,
         }, dispatch),
     };
 }

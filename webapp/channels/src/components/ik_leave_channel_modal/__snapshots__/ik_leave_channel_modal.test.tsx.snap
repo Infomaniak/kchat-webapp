@@ -68,17 +68,7 @@ Object {
               <div
                 class="channel-invite__content"
               >
-                <div
-                  class="channel-invite__content no-options"
-                >
-                  <div
-                    class="alert alert-with-icon-leave alert-grey"
-                  >
-                    <i
-                      class="icon-information-outline"
-                    />
-                    Only a channel administrator can invite you to join this channel again.
-                  </div>
+                <div>
                   <div
                     class="alert-message"
                   >

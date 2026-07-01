@@ -8,11 +8,10 @@ import type {Channel, ChannelMembership} from '@mattermost/types/channels';
 import type {Group} from '@mattermost/types/groups';
 import type {UserProfile} from '@mattermost/types/users';
 
-import {Client4} from 'mattermost-redux/client';
+import {LeaveChannelConstraint} from 'mattermost-redux/selectors/entities/channels';
 import type {ActionResult} from 'mattermost-redux/types/actions';
 import * as UserUtils from 'mattermost-redux/utils/user_utils';
 
-import IkLeaveChannelModal from 'components/ik_leave_channel_modal';
 import DropdownIcon from 'components/widgets/icons/fa_dropdown_icon';
 import Menu from 'components/widgets/menu/menu';
 import MenuWrapper from 'components/widgets/menu/menu_wrapper';
@@ -32,7 +31,7 @@ export interface Props {
     channelMember: ChannelMembership;
     canChangeMemberRoles: boolean;
     canRemoveMember: boolean;
-    hasChannelMembersAdmin: boolean;
+    leaveChannelConstraint: LeaveChannelConstraint;
     channelGroups: Group[];
     isSystemAdmin: boolean;
     index: number;
@@ -43,10 +42,10 @@ export interface Props {
     actions: {
         getChannelStats: (channelId: string) => void;
         updateChannelMemberSchemeRoles: (channelId: string, userId: string, isSchemeUser: boolean, isSchemeAdmin: boolean) => Promise<ActionResult>;
-        removeChannelMember: (channelId: string, userId: string) => Promise<ActionResult>;
         getChannelMember: (channelId: string, userId: string) => void;
+        requestLeaveChannel: (channel: Channel) => Promise<ActionResult>;
+        requestRemoveChannelMember: (channel: Channel, userId: string, channelGroups: Group[]) => Promise<ActionResult<{groupOverlap?: Group[]}>>;
         openModal: <P>(modalData: ModalData<P>) => void;
-        getGroupsByUserId: (userId: string) => Promise<ActionResult>;
     };
 }
 
@@ -62,7 +61,7 @@ export default function ChannelMembersDropdown({
     channelAdminLabel,
     channelMemberLabel,
     guestLabel,
-    hasChannelMembersAdmin,
+    leaveChannelConstraint,
     channelGroups,
     isSystemAdmin,
     actions,
@@ -77,50 +76,25 @@ export default function ChannelMembersDropdown({
             return;
         }
 
-        if (channelGroups.length > 0) {
-            try {
-                const userGroups = await Client4.getGroupsByUserId(user.id);
-                const userGroupIds = new Set(userGroups.map((g) => g.id));
+        setRemoving(true);
+        setServerError(null);
 
-                // Create a snapshot of groups data to avoid re-render issues
-                const overlap = channelGroups.
-                    filter((g) => userGroupIds.has(g.id)).
-                    map((g) => ({...g})); // Clone to prevent reference changes
-                if (overlap.length > 0) {
-                    actions.openModal({
-                        modalId: ModalIdentifiers.MEMBER_IN_GROUP_MODAL,
-                        dialogType: IkMemberInGroupModal,
-                        dialogProps: {channel, groups: overlap, isSystemAdmin},
-                    });
-                    return;
-                }
-            } catch (error) {
-                // eslint-disable-next-line no-console
-                console.error('Failed to fetch user groups:', error);
+        if (user.id === currentUserId) {
+            await actions.requestLeaveChannel(channel);
+        } else {
+            const {data, error} = await actions.requestRemoveChannelMember(channel, user.id, channelGroups);
+            if (error) {
+                setServerError(error.message || String(error));
+            } else if (data?.groupOverlap) {
+                actions.openModal({
+                    modalId: ModalIdentifiers.MEMBER_IN_GROUP_MODAL,
+                    dialogType: IkMemberInGroupModal,
+                    dialogProps: {channel, groups: data.groupOverlap, isSystemAdmin},
+                });
             }
         }
 
-        if (user.id === currentUserId) {
-            setRemoving(true);
-            actions.openModal<React.ComponentProps<typeof IkLeaveChannelModal>>({
-                modalId: ModalIdentifiers.LEAVE_PRIVATE_CHANNEL_MODAL,
-                dialogType: IkLeaveChannelModal,
-                dialogProps: {
-                    channel,
-                },
-            });
-            return;
-        }
-
-        setRemoving(true);
-        const {error} = await actions.removeChannelMember(channel.id, user.id);
         setRemoving(false);
-        if (error) {
-            setServerError(error.message);
-            return;
-        }
-
-        actions.getChannelStats(channel.id);
     };
 
     const handleMakeChannelAdmin = () => {
@@ -186,11 +160,12 @@ export default function ChannelMembersDropdown({
         return (<></>);
     }
 
-    const canMakeUserChannelMember = canChangeMemberRoles && isChannelAdmin && !hasChannelMembersAdmin;
+    const canMakeUserChannelMember = canChangeMemberRoles && isChannelAdmin && leaveChannelConstraint === LeaveChannelConstraint.LEAVE;
     const canMakeUserChannelAdmin = canChangeMemberRoles && isMember;
-    const canRemoveUserFromChannel = canRemoveMember && (!channel.group_constrained || user.is_bot) && (!isDefaultChannel || isGuest);
-    const removeFromChannelText = user.id === currentUserId ? intl.formatMessage({id: 'channel_header.leave', defaultMessage: 'Leave Channel'}) : intl.formatMessage({id: 'channel_members_dropdown.remove_from_channel', defaultMessage: 'Remove from Channel'});
-    const removeFromChannelTestId = user.id === currentUserId ? 'leaveChannel' : 'removeFromChannel';
+    const isSelf = user.id === currentUserId;
+    const canRemoveUserFromChannel = isSelf ? (!isDefaultChannel || isGuest) : (canRemoveMember && (!channel.group_constrained || user.is_bot) && (!isDefaultChannel || isGuest));
+    const removeFromChannelText = isSelf ? intl.formatMessage({id: 'channel_header.leave', defaultMessage: 'Leave Channel'}) : intl.formatMessage({id: 'channel_members_dropdown.remove_from_channel', defaultMessage: 'Remove from Channel'});
+    const removeFromChannelTestId = isSelf ? 'leaveChannel' : 'removeFromChannel';
 
     if (canMakeUserChannelMember || canMakeUserChannelAdmin || canRemoveUserFromChannel) {
         const removeMenu = (

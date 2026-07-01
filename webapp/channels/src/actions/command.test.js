@@ -44,7 +44,9 @@ const initialState = {
             channels: {
                 123: {id: '123', team_id: '456'},
             },
+            membersInChannel: {},
             groupsAssociatedToChannel: {},
+            stats: {},
         },
         preferences: {
             myPreferences: {},
