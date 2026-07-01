@@ -30,6 +30,10 @@ import {EmojiIndicesByCategory, Emojis as EmojisJson} from 'utils/emoji';
 import type EmojiMap from 'utils/emoji_map';
 import {compareEmojis, convertEmojiSkinTone, emojiMatchesSkin, getSkin} from 'utils/emoji_utils';
 
+function escapeRegex(text?: string): string {
+    return text?.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') || '';
+}
+
 export function isCategoryHeaderRow(row: CategoryOrEmojiRow): row is CategoryHeaderRow {
     return row.type === CATEGORY_HEADER_ROW;
 }
@@ -58,12 +62,23 @@ function isEmojiIdEqual(firstEmoji: Emoji, secondEmoji: Emoji): boolean {
     return firstEmojiId === secondEmojId;
 }
 
+function searchMatches(pattern: string, text: string): boolean {
+    if (!pattern.trim()) {
+        return true;
+    }
+
+    const escaped = escapeRegex(pattern);
+    const regex = new RegExp(escaped.replace(/\s+/g, '.'), 'i');
+    return regex.test(text);
+}
+
 export function getFilteredEmojis(allEmojis: Record<string, Emoji>, filter: string, recentEmojisString: string[], userSkinTone: string): Emoji[] {
+    const filterLower = filter.toLowerCase();
     const filteredEmojisWithRecent = Object.values(allEmojis).filter((emoji) => {
         const aliases = isSystemEmoji(emoji) ? emoji.short_names : [emoji.name];
 
         for (let i = 0; i < aliases.length; i++) {
-            if (aliases[i].toLowerCase().includes(filter.toLowerCase())) {
+            if (searchMatches(filterLower, aliases[i].toLowerCase())) {
                 return true;
             }
         }

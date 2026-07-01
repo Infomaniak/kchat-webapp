@@ -34,7 +34,7 @@ import {createCategoryAndEmojiRows, getCursorProperties, getUpdatedCategoriesAnd
 import NoResultsIndicator from 'components/no_results_indicator';
 import {NoResultsVariant} from 'components/no_results_indicator/types';
 
-import type {PropsFromRedux} from './index';
+import type {PropsFromRedux} from './connector';
 
 export interface Props extends PropsFromRedux {
     filter: string;

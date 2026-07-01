@@ -15,6 +15,7 @@ import store from 'stores/redux_store';
 
 import {compareEmojis, emojiMatchesSkin} from 'utils/emoji_utils';
 import * as Emoticons from 'utils/emoticons';
+import {escapeRegex} from 'utils/text_formatting';
 
 import Provider from './provider';
 import type {ResultsCallback} from './provider';
@@ -77,7 +78,7 @@ export default class EmoticonProvider extends Provider {
 
     handlePretextChanged(pretext: string, resultsCallback: ResultsCallback<EmojiItem>) {
         // Look for the potential emoticons at the start of the text, after whitespace, and at the start of emoji reaction commands
-        const captured = (/(^|\s|^\+|^-)(:([^:\s]*))$/g).exec(pretext.toLowerCase());
+        const captured = (/(^|\s|^\+|^-)(:([^:]*))$/g).exec(pretext.toLowerCase());
         if (!captured) {
             return false;
         }
@@ -87,6 +88,10 @@ export default class EmoticonProvider extends Provider {
         const partialName = captured[3];
 
         if (partialName.length < MIN_EMOTICON_LENGTH) {
+            return false;
+        }
+
+        if (!partialName.trim()) {
             return false;
         }
 
@@ -124,6 +129,8 @@ export default class EmoticonProvider extends Provider {
     // For now, this behaviour and difference is by design.
     // See https://mattermost.atlassian.net/browse/MM-17320.
     findAndSuggestEmojis(text: string, partialName: string, resultsCallback: ResultsCallback<EmojiItem>) {
+        const escaped = escapeRegex(partialName);
+        const searchRegex = new RegExp(escaped.replace(/\s+/g, '.'), 'i');
         const recentMatched: EmojiItem[] = [];
         const matched: EmojiItem[] = [];
         const state = store.getState();
@@ -140,7 +147,7 @@ export default class EmoticonProvider extends Provider {
             if (isSystemEmoji(emoji)) {
                 // This is a system emoji so it may have multiple names
                 for (const alias of emoji.short_names) {
-                    if (alias.indexOf(partialName) !== -1) {
+                    if (searchRegex.test(alias)) {
                         const matchedArray = recentEmojis.includes(alias) || recentEmojis.includes(name) ? recentMatched : matched;
 
                         // if the emoji has skin, only add those that match with the user selected skin.
@@ -150,7 +157,7 @@ export default class EmoticonProvider extends Provider {
                         break;
                     }
                 }
-            } else if (name.indexOf(partialName) !== -1) {
+            } else if (searchRegex.test(name)) {
                 // This is a custom emoji so it only has one name
                 if (emojiMap.hasSystemEmoji(name)) {
                     // System emojis take precedence over custom ones
