@@ -8,6 +8,10 @@
         padding: 0 3.2rem;
     }
 
+    .filter-row {
+        margin-bottom: 0;
+    }
+
     .AlertBanner {
         margin: 1.2rem 3.2rem 0;
 
@@ -51,13 +55,17 @@
         position: absolute;
         z-index: 5;
         overflow: auto;
-        width: calc(100% - 48px);
+        width: calc(100% - 6.4rem);
         height: auto;
         max-height: 272px;
         padding: 12px 0;
         border-radius: 4px;
-        margin: -10px 0 0 24px;
+        margin: 0 0 0 3.2rem;
         box-shadow: var(--elevation-4);
+    }
+
+    .multi-select__wrapper + .multi-select__help {
+        margin-top: 10px;
     }
 
     .no-channel-message {
