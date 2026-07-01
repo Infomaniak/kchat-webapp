@@ -109,9 +109,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   }
                   tabIndex={-1}
                   url="/api/v4/users/5/image?_=0"
+                  username="first.last5"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last5 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -181,9 +182,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   }
                   tabIndex={-1}
                   url="/api/v4/users/4/image?_=0"
+                  username="first.last4"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last4 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -253,9 +255,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   }
                   tabIndex={-1}
                   url="/api/v4/users/3/image?_=0"
+                  username="first.last3"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last3 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -298,6 +301,7 @@ exports[`components/threading/channel_threads/thread_footer should report total 
             }
             tabIndex={0}
             text="+2"
+            username=""
           >
             <div
               className="Avatar Avatar-sm Avatar-plain"
@@ -622,9 +626,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   }
                   tabIndex={-1}
                   url="/api/v4/users/5/image?_=0"
+                  username="first.last5"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last5 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -694,9 +699,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   }
                   tabIndex={-1}
                   url="/api/v4/users/4/image?_=0"
+                  username="first.last4"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last4 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -766,9 +772,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   }
                   tabIndex={-1}
                   url="/api/v4/users/3/image?_=0"
+                  username="first.last3"
                 >
                   <img
-                    alt="user profile image"
+                    alt="first.last3 profile image"
                     className="Avatar Avatar-sm"
                     loading="lazy"
                     onBlur={[Function]}
@@ -811,6 +818,7 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
             }
             tabIndex={0}
             text="+2"
+            username=""
           >
             <div
               className="Avatar Avatar-sm Avatar-plain"

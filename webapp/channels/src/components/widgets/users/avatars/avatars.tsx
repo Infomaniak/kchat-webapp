@@ -54,7 +54,7 @@ function UserAvatar({
     ...props
 }: {
     userId: UserProfile['id'];
-} & ComponentProps<typeof Avatar>) {
+} & Omit<ComponentProps<typeof Avatar>, 'username'>) {
     const user = useSelector((state: GlobalState) => selectUser(state, userId)) as UserProfile | undefined;
     const name = useSelector((state: GlobalState) => displayNameGetter(state, true)(user));
 
@@ -72,6 +72,7 @@ function UserAvatar({
             >
                 <Avatar
                     url={imageURLForUser(userId, user?.last_picture_update)}
+                    username={user?.username || ''}
                     tabIndex={-1}
                     {...props}
                 />
@@ -149,6 +150,7 @@ function Avatars({
                         size={size}
                         tabIndex={0}
                         text={nonDisplayCount > OTHERS_DISPLAY_LIMIT ? `${OTHERS_DISPLAY_LIMIT}+` : `+${nonDisplayCount}`}
+                        username={''}
                     />
                 </WithTooltip>
             )}

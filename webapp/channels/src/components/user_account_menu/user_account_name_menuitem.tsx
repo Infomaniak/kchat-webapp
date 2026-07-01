@@ -67,6 +67,7 @@ export default function UserAccountNameMenuItem({profilePicture, ...rest}: Props
                     size='lg'
                     url={profilePicture}
                     aria-hidden='true'
+                    username={currentUser?.username || ''}
                 />
             }
             labels={getLabel()}

@@ -83,6 +83,7 @@ const PostMessagePreview = (props: Props) => {
         <Avatar
             size={'sm'}
             url={src}
+            username={user?.username || ''}
             className={'avatar-post-preview'}
         />
     );

@@ -73,6 +73,7 @@ export default function UserAccountMenuButton({
                 size='sm'
                 url={profilePicture}
                 aria-hidden={true}
+                username={''}
             />
             <div
                 className='userStatusIconWrapper'

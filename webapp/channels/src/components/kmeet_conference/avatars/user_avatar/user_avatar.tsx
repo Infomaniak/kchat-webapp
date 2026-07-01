@@ -82,6 +82,7 @@ function UserAvatar({
                             url={user?.public_picture_url ?? imageURLForUser(user.id, user?.last_picture_update)}
                             tabIndex={-1}
                             {...props}
+                            username={user.username}
                         />
                     </Status>
                 </RoundButton>

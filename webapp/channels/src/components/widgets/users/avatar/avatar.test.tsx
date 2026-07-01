@@ -20,14 +20,20 @@ describe('components/widgets/users/Avatar', () => {
 
     test('should match the snapshot only with url', () => {
         const wrapper = shallow(
-            <Avatar url='test-url'/>,
+            <Avatar
+                url='test-url'
+                username={''}
+            />,
         );
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should match the snapshot only plain text', () => {
         const wrapper = shallow(
-            <Avatar text='SA'/>,
+            <Avatar
+                text='SA'
+                username={''}
+            />,
         );
         expect(wrapper).toMatchSnapshot();
     });

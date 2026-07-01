@@ -22,6 +22,7 @@ function itemToName(item: Channel, currentUserId: string): {icon: React.ReactEle
             <Avatar
                 url={imageURLForUser(getUserIdFromChannelName(currentUserId, item.name))}
                 size='sm'
+                username={''}
             />
         );
 

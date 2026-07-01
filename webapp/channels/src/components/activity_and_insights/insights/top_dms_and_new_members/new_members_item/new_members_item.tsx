@@ -57,6 +57,7 @@ const NewMembersItem = ({newMember, team}: Props) => {
         >
             <Avatar
                 url={imageURLForUser(member.id, member.last_picture_update || 0)}
+                username={member.username}
                 size={'xl'}
             />
             <div className='dm-info'>

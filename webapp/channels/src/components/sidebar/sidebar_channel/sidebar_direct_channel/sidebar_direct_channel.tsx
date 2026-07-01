@@ -81,6 +81,7 @@ class SidebarDirectChannel extends React.PureComponent<Props> {
                 wrapperClass='DirectChannel__profile-picture'
                 newStatusIcon={true}
                 statusClass={`DirectChannel__status-icon ${className}`}
+                username={teammate.username}
             />
         );
     };

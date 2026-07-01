@@ -115,6 +115,7 @@ const NewMembersTable = (props: Props) => {
                             >
                                 <Avatar
                                     url={imageURLForUser(member.id)}
+                                    username={member.username}
                                     size={'sm'}
                                 />
                                 <span className='display-name'>{displayUsername(member as UserProfile, teammateNameDisplaySetting)}</span>

@@ -10,6 +10,7 @@ exports[`components/ProfilePicture should match snapshot, no user specified, def
     <Memo(Avatar)
       size="md"
       url="http://example.com/image.png"
+      username=""
     />
   </span>
   <Memo(StatusIcon)
@@ -28,6 +29,7 @@ exports[`components/ProfilePicture should match snapshot, no user specified, ove
     <Memo(Avatar)
       size="xl"
       url="http://example.com/image.png"
+      username=""
     />
   </span>
   <Memo(StatusIcon)
@@ -55,6 +57,7 @@ exports[`components/ProfilePicture should match snapshot, profile and src, defau
   >
     <Memo(Avatar)
       url="http://example.com/emoji.png"
+      username=""
     />
   </span>
   <Memo(StatusIcon)
@@ -73,6 +76,7 @@ exports[`components/ProfilePicture should match snapshot, user specified 1`] = `
     <Memo(Avatar)
       size="md"
       url="http://example.com/image.png"
+      username="username"
     />
   </span>
   <Memo(StatusIcon)
@@ -91,6 +95,7 @@ exports[`components/ProfilePicture should match snapshot, user specified, overri
     <Memo(Avatar)
       size="xs"
       url="http://example.com/image.png"
+      username="username"
     />
   </span>
   <Memo(StatusIcon)

@@ -14,6 +14,9 @@ import MattermostLogo from 'components/widgets/icons/mattermost_logo';
 import Constants, {UserStatuses} from 'utils/constants';
 import * as PostUtils from 'utils/post_utils';
 import {getProfilePictureURL} from 'utils/post_utils';
+import {isFirefox} from 'utils/user_agent';
+
+import euriaIcon32 from 'images/euria_icon_32.webp';
 
 type Props = {
     availabilityStatusOnPosts: string;
@@ -78,8 +81,9 @@ export default class PostProfilePicture extends React.PureComponent<Props> {
         }
         const fromAutoResponder = PostUtils.fromAutoResponder(post);
 
-        const profileSrc = getProfilePictureURL(post, user);
-        const src = this.getPostIconURL(profileSrc, fromAutoResponder, fromWebhook);
+        const euriaFirefoxSrc = isFirefox() && user?.username === 'euria' ? euriaIcon32 : undefined;
+        const profileSrc = euriaFirefoxSrc ?? getProfilePictureURL(post, user);
+        const src = euriaFirefoxSrc ?? this.getPostIconURL(profileSrc, fromAutoResponder, fromWebhook);
 
         const overrideIconEmoji = ensureString(post.props.override_icon_emoji);
         const overwriteName = ensureString(post.props?.override_username);

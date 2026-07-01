@@ -160,6 +160,7 @@ const EditedPostItem = ({post, isCurrent = false, postCurrentVersion, actions}: 
                 <Avatar
                     size={'sm'}
                     url={profileSrc}
+                    username={''}
                     className={'avatar-post-preview'}
                 />
             </span>

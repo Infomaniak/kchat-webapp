@@ -99,6 +99,7 @@ const ChannelHeaderTitle = ({
                 <ProfilePicture
                     src={Client4.getProfilePictureUrl(dmUser.id, dmUser.last_picture_update)}
                     size='sm'
+                    username={dmUser.username}
                 />
                 <strong
                     id='channelHeaderTitle'
@@ -122,6 +123,7 @@ const ChannelHeaderTitle = ({
                     src={Client4.getProfilePictureUrl(dmUser.id, dmUser.last_picture_update)}
                     size='sm'
                     status={channel.status}
+                    username={dmUser.username}
                 />
             )}
             <ChannelHeaderMenu

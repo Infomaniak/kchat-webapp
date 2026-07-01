@@ -8,7 +8,11 @@ import {useIntl} from 'react-intl';
 
 import {Client4} from 'mattermost-redux/client';
 
+import {isFirefox} from 'utils/user_agent';
+
 import BotDefaultIcon from 'images/bot_default_icon.png';
+import euriaIcon120 from 'images/euria_icon_120.webp';
+import euriaIcon32 from 'images/euria_icon_32.webp';
 
 import './avatar.scss';
 
@@ -38,11 +42,23 @@ export const getAvatarWidth = (size: TAvatarSizeToken) => {
     return 0;
 };
 
+const isLargeSize = (size: TAvatarSizeToken) => {
+    switch (size) {
+    case 'xl':
+    case 'xl-custom-GM':
+    case 'xl-custom-DM':
+    case 'xxl':
+        return true;
+    default:
+        return false;
+    }
+};
+
 type Props = {
 
     // url?: Promise<string> | string;
     url?: string;
-    username?: string;
+    username: string;
     size?: TAvatarSizeToken;
     text?: string;
 };
@@ -62,6 +78,12 @@ const Avatar = forwardRef<HTMLElement, Props & Attrs>(({
     const {formatMessage} = useIntl();
 
     const classes = classNames(`Avatar Avatar-${size}`, attrs.className);
+
+    let euriaFallback;
+    if (isFirefox() && username === 'euria') {
+        euriaFallback = isLargeSize(size) ? euriaIcon120 : euriaIcon32;
+    }
+    const finalUrl = euriaFallback ?? url;
 
     // React.useEffect(() => {
     //     if(url instanceof Promise)
@@ -98,7 +120,7 @@ const Avatar = forwardRef<HTMLElement, Props & Attrs>(({
             alt={formatMessage({id: 'avatar.alt', defaultMessage: '{username} profile image'}, {
                 username: username || 'user',
             })}
-            src={url}
+            src={finalUrl}
             loading='lazy'
             onError={handleOnError}
         />

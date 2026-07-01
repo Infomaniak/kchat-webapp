@@ -28,6 +28,7 @@ const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles}: Props) => {
                 <Avatar
                     size='sm'
                     url={pictures[idx]}
+                    username={profile.username}
                 />
             </WithTooltip>
         );
@@ -39,6 +40,7 @@ const ConnectedProfiles = ({pictures, profiles, maxShowedProfiles}: Props) => {
                 size='sm'
                 text={`+${diff}`}
                 key='call_thread_more_profiles'
+                username={`+${diff}`}
             />,
         );
     }

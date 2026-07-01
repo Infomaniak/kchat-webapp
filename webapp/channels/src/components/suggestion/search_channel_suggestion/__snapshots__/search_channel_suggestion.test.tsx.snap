@@ -81,6 +81,7 @@ exports[`components/suggestion/search_channel_suggestion should match snapshot, 
   <Memo(Avatar)
     size="sm"
     url="/api/v4/users/DN/image?_=0"
+    username=""
   />
   <div
     className="suggestion-list__ellipsis"

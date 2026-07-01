@@ -216,6 +216,7 @@ const TopThreadsTable = (props: Props) => {
                                 <div className='thread-details'>
                                     <Avatar
                                         url={imageURLForUser(thread.user_information.id)}
+                                        username={''}
                                         size={'xs'}
                                     />
                                     <span className='display-name'>{displayUsername(thread.user_information as UserProfile, teammateNameDisplaySetting)}</span>

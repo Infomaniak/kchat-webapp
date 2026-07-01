@@ -54,6 +54,7 @@ const TopDMsItem = ({dm, barSize, team}: Props) => {
         >
             <Avatar
                 url={imageURLForUser(dm.second_participant.id, dm.second_participant.last_picture_update)}
+                username={dm.second_participant.username}
                 size={'xl'}
             />
             <div className='dm-info'>

@@ -216,6 +216,7 @@ const SwitchChannelSuggestion = React.forwardRef<HTMLLIElement, Props>((props, r
                 src={Utils.imageURLForUser(teammate.id, teammate.last_picture_update)}
                 status={teammate.is_bot ? undefined : status}
                 size='sm'
+                username={teammate.username}
             />
         );
     }

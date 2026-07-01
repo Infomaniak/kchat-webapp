@@ -142,6 +142,7 @@ const TopDMsTable = (props: Props) => {
                             >
                                 <Avatar
                                     url={imageURLForUser(dm.second_participant.id, dm.second_participant.last_picture_update)}
+                                    username={dm.second_participant.username}
                                     size={'sm'}
                                 />
                                 <span className='display-name'>{displayUsername(dm.second_participant as UserProfile, teammateNameDisplaySetting)}</span>

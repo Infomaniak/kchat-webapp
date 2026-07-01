@@ -98,6 +98,7 @@ function KMeetAvatars({
                     status={conference?.registrants?.[user.id]}
                     displayProfileOverlay={Boolean(disableProfileOverlay)}
                     displayProfileStatus={Boolean(displayProfileStatus)}
+                    username={user.username}
                 />
             ))}
             {Boolean(nonDisplayCount) && (
@@ -126,6 +127,7 @@ function KMeetAvatars({
                         size={size}
                         tabIndex={0}
                         text={nonDisplayCount > OTHERS_DISPLAY_LIMIT ? `${OTHERS_DISPLAY_LIMIT}+` : `+${nonDisplayCount}`}
+                        username={''}
                     />
                 </SimpleTooltip>
             )}

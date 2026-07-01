@@ -60,7 +60,7 @@ function ProfilePicture(props: Props) {
                 <>
                     <span className={profileIconClass}>
                         <Avatar
-                            username={props.username}
+                            username={props.username || ''}
                             size={props.size}
                             url={props.src}
                         />
@@ -79,6 +79,7 @@ function ProfilePicture(props: Props) {
                 <Avatar
                     size={props?.size ?? 'md'}
                     url={props.src}
+                    username={props.username || ''}
                 />
             </span>
             {props.newStatusIcon ? (

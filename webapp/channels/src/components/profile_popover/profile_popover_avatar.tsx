@@ -23,7 +23,7 @@ const ProfilePopoverAvatar = ({
             <Avatar
                 id='userAvatar'
                 size='xxl'
-                username={username}
+                username={username || ''}
                 url={urlSrc}
                 tabIndex={-1}
             />

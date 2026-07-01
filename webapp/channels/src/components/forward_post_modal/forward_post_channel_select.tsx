@@ -89,6 +89,7 @@ const FormattedOption = (props: ChannelOption & {className: string; isSingleValu
                 src={userImageUrl}
                 status={teammate && teammate.is_bot ? undefined : status}
                 size='sm'
+                username={user?.username}
             />
         );
     }

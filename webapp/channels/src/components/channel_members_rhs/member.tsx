@@ -130,7 +130,7 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                         status={member.status}
                         isBot={member.user.is_bot}
                         userId={member.user.id}
-                        username={member.displayName}
+                        username={member.user.username}
                         src={userProfileSrc}
                     />
                 </Avatar>
