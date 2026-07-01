@@ -257,6 +257,7 @@ export function shouldOpenInNewTab(url: string, siteURL?: string, managedResourc
         // Paths managed by plugins and public file links aren't handled by the web app
         'plugins',
         'files',
+        'api',
 
         // Internal help pages should always open in a new tab
         'help',

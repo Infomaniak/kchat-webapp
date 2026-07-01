@@ -144,6 +144,8 @@ this is long text this is long text this is long text this is long text this is 
 
             {name: 'link to a plugin-handled path', link: 'http://localhost/plugins/example', handled: false}, {name: 'link to a file attachment public link', link: 'http://localhost/files/o6eujqkmjfd138ykpzmsmc131y/public?h=j5nPX8JlgUeNVMOB3dLXwyG_jlxlSw4nSgZmegXfpHw', handled: false},
 
+            {name: 'link to an API endpoint', link: 'http://localhost/api/v4/users/e2c49254-39a2-44a4-0ad1-2267691bb5f8/image?_=1764613277000', handled: false}, {name: 'relative link to an API endpoint', link: '/api/v4/users/e2c49254-39a2-44a4-0ad1-2267691bb5f8/image?_=1764613277000', handled: false},
+
             {name: 'relative link to a plugin-handled path', link: '/plugins/example', handled: false}, {name: 'relative link to a file attachment public link', link: '/files/o6eujqkmjfd138ykpzmsmc131y/public?h=j5nPX8JlgUeNVMOB3dLXwyG_jlxlSw4nSgZmegXfpHw', handled: false},
 
             {name: 'link to a managed resource', link: 'http://localhost/trusted/jitsi', options: {managedResourcePaths: ['trusted']}, handled: false}, {name: 'relative link to a managed resource', link: '/trusted/jitsi', options: {managedResourcePaths: ['trusted']}, handled: false}, {name: 'link that is not to a managed resource', link: 'http://localhost/trusted/jitsi', options: {managedResourcePaths: ['jitsi']}, handled: true},
