@@ -1972,6 +1972,7 @@
   "pluggable.errorOccurred": "W pluginie {pluginId} wystąpił błąd.",
   "pluggable.errorRefresh": "Odświeżyć?",
   "pluginsMenu.more_actions": "Więcej akcji",
+  "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {nie został powiadomiony o tej wzmiance, ponieważ nie jest w kanale. Skontaktuj się z administratorem, aby dodać go do tego prywatnego kanału.} other {nie zostali powiadomieni o tej wzmiance, ponieważ nie są w kanale. Skontaktuj się z administratorem, aby dodać ich do tego prywatnego kanału.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {nie otrzymał powiadomienia o tej wzmiance, ponieważ nie znajduje się na kanale. Nie można go dodać do kanału, ponieważ nie jest członkiem powiązanych grup. Aby dodać go do tego kanału, należy dodać go do powiązanych grup.} other {nie otrzymali powiadomienia o tej wzmiance, ponieważ nie znajdują się na kanale. Nie można ich dodać do kanału, ponieważ nie są członkami powiązanych grup. Aby dodać ich do tego kanału, należy dodać ich do powiązanych grup.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " i ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} innych",

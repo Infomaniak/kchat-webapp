@@ -3,6 +3,7 @@
 
 import type React from 'react';
 import {useCallback, useRef, useState} from 'react';
+import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {ServerError} from '@mattermost/types/errors';
@@ -16,8 +17,9 @@ import {getFilesIdsForPost} from 'mattermost-redux/selectors/entities/files';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {haveIChannelPermission} from 'mattermost-redux/selectors/entities/roles';
-import {getCurrentUserId, getStatusForUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentUserId, getStatusForUserId, getUserByUsername} from 'mattermost-redux/selectors/entities/users';
 
+import {sendEphemeralPost} from 'actions/global_actions';
 import {unsetEditingPost, type CreatePostOptions} from 'actions/post_actions';
 import {scrollPostListToBottom} from 'actions/views/channel';
 import type {OnSubmitOptions, SubmitPostReturnType} from 'actions/views/create_comment';
@@ -33,6 +35,7 @@ import ResetStatusModal from 'components/reset_status_modal';
 
 import Constants, {ModalIdentifiers, UserStatuses} from 'utils/constants';
 import {isErrorInvalidSlashCommand, isServerError, specialMentionsInText} from 'utils/post_utils';
+import {allAtMentions} from 'utils/text_formatting';
 
 import type {GlobalState} from 'types/store';
 import type {PostDraft} from 'types/store/draft';
@@ -78,6 +81,7 @@ const useSubmit = (
     const getGroupMentions = useGroups(channelId, draft.message);
 
     const dispatch = useDispatch();
+    const intl = useIntl();
 
     const postFileIds = useSelector((state: GlobalState) => getFilesIdsForPost(state, postId || ''));
 
@@ -169,9 +173,70 @@ const useSubmit = (
         setServerError(null);
 
         const ignoreSlash = skipCommands || (isErrorInvalidSlashCommand(serverError) && serverError?.submittedMessage === submittingDraft.message);
+
+        const handleAfterSubmit = (response: SubmitPostReturnType) => {
+            if (!isInEditMode && !schedulingInfo) {
+                dispatch((doDispatch: any, getState: () => GlobalState) => {
+                    const state = getState();
+                    const mentions = allAtMentions(submittingDraft.message);
+                    const seenUsernames = new Set<string>();
+                    const outOfChannelUsernames: string[] = [];
+
+                    if (mentions.length === 0) {
+                        return;
+                    }
+
+                    const notInChannelSet = state.entities.users.profilesNotInChannel[channelId] || new Set<string>();
+
+                    for (const mentionText of mentions) {
+                        let rawUsername = mentionText.substring(1).toLowerCase();
+                        rawUsername = rawUsername.replace(/[.,;:!?]+$/, '');
+
+                        if (rawUsername === 'all' || rawUsername === 'channel' || rawUsername === 'here') {
+                            continue;
+                        }
+
+                        if (seenUsernames.has(rawUsername)) {
+                            continue;
+                        }
+
+                        const user = getUserByUsername(state, rawUsername);
+                        if (user && notInChannelSet.has(user.id)) {
+                            seenUsernames.add(rawUsername);
+                            outOfChannelUsernames.push(rawUsername);
+                        }
+                    }
+
+                    if (outOfChannelUsernames.length > 0) {
+                        const currentChannel = getChannel(state, channelId);
+                        if (!currentChannel || currentChannel.type !== Constants.PRIVATE_CHANNEL) {
+                            return;
+                        }
+
+                        const canManageMembers = haveIChannelPermission(state, currentChannel.team_id, currentChannel.id, Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS);
+
+                        if (!canManageMembers) {
+                            const mentionsList = outOfChannelUsernames.map((u) => ('@' + u)).join(', ');
+                            const count = outOfChannelUsernames.length;
+
+                            const message = intl.formatMessage(
+                                {
+                                    id: 'post_body.check_for_out_of_channel_ephemeral.private_no_manage',
+                                    defaultMessage: '{mentions} {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.}}',
+                                },
+                                {mentions: mentionsList, count},
+                            );
+                            doDispatch(sendEphemeralPost(message, channelId, rootId || ''));
+                        }
+                    }
+                });
+            }
+            afterSubmit?.(response);
+        };
+
         const options: OnSubmitOptions = {
             ignoreSlash,
-            afterSubmit,
+            afterSubmit: handleAfterSubmit,
             afterOptimisticSubmit,
             keepDraft: createPostOptions?.keepDraft,
         };

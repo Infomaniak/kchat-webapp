@@ -1972,6 +1972,7 @@
   "pluggable.errorOccurred": "Det oppstod en feil i plugin-modulen {pluginId}.",
   "pluggable.errorRefresh": "Oppdater?",
   "pluginsMenu.more_actions": "Flere handlinger",
+  "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Kontakt en administrator for å legge ham til i denne private kanalen.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. Kontakt en administrator for å legge dem til i denne private kanalen.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Han kan ikke legges til i kanalen fordi han ikke er medlem av de tilknyttede gruppene. For å legge ham til i denne kanalen, må han legges til i de tilknyttede gruppene.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. De kan ikke legges til i kanalen fordi de ikke er medlemmer av de tilknyttede gruppene. For å legge dem til i denne kanalen, må de legges til i de tilknyttede gruppene.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "og",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andre",

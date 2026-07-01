@@ -1972,6 +1972,7 @@
   "pluggable.errorOccurred": "Er is een fout opgetreden in de {pluginId} plugin.",
   "pluggable.errorRefresh": "Vernieuwen?",
   "pluginsMenu.more_actions": "Meer acties",
+  "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Neem contact op met een beheerder om hem toe te voegen aan dit privé-kanaal.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Neem contact op met een beheerder om hen toe te voegen aan dit privé-kanaal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Hij kan niet aan het kanaal worden toegevoegd omdat hij geen lid is van de gekoppelde groepen. Om hem aan dit kanaal toe te voegen, moet hij worden toegevoegd aan de gekoppelde groepen.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Ze kunnen niet aan het kanaal worden toegevoegd omdat ze geen lid zijn van de gekoppelde groepen. Om ze aan dit kanaal toe te voegen, moeten ze worden toegevoegd aan de gekoppelde groepen.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " en ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} anderen",

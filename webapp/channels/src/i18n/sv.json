@@ -1972,6 +1972,7 @@
   "pluggable.errorOccurred": "Ett fel inträffade i plugin {pluginId}.",
   "pluggable.errorRefresh": "Uppdatera?",
   "pluginsMenu.more_actions": "Fler åtgärder",
+  "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {fick ingen avisering om denna omnämnande eftersom hen inte är i kanalen. Kontakta en administratör för att lägga till hen i denna privata kanal.} other {fick ingen avisering om denna omnämnande eftersom de inte är i kanalen. Kontakta en administratör för att lägga till dem i denna privata kanal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {fick inte någon avisering om detta eftersom hen inte är med i kanalen. Hen kan inte läggas till i kanalen eftersom hen inte är medlem i de länkade grupperna. För att lägga till hen i den här kanalen måste hen läggas till i de länkade grupperna.} other {fick inte någon avisering om detta eftersom de inte är med i kanalen. De kan inte läggas till i kanalen eftersom de inte är medlemmar i de länkade grupperna. För att lägga till dem i den här kanalen måste de läggas till i de länkade grupperna.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " och ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andra",

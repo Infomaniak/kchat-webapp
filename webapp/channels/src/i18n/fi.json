@@ -1972,6 +1972,7 @@
   "pluggable.errorOccurred": "{pluginId}-lisäosassa ilmeni virhe.",
   "pluggable.errorRefresh": "Päivitä?",
   "pluginsMenu.more_actions": "Lisää toimintoja",
+  "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {ei saanut ilmoitusta tästä maininnasta, koska hän ei ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi hänet tälle yksityiselle kanavalle.} other {eivät saaneet ilmoitusta tästä maininnasta, koska he eivät ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi heidät tälle yksityiselle kanavalle.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {Häntä ei ilmoitettu tästä maininnasta, koska hän ei ole kanavalla. Häntä ei voida lisätä kanavalle, koska hän ei ole linkitettyjen ryhmien jäsen. Jotta hänet voidaan lisätä tähän kanavaan, hänet on lisättävä linkitettyihin ryhmiin.} other {Heitä ei ilmoitettu tästä maininnasta, koska he eivät ole kanavalla. Heitä ei voida lisätä kanavalle, koska he eivät ole linkitettyjen ryhmien jäseniä. Jotta heidät voidaan lisätä tähän kanavaan, heidät on lisättävä linkitettyihin ryhmiin.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "ja",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} muuta",
