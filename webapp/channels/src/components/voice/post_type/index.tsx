@@ -166,21 +166,39 @@ function VoiceMessageAttachmentPlayer(props: Props) {
                             <>
                                 {isValidTranscript(transcript) && (
                                     <div style={{paddingTop: '5px'}}>
-                                        {showFullTranscript || transcript.text.length <= 300 ? (
+                                        {transcript.text.length <= 300 && (
                                             `${transcript.text} `
-                                        ) : (
+                                        )}
+                                        {transcript.text.length > 300 && !showFullTranscript && (
                                             <>
                                                 {`${transcript.text.substring(0, 300)}... `}
-                                                <a
-                                                    onClick={() => {
-                                                        toggleFullTranscript();
-                                                    }}
+                                                <button
+                                                    className='style--link'
+                                                    type='button'
+                                                    aria-expanded={showFullTranscript}
+                                                    onClick={toggleFullTranscript}
                                                 >
                                                     <FormattedMessage
-                                                        id={'vocals.loading_transcript'}
-                                                        defaultMessage={'Afficher plus'}
+                                                        id='vocals.show_more'
+                                                        defaultMessage='Show more'
                                                     />
-                                                </a>
+                                                </button>
+                                            </>
+                                        )}
+                                        {transcript.text.length > 300 && showFullTranscript && (
+                                            <>
+                                                {`${transcript.text} `}
+                                                <button
+                                                    className='style--link'
+                                                    type='button'
+                                                    aria-expanded={true}
+                                                    onClick={toggleFullTranscript}
+                                                >
+                                                    <FormattedMessage
+                                                        id='vocals.show_less'
+                                                        defaultMessage='Show less'
+                                                    />
+                                                </button>
                                             </>
                                         )}
                                     </div>

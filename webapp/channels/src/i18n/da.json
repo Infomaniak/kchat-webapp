@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "AD/LDAP SYNCRONISERET",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Medlem} other {Medlemmer}}",
   "view_user_group_modal.pluginSynced": "Plugin synkroniseret",
-  "vocals.loading_transcript": "Vis mere",
   "vocals.show": "Lyt til beskeden",
   "vocals.transcript_loading": "Lydtransskription er i gang...",
   "voiceMessage.canvasFallback.recording": "Optagelse startet",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Se planer",
   "workspace_limits.search_message_limit.banner_text": "Nogle ældre beskeder vises muligvis ikke, fordi dit arbejdsområde indeholder mere end {messages} beskeder. <a>{ctaAction}</a>",
   "yourcomputer": "Din computer",
-  "yourmobiledevice": "Din mobile enhed"
+  "yourmobiledevice": "Din mobile enhed",
+  "vocals.show_more": "Vis mere",
+  "vocals.show_less": "Vis mindre"
 }

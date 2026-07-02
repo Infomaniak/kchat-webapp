@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "AD/LDAP SINCRONIZADO",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Membro} other {Membros}}",
   "view_user_group_modal.pluginSynced": "Plugin SINCRONIZADO",
-  "vocals.loading_transcript": "Mostrar mais",
   "vocals.show": "Ouvir a mensagem",
   "vocals.transcript_loading": "Transcrição de áudio em andamento...",
   "voiceMessage.canvasFallback.recording": "Gravação iniciada",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Ver planos",
   "workspace_limits.search_message_limit.banner_text": "Algumas mensagens mais antigas podem não ser exibidas porque o seu espaço de trabalho contém mais de {messages} mensagens. <a>{ctaAction}</a>",
   "yourcomputer": "O seu computador",
-  "yourmobiledevice": "Seu dispositivo móvel"
+  "yourmobiledevice": "Seu dispositivo móvel",
+  "vocals.show_more": "Mostrar mais",
+  "vocals.show_less": "Mostrar menos"
 }

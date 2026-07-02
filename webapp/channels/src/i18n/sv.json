@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "AD/LDAP SYNKRONISERAD",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {medlem} other {medlemmar}}",
   "view_user_group_modal.pluginSynced": "Pluginen är synkroniserad",
-  "vocals.loading_transcript": "Visa mer",
   "vocals.show": "Lyssna på meddelandet",
   "vocals.transcript_loading": "Ljudtranskribering pågår...",
   "voiceMessage.canvasFallback.recording": "Inspelningen har startat",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Visa abonnemang",
   "workspace_limits.search_message_limit.banner_text": "Vissa äldre meddelanden kanske inte visas eftersom arbetsytan har fler än {messages} meddelanden. <a>{ctaAction}</a>",
   "yourcomputer": "Din dator",
-  "yourmobiledevice": "Din mobila enhet"
+  "yourmobiledevice": "Din mobila enhet",
+  "vocals.show_more": "Visa mer",
+  "vocals.show_less": "Visa mindre"
 }

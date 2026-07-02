@@ -290,6 +290,7 @@ test:e2e:pw:
   image: mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}
   allow_failure: true
   needs:
+    - job: "install:deps"
     - job: "test:e2e"
       artifacts: true
   variables:
@@ -300,7 +301,7 @@ test:e2e:pw:
     <<: *cache-definition
     policy: pull
   script:
-    - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..." \
+    - echo "Executing e2e Playwright tests on ${PW_BASE_URL}..."
     - yarn run test:e2e:playwright
   artifacts:
     paths:

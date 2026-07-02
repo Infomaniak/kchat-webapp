@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "AD/LDAP SYNkronisert",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {medlem} other {medlemmer}}",
   "view_user_group_modal.pluginSynced": "Pluginen er synkronisert",
-  "vocals.loading_transcript": "Vis mer",
   "vocals.show": "Lytt til meldingen",
   "vocals.transcript_loading": "Lydtranskripsjon pågår ...",
   "voiceMessage.canvasFallback.recording": "Opptaket er startet",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Vis planer",
   "workspace_limits.search_message_limit.banner_text": "Noen eldre meldinger vises kanskje ikke fordi arbeidsområdet ditt inneholder mer enn {messages} meldinger. <a>{ctaAction}</a>",
   "yourcomputer": "Datamaskinen din",
-  "yourmobiledevice": "Din mobile enhet"
+  "yourmobiledevice": "Din mobile enhet",
+  "vocals.show_more": "Vis mer",
+  "vocals.show_less": "Vis mindre"
 }

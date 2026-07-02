@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "AD/LDAP-TIEDOT SYNKRONOITU",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Jäsen} other {Jäsentä}}",
   "view_user_group_modal.pluginSynced": "Lisäosa synkronoitu",
-  "vocals.loading_transcript": "Näytä lisää",
   "vocals.show": "Kuuntele viesti",
   "vocals.transcript_loading": "Äänitiedoston litterointi on käynnissä...",
   "voiceMessage.canvasFallback.recording": "Tallennus aloitettu",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Näytä suunnitelmat",
   "workspace_limits.search_message_limit.banner_text": "Joitakin vanhempia viestejä ei ehkä näytetä, koska työtilassasi on yli {messages} viestiä. <a>{ctaAction}</a>",
   "yourcomputer": "Tietokoneesi",
-  "yourmobiledevice": "Mobiililaiteesi"
+  "yourmobiledevice": "Mobiililaiteesi",
+  "vocals.show_more": "Näytä lisää",
+  "vocals.show_less": "Näytä vähemmän"
 }

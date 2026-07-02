@@ -3207,7 +3207,6 @@
   "view_user_group_modal.ldapSynced": "ΣΥΝΧΡΟΝΙΣΜΕΝΟΣ AD/LDAP",
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Μέλος} other {Μέλη}}",
   "view_user_group_modal.pluginSynced": "Το πρόσθετο συγχρονίστηκε",
-  "vocals.loading_transcript": "Εμφάνιση περισσότερων",
   "vocals.show": "Ακούστε το μήνυμα",
   "vocals.transcript_loading": "Η μεταγραφή του ήχου βρίσκεται σε εξέλιξη...",
   "voiceMessage.canvasFallback.recording": "Έναρξη εγγραφής",
@@ -3286,5 +3285,7 @@
   "workspace_limits.search_limit.view_plans": "Δείτε τα πλάνα",
   "workspace_limits.search_message_limit.banner_text": "Ορισμένα παλαιότερα μηνύματα ενδέχεται να μην εμφανίζονται, επειδή ο χώρος εργασίας σας περιέχει περισσότερα από {messages} μηνύματα. <a>{ctaAction}</a>",
   "yourcomputer": "Ο υπολογιστής σας",
-  "yourmobiledevice": "Η κινητή σας συσκευή"
+  "yourmobiledevice": "Η κινητή σας συσκευή",
+  "vocals.show_more": "Εμφάνιση περισσότερων",
+  "vocals.show_less": "Εμφάνιση λιγότερων"
 }
