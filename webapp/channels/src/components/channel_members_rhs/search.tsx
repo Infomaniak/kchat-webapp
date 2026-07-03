@@ -57,4 +57,8 @@ export default styled(SearchBar)`
     .Input_container .Input_wrapper {
         padding: 0 8px;
     }
+
+    .Input.form-control:focus {
+        box-shadow: none;
+    }
 `;
