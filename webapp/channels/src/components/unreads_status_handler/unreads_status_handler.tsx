@@ -54,6 +54,13 @@ type Props = {
 };
 
 export class UnreadsStatusHandlerClass extends React.PureComponent<Props> {
+    componentDidMount() {
+        this.updateTitle();
+        this.updateFavicon(this.getBadgeStatus(this.props.unreadStatus));
+        this.updateDesktopApp();
+        this.notifyKSuiteBridge();
+    }
+
     componentDidUpdate(prevProps: Props) {
         this.updateTitle();
         const oldBadgeStatus = this.getBadgeStatus(prevProps.unreadStatus);
