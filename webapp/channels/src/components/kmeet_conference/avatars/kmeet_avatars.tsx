@@ -54,26 +54,23 @@ function KMeetAvatars({
 }: Props) {
     const {formatMessage} = useIntl();
 
-    const usersIds = useMemo(() => {
-        if (conference && conference.registrants) {
-            return Object.keys(conference.registrants);
-        }
-        return [];
-    }, [conference]);
-
-    const usersToDisplay = useMemo(() => {
-        if (conference && conference.registrants) {
-            return conferenceParticipants;
+    const users = useMemo(() => {
+        let userList: UserProfile[] = [];
+        if (conference?.registrants) {
+            userList = conferenceParticipants ?? [];
+        } else if (otherServerParticipants) {
+            userList = otherServerParticipants;
         }
 
-        if (otherServerParticipants) {
-            return otherServerParticipants;
-        }
-        return [];
+        return [...new Map(userList.map((u) => [u.id, u])).values()];
     }, [conference, otherServerParticipants, conferenceParticipants]);
 
+    const usersIds = useMemo(() => users.map((u) => u.id), [users]);
+
     const [overlayProps, setImmediate] = useSynchronizedImmediate();
-    const [, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = countMeta(usersIds, breakAt);
+    const [displayUserIds, overflowUserIds, {overflowUnnamedCount, nonDisplayCount}] = useMemo(() => {
+        return countMeta(usersIds, breakAt);
+    }, [usersIds, breakAt]);
     const overflowNames = useSelector((state: GlobalState) => {
         return overflowUserIds.map((userId) => displayNameGetter(state, true)(selectUser(state, userId))).join(', ');
     });
@@ -83,12 +80,17 @@ function KMeetAvatars({
         background: tinycolor.mix(centerChannelBg, centerChannelColor, 8).toRgbString(),
     }), [centerChannelBg, centerChannelColor]);
 
+    const displayUsers = useMemo(() => {
+        const userMap = new Map(users.map((u) => [u.id, u]));
+        return displayUserIds.map((id) => userMap.get(id)).filter((u): u is UserProfile => Boolean(u));
+    }, [displayUserIds, users]);
+
     return (
         <div
             className={`Avatars Avatars___${size}`}
             onMouseLeave={() => setImmediate(false)}
         >
-            {usersToDisplay?.map((user) => (
+            {displayUsers.map((user) => (
                 <UserAvatar
                     style={avatarStyle}
                     key={user.id}
