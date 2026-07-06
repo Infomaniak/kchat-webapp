@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import type {MouseEvent} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -26,7 +26,6 @@ import FileAttachmentListContainer from 'components/file_attachment_list';
 import IkPostponeReminderButtons from 'components/ik_postpone_reminder_buttons/index';
 import IkWelcomeButtons from 'components/ik_welcome_buttons/index';
 import MessageWithAdditionalContent from 'components/message_with_additional_content';
-import {PopoverContext, usePopoverHover} from 'components/popover_context';
 import PriorityLabel from 'components/post_priority/post_priority_label';
 import PostProfilePicture from 'components/post_profile_picture';
 import PostAcknowledgements from 'components/post_view/acknowledgements';
@@ -304,7 +303,7 @@ function PostComponent(props: Props) {
     const getClassName = () => {
         const isMeMessage = checkIsMeMessage(post);
         const hovered =
-            isHovered || fileDropdownOpened || dropdownOpened || a11yActive || props.isPostBeingEdited;
+            hover || fileDropdownOpened || dropdownOpened || a11yActive || props.isPostBeingEdited;
         return classNames('a11y__section post', {
             'post--highlight': shouldHighlight && !fadeOutHighlight,
             'same--root': hasSameRoot(props),
@@ -341,6 +340,10 @@ function PostComponent(props: Props) {
             setHover(false);
         }
     }, [togglePostMenu, hover]);
+
+    const handlePostProfilePictureOpen = useCallback(() => {
+        setHover(false);
+    }, [setHover]);
 
     const handleMouseOver = useCallback((e: MouseEvent<HTMLDivElement>) => {
         setHover(true);
@@ -461,6 +464,7 @@ function PostComponent(props: Props) {
                 compactDisplay={props.compactDisplay}
                 post={post}
                 userId={post.user_id}
+                onHide={handlePostProfilePictureOpen}
             />
         );
 
@@ -548,12 +552,8 @@ function PostComponent(props: Props) {
 
     const showFileAttachments = post.file_ids && post.file_ids.length > 0 && !props.isPostBeingEdited;
 
-    const {isPopoverHovered, contextValue: postPopoverContextValue} = usePopoverHover();
-
-    const isHovered = hover || isPopoverHovered;
-
     return (
-        <PopoverContext.Provider value={postPopoverContextValue}>
+        <>
             <PostAriaLabelDiv
                 ref={postRef}
                 id={getTestId()}
@@ -654,7 +654,7 @@ function PostComponent(props: Props) {
                                 teamId={teamId}
                                 handleDropdownOpened={handleDropdownOpened}
                                 handleCommentClick={handleCommentClick}
-                                hover={isHovered || a11yActive}
+                                hover={hover || a11yActive}
                                 removePost={props.actions.removePost}
                                 handleJumpClick={handleJumpClick}
                                 isPostHeaderVisible={getPostHeaderVisible()}
@@ -699,7 +699,7 @@ function PostComponent(props: Props) {
                     </div>
                 </div>
             </PostAriaLabelDiv>
-        </PopoverContext.Provider>
+        </>
     );
 }
 
