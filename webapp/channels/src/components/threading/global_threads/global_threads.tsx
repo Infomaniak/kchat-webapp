@@ -127,10 +127,10 @@ const GlobalThreads = () => {
     }, [isLoading]);
 
     useEffect(() => {
-        if (threadIdentifier && !selectedThread && !selectedPost && !isLoading) {
+        if (!selectedThread && !selectedPost && !isLoading) {
             clear();
         }
-    }, [threadIdentifier, selectedThread, selectedPost, isLoading, counts, filter]);
+    }, [currentTeamId, selectedThread, selectedPost, isLoading, counts, filter]);
 
     // cleanup on unmount
     useEffect(() => {
