@@ -7,6 +7,9 @@ stages:
   - release
   - deploy
 
+default:
+  interruptible: true
+
 variables:
   KANIKO_VERSION: "debug"
   MINIO_CLIENT_VERSION: "RELEASE.2022-11-07T23-47-39Z"
@@ -311,6 +314,7 @@ test:e2e:pw:
 
 release:front:
   stage: release
+  interruptible: false
   image:
     name: minio/mc:${MINIO_CLIENT_VERSION}
     entrypoint: [""]
@@ -375,6 +379,7 @@ pages:
 
 release:sentry:
   stage: .post
+  interruptible: false
   image: getsentry/sentry-cli:${SENTRY_VERSION}
   tags:
     - docker-executor
@@ -396,6 +401,7 @@ release:sentry:
 
 deploy:image:
   stage: deploy
+  interruptible: false
   image:
     name: gcr.io/kaniko-project/executor:${KANIKO_VERSION}
     entrypoint: [""]
