@@ -50,7 +50,6 @@ function ProfilePicture(props: Props) {
                 overwriteIcon={props.overwriteIcon}
                 overwriteName={props.overwriteName}
                 fromWebhook={props.fromWebhook}
-                triggerComponentAs='button'
                 triggerComponentStyle={{
                     borderRadius: '50%',
                     width: `${getAvatarWidth(props?.size ?? 'md')}px`,

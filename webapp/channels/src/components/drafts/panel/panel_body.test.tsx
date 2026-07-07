@@ -64,8 +64,13 @@ describe('components/drafts/panel/panel_body', () => {
             },
             users: {
                 currentUserId: 'userid1',
-                profiles: {userid1: {id: 'userid1', username: 'username1', roles: 'system_user'}},
+                profiles: {
+                    userid1: {id: 'userid1', username: 'username1', roles: 'system_user'},
+                    user_id: {id: 'user_id', username: 'username', roles: 'system_user'},
+                },
                 profilesInChannel: {},
+                statuses: {},
+                lastActivity: {},
             },
             teams: {
                 currentTeamId: 'team_id',
@@ -76,6 +81,7 @@ describe('components/drafts/panel/panel_body', () => {
                         display_name: 'Team ID',
                     },
                 },
+                membersInTeam: {},
             },
         },
         views: {

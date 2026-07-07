@@ -10,6 +10,8 @@ declare namespace JSX {
         'wc-mail-attachment': any;
         'wc-ksuite-pro-upgrade-compact-tag': any;
         'wc-icon': any;
+        'wc-contact-sheet': any;
+        'wc-pill': any;
         'module-header-title-component': any;
     }
 }

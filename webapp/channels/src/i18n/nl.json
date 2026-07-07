@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "{days} DAGEN OVER VAN PROEFPERIODE",
   "pricing_modal.wantToTry": "Wil je proberen? ",
   "pricing_modal.wantToUpgrade": "Wil je upgraden? ",
-  "profile_popover.aria_label.with_username": "{userName}profiel popover",
-  "profile_popover.aria_label.without_username": "profiel popover",
   "public_private_selector.private.description": "Alleen uitgenodigde leden",
   "public_private_selector.private.title": "Privé",
   "public_private_selector.public.description": "Iemand",

@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "{days} TAGE, DIE IM TEST VERBLEIBEN",
   "pricing_modal.wantToTry": "Möchtest du testen? ",
   "pricing_modal.wantToUpgrade": "Möchtest du upgraden? ",
-  "profile_popover.aria_label.with_username": "{userName}s Profil Popover",
-  "profile_popover.aria_label.without_username": "Profil-Popover",
   "public_private_selector.private.description": "Nur eingeladene Mitglieder",
   "public_private_selector.private.title": "Privat",
   "public_private_selector.public.description": "Jeder",

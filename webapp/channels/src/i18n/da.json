@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "Der er {days} DAGE tilbage af prøveperioden",
   "pricing_modal.wantToTry": "Vil du prøve?",
   "pricing_modal.wantToUpgrade": "Vil du opgradere?",
-  "profile_popover.aria_label.with_username": "{userName}s profil-popup",
-  "profile_popover.aria_label.without_username": "profil-popover",
   "public_private_selector.private.description": "Kun inviterede medlemmer",
   "public_private_selector.private.title": "Privat",
   "public_private_selector.public.description": "Alle",

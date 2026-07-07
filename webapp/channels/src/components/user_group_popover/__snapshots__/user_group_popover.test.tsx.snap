@@ -2326,13 +2326,14 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                       userId="id0"
                                     >
                                       <span
-                                        aria-expanded="false"
-                                        aria-haspopup="dialog"
                                         onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        onKeyUp={[Function]}
-                                        onMouseDown={[Function]}
-                                        onPointerDown={[Function]}
+                                        role="button"
+                                        style={
+                                          Object {
+                                            "display": "inline-block",
+                                          }
+                                        }
+                                        tabIndex={0}
                                       >
                                         <UserButton>
                                           <button
@@ -2409,6 +2410,30 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                           </button>
                                         </UserButton>
                                       </span>
+                                      <div
+                                        style={
+                                          Object {
+                                            "left": "-9999px",
+                                            "pointerEvents": "none",
+                                            "position": "absolute",
+                                          }
+                                        }
+                                      >
+                                        <wc-contact-sheet
+                                          account-id={-1}
+                                          background-color="transparent"
+                                          is-external={false}
+                                          k-chat-team-name="team1"
+                                          k-chat-user-name="username0"
+                                          presence="offline"
+                                          prevent-open-on-hover={true}
+                                          prevent-stop-propagation={true}
+                                          size="md"
+                                          src="/api/v4/users/id0/image?_=0"
+                                          user-mail="test0@test.com"
+                                          user-name="Name0 Surname0"
+                                        />
+                                      </div>
                                     </ProfilePopoverController>
                                     <DMContainer
                                       className="group-member-list_dm-button"
@@ -3163,13 +3188,14 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                       userId="id1"
                                     >
                                       <span
-                                        aria-expanded="false"
-                                        aria-haspopup="dialog"
                                         onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        onKeyUp={[Function]}
-                                        onMouseDown={[Function]}
-                                        onPointerDown={[Function]}
+                                        role="button"
+                                        style={
+                                          Object {
+                                            "display": "inline-block",
+                                          }
+                                        }
+                                        tabIndex={0}
                                       >
                                         <UserButton>
                                           <button
@@ -3246,6 +3272,30 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                           </button>
                                         </UserButton>
                                       </span>
+                                      <div
+                                        style={
+                                          Object {
+                                            "left": "-9999px",
+                                            "pointerEvents": "none",
+                                            "position": "absolute",
+                                          }
+                                        }
+                                      >
+                                        <wc-contact-sheet
+                                          account-id={-1}
+                                          background-color="transparent"
+                                          is-external={false}
+                                          k-chat-team-name="team1"
+                                          k-chat-user-name="username1"
+                                          presence="offline"
+                                          prevent-open-on-hover={true}
+                                          prevent-stop-propagation={true}
+                                          size="md"
+                                          src="/api/v4/users/id1/image?_=0"
+                                          user-mail="test1@test.com"
+                                          user-name="Name1 Surname1"
+                                        />
+                                      </div>
                                     </ProfilePopoverController>
                                     <DMContainer
                                       className="group-member-list_dm-button"
@@ -4000,13 +4050,14 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                       userId="id10"
                                     >
                                       <span
-                                        aria-expanded="false"
-                                        aria-haspopup="dialog"
                                         onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        onKeyUp={[Function]}
-                                        onMouseDown={[Function]}
-                                        onPointerDown={[Function]}
+                                        role="button"
+                                        style={
+                                          Object {
+                                            "display": "inline-block",
+                                          }
+                                        }
+                                        tabIndex={0}
                                       >
                                         <UserButton>
                                           <button
@@ -4083,6 +4134,30 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                           </button>
                                         </UserButton>
                                       </span>
+                                      <div
+                                        style={
+                                          Object {
+                                            "left": "-9999px",
+                                            "pointerEvents": "none",
+                                            "position": "absolute",
+                                          }
+                                        }
+                                      >
+                                        <wc-contact-sheet
+                                          account-id={-1}
+                                          background-color="transparent"
+                                          is-external={false}
+                                          k-chat-team-name="team1"
+                                          k-chat-user-name="username10"
+                                          presence="offline"
+                                          prevent-open-on-hover={true}
+                                          prevent-stop-propagation={true}
+                                          size="md"
+                                          src="/api/v4/users/id10/image?_=0"
+                                          user-mail="test10@test.com"
+                                          user-name="Name10 Surname10"
+                                        />
+                                      </div>
                                     </ProfilePopoverController>
                                     <DMContainer
                                       className="group-member-list_dm-button"
@@ -4837,13 +4912,14 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                       userId="id11"
                                     >
                                       <span
-                                        aria-expanded="false"
-                                        aria-haspopup="dialog"
                                         onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        onKeyUp={[Function]}
-                                        onMouseDown={[Function]}
-                                        onPointerDown={[Function]}
+                                        role="button"
+                                        style={
+                                          Object {
+                                            "display": "inline-block",
+                                          }
+                                        }
+                                        tabIndex={0}
                                       >
                                         <UserButton>
                                           <button
@@ -4920,6 +4996,30 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                           </button>
                                         </UserButton>
                                       </span>
+                                      <div
+                                        style={
+                                          Object {
+                                            "left": "-9999px",
+                                            "pointerEvents": "none",
+                                            "position": "absolute",
+                                          }
+                                        }
+                                      >
+                                        <wc-contact-sheet
+                                          account-id={-1}
+                                          background-color="transparent"
+                                          is-external={false}
+                                          k-chat-team-name="team1"
+                                          k-chat-user-name="username11"
+                                          presence="offline"
+                                          prevent-open-on-hover={true}
+                                          prevent-stop-propagation={true}
+                                          size="md"
+                                          src="/api/v4/users/id11/image?_=0"
+                                          user-mail="test11@test.com"
+                                          user-name="Name11 Surname11"
+                                        />
+                                      </div>
                                     </ProfilePopoverController>
                                     <DMContainer
                                       className="group-member-list_dm-button"
@@ -5674,13 +5774,14 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                       userId="id12"
                                     >
                                       <span
-                                        aria-expanded="false"
-                                        aria-haspopup="dialog"
                                         onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        onKeyUp={[Function]}
-                                        onMouseDown={[Function]}
-                                        onPointerDown={[Function]}
+                                        role="button"
+                                        style={
+                                          Object {
+                                            "display": "inline-block",
+                                          }
+                                        }
+                                        tabIndex={0}
                                       >
                                         <UserButton>
                                           <button
@@ -5757,6 +5858,30 @@ exports[`component/user_group_popover should match snapshot 1`] = `
                                           </button>
                                         </UserButton>
                                       </span>
+                                      <div
+                                        style={
+                                          Object {
+                                            "left": "-9999px",
+                                            "pointerEvents": "none",
+                                            "position": "absolute",
+                                          }
+                                        }
+                                      >
+                                        <wc-contact-sheet
+                                          account-id={-1}
+                                          background-color="transparent"
+                                          is-external={false}
+                                          k-chat-team-name="team1"
+                                          k-chat-user-name="username12"
+                                          presence="offline"
+                                          prevent-open-on-hover={true}
+                                          prevent-stop-propagation={true}
+                                          size="md"
+                                          src="/api/v4/users/id12/image?_=0"
+                                          user-mail="test12@test.com"
+                                          user-name="Name12 Surname12"
+                                        />
+                                      </div>
                                     </ProfilePopoverController>
                                     <DMContainer
                                       className="group-member-list_dm-button"

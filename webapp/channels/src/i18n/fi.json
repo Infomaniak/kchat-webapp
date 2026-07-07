@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "KOKEILUJAKSOON ON JÄÄNYT {days} PÄIVÄÄ",
   "pricing_modal.wantToTry": "Haluatko kokeilla?",
   "pricing_modal.wantToUpgrade": "Haluatko päivittää?",
-  "profile_popover.aria_label.with_username": "{userName}:n profiilin ponnahdusvalikko",
-  "profile_popover.aria_label.without_username": "profiilin ponnahdusikkuna",
   "public_private_selector.private.description": "Vain kutsutut jäsenet",
   "public_private_selector.private.title": "Yksityinen",
   "public_private_selector.public.description": "Kuka tahansa",

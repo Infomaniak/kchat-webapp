@@ -75,20 +75,19 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <ProfilePopoverController
             src="/api/v4/users/5/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="5"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last5"
@@ -133,7 +132,29 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last5"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/5/image?_=0"
+                user-name="First5 Last5"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -148,20 +169,19 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <ProfilePopoverController
             src="/api/v4/users/4/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="4"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last4"
@@ -206,7 +226,29 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last4"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/4/image?_=0"
+                user-name="First4 Last4"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -221,20 +263,19 @@ exports[`components/threading/channel_threads/thread_footer should report total 
         >
           <ProfilePopoverController
             src="/api/v4/users/3/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="3"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last3"
@@ -279,7 +320,29 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last3"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/3/image?_=0"
+                user-name="First3 Last3"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <WithTooltip
@@ -592,20 +655,19 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <ProfilePopoverController
             src="/api/v4/users/5/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="5"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last5"
@@ -650,7 +712,29 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last5"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/5/image?_=0"
+                user-name="First5 Last5"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -665,20 +749,19 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <ProfilePopoverController
             src="/api/v4/users/4/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="4"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last4"
@@ -723,7 +806,29 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last4"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/4/image?_=0"
+                user-name="First4 Last4"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -738,20 +843,19 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
         >
           <ProfilePopoverController
             src="/api/v4/users/3/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="style--none btn-round"
             userId="3"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="style--none btn-round"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
-              type="button"
+              role="button"
+              style={
+                Object {
+                  "display": "inline-block",
+                }
+              }
+              tabIndex={0}
             >
               <WithTooltip
                 title="first.last3"
@@ -796,7 +900,29 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                   />
                 </Avatar>
               </WithTooltip>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-user-name="first.last3"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/3/image?_=0"
+                user-name="First3 Last3"
+              />
+            </div>
           </ProfilePopoverController>
         </UserAvatar>
         <WithTooltip

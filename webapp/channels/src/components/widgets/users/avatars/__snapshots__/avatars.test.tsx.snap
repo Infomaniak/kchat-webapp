@@ -29,20 +29,19 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/1/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="1"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last1"
@@ -87,7 +86,30 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last1"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/1/image?_=1620680333191"
+            user-name="First1 Last1"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -102,20 +124,19 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/6/image?_=0"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="6"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="Someone"
@@ -160,7 +181,29 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/6/image?_=0"
+            user-name="undefined undefined"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -175,20 +218,19 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/7/image?_=0"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="7"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="Someone"
@@ -233,7 +275,29 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/7/image?_=0"
+            user-name="undefined undefined"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <WithTooltip
@@ -308,20 +372,19 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/1/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="1"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last1"
@@ -366,7 +429,30 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last1"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/1/image?_=1620680333191"
+            user-name="First1 Last1"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -381,20 +467,19 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/2/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="2"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last2"
@@ -439,7 +524,30 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last2"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/2/image?_=1620680333191"
+            user-name="First2 Last2"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -454,20 +562,19 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/3/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="3"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last3"
@@ -512,7 +619,30 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last3"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/3/image?_=1620680333191"
+            user-name="First3 Last3"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <WithTooltip
@@ -585,20 +715,19 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/1/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="1"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last1"
@@ -643,7 +772,30 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last1"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/1/image?_=1620680333191"
+            user-name="First1 Last1"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -658,20 +810,19 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/2/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="2"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last2"
@@ -716,7 +867,30 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last2"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/2/image?_=1620680333191"
+            user-name="First2 Last2"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
     <UserAvatar
@@ -731,20 +905,19 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
     >
       <ProfilePopoverController
         src="/api/v4/users/3/image?_=1620680333191"
-        triggerComponentAs="button"
         triggerComponentClass="style--none btn-round"
         userId="3"
       >
-        <button
-          aria-expanded="false"
-          aria-haspopup="dialog"
+        <span
           className="style--none btn-round"
           onClick={[Function]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          onMouseDown={[Function]}
-          onPointerDown={[Function]}
-          type="button"
+          role="button"
+          style={
+            Object {
+              "display": "inline-block",
+            }
+          }
+          tabIndex={0}
         >
           <WithTooltip
             title="first.last3"
@@ -789,7 +962,30 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
               />
             </Avatar>
           </WithTooltip>
-        </button>
+        </span>
+        <div
+          style={
+            Object {
+              "left": "-9999px",
+              "pointerEvents": "none",
+              "position": "absolute",
+            }
+          }
+        >
+          <wc-contact-sheet
+            account-id={-1}
+            background-color="transparent"
+            is-external={false}
+            k-chat-team-name="team1"
+            k-chat-user-name="first.last3"
+            presence="offline"
+            prevent-open-on-hover={true}
+            prevent-stop-propagation={true}
+            size="md"
+            src="/api/v4/users/3/image?_=1620680333191"
+            user-name="First3 Last3"
+          />
+        </div>
       </ProfilePopoverController>
     </UserAvatar>
   </div>

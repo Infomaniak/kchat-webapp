@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "{days} DAGAR KVAR AV PROVA-PÅ-PERIODEN",
   "pricing_modal.wantToTry": "Vill du prova? ",
   "pricing_modal.wantToUpgrade": "Vill du uppgradera? ",
-  "profile_popover.aria_label.with_username": "{userName}'s profil-popover",
-  "profile_popover.aria_label.without_username": "profil-popover",
   "public_private_selector.private.description": "Endast inbjudna medlemmar",
   "public_private_selector.private.title": "Privat",
   "public_private_selector.public.description": "Vem som helt",

@@ -23,16 +23,15 @@ export type Props = {
     membersCount: number;
     hide: () => void;
     returnFocus: () => void;
-    showUserOverlay: (user: UserProfile) => void;
 }
 
 const GuestListPopover: FC<Props> = ({
+    channelId,
     channelDisplayName,
     profiles,
     membersCount,
     hide,
     returnFocus,
-    showUserOverlay,
 }) => {
     const {formatMessage} = useIntl();
 
@@ -112,7 +111,7 @@ const GuestListPopover: FC<Props> = ({
                     hide={hide}
                     profiles={profiles}
                     membersCount={membersCount}
-                    showUserOverlay={showUserOverlay}
+                    channelId={channelId}
                 />
             </Body>
             {tabCatcher}

@@ -354,6 +354,11 @@ img {
     max-width: 100%;
 }
 
+// Hide all children except triggers when web component is not defined
+wc-contact-sheet:not(:defined) > *:not([slot="trigger"]) {
+    display: none;
+}
+
 .noscript-banner {
     background-color: #fff;
     width: 100vw;

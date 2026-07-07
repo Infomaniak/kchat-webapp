@@ -228,6 +228,8 @@ export type Theme = {
     switchServerIconColor: string;
     switchServerHoverBackground: string;
     guestBannerBackground: string;
+    contactSheetPillColor: string;
+    contactSheetPillBackgroundColor: string;
     ikAppBrandingNameColor: string;
     integrationHeaderColor: string;
     integrationHeaderBorder: string;

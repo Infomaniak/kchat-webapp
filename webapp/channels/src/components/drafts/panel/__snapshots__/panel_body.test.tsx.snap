@@ -43,7 +43,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           <ProfilePopoverController
             channelId="channel_id"
             src="/api/v4/users/user_id/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="status-wrapper style--none"
             triggerComponentStyle={
               Object {
@@ -55,23 +54,19 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
             userId="user_id"
             username="username"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="status-wrapper style--none"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+              role="button"
               style={
                 Object {
                   "borderRadius": "50%",
+                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
               }
-              type="button"
+              tabIndex={0}
             >
               <span
                 className="profile-icon "
@@ -122,7 +117,30 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                   </span>
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-team-name="team-id"
+                k-chat-user-name="username"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/user_id/image?_=0"
+                user-name="undefined undefined"
+              />
+            </div>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -280,7 +298,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           <ProfilePopoverController
             channelId="channel_id"
             src="/api/v4/users/user_id/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="status-wrapper style--none"
             triggerComponentStyle={
               Object {
@@ -292,23 +309,19 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
             userId="user_id"
             username="username"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="status-wrapper style--none"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+              role="button"
               style={
                 Object {
                   "borderRadius": "50%",
+                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
               }
-              type="button"
+              tabIndex={0}
             >
               <span
                 className="profile-icon "
@@ -359,7 +372,30 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                   </span>
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-team-name="team-id"
+                k-chat-user-name="username"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/user_id/image?_=0"
+                user-name="undefined undefined"
+              />
+            </div>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -523,7 +559,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           <ProfilePopoverController
             channelId="channel_id"
             src="/api/v4/users/user_id/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="status-wrapper style--none"
             triggerComponentStyle={
               Object {
@@ -535,23 +570,19 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
             userId="user_id"
             username="username"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="status-wrapper style--none"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+              role="button"
               style={
                 Object {
                   "borderRadius": "50%",
+                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
               }
-              type="button"
+              tabIndex={0}
             >
               <span
                 className="profile-icon "
@@ -602,7 +633,30 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                   </span>
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-team-name="team-id"
+                k-chat-user-name="username"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/user_id/image?_=0"
+                user-name="undefined undefined"
+              />
+            </div>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -823,7 +877,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           <ProfilePopoverController
             channelId="channel_id"
             src="/api/v4/users/user_id/image?_=0"
-            triggerComponentAs="button"
             triggerComponentClass="status-wrapper style--none"
             triggerComponentStyle={
               Object {
@@ -835,23 +888,19 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
             userId="user_id"
             username="username"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="dialog"
+            <span
               className="status-wrapper style--none"
               onClick={[Function]}
-              onKeyDown={[Function]}
-              onKeyUp={[Function]}
-              onMouseDown={[Function]}
-              onPointerDown={[Function]}
+              role="button"
               style={
                 Object {
                   "borderRadius": "50%",
+                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
               }
-              type="button"
+              tabIndex={0}
             >
               <span
                 className="profile-icon "
@@ -902,7 +951,30 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                   </span>
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
-            </button>
+            </span>
+            <div
+              style={
+                Object {
+                  "left": "-9999px",
+                  "pointerEvents": "none",
+                  "position": "absolute",
+                }
+              }
+            >
+              <wc-contact-sheet
+                account-id={-1}
+                background-color="transparent"
+                is-external={false}
+                k-chat-team-name="team-id"
+                k-chat-user-name="username"
+                presence="offline"
+                prevent-open-on-hover={true}
+                prevent-stop-propagation={true}
+                size="md"
+                src="/api/v4/users/user_id/image?_=0"
+                user-name="undefined undefined"
+              />
+            </div>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>

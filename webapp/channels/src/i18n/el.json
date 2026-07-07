@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "Απομένουν {days} ΗΜΈΡΕΣ για την δοκιμαστική περίοδο",
   "pricing_modal.wantToTry": "Θέλετε να το δοκιμάσετε;",
   "pricing_modal.wantToUpgrade": "Θέλετε να κάνετε αναβάθμιση;",
-  "profile_popover.aria_label.with_username": "Αναδυόμενο παράθυρο προφίλ του {userName}",
-  "profile_popover.aria_label.without_username": "αναδυόμενο παράθυρο προφίλ",
   "public_private_selector.private.description": "Μόνο τα μέλη που έχουν προσκληθεί",
   "public_private_selector.private.title": "Ιδιωτικό",
   "public_private_selector.public.description": "Οποιοσδήποτε",

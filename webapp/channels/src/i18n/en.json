@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "{days} DAYS LEFT ON TRIAL",
   "pricing_modal.wantToTry": "Want to try? ",
   "pricing_modal.wantToUpgrade": "Want to upgrade? ",
-  "profile_popover.aria_label.with_username": "{userName}'s profile popover",
-  "profile_popover.aria_label.without_username": "profile popover",
   "public_private_selector.private.description": "Only invited members",
   "public_private_selector.private.title": "Private",
   "public_private_selector.public.description": "Anyone",

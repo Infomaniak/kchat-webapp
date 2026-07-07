@@ -640,6 +640,8 @@ export function applyTheme(theme: Theme) {
             'ik-btn-secondary': theme.ikBtnSecondary,
             'ik-btn-secondary-color': theme.ikBtnSecondaryColor,
             'ik-app-branding-name-color': theme.ikAppBrandingNameColor,
+            'wc-contact-sheet-pill-color': theme.contactSheetPillColor,
+            'wc-contact-sheet-pill-background-color': theme.contactSheetPillBackgroundColor,
 
             // integrations
             'ik-integration-header-color': theme.integrationHeaderColor,

@@ -71,8 +71,7 @@ export default function UserProfile({
 
     return (
         <>
-            <ProfilePopover<HTMLButtonElement>
-                triggerComponentAs='button'
+            <ProfilePopover
                 triggerComponentClass='user-popover style--none'
                 triggerComponentStyle={userStyle}
                 userId={userId}

@@ -2100,8 +2100,6 @@
   "pricing_modal.plan_label_trialDays": "IL RESTE {days} JOURS SUR L’ESSAI",
   "pricing_modal.wantToTry": "Vous voulez essayer ? ",
   "pricing_modal.wantToUpgrade": "Vous voulez passer à la version payante ? ",
-  "profile_popover.aria_label.with_username": "Popover du profil de {userName}",
-  "profile_popover.aria_label.without_username": "Popover du profil",
   "public_private_selector.private.description": "Seulement les membres invités",
   "public_private_selector.private.title": "Privé",
   "public_private_selector.public.description": "Tout le monde",
