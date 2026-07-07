@@ -38,7 +38,6 @@ exports[`TooltipContent have correct structure with title and emoji 1`] = `
           <img
             alt=":smile:"
             height="28"
-            loading="lazy"
             src="/static/emoji/1f604.png"
             style="object-fit: contain;"
             width="28"
@@ -75,7 +74,6 @@ exports[`TooltipContent have correct structure with title and large emoji 1`] = 
           <img
             alt=":smile:"
             height="48"
-            loading="lazy"
             src="/static/emoji/1f604.png"
             style="object-fit: contain;"
             width="48"
@@ -144,7 +142,6 @@ exports[`TooltipContent have correct structure with title, emoji and hint 1`] = 
           <img
             alt=":smile:"
             height="28"
-            loading="lazy"
             src="/static/emoji/1f604.png"
             style="object-fit: contain;"
             width="28"
