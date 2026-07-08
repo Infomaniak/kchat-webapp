@@ -80,7 +80,6 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -133,28 +132,63 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last5"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/5/image?_=0"
+                    user-name="First5 Last5"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/5/image?_=0"
+              user={
+                Object {
+                  "first_name": "First5",
+                  "id": "5",
+                  "last_name": "Last5",
+                  "nickname": "nickname5",
+                  "username": "first.last5",
+                }
+              }
+              userStatus="offline"
+              username="first.last5"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last5"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/5/image?_=0"
-                user-name="First5 Last5"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last5"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/5/image?_=0"
+                  user-name="First5 Last5"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -174,7 +208,6 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -227,28 +260,63 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last4"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/4/image?_=0"
+                    user-name="First4 Last4"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/4/image?_=0"
+              user={
+                Object {
+                  "first_name": "First4",
+                  "id": "4",
+                  "last_name": "Last4",
+                  "nickname": "nickname4",
+                  "username": "first.last4",
+                }
+              }
+              userStatus="offline"
+              username="first.last4"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last4"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/4/image?_=0"
-                user-name="First4 Last4"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last4"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/4/image?_=0"
+                  user-name="First4 Last4"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -268,7 +336,6 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -321,28 +388,63 @@ exports[`components/threading/channel_threads/thread_footer should report total 
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last3"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/3/image?_=0"
+                    user-name="First3 Last3"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/3/image?_=0"
+              user={
+                Object {
+                  "first_name": "First3",
+                  "id": "3",
+                  "last_name": "Last3",
+                  "nickname": "nickname3",
+                  "username": "first.last3",
+                }
+              }
+              userStatus="offline"
+              username="first.last3"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last3"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/3/image?_=0"
-                user-name="First3 Last3"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last3"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/3/image?_=0"
+                  user-name="First3 Last3"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <WithTooltip
@@ -660,7 +762,6 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -713,28 +814,63 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last5"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/5/image?_=0"
+                    user-name="First5 Last5"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/5/image?_=0"
+              user={
+                Object {
+                  "first_name": "First5",
+                  "id": "5",
+                  "last_name": "Last5",
+                  "nickname": "nickname5",
+                  "username": "first.last5",
+                }
+              }
+              userStatus="offline"
+              username="first.last5"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last5"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/5/image?_=0"
-                user-name="First5 Last5"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last5"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/5/image?_=0"
+                  user-name="First5 Last5"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -754,7 +890,6 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -807,28 +942,63 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last4"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/4/image?_=0"
+                    user-name="First4 Last4"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/4/image?_=0"
+              user={
+                Object {
+                  "first_name": "First4",
+                  "id": "4",
+                  "last_name": "Last4",
+                  "nickname": "nickname4",
+                  "username": "first.last4",
+                }
+              }
+              userStatus="offline"
+              username="first.last4"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last4"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/4/image?_=0"
-                user-name="First4 Last4"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last4"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/4/image?_=0"
+                  user-name="First4 Last4"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <UserAvatar
@@ -848,7 +1018,6 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               className="style--none btn-round"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -901,28 +1070,63 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
                 </Avatar>
               </WithTooltip>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-user-name="first.last3"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/3/image?_=0"
+                    user-name="First3 Last3"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/3/image?_=0"
+              user={
+                Object {
+                  "first_name": "First3",
+                  "id": "3",
+                  "last_name": "Last3",
+                  "nickname": "nickname3",
+                  "username": "first.last3",
+                }
+              }
+              userStatus="offline"
+              username="first.last3"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-user-name="first.last3"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/3/image?_=0"
-                user-name="First3 Last3"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-user-name="first.last3"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/3/image?_=0"
+                  user-name="First3 Last3"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </UserAvatar>
         <WithTooltip
