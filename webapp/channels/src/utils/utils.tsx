@@ -480,10 +480,13 @@ export function applyTheme(theme: Theme) {
 
     if (theme.mentionHighlightBg) {
         changeCss('.app__body .search-highlight', 'background:' + theme.mentionHighlightBg);
-        changeCss('.app__body .post.post--highlight', 'background:' + changeOpacity(theme.mentionHighlightBg, 0.5));
 
         // TODO: check if need
         changeCss('.app__body .post.post--comment .post__body.mention-comment', 'border-color:' + theme.mentionHighlightBg);
+    }
+
+    if (theme.highlightBg) {
+        changeCss('.app__body .post.post--highlight', 'background:' + changeOpacity(theme.highlightBg, 0.5));
     }
 
     if (theme.mentionHighlightLink) {
