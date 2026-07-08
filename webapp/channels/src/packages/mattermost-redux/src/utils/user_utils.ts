@@ -38,7 +38,7 @@ export function getInitialsFromName(name: string): string {
         return word.toUpperCase();
     }
 
-    return (word[0] + word[word.length - 1]).toUpperCase();
+    return (word[0] + word[1]).toUpperCase();
 }
 
 export function displayUsername(
