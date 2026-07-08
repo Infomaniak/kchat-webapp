@@ -136,6 +136,7 @@ const Member = ({className, channel, member, index, totalUsers, editing, actions
                 </Avatar>
                 <ProfilePopover
                     triggerComponentClass='profileSpan_userInfo'
+                    triggerComponentStyle={{display: 'flex'}}
                     userId={member.user.id}
                     src={userProfileSrc}
                     hideStatus={member.user.is_bot}
