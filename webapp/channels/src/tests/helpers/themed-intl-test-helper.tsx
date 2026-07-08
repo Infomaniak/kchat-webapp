@@ -37,6 +37,7 @@ const DEFAULT_THEME: Theme = {
     buttonColor: stubValue,
     errorTextColor: stubValue,
     mentionHighlightBg: stubValue,
+    highlightBg: stubValue,
     mentionHighlightLink: stubValue,
     codeTheme: stubValue,
 };
