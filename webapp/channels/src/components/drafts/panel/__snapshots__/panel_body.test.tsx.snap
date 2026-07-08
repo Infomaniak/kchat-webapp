@@ -56,7 +56,6 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           >
             <span
               className="status-wrapper style--none"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -118,29 +117,64 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-team-name="team-id"
+                    k-chat-user-name="username"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/user_id/image?_=0"
+                    user-name="undefined undefined"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/user_id/image?_=0"
+              teamName="team-id"
+              user={
+                Object {
+                  "id": "user_id",
+                  "roles": "system_user",
+                  "username": "username",
+                }
+              }
+              userStatus="offline"
+              username="username"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-team-name="team-id"
-                k-chat-user-name="username"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/user_id/image?_=0"
-                user-name="undefined undefined"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-team-name="team-id"
+                  k-chat-user-name="username"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/user_id/image?_=0"
+                  user-name="undefined undefined"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -311,7 +345,6 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           >
             <span
               className="status-wrapper style--none"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -373,29 +406,64 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-team-name="team-id"
+                    k-chat-user-name="username"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/user_id/image?_=0"
+                    user-name="undefined undefined"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/user_id/image?_=0"
+              teamName="team-id"
+              user={
+                Object {
+                  "id": "user_id",
+                  "roles": "system_user",
+                  "username": "username",
+                }
+              }
+              userStatus="offline"
+              username="username"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-team-name="team-id"
-                k-chat-user-name="username"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/user_id/image?_=0"
-                user-name="undefined undefined"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-team-name="team-id"
+                  k-chat-user-name="username"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/user_id/image?_=0"
+                  user-name="undefined undefined"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -572,7 +640,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           >
             <span
               className="status-wrapper style--none"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -634,29 +701,64 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-team-name="team-id"
+                    k-chat-user-name="username"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/user_id/image?_=0"
+                    user-name="undefined undefined"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/user_id/image?_=0"
+              teamName="team-id"
+              user={
+                Object {
+                  "id": "user_id",
+                  "roles": "system_user",
+                  "username": "username",
+                }
+              }
+              userStatus="offline"
+              username="username"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-team-name="team-id"
-                k-chat-user-name="username"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/user_id/image?_=0"
-                user-name="undefined undefined"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-team-name="team-id"
+                  k-chat-user-name="username"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/user_id/image?_=0"
+                  user-name="undefined undefined"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
@@ -890,7 +992,6 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           >
             <span
               className="status-wrapper style--none"
-              onClick={[Function]}
               role="button"
               style={
                 Object {
@@ -952,29 +1053,64 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
                 </StatusOfflineIcon>
               </Memo(StatusIcon)>
             </span>
-            <div
-              style={
+            <WcContactSheet
+              accountId={-1}
+              badges={Array []}
+              isUserGuest={false}
+              sheetRef={
                 Object {
-                  "left": "-9999px",
-                  "pointerEvents": "none",
-                  "position": "absolute",
+                  "current": <wc-contact-sheet
+                    account-id="-1"
+                    background-color="transparent"
+                    is-external="false"
+                    k-chat-team-name="team-id"
+                    k-chat-user-name="username"
+                    presence="offline"
+                    prevent-open-on-hover="true"
+                    prevent-stop-propagation="true"
+                    size="md"
+                    src="/api/v4/users/user_id/image?_=0"
+                    user-name="undefined undefined"
+                  />,
                 }
               }
+              shouldDisplayMinimalPanel={false}
+              src="/api/v4/users/user_id/image?_=0"
+              teamName="team-id"
+              user={
+                Object {
+                  "id": "user_id",
+                  "roles": "system_user",
+                  "username": "username",
+                }
+              }
+              userStatus="offline"
+              username="username"
             >
-              <wc-contact-sheet
-                account-id={-1}
-                background-color="transparent"
-                is-external={false}
-                k-chat-team-name="team-id"
-                k-chat-user-name="username"
-                presence="offline"
-                prevent-open-on-hover={true}
-                prevent-stop-propagation={true}
-                size="md"
-                src="/api/v4/users/user_id/image?_=0"
-                user-name="undefined undefined"
-              />
-            </div>
+              <div
+                style={
+                  Object {
+                    "left": "-9999px",
+                    "pointerEvents": "none",
+                    "position": "absolute",
+                  }
+                }
+              >
+                <wc-contact-sheet
+                  account-id={-1}
+                  background-color="transparent"
+                  is-external={false}
+                  k-chat-team-name="team-id"
+                  k-chat-user-name="username"
+                  presence="offline"
+                  prevent-open-on-hover={true}
+                  prevent-stop-propagation={true}
+                  size="md"
+                  src="/api/v4/users/user_id/image?_=0"
+                  user-name="undefined undefined"
+                />
+              </div>
+            </WcContactSheet>
           </ProfilePopoverController>
         </ProfilePicture>
       </div>
