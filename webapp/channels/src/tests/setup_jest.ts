@@ -60,6 +60,12 @@ jest.mock('utils/url_import', () => ({
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
+global.IntersectionObserver = class IntersectionObserver {
+    disconnect() {}
+    observe() {}
+    unobserve() {}
+} as any;
+
 // Mock crypto.randomUUID for tests (not available in jsdom)
 // Returns a fixed UUID to ensure test consistency
 Object.defineProperty(global.crypto, 'randomUUID', {

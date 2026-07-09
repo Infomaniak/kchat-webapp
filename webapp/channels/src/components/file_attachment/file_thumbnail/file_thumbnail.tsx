@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {memo} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 
 import type {FileInfo} from '@mattermost/types/files';
 
@@ -32,6 +32,19 @@ const FileThumbnail = ({
 }: Props) => {
     const {id, extension, has_preview_image: hasPreviewImage, width = 0, height = 0} = (fileInfo as FileInfo);
     const mimeType = (fileInfo as FileInfo).mime_type || (fileInfo as FilePreviewInfo | FilePreviewInfoLimited).type;
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (ref.current && extension && isGIFImage(extension) && hasPreviewImage && typeof IntersectionObserver !== 'undefined') {
+            const observer = new IntersectionObserver((entries) => {
+                setIsVisible(entries[0]?.isIntersecting ?? false);
+            });
+            observer.observe(ref.current);
+            return () => observer.disconnect();
+        }
+        return undefined;
+    }, [extension, hasPreviewImage]);
 
     let type = FileTypes.OTHER;
     if (extension) {
@@ -50,16 +63,21 @@ const FileThumbnail = ({
                 className += ' normal';
             }
 
-            let thumbnailUrl = getFileThumbnailUrl(id);
-            if (extension && isGIFImage(extension) && !hasPreviewImage) {
-                thumbnailUrl = getFileUrl(id);
+            let displayUrl = getFileThumbnailUrl(id);
+            if (extension && isGIFImage(extension)) {
+                if (hasPreviewImage) {
+                    displayUrl = isVisible ? getFileUrl(id) : getFileThumbnailUrl(id);
+                } else {
+                    displayUrl = getFileUrl(id);
+                }
             }
 
             return (
                 <div
+                    ref={ref}
                     className={className}
                     style={{
-                        backgroundImage: `url(${thumbnailUrl})`,
+                        backgroundImage: `url(${displayUrl})`,
                         backgroundSize: 'cover',
                     }}
                 />
