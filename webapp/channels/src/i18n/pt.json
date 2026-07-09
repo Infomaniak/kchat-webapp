@@ -1972,7 +1972,9 @@
   "pluggable.errorOccurred": "Ocorreu um erro no plugin {pluginId}.",
   "pluggable.errorRefresh": "Atualizar?",
   "pluginsMenu.more_actions": "Mais ações",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {não foi notificado(a) por esta menção porque não está no canal. Contacte um administrador para o(a) adicionar a este canal.} other {não foram notificados(as) por esta menção porque não estão no canal. Contacte um administrador para os(as) adicionar a este canal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {não foi notificado(a) por esta menção porque não está no canal. Contacte um administrador para o(a) adicionar a este canal privado.} other {não foram notificados(as) por esta menção porque não estão no canal. Contacte um administrador para os(as) adicionar a este canal privado.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {não foi notificado(a) por esta menção porque não está no canal. Contacte um administrador para o(a) adicionar a este canal privado.} other {não foram notificados(as) por esta menção porque não estão no canal. Contacte um administrador para os(as) adicionar a este canal privado.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "<mentions></mentions> {count, plural, one {não foi notificado(a) por esta menção porque não está no canal. Não pode ser adicionado(a) ao canal porque não é membro dos grupos associados. Para o(a) adicionar a este canal, deve ser adicionado(a) aos grupos associados.} other {não foram notificados(as) por esta menção porque não estão no canal. Não podem ser adicionados(as) ao canal porque não são membros dos grupos associados. Para os(as) adicionar a este canal, devem ser adicionados(as) aos grupos associados.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "e",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} outros",
@@ -3206,6 +3208,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Membro} other {Membros}}",
   "view_user_group_modal.pluginSynced": "Plugin SINCRONIZADO",
   "vocals.show": "Ouvir a mensagem",
+  "vocals.show_less": "Mostrar menos",
+  "vocals.show_more": "Mostrar mais",
   "vocals.transcript_loading": "Transcrição de áudio em andamento...",
   "voiceMessage.canvasFallback.recording": "Gravação iniciada",
   "voiceMessage.preview.title": "Mensagem de voz",
@@ -3283,7 +3287,5 @@
   "workspace_limits.search_limit.view_plans": "Ver planos",
   "workspace_limits.search_message_limit.banner_text": "Algumas mensagens mais antigas podem não ser exibidas porque o seu espaço de trabalho contém mais de {messages} mensagens. <a>{ctaAction}</a>",
   "yourcomputer": "O seu computador",
-  "yourmobiledevice": "Seu dispositivo móvel",
-  "vocals.show_more": "Mostrar mais",
-  "vocals.show_less": "Mostrar menos"
+  "yourmobiledevice": "Seu dispositivo móvel"
 }

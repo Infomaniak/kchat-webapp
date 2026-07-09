@@ -1972,7 +1972,9 @@
   "pluggable.errorOccurred": "Det oppstod en feil i plugin-modulen {pluginId}.",
   "pluggable.errorRefresh": "Oppdater?",
   "pluginsMenu.more_actions": "Flere handlinger",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Kontakt en administrator for å legge ham til i denne kanalen.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. Kontakt en administrator for å legge dem til i denne kanalen.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Kontakt en administrator for å legge ham til i denne private kanalen.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. Kontakt en administrator for å legge dem til i denne private kanalen.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Kontakt en administrator for å legge ham til i denne private kanalen.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. Kontakt en administrator for å legge dem til i denne private kanalen.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {ble ikke varslet om denne omtalen fordi han ikke er i kanalen. Han kan ikke legges til i kanalen fordi han ikke er medlem av de tilknyttede gruppene. For å legge ham til i denne kanalen, må han legges til i de tilknyttede gruppene.} other {ble ikke varslet om denne omtalen fordi de ikke er i kanalen. De kan ikke legges til i kanalen fordi de ikke er medlemmer av de tilknyttede gruppene. For å legge dem til i denne kanalen, må de legges til i de tilknyttede gruppene.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "og",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andre",
@@ -3206,6 +3208,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {medlem} other {medlemmer}}",
   "view_user_group_modal.pluginSynced": "Pluginen er synkronisert",
   "vocals.show": "Lytt til meldingen",
+  "vocals.show_less": "Vis mindre",
+  "vocals.show_more": "Vis mer",
   "vocals.transcript_loading": "Lydtranskripsjon pågår ...",
   "voiceMessage.canvasFallback.recording": "Opptaket er startet",
   "voiceMessage.preview.title": "Talebeskjed",
@@ -3283,7 +3287,5 @@
   "workspace_limits.search_limit.view_plans": "Vis planer",
   "workspace_limits.search_message_limit.banner_text": "Noen eldre meldinger vises kanskje ikke fordi arbeidsområdet ditt inneholder mer enn {messages} meldinger. <a>{ctaAction}</a>",
   "yourcomputer": "Datamaskinen din",
-  "yourmobiledevice": "Din mobile enhet",
-  "vocals.show_more": "Vis mer",
-  "vocals.show_less": "Vis mindre"
+  "yourmobiledevice": "Din mobile enhet"
 }

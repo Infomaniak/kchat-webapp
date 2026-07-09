@@ -9,7 +9,7 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {sendAddToChannelEphemeralPost} from 'actions/global_actions';
 
-import PostAddChannelMember from 'components/post_view/post_add_channel_member/post_add_channel_member';
+import PostChannelMemberMention from 'components/post_view/post_add_channel_member/post_add_channel_member';
 import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 
 import {TestHelper} from 'utils/test_helper';
@@ -20,7 +20,7 @@ jest.mock('actions/global_actions', () => {
     };
 });
 
-describe('components/post_view/PostAddChannelMember', () => {
+describe('components/post_view/PostChannelMemberMention', () => {
     const post: Post = TestHelper.getPostMock({
         id: 'post_id_1',
         root_id: 'root_id',
@@ -51,7 +51,7 @@ describe('components/post_view/PostAddChannelMember', () => {
             ...requiredProps,
             postId: '',
         };
-        const wrapper = shallow(<PostAddChannelMember {...props}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -60,12 +60,12 @@ describe('components/post_view/PostAddChannelMember', () => {
             ...requiredProps,
             channelType: '',
         };
-        const wrapper = shallow(<PostAddChannelMember {...props}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should match snapshot, public channel', () => {
-        const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -75,7 +75,7 @@ describe('components/post_view/PostAddChannelMember', () => {
             channelType: 'P',
         };
 
-        const wrapper = shallow(<PostAddChannelMember {...props}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -88,12 +88,12 @@ describe('components/post_view/PostAddChannelMember', () => {
             usernames,
         };
 
-        const wrapper = shallow(<PostAddChannelMember {...props}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
         expect(wrapper.state('expanded')).toEqual(false);
         expect(wrapper).toMatchSnapshot();
 
         // Call expand handler directly since the link is rendered inside FormattedMessage
-        (wrapper.instance() as PostAddChannelMember).expand();
+        (wrapper.instance() as PostChannelMemberMention).expand();
         wrapper.update();
         expect(wrapper.state('expanded')).toEqual(true);
         expect(wrapper).toMatchSnapshot();
@@ -107,11 +107,11 @@ describe('components/post_view/PostAddChannelMember', () => {
         };
         const props: Props = {...requiredProps, actions};
         const wrapper = shallow(
-            <PostAddChannelMember {...props}/>,
+            <PostChannelMemberMention {...props}/>,
         );
 
         // Call handler directly since the link is rendered inside FormattedMessage
-        (wrapper.instance() as PostAddChannelMember).handleAddChannelMember();
+        (wrapper.instance() as PostChannelMemberMention).handleAddChannelMember();
 
         expect(actions.addChannelMember).toHaveBeenCalledTimes(1);
         expect(actions.addChannelMember).toHaveBeenCalledWith(post.channel_id, requiredProps.userIds[0], post.root_id);
@@ -131,16 +131,59 @@ describe('components/post_view/PostAddChannelMember', () => {
         };
         const props: Props = {...requiredProps, userIds, usernames, actions};
         const wrapper = shallow(
-            <PostAddChannelMember {...props}/>,
+            <PostChannelMemberMention {...props}/>,
         );
 
         // Call handler directly since the link is rendered inside FormattedMessage
-        (wrapper.instance() as PostAddChannelMember).handleAddChannelMember();
+        (wrapper.instance() as PostChannelMemberMention).handleAddChannelMember();
         expect(actions.addChannelMember).toHaveBeenCalledTimes(4);
     });
 
+    test('should match snapshot, ask mode in public channel', () => {
+        const props: Props = {
+            ...requiredProps,
+            askMode: true,
+        };
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, ask mode in private channel', () => {
+        const props: Props = {
+            ...requiredProps,
+            channelType: 'P',
+            askMode: true,
+        };
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, ask mode with no-groups usernames', () => {
+        const props: Props = {
+            ...requiredProps,
+            channelType: 'P',
+            askMode: true,
+            noGroupsUsernames: ['user_id_2'],
+        };
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not have addLink in ask mode', () => {
+        const props: Props = {
+            ...requiredProps,
+            askMode: true,
+        };
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
+        const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
+        const values = formattedMessage.prop('values') as Record<string, unknown> | undefined;
+        expect(values).toBeDefined();
+        expect(values?.addLink).toBeUndefined();
+        expect(values?.notifyLink).toBeUndefined();
+    });
+
     test('handleAddChannelMember should be passed to FormattedMessage addLink callback', () => {
-        const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
         const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
         const values = formattedMessage.prop('values');
         expect(values).toBeDefined();
@@ -151,7 +194,7 @@ describe('components/post_view/PostAddChannelMember', () => {
         expect(typeof addLink).toBe('function');
 
         // Create a mock onClick and verify it gets called when the link would be clicked
-        const instance = wrapper.instance() as PostAddChannelMember;
+        const instance = wrapper.instance() as PostChannelMemberMention;
         const handleAddSpy = jest.spyOn(instance, 'handleAddChannelMember');
 
         // Simulate what happens when FormattedMessage renders the addLink
@@ -169,7 +212,7 @@ describe('components/post_view/PostAddChannelMember', () => {
             ...requiredProps,
             noGroupsUsernames: ['user_id_2'],
         };
-        const wrapper = shallow(<PostAddChannelMember {...props}/>);
+        const wrapper = shallow(<PostChannelMemberMention {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 });

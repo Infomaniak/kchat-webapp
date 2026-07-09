@@ -1972,7 +1972,9 @@
   "pluggable.errorOccurred": "Der opstod en fejl i {pluginId}-pluginet.",
   "pluggable.errorRefresh": "Opdater?",
   "pluginsMenu.more_actions": "Flere handlinger",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne kanal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne private kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne private kanal.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne private kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne private kanal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Vedkommende kan ikke tilføjes til kanalen, fordi vedkommende ikke er medlem af de tilknyttede grupper. For at tilføje vedkommende til denne kanal, skal vedkommende tilføjes til de tilknyttede grupper.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. De kan ikke tilføjes til kanalen, fordi de ikke er medlemmer af de tilknyttede grupper. For at tilføje dem til denne kanal, skal de tilføjes til de tilknyttede grupper.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "og",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andre",
@@ -3206,6 +3208,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Medlem} other {Medlemmer}}",
   "view_user_group_modal.pluginSynced": "Plugin synkroniseret",
   "vocals.show": "Lyt til beskeden",
+  "vocals.show_less": "Vis mindre",
+  "vocals.show_more": "Vis mere",
   "vocals.transcript_loading": "Lydtransskription er i gang...",
   "voiceMessage.canvasFallback.recording": "Optagelse startet",
   "voiceMessage.preview.title": "Stemmebesked",
@@ -3283,7 +3287,5 @@
   "workspace_limits.search_limit.view_plans": "Se planer",
   "workspace_limits.search_message_limit.banner_text": "Nogle ældre beskeder vises muligvis ikke, fordi dit arbejdsområde indeholder mere end {messages} beskeder. <a>{ctaAction}</a>",
   "yourcomputer": "Din computer",
-  "yourmobiledevice": "Din mobile enhed",
-  "vocals.show_more": "Vis mere",
-  "vocals.show_less": "Vis mindre"
+  "yourmobiledevice": "Din mobile enhed"
 }

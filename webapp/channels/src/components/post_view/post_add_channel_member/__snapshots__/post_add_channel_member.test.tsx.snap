@@ -1,10 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, empty channelType 1`] = `""`;
+exports[`components/post_view/PostChannelMemberMention should match snapshot, ask mode in private channel 1`] = `
+<Fragment>
+  <p>
+    <MemoizedFormattedMessage
+      defaultMessage="<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.}}"
+      id="post_body.check_for_out_of_channel_ephemeral.ask_admin_private"
+      values={
+        Object {
+          "count": 1,
+          "mentions": [Function],
+        }
+      }
+    />
+  </p>
+</Fragment>
+`;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, empty postId 1`] = `""`;
+exports[`components/post_view/PostChannelMemberMention should match snapshot, ask mode in public channel 1`] = `
+<Fragment>
+  <p>
+    <MemoizedFormattedMessage
+      defaultMessage="<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this channel.}}"
+      id="post_body.check_for_out_of_channel_ephemeral.ask"
+      values={
+        Object {
+          "count": 1,
+          "mentions": [Function],
+        }
+      }
+    />
+  </p>
+</Fragment>
+`;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, more than 3 users 1`] = `
+exports[`components/post_view/PostChannelMemberMention should match snapshot, ask mode with no-groups usernames 1`] = `
+<Fragment>
+  <p>
+    <MemoizedFormattedMessage
+      defaultMessage="<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.}}"
+      id="post_body.check_for_out_of_channel_ephemeral.ask_admin_private"
+      values={
+        Object {
+          "count": 1,
+          "mentions": [Function],
+        }
+      }
+    />
+  </p>
+  <p>
+    <MemoizedFormattedMessage
+      defaultMessage="<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.}}"
+      id="post_body.check_for_out_of_channel_ephemeral.ask_admin_private"
+      values={
+        Object {
+          "count": 1,
+          "mentions": [Function],
+        }
+      }
+    />
+  </p>
+</Fragment>
+`;
+
+exports[`components/post_view/PostChannelMemberMention should match snapshot, empty channelType 1`] = `""`;
+
+exports[`components/post_view/PostChannelMemberMention should match snapshot, empty postId 1`] = `""`;
+
+exports[`components/post_view/PostChannelMemberMention should match snapshot, more than 3 users 1`] = `
 <Fragment>
   <p>
     <MemoizedFormattedMessage
@@ -23,7 +86,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
 </Fragment>
 `;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, more than 3 users 2`] = `
+exports[`components/post_view/PostChannelMemberMention should match snapshot, more than 3 users 2`] = `
 <Fragment>
   <p>
     <MemoizedFormattedMessage
@@ -42,7 +105,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, more t
 </Fragment>
 `;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, private channel 1`] = `
+exports[`components/post_view/PostChannelMemberMention should match snapshot, private channel 1`] = `
 <Fragment>
   <p>
     <MemoizedFormattedMessage
@@ -60,7 +123,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, privat
 </Fragment>
 `;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, public channel 1`] = `
+exports[`components/post_view/PostChannelMemberMention should match snapshot, public channel 1`] = `
 <Fragment>
   <p>
     <MemoizedFormattedMessage
@@ -79,7 +142,7 @@ exports[`components/post_view/PostAddChannelMember should match snapshot, public
 </Fragment>
 `;
 
-exports[`components/post_view/PostAddChannelMember should match snapshot, with no-groups usernames 1`] = `
+exports[`components/post_view/PostChannelMemberMention should match snapshot, with no-groups usernames 1`] = `
 <Fragment>
   <p>
     <MemoizedFormattedMessage

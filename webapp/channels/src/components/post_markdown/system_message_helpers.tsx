@@ -17,7 +17,7 @@ import CallNotificationMessage from 'components/kmeet_conference/post_type';
 import Markdown from 'components/markdown';
 import CombinedSystemMessage from 'components/post_view/combined_system_message';
 import GMConversionMessage from 'components/post_view/gm_conversion_message/gm_conversion_message';
-import PostAddChannelMember from 'components/post_view/post_add_channel_member';
+import PostChannelMemberMention from 'components/post_view/post_add_channel_member';
 import PostNotifyChannelMember from 'components/post_view/post_notify_channel_member/post_notify_channel_member';
 import VoiceMessageAttachmentPlayer from 'components/voice/post_type';
 
@@ -468,18 +468,29 @@ export function isAddMemberProps(v: unknown): v is AddMemberProps {
 export function renderSystemMessage(post: Post, currentTeamName: string, channel: Channel, hideGuestTags: boolean, isUserCanManageMembers?: boolean): ReactNode {
     const isEphemeral = isPostEphemeral(post);
 
+    let props: AddMemberProps | undefined;
+    let isAskMode = false;
+
     if (isAddMemberProps(post.props?.add_channel_member)) {
-        if (channel && (channel.type === General.PRIVATE_CHANNEL || channel.type === General.OPEN_CHANNEL) &&
-            isUserCanManageMembers &&
-            isEphemeral
-        ) {
-            const addMemberProps = post.props.add_channel_member;
+        props = post.props.add_channel_member;
+        isAskMode = false;
+    } else if (isAddMemberProps(post.props?.ask_add_channel_member)) {
+        props = post.props.ask_add_channel_member;
+        isAskMode = true;
+    }
+
+    if (props) {
+        const channelSupported = channel &&
+            (channel.type === General.PRIVATE_CHANNEL || channel.type === General.OPEN_CHANNEL);
+
+        if (channelSupported && isEphemeral) {
             return (
-                <PostAddChannelMember
-                    postId={addMemberProps.post_id}
-                    userIds={addMemberProps.not_in_channel_user_ids}
-                    noGroupsUsernames={addMemberProps.not_in_groups_usernames}
-                    usernames={addMemberProps.not_in_channel_usernames}
+                <PostChannelMemberMention
+                    postId={props.post_id}
+                    userIds={props.not_in_channel_user_ids}
+                    noGroupsUsernames={props.not_in_groups_usernames}
+                    usernames={props.not_in_channel_usernames}
+                    askMode={isAskMode}
                 />
             );
         }
