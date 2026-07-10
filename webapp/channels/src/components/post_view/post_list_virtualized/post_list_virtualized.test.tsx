@@ -345,13 +345,13 @@ describe('PostList', () => {
                 expected: false,
             },
             {
-                name: 'when 11 pixel from the bottom',
-                scrollOffset: 489,
+                name: 'when 110 pixel from the bottom',
+                scrollOffset: 390,
                 expected: false,
             },
             {
-                name: 'when 9 pixel from the bottom also considered to be bottom',
-                scrollOffset: 490,
+                name: 'when 99 pixel from the bottom also considered to be bottom',
+                scrollOffset: 401,
                 expected: true,
             },
             {
