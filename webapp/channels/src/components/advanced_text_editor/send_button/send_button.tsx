@@ -7,7 +7,7 @@ import React, {memo, useCallback, useMemo} from 'react';
 import {defineMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {SchedulingInfoInput} from '@mattermost/types/schedule_post';
 
 import {isScheduledPostsEnabled} from 'mattermost-redux/selectors/entities/scheduled_posts';
 
@@ -21,7 +21,7 @@ import {ShortcutKeys} from 'components/with_tooltip/tooltip_shortcut';
 import './send_button.scss';
 
 type SendButtonProps = {
-    handleSubmit: (schedulingInfo?: SchedulingInfo) => Promise<boolean>;
+    handleSubmit: (schedulingInfo?: SchedulingInfoInput) => Promise<boolean>;
     disabled: boolean;
     channelId: string;
 }
@@ -30,7 +30,7 @@ const SendButton = ({disabled, handleSubmit, channelId}: SendButtonProps) => {
     const {formatMessage} = useIntl();
     const isScheduledPostEnabled = useSelector(isScheduledPostsEnabled);
 
-    const sendMessage = useCallback((e: React.FormEvent, schedulingInfo?: SchedulingInfo) => {
+    const sendMessage = useCallback((e: React.FormEvent, schedulingInfo?: SchedulingInfoInput) => {
         e?.stopPropagation();
         e?.preventDefault();
         handleSubmit(schedulingInfo);

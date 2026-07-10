@@ -7,7 +7,7 @@ import {FormattedMessage} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {Channel} from '@mattermost/types/channels';
-import type {ScheduledPost, SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {ScheduledPost, SchedulingInfoInput} from '@mattermost/types/schedule_post';
 
 import {fetchMissingChannels} from 'mattermost-redux/actions/channels';
 import {isDeactivatedDirectChannel} from 'mattermost-redux/selectors/entities/channels';
@@ -58,7 +58,7 @@ const copyTextTooltipText = (
 type Props = {
     scheduledPost: ScheduledPost;
     channel?: Channel;
-    onReschedule: (timestamp: number | 'monday' | 'tomorrow') => Promise<{error?: string}>;
+    onReschedule: (timestamp: SchedulingInfoInput['scheduled_at']) => Promise<{error?: string}>;
     onDelete: (scheduledPostId: string) => Promise<{error?: string}>;
     onSend: (scheduledPostId: string) => void;
     onEdit: () => void;
@@ -81,7 +81,7 @@ function ScheduledPostActions({scheduledPost, channel, onReschedule, onDelete, o
         }
     }, [channel, dispatch]);
 
-    const handleReschedulePost = useCallback((schedulingInfo: SchedulingInfo) => {
+    const handleReschedulePost = useCallback((schedulingInfo: SchedulingInfoInput) => {
         onReschedule(schedulingInfo.scheduled_at);
     }, [onReschedule]);
 

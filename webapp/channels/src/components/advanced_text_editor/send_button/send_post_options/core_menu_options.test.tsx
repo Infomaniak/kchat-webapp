@@ -140,7 +140,7 @@ describe('CoreMenuOptions Component', () => {
         const tomorrowOption = screen.getByText(/Tomorrow at/);
         fireEvent.click(tomorrowOption);
 
-        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), 'tomorrow');
+        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), {type: 'fixed', value: 'tomorrow'});
     });
 
     it('should NOT include trailing element when isDM and isBot are true', () => {

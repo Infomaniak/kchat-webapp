@@ -120,7 +120,7 @@ import type {RemoteCluster, RemoteClusterAcceptInvite, RemoteClusterPatch, Remot
 import type {UserReport, UserReportFilter, UserReportOptions} from '@mattermost/types/reports';
 import type {Role} from '@mattermost/types/roles';
 import type {SamlCertificateStatus, SamlMetadataResponse} from '@mattermost/types/saml';
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPost, ScheduledPostInput} from '@mattermost/types/schedule_post';
 import type {Scheme} from '@mattermost/types/schemes';
 import type {Session} from '@mattermost/types/sessions';
 import type {CompleteOnboardingRequest} from '@mattermost/types/setup';
@@ -4922,7 +4922,7 @@ export default class Client4 {
     }
 
     // Schedule Post methods
-    createScheduledPost = (schedulePost: PartialExcept<ScheduledPost, 'channel_id' | 'message' | 'scheduled_at'>, connectionId: string) => {
+    createScheduledPost = (schedulePost: PartialExcept<ScheduledPostInput, 'channel_id' | 'message' | 'scheduled_at'>, connectionId: string) => {
         this.trackFeatureEvent('scheduled_posts', 'create_scheduled_post', {actual_user_id: schedulePost.user_id, user_agent: 'desktop'});
 
         return this.doFetchWithResponse<ScheduledPost>(
@@ -4939,7 +4939,7 @@ export default class Client4 {
         );
     };
 
-    updateScheduledPost = (schedulePost: ScheduledPost, connectionId: string) => {
+    updateScheduledPost = (schedulePost: ScheduledPostInput, connectionId: string) => {
         this.trackFeatureEvent('scheduled_posts', 'update_scheduled_post', {actual_user_id: schedulePost.user_id, user_agent: 'desktop'});
 
         return this.doFetchWithResponse<ScheduledPost>(

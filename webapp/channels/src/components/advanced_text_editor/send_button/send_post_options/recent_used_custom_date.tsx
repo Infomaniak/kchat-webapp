@@ -7,6 +7,7 @@ import React, {memo, useCallback, useMemo} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
+import type {ScheduledAt} from '@mattermost/types/schedule_post';
 import type {GlobalState} from '@mattermost/types/store';
 
 import {get as getPreference} from 'mattermost-redux/selectors/entities/preferences';
@@ -17,7 +18,7 @@ import Timestamp, {RelativeRanges} from 'components/timestamp';
 import {scheduledPosts} from 'utils/constants';
 
 type Props = {
-    handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
+    handleOnSelect: (e: React.FormEvent, scheduledAt: ScheduledAt) => void;
     userCurrentTimezone: string;
     tomorrow8amTime: number;
     nextMonday: number;
@@ -86,7 +87,7 @@ function RecentUsedCustomDate({handleOnSelect, userCurrentTimezone, nextMonday, 
         }
         return {};
     }, [recentlyUsedCustomDate]);
-    const handleRecentlyUsedCustomTime = useCallback((e) => handleOnSelect(e, recentlyUsedCustomDateVal.timestamp!), [handleOnSelect, recentlyUsedCustomDateVal.timestamp]);
+    const handleRecentlyUsedCustomTime = useCallback((e) => handleOnSelect(e, {type: 'custom', value: recentlyUsedCustomDateVal.timestamp!}), [handleOnSelect, recentlyUsedCustomDateVal.timestamp]);
 
     if (
         !shouldShowRecentlyUsedCustomTime(now.toMillis(), recentlyUsedCustomDateVal, userCurrentTimezone, tomorrow8amTime, nextMonday)

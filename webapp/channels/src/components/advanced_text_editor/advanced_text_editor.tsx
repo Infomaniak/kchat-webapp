@@ -8,7 +8,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {ServerError} from '@mattermost/types/errors';
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {SchedulingInfoInput} from '@mattermost/types/schedule_post';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
 import {Permissions} from 'mattermost-redux/constants';
@@ -389,7 +389,7 @@ const AdvancedTextEditor = ({
         postId,
     );
 
-    const handleSubmitWithErrorHandling = useCallback(async (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions): Promise<boolean> => {
+    const handleSubmitWithErrorHandling = useCallback(async (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfoInput, options?: CreatePostOptions): Promise<boolean> => {
         const success = await handleSubmit(submittingDraft, schedulingInfo, options);
         if (success && !errorClass) {
             const messageStatusElement = messageStatusRef.current;
@@ -622,7 +622,7 @@ const AdvancedTextEditor = ({
         draftRef.current = draft;
     }, [draft]);
 
-    const handleSubmitPostAndScheduledMessage = useCallback(async (schedulingInfo?: SchedulingInfo): Promise<boolean> => {
+    const handleSubmitPostAndScheduledMessage = useCallback(async (schedulingInfo?: SchedulingInfoInput): Promise<boolean> => {
         return handleSubmitWithErrorHandling(undefined, schedulingInfo);
     }, [handleSubmitWithErrorHandling]);
 

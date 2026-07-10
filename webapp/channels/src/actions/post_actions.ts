@@ -7,7 +7,7 @@ import {batchActions} from 'redux-batched-actions';
 import type {FileInfo} from '@mattermost/types/files';
 import type {GroupChannel} from '@mattermost/types/groups';
 import type {Post} from '@mattermost/types/posts';
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPostInput} from '@mattermost/types/schedule_post';
 
 // import {getMyChannelMember} from 'mattermost-redux/actions/channels';
 import {SearchTypes} from 'mattermost-redux/action_types';
@@ -164,7 +164,7 @@ export function createPost(
     };
 }
 
-export function createSchedulePostFromDraft(scheduledPost: ScheduledPost): ActionFuncAsync<PostActions.CreatePostReturnType> {
+export function createSchedulePostFromDraft(scheduledPost: ScheduledPostInput): ActionFuncAsync<PostActions.CreatePostReturnType> {
     return async (dispatch, getState) => {
         dispatch(addRecentEmojisForMessage(scheduledPost.message));
 

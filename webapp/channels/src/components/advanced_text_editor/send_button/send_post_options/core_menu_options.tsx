@@ -6,6 +6,8 @@ import React, {memo, useCallback, useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useSelector} from 'react-redux';
 
+import type {ScheduledAt} from '@mattermost/types/schedule_post';
+
 import {
     TrackPropertyUser, TrackPropertyUserAgent,
     TrackScheduledPostsFeature,
@@ -23,7 +25,7 @@ import Timestamp from 'components/timestamp';
 import RecentUsedCustomDate from './recent_used_custom_date';
 
 type Props = {
-    handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
+    handleOnSelect: (e: React.FormEvent, scheduledAt: ScheduledAt) => void;
     channelId: string;
     allowCustom: boolean;
 }
@@ -116,9 +118,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
-    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
+    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, {type: 'fixed', value: 'tomorrow'}), [handleOnSelect]);
 
     const optionTomorrow = (
         <Menu.Item
@@ -137,9 +137,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         />
     );
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
-    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
+    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, {type: 'fixed', value: 'monday'}), [handleOnSelect]);
 
     const optionNextMonday = (
         <Menu.Item

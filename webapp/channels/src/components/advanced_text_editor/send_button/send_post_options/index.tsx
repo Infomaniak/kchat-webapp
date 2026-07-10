@@ -7,7 +7,7 @@ import React, {useCallback, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {SchedulingInfoInput, ScheduledAt} from '@mattermost/types/schedule_post';
 
 import {getCloudLimits} from 'mattermost-redux/selectors/entities/cloud';
 import {getCurrentPackName} from 'mattermost-redux/selectors/entities/teams';
@@ -28,7 +28,7 @@ import './style.scss';
 type Props = {
     channelId: string;
     disabled?: boolean;
-    onSelect: (schedulingInfo: SchedulingInfo) => void;
+    onSelect: (schedulingInfo: SchedulingInfoInput) => void;
     transformOriginVertical?: 'top' | 'bottom';
     anchorOrigin?: 'top' | 'bottom';
     menuIcon?: React.ReactNode;
@@ -41,19 +41,19 @@ export function SendPostOptions({disabled, onSelect, channelId, transformOriginV
 
     const [isUpdating, setIsUpdating] = useState(false);
 
-    const handleOnSelect = useCallback((e: React.FormEvent, scheduledAt: number) => {
+    const handleOnSelect = useCallback((e: React.FormEvent, scheduledAt: ScheduledAt) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const schedulingInfo: SchedulingInfo = {
-            scheduled_at: scheduledAt,
+        const schedulingInfo: SchedulingInfoInput = {
+            scheduled_at: scheduledAt.value,
         };
 
         onSelect(schedulingInfo);
     }, [onSelect]);
 
     const handleSelectCustomTime = useCallback((scheduledAt: number) => {
-        const schedulingInfo: SchedulingInfo = {
+        const schedulingInfo: SchedulingInfoInput = {
             scheduled_at: scheduledAt,
         };
 
