@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import type {Dispatch} from 'redux';
 import {bindActionCreators} from 'redux';
 
+import {getPost, doPostActionWithCookie} from 'mattermost-redux/actions/posts';
 import {appsEnabled} from 'mattermost-redux/selectors/entities/apps';
 
 import {toggleEmbedVisibility} from 'actions/post_actions';
@@ -27,7 +28,7 @@ function mapStateToProps(state: GlobalState, ownProps: Omit<Props, 'appsEnabled'
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        actions: bindActionCreators({toggleEmbedVisibility}, dispatch),
+        actions: bindActionCreators({toggleEmbedVisibility, getPost, doPostActionWithCookie}, dispatch),
     };
 }
 
