@@ -56,7 +56,7 @@ describe('components/post_view/message_attachments/action_button.jsx', () => {
     test('should have correct styles when provided color from not default theme', () => {
         const props = {
             ...baseProps,
-            theme: Preferences.THEMES.onyx as unknown as Theme,
+            theme: Preferences.THEMES.indigo as unknown as Theme,
             action: {...baseProps.action, style: 'danger'},
         };
 
@@ -64,8 +64,8 @@ describe('components/post_view/message_attachments/action_button.jsx', () => {
 
         const button = screen.getByRole('button');
 
-        expect(button).toHaveStyle(`background-color: ${changeOpacity(Preferences.THEMES.onyx.errorTextColor, 0.08)}`);
-        expect(button).toHaveStyle(`color: ${Preferences.THEMES.onyx.errorTextColor}`);
+        expect(button).toHaveStyle(`background-color: ${changeOpacity(Preferences.THEMES.indigo.errorTextColor, 0.08)}`);
+        expect(button).toHaveStyle(`color: ${Preferences.THEMES.indigo.errorTextColor}`);
     });
 
     test('should have correct styles when provided status color', () => {

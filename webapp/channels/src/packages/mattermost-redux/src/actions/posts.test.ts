@@ -111,7 +111,7 @@ describe('Actions.Posts', () => {
             reply(400, createPostError);
 
         await store.dispatch(Actions.createPost(post));
-        await TestHelper.wait(100);
+        await TestHelper.wait(50);
 
         let state = store.getState();
         let createRequest = state.requests.posts.createPost;
@@ -124,7 +124,7 @@ describe('Actions.Posts', () => {
         expect(createRequest.error.status_code).toEqual(createPostError.status_code);
 
         store.dispatch(Actions.resetCreatePostRequest());
-        await TestHelper.wait(100);
+        await TestHelper.wait(50);
 
         state = store.getState();
         createRequest = state.requests.posts.createPost;

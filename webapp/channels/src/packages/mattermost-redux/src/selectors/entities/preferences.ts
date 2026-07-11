@@ -199,7 +199,6 @@ export type Theme = {
     buttonColor: string;
     errorTextColor: string;
     mentionHighlightBg: string;
-    highlightBg: string;
     mentionHighlightLink: string;
     codeTheme: string;
     ikIllustrationGreyOne: string;
