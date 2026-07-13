@@ -54,7 +54,6 @@ export type Props = {
     autocompleteGroups: Group[] | null;
     searchAssociatedGroupsForReference: (prefix: string) => Promise<{data: any}>;
     priorityProfiles: UserProfile[] | undefined;
-    loading: boolean;
 }
 
 // The AtMentionProvider provides matches for at mentions, including @here, @channel, @all,
@@ -69,18 +68,16 @@ export default class AtMentionProvider extends Provider {
     public autocompleteGroups: Group[] | null;
     public searchAssociatedGroupsForReference: (prefix: string) => Promise<{data: any}>;
     public priorityProfiles: UserProfile[] | undefined;
-    public loading: boolean;
 
     public data: any;
     public lastCompletedWord: string;
-    public lastPrefixWithNoResults: string;
     public getProfilesInChannel: (state: GlobalState, channelId: string, filters?: Filters | undefined) => UserProfile[];
     public addLastViewAtToProfiles: (state: GlobalState, profiles: UserProfile[]) => UserProfileWithLastViewAt[];
 
     constructor(props: Props) {
         super();
 
-        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, loading, textboxId} = props;
+        const {currentUserId, channelId, autocompleteUsersInChannel, useChannelMentions, autocompleteGroups, searchAssociatedGroupsForReference, priorityProfiles, textboxId} = props;
 
         this.textboxId = textboxId;
         this.currentUserId = currentUserId;
@@ -90,11 +87,9 @@ export default class AtMentionProvider extends Provider {
         this.autocompleteGroups = autocompleteGroups;
         this.searchAssociatedGroupsForReference = searchAssociatedGroupsForReference;
         this.priorityProfiles = priorityProfiles;
-        this.loading = loading;
 
         this.data = null;
         this.lastCompletedWord = '';
-        this.lastPrefixWithNoResults = '';
         this.triggerCharacter = '@';
         this.getProfilesInChannel = makeGetProfilesInChannel();
         this.addLastViewAtToProfiles = makeAddLastViewAtToProfiles();
@@ -369,11 +364,6 @@ export default class AtMentionProvider extends Provider {
 
     // updateMatches invokes the resultCallback with the metadata for rendering at mentions
     updateMatches(resultCallback: ResultsCallback, items: any[]) {
-        if (this.loading !== true && items.length === 0) {
-            this.lastPrefixWithNoResults = this.latestPrefix;
-        } else if (this.lastPrefixWithNoResults === this.latestPrefix) {
-            this.lastPrefixWithNoResults = '';
-        }
         const mentions: string[] = [];
 
         // Add the textboxId for each suggestions
@@ -408,15 +398,9 @@ export default class AtMentionProvider extends Provider {
         }
 
         const prefix = captured[1];
-        if (this.lastPrefixWithNoResults && prefix.startsWith(this.lastPrefixWithNoResults)) {
-            // Just give up since we know it won't return any results
-            return false;
-        }
 
-        this.loading = true;
         this.startNewRequest(prefix);
         this.updateMatches(resultCallback, this.items());
-        this.loading = false;
 
         // If we haven't gotten server-side results in 500 ms, add the loading indicator.
         let showLoadingIndicator: NodeJS.Timeout | null = setTimeout(() => {
@@ -454,7 +438,6 @@ export default class AtMentionProvider extends Provider {
 
     handleCompleteWord(term: string) {
         this.lastCompletedWord = term;
-        this.lastPrefixWithNoResults = '';
     }
 
     createFromProfile(profile: UserProfile | UserProfileWithLastViewAt, type: string): CreatedProfile {
