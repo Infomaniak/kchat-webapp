@@ -360,15 +360,15 @@ wc-contact-sheet:not(:defined) > *:not([slot="trigger"]) {
 }
 
 .noscript-banner {
-    background-color: #fff;
-    width: 100vw;
     position: absolute;
     z-index: 101;
-    font-size: 14px;
-    height: 40px;
     display: flex;
-    justify-content: center;
+    width: 100vw;
+    height: 40px;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: center;
+    background-color: #fff;
     font-family: sans-serif;
+    font-size: 14px;
 }

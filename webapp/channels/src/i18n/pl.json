@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Ostatnio używany czas niestandardowy",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} czas {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "Jutro o godz. {9amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Potwierdź zaplanowanie",
+  "create_post_button.option.schedule_message.options.confirm_message": "Jest obecnie {currentTime}. Ta wiadomość może zostać wysłana {thisMorningDateTime} lub {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Anuluj",
   "create_post_button.option.send_now": "Wyślij teraz",
   "create_post.dm_or_gm_remote": "Wiadomości bezpośrednie i wiadomości grupowe z użytkownikami zdalnymi nie są obsługiwane.",
   "create_post.error_message": "Wiadomość jest zbyt długa. Ilość znaków: {length}/{limit}",
@@ -3287,5 +3291,6 @@
   "workspace_limits.search_limit.view_plans": "Zobacz plany",
   "workspace_limits.search_message_limit.banner_text": "Niektóre starsze wiadomości mogą nie być wyświetlane, ponieważ Twój obszar roboczy ma ponad {messages} wiadomości. <a>{ctaAction}</a>",
   "yourcomputer": "Twój komputer",
-  "yourmobiledevice": "Twoje urządzenie mobilne"
+  "yourmobiledevice": "Twoje urządzenie mobilne",
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

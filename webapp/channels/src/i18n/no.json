@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Nylig brukt egendefinert tidspunkt",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} for {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "I morgen kl. {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Bekreft planlegging",
+  "create_post_button.option.schedule_message.options.confirm_message": "Klokken er nå {currentTime}. Denne meldingen kan sendes {thisMorningDateTime} eller {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Avbryt",
   "create_post_button.option.send_now": "Send nå",
   "create_post.dm_or_gm_remote": "Direktemeldinger og gruppemeldinger til eksterne brukere støttes ikke.",
   "create_post.error_message": "Meldingen din er for lang. Antall tegn: {length}/{limit}",
@@ -3287,5 +3291,6 @@
   "workspace_limits.search_limit.view_plans": "Vis planer",
   "workspace_limits.search_message_limit.banner_text": "Noen eldre meldinger vises kanskje ikke fordi arbeidsområdet ditt inneholder mer enn {messages} meldinger. <a>{ctaAction}</a>",
   "yourcomputer": "Datamaskinen din",
-  "yourmobiledevice": "Din mobile enhet"
+  "yourmobiledevice": "Din mobile enhet",
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Viimeksi käytetty mukautettu aika",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} {user}:n aika",
   "create_post_button.option.schedule_message.options.tomorrow": "Huomenna klo {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Vahvista ajoitus",
+  "create_post_button.option.schedule_message.options.confirm_message": "Kello on {currentTime}. Tämä viesti voidaan lähettää {thisMorningDateTime} tai {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Peruuta",
   "create_post_button.option.send_now": "Lähetä nyt",
   "create_post.dm_or_gm_remote": "Suorat viestit ja ryhmäviestit etäkäyttäjille eivät ole tuettuja.",
   "create_post.error_message": "Viestisi on liian pitkä. Merkkien määrä: {length}/{limit}",
@@ -3287,5 +3291,6 @@
   "workspace_limits.search_limit.view_plans": "Näytä suunnitelmat",
   "workspace_limits.search_message_limit.banner_text": "Joitakin vanhempia viestejä ei ehkä näytetä, koska työtilassasi on yli {messages} viestiä. <a>{ctaAction}</a>",
   "yourcomputer": "Tietokoneesi",
-  "yourmobiledevice": "Mobiililaiteesi"
+  "yourmobiledevice": "Mobiililaiteesi",
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

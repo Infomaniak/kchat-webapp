@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Heure personnalisée récemment utilisée",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} pour {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "Demain à {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Confirmer la programmation",
+  "create_post_button.option.schedule_message.options.confirm_message": "Il est actuellement {currentTime}. Ce message peut être envoyé {thisMorningDateTime} ou {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Annuler",
   "create_post_button.option.send_now": "Envoyer",
   "create_post.dm_or_gm_remote": "Les messages directs et les messages de groupe avec des utilisateurs distants ne sont pas pris en charge.",
   "create_post.error_message": "Votre message est trop long. Nombre de caractères : {length}/{limit}",
@@ -3287,5 +3291,6 @@
   "workspace_limits.search_limit.view_plans": "Voir les plans",
   "workspace_limits.search_message_limit.banner_text": "Certains anciens messages peuvent ne pas être affichés car votre espace de travail contient plus de {messages} messages. <a>{ctaAction}</a>",
   "yourcomputer": "Votre ordinateur",
-  "yourmobiledevice": "Votre appareil mobile"
+  "yourmobiledevice": "Votre appareil mobile",
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }
