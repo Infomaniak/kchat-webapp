@@ -26,7 +26,7 @@ describe('plugins/PostMessageView', () => {
                 type: '',
             },
         },
-        theme: Preferences.THEMES.denim,
+        theme: Preferences.THEMES.ik,
         enableFormatting: true,
         currentRelativeTeamUrl: 'team_url',
     };
