@@ -31,7 +31,7 @@ describe('components/user_settings/display/user_settings_theme/user_settings_the
     mockStore(initialState);
 
     const requiredProps: ComponentProps<typeof UserSettingsTheme> = {
-        theme: Preferences.THEMES.denim,
+        theme: Preferences.THEMES.ik,
         currentTeamId: 'teamId',
         selected: false,
         updateSection: jest.fn(),

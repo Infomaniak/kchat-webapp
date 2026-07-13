@@ -114,7 +114,7 @@ describe('Actions.User', () => {
                         category: 'theme',
                         name: 'team_1',
                         user_id: 'current_user_id',
-                        value: JSON.stringify(Preferences.THEMES.indigo),
+                        value: JSON.stringify(Preferences.THEMES.onyx),
                     },
                 },
             },

@@ -323,8 +323,7 @@ export default class Root extends React.PureComponent<Props, State> {
     };
 
     applyTheme() {
-        // don't apply theme when in system console; system console hardcoded to THEMES.denim
-        // AdminConsole will apply denim on mount re-apply user theme on unmount
+        // don't apply theme when in system console; system console hardcoded to ik theme
         if (this.props.location.pathname.startsWith('/admin_console')) {
             return;
         }

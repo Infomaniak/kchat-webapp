@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import {Preferences} from 'mattermost-redux/constants';
-import type {LegacyThemeType, Theme, ThemeKey, ThemeType} from 'mattermost-redux/selectors/entities/preferences';
+import type {Theme, ThemeKey, ThemeType} from 'mattermost-redux/selectors/entities/preferences';
 
 export function makeStyleFromTheme(getStyleFromTheme: (a: any) => any): (a: any) => any {
     let lastTheme: any;
@@ -116,20 +116,10 @@ export const blendColors = (background: string, foreground: string, opacity: num
     return `rgba(${red},${green},${blue},${alpha})`;
 };
 
-type ThemeTypeMap = Record<ThemeType | LegacyThemeType, ThemeKey>;
+type ThemeTypeMap = Record<ThemeType, ThemeKey>;
 
-// object mapping theme types to their respective keys for retrieving the source themes directly
-// - supports mapping old themes to new themes
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 const themeTypeMap: ThemeTypeMap = {
-    Mattermost: 'denim',
-    'Mattermost Dark': 'indigo',
-    'Windows Dark': 'indigo',
     Infomaniak: 'ik',
-    Denim: 'denim',
-    Quartz: 'quartz',
-    Indigo: 'indigo',
     Onyx: 'onyx',
 };
 
@@ -142,6 +132,10 @@ export function setThemeDefaults(theme: Partial<Theme>, preference?: string): Th
     // If this is a system theme, return the source theme object matching the theme preference type
     if (theme.type && theme.type !== 'custom' && Object.keys(themeTypeMap).includes(theme.type)) {
         const systemTheme = Preferences.THEMES[themeTypeMap[theme.type]];
+
+        if (!systemTheme) {
+            return defaultTheme;
+        }
 
         if (systemTheme.ksuiteTheme === 'auto' && preference) {
             const preferredTheme = preference === 'dark' ? Preferences.THEMES.onyx : Preferences.THEMES.ik;
