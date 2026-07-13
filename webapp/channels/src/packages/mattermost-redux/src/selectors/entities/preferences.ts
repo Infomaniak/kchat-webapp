@@ -165,11 +165,9 @@ export const getTeamsOrderPreference = createSelector(
     },
 );
 
-export type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'ik';
+export type ThemeKey = 'onyx' | 'ik';
 
-export type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
-
-export type ThemeType = 'Denim' | 'Sapphire' | 'Quartz' | 'Indigo' | 'Onyx' | 'Infomaniak';
+export type ThemeType = 'Onyx' | 'Infomaniak';
 export type KsuiteThemeType = 'light' | 'dark' | 'auto';
 
 export type Theme = {
