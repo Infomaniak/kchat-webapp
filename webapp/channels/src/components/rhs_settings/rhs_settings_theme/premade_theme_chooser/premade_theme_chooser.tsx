@@ -5,7 +5,7 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {Preferences} from 'mattermost-redux/constants';
-import type {Theme, ThemeKey} from 'mattermost-redux/selectors/entities/preferences';
+import type {Theme} from 'mattermost-redux/selectors/entities/preferences';
 
 import SvgAutoThemeIcon from '../assets/SvgAutoIcon';
 import SvgDarkThemeIcon from '../assets/SvgDarkIcon';
@@ -18,14 +18,37 @@ type Props = {
     allowedThemes: string[];
 }
 
-const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = []}: Props) => {
-    const premadeThemes = [];
-    const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
-    const ikAllowedThemes = ['Infomaniak', 'Onyx', 'Quartz'];
+interface ThemeChoice {
+    key: string;
+    theme: Theme;
+    icon: typeof SvgLightThemeIcon;
+}
 
-    // eslint-disable-next-line consistent-return
-    const getThemeLabel = (theme: Theme) => {
-        switch (theme.ksuiteTheme) {
+const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = []}: Props) => {
+    const activeKsuiteTheme = storedTheme?.ksuiteTheme ?? theme.ksuiteTheme;
+
+    const autoThemeStub: Theme = {...Preferences.THEMES.ik, ksuiteTheme: 'auto'};
+
+    const choices: ThemeChoice[] = [
+        {
+            key: 'light',
+            theme: Preferences.THEMES.ik,
+            icon: SvgLightThemeIcon,
+        },
+        {
+            key: 'dark',
+            theme: Preferences.THEMES.onyx,
+            icon: SvgDarkThemeIcon,
+        },
+        {
+            key: 'auto',
+            theme: autoThemeStub,
+            icon: SvgAutoThemeIcon,
+        },
+    ];
+
+    const getThemeLabel = (choiceKey: string) => {
+        switch (choiceKey) {
         case 'light': {
             return (
                 <FormattedMessage
@@ -50,57 +73,39 @@ const PremadeThemeChooser = ({theme, storedTheme, updateTheme, allowedThemes = [
                 />
             );
         }
+        default:
+            return null;
         }
     };
 
-    for (const k in Preferences.THEMES) {
-        if (Object.prototype.hasOwnProperty.call(Preferences.THEMES, k)) {
-            if ((hasAllowedThemes && allowedThemes.indexOf(k) < 0)) {
-                continue;
-            }
-
-            const premadeTheme: Theme = Object.assign({}, Preferences.THEMES[k as ThemeKey]);
-
-            if (premadeTheme.type && !ikAllowedThemes.includes(premadeTheme.type)) {
-                continue;
-            }
-
-            let activeClass = '';
-            if ((!storedTheme && premadeTheme.ksuiteTheme === theme.ksuiteTheme) || (storedTheme && storedTheme.ksuiteTheme === premadeTheme.ksuiteTheme)) {
-                activeClass = 'active';
-            }
-
-            premadeThemes.push(
-                <div
-                    className='col-xs-6 col-sm-4 rhs-btns text-center'
-                    key={premadeTheme.type}
-                >
-                    <div
-                        id={`rhsTheme${premadeTheme.type?.replace(' ', '')}`}
-                        className={`rhs-custom-btn ${activeClass}`}
-                        onClick={() => updateTheme(premadeTheme)}
-                    >
-                        <label>
-                            {/* {(premadeTheme.type === 'Indigo' || premadeTheme.type === 'Onyx') && (<SvgDarkThemeIcon/>)} */}
-                            {premadeTheme.ksuiteTheme === 'light' && (<SvgLightThemeIcon/>)}
-                            {premadeTheme.ksuiteTheme === 'dark' && (<SvgDarkThemeIcon/>)}
-                            {premadeTheme.ksuiteTheme === 'auto' && (<SvgAutoThemeIcon/>)}
-                            <div className='rhs-custom-btn-label'>{
-                                getThemeLabel(premadeTheme)
-                            }</div>
-                        </label>
-                    </div>
-                </div>,
-            );
-        }
-    }
+    const hasAllowedThemes = allowedThemes.length > 1 || (allowedThemes[0] && allowedThemes[0].trim().length > 0);
+    const visibleChoices = hasAllowedThemes ? choices.filter((c) => allowedThemes.includes(c.key)) : choices;
 
     return (
-        <section
-            className='row rhs-settings-section pb-8'
-            key='txdfuyguhijok'
-        >
-            {premadeThemes}
+        <section className='row rhs-settings-section pb-8'>
+            {visibleChoices.map((choice) => {
+                const isActive = activeKsuiteTheme === choice.theme.ksuiteTheme;
+
+                return (
+                    <div
+                        className='col-xs-6 col-sm-4 rhs-btns text-center'
+                        key={choice.key}
+                    >
+                        <div
+                            id={`rhsTheme${choice.key === 'auto' ? 'Auto' : choice.theme.type?.replace(' ', '')}`}
+                            className={`rhs-custom-btn ${isActive ? 'active' : ''}`}
+                            onClick={() => updateTheme({...choice.theme})}
+                        >
+                            <label>
+                                <choice.icon/>
+                                <div className='rhs-custom-btn-label'>
+                                    {getThemeLabel(choice.key)}
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                );
+            })}
         </section>
     );
 };
