@@ -674,12 +674,6 @@ export default class PostList extends React.PureComponent<Props, State> {
                             <AutoSizer>
                                 {({height, width}) => (
                                     <>
-                                        <div>
-                                            <KDriveUploadToast/>
-                                            <Pluggable pluggableName='ChannelToast'/>
-                                            {this.renderToasts(width)}
-                                        </div>
-
                                         <DynamicVirtualizedList
                                             ref={this.listRef}
                                             height={height}
@@ -702,6 +696,11 @@ export default class PostList extends React.PureComponent<Props, State> {
                                         >
                                             {this.renderRow}
                                         </DynamicVirtualizedList>
+                                        <div>
+                                            <KDriveUploadToast/>
+                                            <Pluggable pluggableName='ChannelToast'/>
+                                            {this.renderToasts(width)}
+                                        </div>
                                     </>
                                 )}
                             </AutoSizer>
