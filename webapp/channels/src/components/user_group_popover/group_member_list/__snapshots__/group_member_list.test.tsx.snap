@@ -1122,6 +1122,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                               userId="id0"
                             >
                               <span
+                                aria-expanded={false}
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
                                 role="button"
                                 style={
                                   Object {
@@ -1205,55 +1208,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                   </button>
                                 </UserButton>
                               </span>
-                              <WcContactSheet
-                                accountId={-1}
-                                badges={Array []}
-                                hideStatus={false}
-                                isUserGuest={false}
-                                sheetRef={
-                                  Object {
-                                    "current": <wc-contact-sheet
-                                      account-id="-1"
-                                      background-color="transparent"
-                                      is-external="false"
-                                      k-chat-team-name="team1"
-                                      presence="offline"
-                                      prevent-open-on-hover="true"
-                                      prevent-stop-propagation="true"
-                                      size="md"
-                                      src="/api/v4/users/id0/image?_=0"
-                                      user-name="undefined undefined"
-                                    />,
-                                  }
-                                }
-                                shouldDisplayMinimalPanel={false}
-                                src="/api/v4/users/id0/image?_=0"
-                                teamName="team1"
-                                userStatus="offline"
-                              >
-                                <div
-                                  style={
-                                    Object {
-                                      "left": "-9999px",
-                                      "pointerEvents": "none",
-                                      "position": "absolute",
-                                    }
-                                  }
-                                >
-                                  <wc-contact-sheet
-                                    account-id={-1}
-                                    background-color="transparent"
-                                    is-external={false}
-                                    k-chat-team-name="team1"
-                                    presence="offline"
-                                    prevent-open-on-hover={true}
-                                    prevent-stop-propagation={true}
-                                    size="md"
-                                    src="/api/v4/users/id0/image?_=0"
-                                    user-name="undefined undefined"
-                                  />
-                                </div>
-                              </WcContactSheet>
                             </ProfilePopoverController>
                             <DMContainer
                               className="group-member-list_dm-button"
@@ -1588,6 +1542,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                               userId="id1"
                             >
                               <span
+                                aria-expanded={false}
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
                                 role="button"
                                 style={
                                   Object {
@@ -1671,55 +1628,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                   </button>
                                 </UserButton>
                               </span>
-                              <WcContactSheet
-                                accountId={-1}
-                                badges={Array []}
-                                hideStatus={false}
-                                isUserGuest={false}
-                                sheetRef={
-                                  Object {
-                                    "current": <wc-contact-sheet
-                                      account-id="-1"
-                                      background-color="transparent"
-                                      is-external="false"
-                                      k-chat-team-name="team1"
-                                      presence="offline"
-                                      prevent-open-on-hover="true"
-                                      prevent-stop-propagation="true"
-                                      size="md"
-                                      src="/api/v4/users/id1/image?_=0"
-                                      user-name="undefined undefined"
-                                    />,
-                                  }
-                                }
-                                shouldDisplayMinimalPanel={false}
-                                src="/api/v4/users/id1/image?_=0"
-                                teamName="team1"
-                                userStatus="offline"
-                              >
-                                <div
-                                  style={
-                                    Object {
-                                      "left": "-9999px",
-                                      "pointerEvents": "none",
-                                      "position": "absolute",
-                                    }
-                                  }
-                                >
-                                  <wc-contact-sheet
-                                    account-id={-1}
-                                    background-color="transparent"
-                                    is-external={false}
-                                    k-chat-team-name="team1"
-                                    presence="offline"
-                                    prevent-open-on-hover={true}
-                                    prevent-stop-propagation={true}
-                                    size="md"
-                                    src="/api/v4/users/id1/image?_=0"
-                                    user-name="undefined undefined"
-                                  />
-                                </div>
-                              </WcContactSheet>
                             </ProfilePopoverController>
                             <DMContainer
                               className="group-member-list_dm-button"
@@ -2054,6 +1962,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                               userId="id2"
                             >
                               <span
+                                aria-expanded={false}
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
                                 role="button"
                                 style={
                                   Object {
@@ -2137,55 +2048,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                   </button>
                                 </UserButton>
                               </span>
-                              <WcContactSheet
-                                accountId={-1}
-                                badges={Array []}
-                                hideStatus={false}
-                                isUserGuest={false}
-                                sheetRef={
-                                  Object {
-                                    "current": <wc-contact-sheet
-                                      account-id="-1"
-                                      background-color="transparent"
-                                      is-external="false"
-                                      k-chat-team-name="team1"
-                                      presence="offline"
-                                      prevent-open-on-hover="true"
-                                      prevent-stop-propagation="true"
-                                      size="md"
-                                      src="/api/v4/users/id2/image?_=0"
-                                      user-name="undefined undefined"
-                                    />,
-                                  }
-                                }
-                                shouldDisplayMinimalPanel={false}
-                                src="/api/v4/users/id2/image?_=0"
-                                teamName="team1"
-                                userStatus="offline"
-                              >
-                                <div
-                                  style={
-                                    Object {
-                                      "left": "-9999px",
-                                      "pointerEvents": "none",
-                                      "position": "absolute",
-                                    }
-                                  }
-                                >
-                                  <wc-contact-sheet
-                                    account-id={-1}
-                                    background-color="transparent"
-                                    is-external={false}
-                                    k-chat-team-name="team1"
-                                    presence="offline"
-                                    prevent-open-on-hover={true}
-                                    prevent-stop-propagation={true}
-                                    size="md"
-                                    src="/api/v4/users/id2/image?_=0"
-                                    user-name="undefined undefined"
-                                  />
-                                </div>
-                              </WcContactSheet>
                             </ProfilePopoverController>
                             <DMContainer
                               className="group-member-list_dm-button"
@@ -2520,6 +2382,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                               userId="id3"
                             >
                               <span
+                                aria-expanded={false}
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
                                 role="button"
                                 style={
                                   Object {
@@ -2603,55 +2468,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                   </button>
                                 </UserButton>
                               </span>
-                              <WcContactSheet
-                                accountId={-1}
-                                badges={Array []}
-                                hideStatus={false}
-                                isUserGuest={false}
-                                sheetRef={
-                                  Object {
-                                    "current": <wc-contact-sheet
-                                      account-id="-1"
-                                      background-color="transparent"
-                                      is-external="false"
-                                      k-chat-team-name="team1"
-                                      presence="offline"
-                                      prevent-open-on-hover="true"
-                                      prevent-stop-propagation="true"
-                                      size="md"
-                                      src="/api/v4/users/id3/image?_=0"
-                                      user-name="undefined undefined"
-                                    />,
-                                  }
-                                }
-                                shouldDisplayMinimalPanel={false}
-                                src="/api/v4/users/id3/image?_=0"
-                                teamName="team1"
-                                userStatus="offline"
-                              >
-                                <div
-                                  style={
-                                    Object {
-                                      "left": "-9999px",
-                                      "pointerEvents": "none",
-                                      "position": "absolute",
-                                    }
-                                  }
-                                >
-                                  <wc-contact-sheet
-                                    account-id={-1}
-                                    background-color="transparent"
-                                    is-external={false}
-                                    k-chat-team-name="team1"
-                                    presence="offline"
-                                    prevent-open-on-hover={true}
-                                    prevent-stop-propagation={true}
-                                    size="md"
-                                    src="/api/v4/users/id3/image?_=0"
-                                    user-name="undefined undefined"
-                                  />
-                                </div>
-                              </WcContactSheet>
                             </ProfilePopoverController>
                             <DMContainer
                               className="group-member-list_dm-button"
@@ -2986,6 +2802,9 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                               userId="id4"
                             >
                               <span
+                                aria-expanded={false}
+                                onClick={[Function]}
+                                onKeyDown={[Function]}
                                 role="button"
                                 style={
                                   Object {
@@ -3069,55 +2888,6 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                                   </button>
                                 </UserButton>
                               </span>
-                              <WcContactSheet
-                                accountId={-1}
-                                badges={Array []}
-                                hideStatus={false}
-                                isUserGuest={false}
-                                sheetRef={
-                                  Object {
-                                    "current": <wc-contact-sheet
-                                      account-id="-1"
-                                      background-color="transparent"
-                                      is-external="false"
-                                      k-chat-team-name="team1"
-                                      presence="offline"
-                                      prevent-open-on-hover="true"
-                                      prevent-stop-propagation="true"
-                                      size="md"
-                                      src="/api/v4/users/id4/image?_=0"
-                                      user-name="undefined undefined"
-                                    />,
-                                  }
-                                }
-                                shouldDisplayMinimalPanel={false}
-                                src="/api/v4/users/id4/image?_=0"
-                                teamName="team1"
-                                userStatus="offline"
-                              >
-                                <div
-                                  style={
-                                    Object {
-                                      "left": "-9999px",
-                                      "pointerEvents": "none",
-                                      "position": "absolute",
-                                    }
-                                  }
-                                >
-                                  <wc-contact-sheet
-                                    account-id={-1}
-                                    background-color="transparent"
-                                    is-external={false}
-                                    k-chat-team-name="team1"
-                                    presence="offline"
-                                    prevent-open-on-hover={true}
-                                    prevent-stop-propagation={true}
-                                    size="md"
-                                    src="/api/v4/users/id4/image?_=0"
-                                    user-name="undefined undefined"
-                                  />
-                                </div>
-                              </WcContactSheet>
                             </ProfilePopoverController>
                             <DMContainer
                               className="group-member-list_dm-button"
