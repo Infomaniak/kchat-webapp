@@ -1123,14 +1123,10 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                             >
                               <span
                                 aria-expanded={false}
+                                className="profile-popover-trigger"
                                 onClick={[Function]}
                                 onKeyDown={[Function]}
                                 role="button"
-                                style={
-                                  Object {
-                                    "display": "inline-block",
-                                  }
-                                }
                                 tabIndex={0}
                               >
                                 <UserButton>
@@ -1543,14 +1539,10 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                             >
                               <span
                                 aria-expanded={false}
+                                className="profile-popover-trigger"
                                 onClick={[Function]}
                                 onKeyDown={[Function]}
                                 role="button"
-                                style={
-                                  Object {
-                                    "display": "inline-block",
-                                  }
-                                }
                                 tabIndex={0}
                               >
                                 <UserButton>
@@ -1963,14 +1955,10 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                             >
                               <span
                                 aria-expanded={false}
+                                className="profile-popover-trigger"
                                 onClick={[Function]}
                                 onKeyDown={[Function]}
                                 role="button"
-                                style={
-                                  Object {
-                                    "display": "inline-block",
-                                  }
-                                }
                                 tabIndex={0}
                               >
                                 <UserButton>
@@ -2383,14 +2371,10 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                             >
                               <span
                                 aria-expanded={false}
+                                className="profile-popover-trigger"
                                 onClick={[Function]}
                                 onKeyDown={[Function]}
                                 role="button"
-                                style={
-                                  Object {
-                                    "display": "inline-block",
-                                  }
-                                }
                                 tabIndex={0}
                               >
                                 <UserButton>
@@ -2803,14 +2787,10 @@ exports[`component/user_group_popover/group_member_list should match snapshot 1`
                             >
                               <span
                                 aria-expanded={false}
+                                className="profile-popover-trigger"
                                 onClick={[Function]}
                                 onKeyDown={[Function]}
                                 role="button"
-                                style={
-                                  Object {
-                                    "display": "inline-block",
-                                  }
-                                }
                                 tabIndex={0}
                               >
                                 <UserButton>

@@ -1,5 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+
+import classNames from 'classnames';
 import type {CSSProperties, ReactNode} from 'react';
 import React, {useRef, useMemo} from 'react';
 import {useIntl} from 'react-intl';
@@ -166,11 +168,8 @@ export function ProfilePopoverController(props: Props) {
         <span
             ref={triggerRef}
             id={props.triggerComponentId}
-            className={props.triggerComponentClass}
-            style={{
-                display: 'inline-block',
-                ...props.triggerComponentStyle,
-            }}
+            className={classNames('profile-popover-trigger', props.triggerComponentClass)}
+            style={props.triggerComponentStyle}
             role='button'
             aria-expanded={false}
             tabIndex={0}

@@ -34,15 +34,10 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -108,15 +103,10 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -182,15 +172,10 @@ exports[`components/widgets/users/Avatars should fetch missing users 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -316,15 +301,10 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -390,15 +370,10 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -464,15 +439,10 @@ exports[`components/widgets/users/Avatars should properly count overflow 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -596,15 +566,10 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -670,15 +635,10 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
@@ -744,15 +704,10 @@ exports[`components/widgets/users/Avatars should support userIds 1`] = `
       >
         <span
           aria-expanded={false}
-          className="style--none btn-round"
+          className="profile-popover-trigger style--none btn-round"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="button"
-          style={
-            Object {
-              "display": "inline-block",
-            }
-          }
           tabIndex={0}
         >
           <WithTooltip
