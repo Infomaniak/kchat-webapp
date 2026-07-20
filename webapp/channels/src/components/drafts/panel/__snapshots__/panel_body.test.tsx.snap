@@ -56,14 +56,13 @@ exports[`components/drafts/panel/panel_body should have called handleFormattedTe
           >
             <span
               aria-expanded={false}
-              className="status-wrapper style--none"
+              className="profile-popover-trigger status-wrapper style--none"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
               style={
                 Object {
                   "borderRadius": "50%",
-                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
@@ -290,14 +289,13 @@ exports[`components/drafts/panel/panel_body should match snapshot 1`] = `
           >
             <span
               aria-expanded={false}
-              className="status-wrapper style--none"
+              className="profile-popover-trigger status-wrapper style--none"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
               style={
                 Object {
                   "borderRadius": "50%",
-                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
@@ -530,14 +528,13 @@ exports[`components/drafts/panel/panel_body should match snapshot for priority 1
           >
             <span
               aria-expanded={false}
-              className="status-wrapper style--none"
+              className="profile-popover-trigger status-wrapper style--none"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
               style={
                 Object {
                   "borderRadius": "50%",
-                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }
@@ -827,14 +824,13 @@ exports[`components/drafts/panel/panel_body should match snapshot for requested_
           >
             <span
               aria-expanded={false}
-              className="status-wrapper style--none"
+              className="profile-popover-trigger status-wrapper style--none"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
               style={
                 Object {
                   "borderRadius": "50%",
-                  "display": "inline-block",
                   "height": "32px",
                   "width": "32px",
                 }

@@ -80,15 +80,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
@@ -154,15 +149,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
@@ -228,15 +218,10 @@ exports[`components/threading/channel_threads/thread_footer should report total 
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
@@ -600,15 +585,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
@@ -674,15 +654,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
@@ -748,15 +723,10 @@ exports[`components/threading/channel_threads/thread_footer should show unread i
           >
             <span
               aria-expanded={false}
-              className="style--none btn-round"
+              className="profile-popover-trigger style--none btn-round"
               onClick={[Function]}
               onKeyDown={[Function]}
               role="button"
-              style={
-                Object {
-                  "display": "inline-block",
-                }
-              }
               tabIndex={0}
             >
               <WithTooltip
