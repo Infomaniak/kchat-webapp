@@ -216,6 +216,24 @@ check-types:typescript:
   artifacts:
     expire_in: 1 day
 
+check:react-doctor:
+  stage: quality
+  image: node:20
+  tags:
+    - kubernetes
+  needs:
+    - job: "install:deps"
+    - job: "build:packages"
+      artifacts: true
+  rules:
+    - *rule-merge-request
+  cache:
+    <<: *cache-definition
+    policy: pull
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - cd webapp/channels && yarn react-doctor . --scope changed --base "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" --blocking error -y --no-telemetry
+
 test:unit:
   stage: quality
   extends:
