@@ -3,10 +3,10 @@ import {useSelector} from 'react-redux';
 
 import type {UserProfile} from '@mattermost/types/users';
 
+import {isAnyModalOpen} from 'selectors/views/modals';
+
 import {getHistory} from 'utils/browser_history';
 import {copyToClipboard} from 'utils/utils';
-
-import type {GlobalState} from 'types/store';
 
 export interface ContactSheetConfig {
     accountId: number;
@@ -50,17 +50,11 @@ export function showContactSheet(config: ContactSheetConfig, trigger: HTMLElemen
     showFn?.(config, trigger);
 }
 
-const selectAnyModalOpen = (state: GlobalState) =>
-    Boolean(
-        state.views?.modals?.modalState &&
-        Object.keys(state.views.modals.modalState).some((k) => state.views.modals.modalState[k].open),
-    );
-
 export function WcContactSheetService() {
     const sheetRef = useRef<WcContactSheetElement | null>(null);
     const latestConfig = useRef<ContactSheetConfig | null>(null);
     const [config, setConfig] = useState<ContactSheetConfig | null>(null);
-    const anyModalOpen = useSelector(selectAnyModalOpen);
+    const anyModalOpen = useSelector(isAnyModalOpen);
 
     const handleShow = useCallback((newConfig: ContactSheetConfig, trigger: HTMLElement) => {
         latestConfig.current = newConfig;

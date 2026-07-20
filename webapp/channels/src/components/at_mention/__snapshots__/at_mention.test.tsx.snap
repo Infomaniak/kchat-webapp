@@ -2,70 +2,30 @@
 
 exports[`components/AtMention should match snapshot when mentioning a group followed by punctuation 1`] = `
 <Fragment>
-  <UserGroupPopoverController
-    group={
-      Object {
-        "allow_reference": true,
-        "create_at": 1,
-        "delete_at": 0,
-        "description": "",
-        "display_name": "group_display_name",
-        "has_syncables": false,
-        "id": "qwerty1",
-        "member_count": 0,
-        "member_ids": Array [],
-        "name": "developers",
-        "remote_id": "",
-        "scheme_admin": false,
-        "source": "",
-        "update_at": 1,
-      }
-    }
-    returnFocus={[Function]}
+  <a
+    className="group-mention-link"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    role="button"
+    tabIndex={0}
   >
-    <a
-      className="group-mention-link"
-      role="button"
-      tabIndex={0}
-    >
-      @developers
-    </a>
-  </UserGroupPopoverController>
+    @group_display_name
+  </a>
   .
 </Fragment>
 `;
 
 exports[`components/AtMention should match snapshot when mentioning a group that is allowed reference 1`] = `
 <Fragment>
-  <UserGroupPopoverController
-    group={
-      Object {
-        "allow_reference": true,
-        "create_at": 1,
-        "delete_at": 0,
-        "description": "",
-        "display_name": "group_display_name",
-        "has_syncables": false,
-        "id": "qwerty1",
-        "member_count": 0,
-        "member_ids": Array [],
-        "name": "developers",
-        "remote_id": "",
-        "scheme_admin": false,
-        "source": "",
-        "update_at": 1,
-      }
-    }
-    returnFocus={[Function]}
+  <a
+    className="group-mention-link"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    role="button"
+    tabIndex={0}
   >
-    <a
-      className="group-mention-link"
-      role="button"
-      tabIndex={0}
-    >
-      @developers
-    </a>
-  </UserGroupPopoverController>
+    @group_display_name
+  </a>
 </Fragment>
 `;
 
