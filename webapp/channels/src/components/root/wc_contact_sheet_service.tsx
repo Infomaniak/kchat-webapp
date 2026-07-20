@@ -70,7 +70,7 @@ export function WcContactSheetService() {
             el.isExternal = newConfig.isUserGuest;
             el.kChatTeamName = newConfig.teamName ?? '';
             el.kChatUserName = newConfig.username ?? '';
-            el.presence = newConfig.hideStatus ? undefined : newConfig.userStatus;
+            el.presence = (newConfig.hideStatus || newConfig.user?.is_bot) ? undefined : newConfig.userStatus;
             el.src = newConfig.overwriteIcon || newConfig.src;
             el.timezone = newConfig.user?.timezone?.useAutomaticTimezone ? newConfig.user?.timezone.automaticTimezone : newConfig.user?.timezone?.manualTimezone;
             el.userId = newConfig.shouldDisplayMinimalPanel ? undefined : newConfig.user?.user_id;
