@@ -56,6 +56,7 @@ import LuxonController from './luxon_controller';
 import RootProvider from './root_provider';
 import RootRedirect from './root_redirect';
 import {WcContactSheetService} from './wc_contact_sheet_service';
+import {WcIdentitySheetService} from './wc_identity_sheet_service';
 import {WcKsuiteUpgradeModal} from './wc_ksuite_upgrade_modal';
 import WithTitleObserver from './with_title_observer';
 
@@ -670,6 +671,7 @@ export default class Root extends React.PureComponent<Props, State> {
                 <LuxonController/>
                 <WcKsuiteUpgradeModal/>
                 <WcContactSheetService/>
+                <WcIdentitySheetService/>
                 <Switch>
                     <Route
                         path={'/error'}

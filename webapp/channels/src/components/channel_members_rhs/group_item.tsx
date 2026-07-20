@@ -1,17 +1,19 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
 
 import type {Group} from '@mattermost/types/groups';
 
+import {getCurrentTeamAccountId} from 'mattermost-redux/selectors/entities/teams';
+
 import {openModal} from 'actions/views/modals';
 
 import GroupIcon from 'components/common/group_icon';
-import {UserGroupPopoverController} from 'components/user_group_popover/user_group_popover_controller';
+import {showTeamIdentitySheet} from 'components/root/wc_identity_sheet_service';
 
 import IkRemoveGroupFromChannelModal from './ik_remove_group_from_channel_modal';
 
@@ -90,7 +92,8 @@ interface Props {
 }
 
 export default function GroupItem({group, editing, canRemove}: Props) {
-    const returnFocus = useCallback(() => { /* noop */ }, []);
+    const currentTeamAccountId = useSelector(getCurrentTeamAccountId);
+    const rowRef = useRef<HTMLDivElement>(null);
     const {formatMessage} = useIntl();
     const dispatch = useDispatch();
 
@@ -102,13 +105,36 @@ export default function GroupItem({group, editing, canRemove}: Props) {
         }));
     }, [dispatch]);
 
-    const groupContent = (
+    const handleGroupClick = useCallback(() => {
+        const trigger = rowRef.current;
+        if (!trigger || !currentTeamAccountId) {
+            return;
+        }
+
+        const entityId = parseInt(group.remote_id || '', 10) || parseInt(group.id, 10) || 0;
+        showTeamIdentitySheet({
+            accountId: currentTeamAccountId,
+            entityId,
+            displayName: group.display_name || group.name,
+        }, trigger);
+    }, [currentTeamAccountId, group]);
+
+    return (
         <GroupRow
+            ref={rowRef}
             aria-label={formatMessage({
                 id: 'channel_members_rhs.groups.aria_label',
                 defaultMessage: 'Team: {groupName}',
             }, {groupName: group.display_name})}
             role='button'
+            tabIndex={0}
+            onClick={handleGroupClick}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleGroupClick();
+                }
+            }}
         >
             <GroupIcon/>
             <GroupNameContainer>
@@ -134,14 +160,5 @@ export default function GroupItem({group, editing, canRemove}: Props) {
                 </RemoveLink>
             )}
         </GroupRow>
-    );
-
-    return (
-        <UserGroupPopoverController
-            group={group}
-            returnFocus={returnFocus}
-        >
-            {groupContent}
-        </UserGroupPopoverController>
     );
 }

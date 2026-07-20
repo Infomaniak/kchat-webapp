@@ -2,13 +2,13 @@
 // See LICENSE.txt for license information.
 
 import classNames from 'classnames';
-import React, {useRef, useMemo, memo, useEffect} from 'react';
+import React, {useCallback, useRef, useMemo, memo, useEffect} from 'react';
 
 import {Client4} from 'mattermost-redux/client';
 import {displayUsername} from 'mattermost-redux/utils/user_utils';
 
 import ProfilePopover from 'components/profile_popover';
-import UserGroupPopover from 'components/user_group_popover';
+import {showTeamIdentitySheet} from 'components/root/wc_identity_sheet_service';
 
 import type {A11yFocusEventDetail} from 'utils/constants';
 import {A11yCustomEventTypes} from 'utils/constants';
@@ -52,6 +52,20 @@ const AtMention = (props: Props) => {
         ));
     };
 
+    const handleGroupClick = useCallback(() => {
+        const trigger = ref.current;
+        if (!trigger || !props.currentTeamAccountId || !group) {
+            return;
+        }
+
+        const entityId = parseInt(group.remote_id || '', 10) || 0;
+        showTeamIdentitySheet({
+            accountId: props.currentTeamAccountId,
+            entityId,
+            displayName: group.display_name || group.name,
+        }, trigger);
+    }, [props.currentTeamAccountId, group]);
+
     if (user) {
         const userMentionNameSuffix = props.mentionName.substring(user.username.length);
         const userDisplayName = displayUsername(user, props.teammateNameDisplay);
@@ -78,23 +92,25 @@ const AtMention = (props: Props) => {
         );
     } else if (group) {
         const groupMentionNameSuffix = props.mentionName.substring(group.name.length);
-        const groupDisplayName = group.name;
+        const groupDisplayName = group.display_name || group.name;
 
         return (
             <>
-                <UserGroupPopover
-                    group={group}
-                    returnFocus={returnFocus}
+                <a
+                    ref={ref}
+                    className='group-mention-link'
+                    role='button'
+                    tabIndex={0}
+                    onClick={handleGroupClick}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleGroupClick();
+                        }
+                    }}
                 >
-                    <a
-                        ref={ref}
-                        className='group-mention-link'
-                        role='button'
-                        tabIndex={0}
-                    >
-                        {'@' + groupDisplayName}
-                    </a>
-                </UserGroupPopover>
+                    {'@' + groupDisplayName}
+                </a>
                 {groupMentionNameSuffix}
             </>
         );

@@ -7,6 +7,7 @@ import React from 'react';
 import {General} from 'mattermost-redux/constants';
 
 import AtMention from 'components/at_mention/at_mention';
+import * as WcIdentitySheetService from 'components/root/wc_identity_sheet_service';
 
 import {TestHelper} from 'utils/test_helper';
 
@@ -17,6 +18,7 @@ import {render} from 'tests/react_testing_utils';
 describe('components/AtMention', () => {
     const baseProps = {
         currentUserId: 'abc1',
+        currentTeamAccountId: 42,
         teammateNameDisplay: General.TEAMMATE_NAME_DISPLAY.SHOW_NICKNAME_FULLNAME,
         usersByUsername: {
             currentuser: TestHelper.getUserMock(
@@ -257,6 +259,34 @@ describe('components/AtMention', () => {
             );
 
             expect(baseProps.getMissingMentionedUsers).not.toHaveBeenCalledWith('someuser');
+        });
+    });
+
+    describe('group mention click', () => {
+        test('should call showTeamIdentitySheet when group mention is clicked', () => {
+            const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet');
+
+            render(
+                <AtMention
+                    {...baseProps}
+                    mentionName='developers'
+                >
+                    {'@developers'}
+                </AtMention>,
+            );
+
+            const groupLink = document.querySelector('.group-mention-link') as HTMLElement;
+            expect(groupLink).toBeInTheDocument();
+            groupLink.click();
+
+            expect(showTeamIdentitySheet).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    accountId: 42,
+                    entityId: 0,
+                    displayName: 'group_display_name',
+                }),
+                expect.any(HTMLElement),
+            );
         });
     });
 });

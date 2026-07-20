@@ -11,6 +11,7 @@ declare namespace JSX {
         'wc-ksuite-pro-upgrade-compact-tag': any;
         'wc-icon': any;
         'wc-contact-sheet': any;
+        'wc-identity-sheet': any;
         'wc-pill': any;
         'module-header-title-component': any;
     }

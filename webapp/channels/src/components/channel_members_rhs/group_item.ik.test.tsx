@@ -1,15 +1,13 @@
 import {fireEvent, screen} from '@testing-library/react';
 import React from 'react';
 
+import * as WcIdentitySheetService from 'components/root/wc_identity_sheet_service';
+
 import {TestHelper} from 'utils/test_helper';
 
 import {renderWithContext} from 'tests/react_testing_utils';
 
 import GroupItem from './group_item';
-
-jest.mock('components/user_group_popover/user_group_popover_controller', () => ({
-    UserGroupPopoverController: ({children}: {children: React.ReactNode}) => <div>{children}</div>,
-}));
 
 describe('GroupItem', () => {
     const group = TestHelper.getGroupMock({
@@ -87,5 +85,34 @@ describe('GroupItem', () => {
         );
 
         fireEvent.click(screen.getByText('Remove from channel'));
+    });
+
+    it('calls showTeamIdentitySheet when group row is clicked', () => {
+        const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet');
+
+        const initialState = {
+            entities: {
+                teams: {
+                    currentTeamId: 'team1',
+                    teams: {
+                        team1: TestHelper.getTeamMock({id: 'team1', account_id: 123}),
+                    },
+                },
+            },
+        };
+
+        renderWithContext(<GroupItem group={group}/>, initialState);
+
+        const groupRow = screen.getByText('Engineering').closest('[role="button"]') as HTMLElement;
+        expect(groupRow).toBeInTheDocument();
+        fireEvent.click(groupRow);
+
+        expect(showTeamIdentitySheet).toHaveBeenCalledWith(
+            expect.objectContaining({
+                entityId: 0,
+                displayName: 'Engineering',
+            }),
+            expect.any(HTMLElement),
+        );
     });
 });
