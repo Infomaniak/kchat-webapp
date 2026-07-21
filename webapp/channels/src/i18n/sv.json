@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Nyligen använd anpassad tid",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} {user}'s tid",
   "create_post_button.option.schedule_message.options.tomorrow": "I morgon kl. {9amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Bekräfta schemaläggning",
+  "create_post_button.option.schedule_message.options.confirm_message": "Klockan är {currentTime}. Detta meddelande kan skickas {thisMorningDateTime} eller {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Avbryt",
   "create_post_button.option.send_now": "Skicka nu",
   "create_post.dm_or_gm_remote": "Direktmeddelanden och gruppmeddelanden med fjärranvändare stöds inte.",
   "create_post.error_message": "Ditt meddelande är för långt. Antal tecken: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "Ett fel inträffade i plugin {pluginId}.",
   "pluggable.errorRefresh": "Uppdatera?",
   "pluginsMenu.more_actions": "Fler åtgärder",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {fick ingen avisering om denna omnämnande eftersom hen inte är i kanalen. Kontakta en administratör för att lägga till hen i denna kanal.} other {fick ingen avisering om denna omnämnande eftersom de inte är i kanalen. Kontakta en administratör för att lägga till dem i denna kanal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {fick ingen avisering om denna omnämnande eftersom hen inte är i kanalen. Kontakta en administratör för att lägga till hen i denna privata kanal.} other {fick ingen avisering om denna omnämnande eftersom de inte är i kanalen. Kontakta en administratör för att lägga till dem i denna privata kanal.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {fick ingen avisering om denna omnämnande eftersom hen inte är i kanalen. Kontakta en administratör för att lägga till hen i denna privata kanal.} other {fick ingen avisering om denna omnämnande eftersom de inte är i kanalen. Kontakta en administratör för att lägga till dem i denna privata kanal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {fick inte någon avisering om detta eftersom hen inte är med i kanalen. Hen kan inte läggas till i kanalen eftersom hen inte är medlem i de länkade grupperna. För att lägga till hen i den här kanalen måste hen läggas till i de länkade grupperna.} other {fick inte någon avisering om detta eftersom de inte är med i kanalen. De kan inte läggas till i kanalen eftersom de inte är medlemmar i de länkade grupperna. För att lägga till dem i den här kanalen måste de läggas till i de länkade grupperna.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " och ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andra",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {medlem} other {medlemmar}}",
   "view_user_group_modal.pluginSynced": "Pluginen är synkroniserad",
   "vocals.show": "Lyssna på meddelandet",
+  "vocals.show_less": "Visa mindre",
+  "vocals.show_more": "Visa mer",
   "vocals.transcript_loading": "Ljudtranskribering pågår...",
   "voiceMessage.canvasFallback.recording": "Inspelningen har startat",
   "voiceMessage.preview.title": "Röstmeddelande",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Vissa äldre meddelanden kanske inte visas eftersom arbetsytan har fler än {messages} meddelanden. <a>{ctaAction}</a>",
   "yourcomputer": "Din dator",
   "yourmobiledevice": "Din mobila enhet",
-  "vocals.show_more": "Visa mer",
-  "vocals.show_less": "Visa mindre"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

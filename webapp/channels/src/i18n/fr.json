@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Heure personnalisée récemment utilisée",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} pour {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "Demain à {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Confirmer la programmation",
+  "create_post_button.option.schedule_message.options.confirm_message": "Il est actuellement {currentTime}. Ce message peut être envoyé {thisMorningDateTime} ou {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Annuler",
   "create_post_button.option.send_now": "Envoyer",
   "create_post.dm_or_gm_remote": "Les messages directs et les messages de groupe avec des utilisateurs distants ne sont pas pris en charge.",
   "create_post.error_message": "Votre message est trop long. Nombre de caractères : {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "Une erreur est survenue dans le plugin {pluginId}.",
   "pluggable.errorRefresh": "Rafraîchir ?",
   "pluginsMenu.more_actions": "Plus d’actions",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {n'a pas été notifié(e) par cette mention car il/elle n'est pas dans le canal. Veuillez contacter un administrateur pour l'ajouter à ce canal.} other {n'ont pas été notifiés par cette mention car ils ne sont pas dans le canal. Veuillez contacter un administrateur pour les ajouter à ce canal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {n'a pas été notifié(e) par cette mention car il/elle n'est pas dans le canal. Veuillez contacter un administrateur pour l'ajouter à ce canal privé.} other {n'ont pas été notifiés par cette mention car ils ne sont pas dans le canal. Veuillez contacter un administrateur pour les ajouter à ce canal privé.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {n'a pas été notifié(e) par cette mention car il/elle n'est pas dans le canal. Veuillez contacter un administrateur pour l'ajouter à ce canal privé.} other {n'ont pas été notifiés par cette mention car ils ne sont pas dans le canal. Veuillez contacter un administrateur pour les ajouter à ce canal privé.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "<mentions></mentions> {count, plural, one {n'a pas été notifié par cette mention car il n'est pas dans le canal. Il ne peut pas être ajouté au canal car il n'est pas membre des groupes liés. Pour l'ajouter à ce canal, il doit être ajouté aux groupes liés.} other {n'ont pas été notifiés par cette mention car ils ne sont pas dans le canal. Ils ne peuvent pas être ajoutés au canal car ils ne sont pas membres des groupes liés. Pour les ajouter à ce canal, ils doivent être ajoutés aux groupes liés.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " et ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} autres",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Membre} other {Membres}}",
   "view_user_group_modal.pluginSynced": "Plugin SYNCHRONISÉ",
   "vocals.show": "Écouter le message",
+  "vocals.show_less": "Afficher moins",
+  "vocals.show_more": "Afficher plus",
   "vocals.transcript_loading": "Transcription de l'audio en cours...",
   "voiceMessage.canvasFallback.recording": "Enregistrement démarré",
   "voiceMessage.preview.title": "Message vocal",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Certains anciens messages peuvent ne pas être affichés car votre espace de travail contient plus de {messages} messages. <a>{ctaAction}</a>",
   "yourcomputer": "Votre ordinateur",
   "yourmobiledevice": "Votre appareil mobile",
-  "vocals.show_more": "Afficher plus",
-  "vocals.show_less": "Afficher moins"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

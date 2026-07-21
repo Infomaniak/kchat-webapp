@@ -1,7 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPostInput} from '@mattermost/types/schedule_post';
 
 import {ScheduledPostTypes} from 'mattermost-redux/action_types';
 import {logError} from 'mattermost-redux/actions/errors';
@@ -9,7 +9,7 @@ import {forceLogoutIfNecessary} from 'mattermost-redux/actions/helpers';
 import {Client4} from 'mattermost-redux/client';
 import type {DispatchFunc, GetStateFunc} from 'mattermost-redux/types/actions';
 
-export function createSchedulePost(schedulePost: ScheduledPost, teamId: string, connectionId: string) {
+export function createSchedulePost(schedulePost: ScheduledPostInput, teamId: string, connectionId: string) {
     return async (dispatch: DispatchFunc) => {
         try {
             const createdPost = await Client4.createScheduledPost(schedulePost, connectionId);
@@ -54,7 +54,7 @@ export function fetchTeamScheduledPosts(teamId: string, includeDirectChannels: b
     };
 }
 
-export function updateScheduledPost(scheduledPost: ScheduledPost, connectionId: string) {
+export function updateScheduledPost(scheduledPost: ScheduledPostInput, connectionId: string) {
     return async (dispatch: DispatchFunc) => {
         try {
             const updatedScheduledPost = await Client4.updateScheduledPost(scheduledPost, connectionId);

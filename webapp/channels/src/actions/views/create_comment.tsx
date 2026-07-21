@@ -3,7 +3,7 @@
 
 import type {CommandArgs} from '@mattermost/types/integrations';
 import type {Post, PostMetadata} from '@mattermost/types/posts';
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {SchedulingInfoInput} from '@mattermost/types/schedule_post';
 import {scheduledPostFromPost} from '@mattermost/types/schedule_post';
 
 import type {CreatePostReturnType, SubmitReactionReturnType} from 'mattermost-redux/actions/posts';
@@ -40,7 +40,7 @@ export function submitPost(
     rootId: string,
     draft: PostDraft,
     afterSubmit?: (response: SubmitPostReturnType) => void,
-    schedulingInfo?: SchedulingInfo,
+    schedulingInfo?: SchedulingInfoInput,
     options?: OnSubmitOptions,
 ): ActionFuncAsync<CreatePostReturnType> {
     return async (dispatch, getState) => {
@@ -170,7 +170,7 @@ export type OnSubmitOptions = {
 export function onSubmit(
     draft: PostDraft,
     options: OnSubmitOptions,
-    schedulingInfo?: SchedulingInfo,
+    schedulingInfo?: SchedulingInfoInput,
 ): ActionFuncAsync<SubmitPostReturnType> {
     return async (dispatch, getState) => {
         const {message, channelId, rootId} = draft;

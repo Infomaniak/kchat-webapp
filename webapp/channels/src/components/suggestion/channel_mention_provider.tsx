@@ -68,7 +68,6 @@ ChannelMentionSuggestion.displayName = 'ChannelMentionSuggestion';
 
 export default class ChannelMentionProvider extends Provider {
     private lastPrefixTrimmed: string;
-    private lastPrefixWithNoResults: string;
     private lastCompletedWord: string;
     triggerCharacter: string;
     private delayChannelAutocomplete: boolean;
@@ -78,7 +77,6 @@ export default class ChannelMentionProvider extends Provider {
         super();
 
         this.lastPrefixTrimmed = '';
-        this.lastPrefixWithNoResults = '';
         this.lastCompletedWord = '';
         this.triggerCharacter = '~';
 
@@ -117,11 +115,6 @@ export default class ChannelMentionProvider extends Provider {
         }
 
         this.lastPrefixTrimmed = prefix.trim();
-
-        if (this.lastPrefixWithNoResults && prefix.startsWith(this.lastPrefixWithNoResults)) {
-            // Just give up since we know it won't return any results
-            return false;
-        }
 
         if (this.lastCompletedWord && captured[0].startsWith(this.lastCompletedWord)) {
             // It appears we're still matching a channel handle that we already completed
@@ -184,16 +177,12 @@ export default class ChannelMentionProvider extends Provider {
             matchedPretext: captured[1],
         });
 
-        const handleChannels = (channels: Channel[], withError: boolean) => {
+        const handleChannels = (channels: Channel[]) => {
             if (prefix !== this.latestPrefix || this.shouldCancelDispatch(prefix)) {
                 return;
             }
 
             const myMembers = getMyChannelMemberships(store.getState());
-
-            if (channels.length === 0 && !withError) {
-                this.lastPrefixWithNoResults = prefix;
-            }
 
             // Wrap channels in an outer object to avoid overwriting the 'type' property.
             const wrappedMoreChannels: WrappedChannel[] = [];
@@ -249,8 +238,8 @@ export default class ChannelMentionProvider extends Provider {
 
         this.autocompleteChannels(
             prefix,
-            (channels: Channel[]) => handleChannels(channels, false),
-            () => handleChannels([], true),
+            (channels: Channel[]) => handleChannels(channels),
+            () => handleChannels([]),
         );
 
         return true;
@@ -258,7 +247,6 @@ export default class ChannelMentionProvider extends Provider {
 
     handleCompleteWord(term: string) {
         this.lastCompletedWord = term;
-        this.lastPrefixWithNoResults = '';
     }
 }
 

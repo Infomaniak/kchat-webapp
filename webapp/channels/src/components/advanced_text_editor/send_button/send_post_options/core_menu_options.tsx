@@ -2,9 +2,12 @@
 // See LICENSE.txt for license information.
 
 import {DateTime} from 'luxon';
-import React, {memo, useCallback, useEffect} from 'react';
-import {FormattedMessage} from 'react-intl';
-import {useSelector} from 'react-redux';
+import React, {memo, useCallback, useEffect, useRef} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {GenericModal} from '@mattermost/components';
+import type {ScheduledAt} from '@mattermost/types/schedule_post';
 
 import {
     TrackPropertyUser, TrackPropertyUserAgent,
@@ -13,6 +16,7 @@ import {
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 
 import {trackFeatureEvent} from 'actions/telemetry_actions';
+import {closeModal, openModal} from 'actions/views/modals';
 import {getCurrentLocale} from 'selectors/i18n';
 
 import useTimePostBoxIndicator from 'components/advanced_text_editor/use_post_box_indicator';
@@ -20,12 +24,115 @@ import * as Menu from 'components/menu';
 import type {Props as MenuItemProps} from 'components/menu/menu_item';
 import Timestamp from 'components/timestamp';
 
+import {ModalIdentifiers} from 'utils/constants';
+
 import RecentUsedCustomDate from './recent_used_custom_date';
 
 type Props = {
-    handleOnSelect: (e: React.FormEvent, scheduledAt: number) => void;
+    handleOnSelect: (e: React.FormEvent, scheduledAt: ScheduledAt) => void;
     channelId: string;
     allowCustom: boolean;
+}
+
+type ScheduleConfirmModalProps = {
+    thisMorningDateButtonString: string;
+    tomorrowDateButtonString: string;
+    thisMorningDateTimeMessageString: string;
+    tomorrowDateTimeMessageString: string;
+    currentTimeString: string;
+    onScheduleTomorrow: () => void;
+    onScheduleThisMorning: () => void;
+}
+
+export function ScheduleConfirmModal({
+    thisMorningDateButtonString,
+    tomorrowDateButtonString,
+    thisMorningDateTimeMessageString,
+    tomorrowDateTimeMessageString,
+    currentTimeString,
+    onScheduleTomorrow,
+    onScheduleThisMorning,
+}: ScheduleConfirmModalProps) {
+    const dispatch = useDispatch();
+    const {formatMessage} = useIntl();
+
+    const handleClose = useCallback(() => {
+        dispatch(closeModal(ModalIdentifiers.CONFIRM));
+    }, [dispatch]);
+
+    const cancelButtonText = formatMessage({
+        id: 'create_post_button.option.schedule_message.options.cancel_button',
+        defaultMessage: 'Cancel',
+    });
+
+    const footer = (
+        <div className='GenericModal__footer'>
+            <button
+                type='button'
+                className='GenericModal__button btn btn-tertiary'
+                onClick={handleClose}
+            >
+                {cancelButtonText}
+            </button>
+            <button
+                type='button'
+                className='GenericModal__button btn btn-secondary'
+                onClick={() => {
+                    onScheduleThisMorning();
+                    handleClose();
+                }}
+            >
+                {formatMessage({
+                    id: 'create_post_button.option.schedule_message.options.this_morning_button',
+                    defaultMessage: '{dateTime}',
+                }, {
+                    dateTime: thisMorningDateButtonString,
+                })}
+            </button>
+            <button
+                type='button'
+                className='GenericModal__button btn btn-primary'
+                onClick={() => {
+                    onScheduleTomorrow();
+                    handleClose();
+                }}
+            >
+                {formatMessage({
+                    id: 'create_post_button.option.schedule_message.options.confirm_button',
+                    defaultMessage: '{dateTime}',
+                }, {
+                    dateTime: tomorrowDateButtonString,
+                })}
+            </button>
+        </div>
+    );
+
+    return (
+        <GenericModal
+            className='schedule-confirm-modal'
+            modalHeaderText={formatMessage({
+                id: 'create_post_button.option.schedule_message.options.confirm_title',
+                defaultMessage: 'Confirm scheduling',
+            })}
+            autoCloseOnConfirmButton={false}
+            enforceFocus={false}
+            compassDesign={true}
+            onExited={handleClose}
+            footerContent={footer}
+        >
+            <p>
+                <FormattedMessage
+                    id='create_post_button.option.schedule_message.options.confirm_message'
+                    defaultMessage='It is currently {currentTime}. This message can be sent {thisMorningDateTime} or {tomorrowDateTime}.'
+                    values={{
+                        currentTime: currentTimeString,
+                        thisMorningDateTime: <strong>{thisMorningDateTimeMessageString}</strong>,
+                        tomorrowDateTime: <strong>{tomorrowDateTimeMessageString}</strong>,
+                    }}
+                />
+            </p>
+        </GenericModal>
+    );
 }
 
 function getScheduledTimeInTeammateTimezone(userCurrentTimestamp: number, teammateTimezoneString: string, userLocale: string): string {
@@ -55,8 +162,11 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         isBot,
     } = useTimePostBoxIndicator(channelId);
 
+    const dispatch = useDispatch();
     const currentUserId = useSelector(getCurrentUserId);
     const locale = useSelector(getCurrentLocale);
+
+    const pendingEventRef = useRef<React.FormEvent | null>(null);
 
     useEffect(() => {
         // tracking opening of scheduled posts option menu.
@@ -73,11 +183,18 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
     }, [currentUserId]);
 
     const now = DateTime.now().setZone(userCurrentTimezone);
-    const tomorrow8amTime = DateTime.now().
+    const tomorrow8amTime = now.
         setZone(userCurrentTimezone).
         plus({days: 1}).
         set({hour: 8, minute: 0, second: 0, millisecond: 0}).
         toMillis();
+
+    const thisMorning8amTime = now.
+        setZone(userCurrentTimezone).
+        set({hour: 8, minute: 0, second: 0, millisecond: 0}).
+        toMillis();
+
+    const isBetweenMidnightAnd8am = now.hour >= 0 && now.hour < 8;
 
     const nextMonday = getNextWeekday(now, 1).set({
         hour: 8,
@@ -85,6 +202,21 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         second: 0,
         millisecond: 0,
     }).toMillis();
+
+    const handleScheduleTomorrow = useCallback(() => {
+        if (pendingEventRef.current) {
+            handleOnSelect(pendingEventRef.current, {type: 'fixed', value: 'tomorrow'});
+        }
+        pendingEventRef.current = null;
+    }, [handleOnSelect]);
+
+    const handleScheduleThisMorning = useCallback(() => {
+        if (pendingEventRef.current) {
+            const thisMorning = DateTime.now().setZone(userCurrentTimezone).set({hour: 8, minute: 0, second: 0, millisecond: 0}).toMillis();
+            handleOnSelect(pendingEventRef.current, {type: 'custom', value: thisMorning});
+        }
+        pendingEventRef.current = null;
+    }, [handleOnSelect, userCurrentTimezone]);
 
     const timeComponent = (
         <Timestamp
@@ -116,9 +248,34 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         extraProps.trailingElements = teammateTimeDisplay;
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
-    const tomorrowClickHandler = useCallback((e) => handleOnSelect(e, 'tomorrow'), [handleOnSelect]);
+    const tomorrowClickHandler = useCallback((e: React.FormEvent) => {
+        if (isBetweenMidnightAnd8am) {
+            pendingEventRef.current = e;
+
+            const currentTimeString = now.setLocale(locale).toLocaleString(DateTime.TIME_SIMPLE);
+
+            const thisMorningDateButtonString = DateTime.fromMillis(thisMorning8amTime).setZone(userCurrentTimezone).setLocale(locale).toFormat('EEE d MMM, HH:mm');
+            const tomorrowDateButtonString = DateTime.fromMillis(tomorrow8amTime).setZone(userCurrentTimezone).setLocale(locale).toFormat('EEE d MMM, HH:mm');
+            const thisMorningDateTimeMessageString = DateTime.fromMillis(thisMorning8amTime).setZone(userCurrentTimezone).setLocale(locale).toFormat('EEE d MMMM, HH:mm');
+            const tomorrowDateTimeMessageString = DateTime.fromMillis(tomorrow8amTime).setZone(userCurrentTimezone).setLocale(locale).toFormat('EEE d MMMM, HH:mm');
+
+            dispatch(openModal({
+                modalId: ModalIdentifiers.CONFIRM,
+                dialogType: ScheduleConfirmModal,
+                dialogProps: {
+                    thisMorningDateButtonString,
+                    tomorrowDateButtonString,
+                    thisMorningDateTimeMessageString,
+                    tomorrowDateTimeMessageString,
+                    currentTimeString,
+                    onScheduleTomorrow: handleScheduleTomorrow,
+                    onScheduleThisMorning: handleScheduleThisMorning,
+                },
+            }));
+        } else {
+            handleOnSelect(e, {type: 'fixed', value: 'tomorrow'});
+        }
+    }, [handleOnSelect, isBetweenMidnightAnd8am, tomorrow8amTime, now, dispatch, handleScheduleTomorrow, handleScheduleThisMorning, userCurrentTimezone, thisMorning8amTime, locale]);
 
     const optionTomorrow = (
         <Menu.Item
@@ -137,9 +294,7 @@ function CoreMenuOptions({handleOnSelect, channelId, allowCustom}: Props) {
         />
     );
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore tyoe behind the scene 'tomorrow' and 'monday' is allowed
-    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, 'monday'), [handleOnSelect]);
+    const nextMondayClickHandler = useCallback((e) => handleOnSelect(e, {type: 'fixed', value: 'monday'}), [handleOnSelect]);
 
     const optionNextMonday = (
         <Menu.Item

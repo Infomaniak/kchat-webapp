@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, defineMessages} from 'react-intl';
 
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
@@ -28,13 +28,37 @@ export interface Props {
     usernames: string[];
     noGroupsUsernames: string[];
     actions: Actions;
+    askMode?: boolean;
 }
 
 interface State {
     expanded: boolean;
 }
 
-export default class PostAddChannelMember extends React.PureComponent<Props, State> {
+const messages = defineMessages({
+    askAdminPrivate: {
+        id: 'post_body.check_for_out_of_channel_ephemeral.ask_admin_private',
+        defaultMessage: '<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this private channel.}}',
+    },
+    askAdminOpen: {
+        id: 'post_body.check_for_out_of_channel_ephemeral.ask',
+        defaultMessage: '<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this channel.} other {did not get notified by this mention because they are not in the channel. Please contact an administrator to add them to this channel.}}',
+    },
+    addMemberPublic: {
+        id: 'post_body.check_for_out_of_channel_mentions.public_with_notify',
+        defaultMessage: '<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.} other {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.}}',
+    },
+    addMemberPrivate: {
+        id: 'post_body.check_for_out_of_channel_mentions.private',
+        defaultMessage: '<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to this private channel</addLink>? They will have access to all message history.} other {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to this private channel</addLink>? They will have access to all message history.}}',
+    },
+    addMemberBlockedByGroups: {
+        id: 'post_body.check_for_out_of_channel_groups_mentions',
+        defaultMessage: '<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.} other {did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.}}',
+    },
+});
+
+export default class PostChannelMemberMention extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
@@ -155,8 +179,98 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
         return '';
     }
 
+    getOutOfChannelMessageConfig(channelType: string, askMode?: boolean) {
+        if (askMode) {
+            if (channelType === Constants.OPEN_CHANNEL) {
+                return messages.askAdminOpen;
+            }
+            return messages.askAdminPrivate;
+        }
+
+        if (channelType === Constants.OPEN_CHANNEL) {
+            return messages.addMemberPublic;
+        }
+
+        return messages.addMemberPrivate;
+    }
+
+    getOutOfChannelValues(usernames: string[], askMode: boolean, channelType: string) {
+        const outOfChannelAtMentions = this.generateAtMentions(usernames);
+        const values: Record<string, unknown> = {
+            count: usernames.length,
+            mentions: () => outOfChannelAtMentions,
+        };
+
+        if (!askMode) {
+            values.addLink = (chunks: React.ReactNode) => (
+                <a
+                    className='PostBody_addChannelMemberLink'
+                    onClick={this.handleAddChannelMember}
+                >
+                    {chunks}
+                </a>
+            );
+
+            if (channelType === Constants.OPEN_CHANNEL) {
+                values.notifyLink = (chunks: React.ReactNode) => (
+                    <a
+                        className='PostBody_addChannelMemberLink-notify'
+                        onClick={this.handleNotifyChannelMember}
+                    >
+                        {chunks}
+                    </a>
+                );
+            }
+        }
+
+        return values;
+    }
+
+    renderOutOfChannelMessage(usernames: string[], channelType: string, askMode?: boolean) {
+        const messageConfig = this.getOutOfChannelMessageConfig(channelType, askMode);
+        const values = this.getOutOfChannelValues(usernames, Boolean(askMode), channelType);
+
+        return (
+            <p>
+                <FormattedMessage
+                    id={messageConfig.id}
+                    defaultMessage={messageConfig.defaultMessage}
+                    values={values}
+                />
+            </p>
+        );
+    }
+
+    renderGroupsMessage(noGroupsUsernames: string[], askMode?: boolean, channelType?: string) {
+        let messageConfig;
+        if (askMode) {
+            if (channelType === Constants.OPEN_CHANNEL) {
+                messageConfig = messages.askAdminOpen;
+            } else {
+                messageConfig = messages.askAdminPrivate;
+            }
+        } else {
+            messageConfig = messages.addMemberBlockedByGroups;
+        }
+        const outOfGroupsAtMentions = this.generateAtMentions(noGroupsUsernames);
+
+        return (
+            <p>
+                <FormattedMessage
+                    id={messageConfig.id}
+                    defaultMessage={messageConfig.defaultMessage}
+                    values={{
+                        count: noGroupsUsernames.length,
+                        mentions: () => outOfGroupsAtMentions,
+                    }}
+                />
+            </p>
+        );
+    }
+
     render() {
-        const {channelType, postId, usernames, noGroupsUsernames} = this.props;
+        const {channelType, postId, usernames, noGroupsUsernames, askMode} = this.props;
+
         if (!postId || !channelType) {
             return null;
         }
@@ -165,75 +279,11 @@ export default class PostAddChannelMember extends React.PureComponent<Props, Sta
         let outOfGroupsMessage = null;
 
         if (usernames.length) {
-            const outOfChannelAtMentions = this.generateAtMentions(usernames);
-
-            if (channelType === Constants.OPEN_CHANNEL) {
-                outOfChannelMessage = (
-                    <p>
-                        <FormattedMessage
-                            id='post_body.check_for_out_of_channel_mentions.public_with_notify'
-                            defaultMessage='<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.} other {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to the channel</addLink> or <notifyLink>notify them</notifyLink>? They will have access to all message history.}}'
-                            values={{
-                                count: usernames.length,
-                                mentions: () => outOfChannelAtMentions,
-                                addLink: (chunks: React.ReactNode) => (
-                                    <a
-                                        className='PostBody_addChannelMemberLink'
-                                        onClick={this.handleAddChannelMember}
-                                    >
-                                        {chunks}
-                                    </a>
-                                ),
-                                notifyLink: (chunks: React.ReactNode) => (
-                                    <a
-                                        className='PostBody_addChannelMemberLink-notify'
-                                        onClick={this.handleNotifyChannelMember}
-                                    >
-                                        {chunks}
-                                    </a>
-                                ),
-                            }}
-                        />
-                    </p>
-                );
-            } else {
-                outOfChannelMessage = (
-                    <p>
-                        <FormattedMessage
-                            id='post_body.check_for_out_of_channel_mentions.private'
-                            defaultMessage='<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to this private channel</addLink>? They will have access to all message history.} other {did not get notified by this mention because they are not in the channel. Would you like to <addLink>add them to this private channel</addLink>? They will have access to all message history.}}'
-                            values={{
-                                count: usernames.length,
-                                mentions: () => outOfChannelAtMentions,
-                                addLink: (chunks: React.ReactNode) => (
-                                    <a
-                                        className='PostBody_addChannelMemberLink'
-                                        onClick={this.handleAddChannelMember}
-                                    >
-                                        {chunks}
-                                    </a>
-                                ),
-                            }}
-                        />
-                    </p>
-                );
-            }
+            outOfChannelMessage = this.renderOutOfChannelMessage(usernames, channelType, askMode);
         }
 
         if (noGroupsUsernames.length) {
-            const outOfGroupsAtMentions = this.generateAtMentions(noGroupsUsernames);
-            outOfGroupsMessage = (
-                <p>
-                    <FormattedMessage
-                        id='post_body.check_for_out_of_channel_groups_mentions'
-                        defaultMessage='<mentions></mentions> {count, plural, one {did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.} other {did not get notified by this mention because they are not in the channel. They cannot be added to the channel because they are not a member of the linked groups. To add them to this channel, they must be added to the linked groups.}}'
-                        values={{
-                            count: noGroupsUsernames.length,
-                            mentions: () => outOfGroupsAtMentions,
-                        }}
-                    />
-                </p>
-            );
+            outOfGroupsMessage = this.renderGroupsMessage(noGroupsUsernames, askMode, channelType);
         }
 
         return (

@@ -137,7 +137,7 @@ describe('CoreMenuOptions Component', () => {
         const recentCustomOption = screen.getByText(recentUsedCustomDateString);
         fireEvent.click(recentCustomOption);
 
-        expect(handleOnSelectMock).toHaveBeenCalledWith(expect.anything(), recentTimestamp);
+        expect(handleOnSelectMock).toHaveBeenCalledWith(expect.anything(), {type: 'custom', value: recentTimestamp});
     });
 
     it('should not render recently used custom time when update_at is older than 30 days', () => {

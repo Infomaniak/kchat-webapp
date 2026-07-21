@@ -12,6 +12,11 @@
 - Drop `IK:` comments
 - **CSS files for styling** — no inline styles, no SCSS for new code; use existing `.css` files unless there's already SCSS or inline styles present; if inline styles are small and you need to add/modify them, transform to CSS stylesheet
 
+## GitLab Review (AgentFlow)
+
+When performing code review via GitLab (AgentFlow):
+- **Do not run tooling commands** (tsc, eslint, prettier) — `node_modules` is not available in this environment
+
 ## i18n
 
 **13 locales**: `en`, `fr`, `it`, `es`, `de`, `pt`, `sv`, `pl`, `nl`, `el`, `no`, `da`, `fi` — no other languages. Translations must be natural.

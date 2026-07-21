@@ -8,6 +8,7 @@ import {isMessageAttachmentArray} from '@mattermost/types/message_attachments';
 import type {Post, PostEmbed} from '@mattermost/types/posts';
 import {isArrayOf} from '@mattermost/types/utilities';
 
+import type {ActionResult} from 'mattermost-redux/types/actions';
 import {validateBindings} from 'mattermost-redux/utils/apps';
 import {getEmbedFromMetadata, isPostEphemeral} from 'mattermost-redux/utils/post_utils';
 
@@ -15,6 +16,7 @@ import MessageAttachmentList from 'components/post_view/message_attachments/mess
 import PostAttachmentOpenGraph from 'components/post_view/post_attachment_opengraph';
 import PostImage from 'components/post_view/post_image';
 import PostMessagePreview from 'components/post_view/post_message_preview';
+import ReminderList from 'components/post_view/reminder_list/reminder_list';
 import YoutubeVideo from 'components/youtube_video';
 
 import type {TextFormattingOptions} from 'utils/text_formatting';
@@ -35,6 +37,8 @@ export type Props = {
     handleFileDropdownOpened?: (open: boolean) => void;
     actions: {
         toggleEmbedVisibility: (id: string) => void;
+        getPost?: (postId: string) => Promise<ActionResult>;
+        doPostActionWithCookie?: (postId: string, actionId: string, actionCookie: string, selectedOption?: string) => Promise<ActionResult>;
     };
 };
 
@@ -89,6 +93,19 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
         case 'message_attachment': {
             const attachments = isMessageAttachmentArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
 
+            if (isPostEphemeral(this.props.post) && this.props.post.props?.type === 'reminder') {
+                return (
+                    <ReminderList
+                        attachments={attachments}
+                        postId={this.props.post.id}
+                        channelId={this.props.post.channel_id}
+                        handleFileDropdownOpened={this.props.handleFileDropdownOpened}
+                        doPostActionWithCookie={this.props.actions.doPostActionWithCookie}
+                        getPost={this.props.actions.getPost}
+                    />
+                );
+            }
+
             return (
                 <MessageAttachmentList
                     attachments={attachments}
@@ -124,12 +141,6 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
                 />
             );
         case 'permalink':
-            // Ik change: There is a case where a ephemeral message has a permalink in the metadata embed
-            // (e.g., when a reminder is triggered — Mattermost does not send a regular ephemeral message in this case).
-            // In such cases, we want to render the attachment list instead of the post preview.
-            // For now, we assume that all ephemeral messages should display the attachment list.
-            // See post_body_additional_content.ik.test.tsx for test cases.
-
             if (isPostEphemeral(this.props.post)) {
                 const attachments = isMessageAttachmentArray(this.props.post.props?.attachments) ? this.props.post.props?.attachments : [];
                 return (
@@ -174,7 +185,6 @@ export default class PostBodyAdditionalContent extends React.PureComponent<Props
         if (this.props.appsEnabled) {
             const appEmbeds = isArrayOf<AppBinding>(this.props.post.props?.app_bindings, isAppBinding) ? validateBindings(this.props.post.props?.app_bindings) : [];
             if (appEmbeds.length) {
-                // TODO Put some log / message if the form is not valid?
                 return (
                     <>
                         {this.props.children}

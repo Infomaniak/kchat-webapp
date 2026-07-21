@@ -9,7 +9,7 @@ import {useHistory} from 'react-router-dom';
 
 import type {ServerError} from '@mattermost/types/errors';
 import type {FileInfo} from '@mattermost/types/files';
-import type {ScheduledPost} from '@mattermost/types/schedule_post';
+import type {ScheduledPost, ScheduledPostInput} from '@mattermost/types/schedule_post';
 import type {UserProfile, UserStatus} from '@mattermost/types/users';
 
 import {getPost as getPostAction} from 'mattermost-redux/actions/posts';
@@ -254,14 +254,11 @@ function DraftRow({
         setIsEditing(false);
     }, []);
 
-    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: number | 'monday' | 'tomorrow') => {
+    const handleSchedulePostOnReschedule = useCallback(async (updatedScheduledAtTime: ScheduledPostInput['scheduled_at']) => {
         handleCancelEdit();
 
-        const updatedScheduledPost: ScheduledPost = {
+        const updatedScheduledPost: ScheduledPostInput = {
             ...(item as ScheduledPost),
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore type mistmatch to avoid plenty of changes, but scheduled_at accept 'monday' and 'tomorrow'
             scheduled_at: updatedScheduledAtTime,
         };
 

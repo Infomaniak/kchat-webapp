@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Senest anvendt brugerdefineret tidspunkt",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} for {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "I morgen kl. {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Bekræft planlægning",
+  "create_post_button.option.schedule_message.options.confirm_message": "Det er i øjeblikket {currentTime}. Denne besked kan sendes {thisMorningDateTime} eller {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Annuller",
   "create_post_button.option.send_now": "Send nu",
   "create_post.dm_or_gm_remote": "Direkte beskeder og gruppe beskeder til eksterne brugere understøttes ikke.",
   "create_post.error_message": "Din besked er for lang. Antal tegn: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "Der opstod en fejl i {pluginId}-pluginet.",
   "pluggable.errorRefresh": "Opdater?",
   "pluginsMenu.more_actions": "Flere handlinger",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne kanal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne private kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne private kanal.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Kontakt en administrator for at tilføje vedkommende til denne private kanal.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. Kontakt en administrator for at tilføje dem til denne private kanal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {blev ikke underrettet om denne omtale, fordi vedkommende ikke er i kanalen. Vedkommende kan ikke tilføjes til kanalen, fordi vedkommende ikke er medlem af de tilknyttede grupper. For at tilføje vedkommende til denne kanal, skal vedkommende tilføjes til de tilknyttede grupper.} other {blev ikke underrettet om denne omtale, fordi de ikke er i kanalen. De kan ikke tilføjes til kanalen, fordi de ikke er medlemmer af de tilknyttede grupper. For at tilføje dem til denne kanal, skal de tilføjes til de tilknyttede grupper.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "og",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} andre",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Medlem} other {Medlemmer}}",
   "view_user_group_modal.pluginSynced": "Plugin synkroniseret",
   "vocals.show": "Lyt til beskeden",
+  "vocals.show_less": "Vis mindre",
+  "vocals.show_more": "Vis mere",
   "vocals.transcript_loading": "Lydtransskription er i gang...",
   "voiceMessage.canvasFallback.recording": "Optagelse startet",
   "voiceMessage.preview.title": "Stemmebesked",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Nogle ældre beskeder vises muligvis ikke, fordi dit arbejdsområde indeholder mere end {messages} beskeder. <a>{ctaAction}</a>",
   "yourcomputer": "Din computer",
   "yourmobiledevice": "Din mobile enhed",
-  "vocals.show_more": "Vis mere",
-  "vocals.show_less": "Vis mindre"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

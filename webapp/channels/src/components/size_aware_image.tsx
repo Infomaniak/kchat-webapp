@@ -23,7 +23,7 @@ import WithTooltip from 'components/with_tooltip';
 import {FileTypes} from 'utils/constants';
 import {isServerVersionGreaterThanOrEqualTo} from 'utils/server_version';
 import {getDesktopVersion, isDesktopApp} from 'utils/user_agent';
-import {copyToClipboard, getFileType, localizeMessage} from 'utils/utils';
+import {copyToClipboard, getFileType, isGIFImage, localizeMessage} from 'utils/utils';
 
 import KDriveIcon from './widgets/icons/kdrive_icon';
 
@@ -110,6 +110,7 @@ type State = {
     linkCopyInProgress: boolean;
     error: boolean;
     imageWidth: number;
+    isIntersecting: boolean;
 }
 
 // SizeAwareImage is a component used for rendering images where the dimensions of the image are important for
@@ -118,6 +119,8 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
     public heightTimeout = 0;
     public mounted = false;
     public timeout: NodeJS.Timeout | null = null;
+    public containerRef = React.createRef<HTMLDivElement>();
+    public observer?: IntersectionObserver;
 
     constructor(props: Props) {
         super(props);
@@ -131,6 +134,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             linkCopyInProgress: false,
             error: false,
             imageWidth: 0,
+            isIntersecting: false,
         };
 
         this.heightTimeout = 0;
@@ -138,11 +142,51 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         this.mounted = true;
+        this.setupObserver();
+    }
+
+    componentDidUpdate() {
+        if (this.isSwappableGIF()) {
+            this.setupObserver();
+        } else {
+            this.disconnectObserver();
+        }
     }
 
     componentWillUnmount() {
         this.mounted = false;
+        this.disconnectObserver();
     }
+
+    isSwappableGIF = () => {
+        const {fileInfo, fileURL} = this.props;
+        if (!fileURL) {
+            return false;
+        }
+        if (fileInfo?.extension && isGIFImage(fileInfo.extension) && fileInfo.has_preview_image) {
+            return true;
+        }
+        return false;
+    };
+
+    setupObserver = () => {
+        if (!this.isSwappableGIF() || !this.containerRef.current || this.observer || typeof IntersectionObserver === 'undefined') {
+            return;
+        }
+        this.observer = new IntersectionObserver((entries) => {
+            if (this.mounted) {
+                this.setState({isIntersecting: entries[0]?.isIntersecting ?? false});
+            }
+        });
+        this.observer.observe(this.containerRef.current);
+    };
+
+    disconnectObserver = () => {
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer = undefined;
+        }
+    };
 
     dimensionsAvailable = (dimensions?: Partial<PostImage>) => {
         return dimensions && dimensions.width && dimensions.height;
@@ -238,6 +282,9 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
                 height: 'auto',
             };
         }
+
+        const imageSrc = this.isSwappableGIF() && !this.state.isIntersecting ? src : (fileURL || src);
+
         const image = (
             <Image
                 {...props}
@@ -249,7 +296,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
                     this.props.className +
                     (this.props.handleSmallImageContainer &&
                         this.state.isSmallImage ? ' small-image--inside-container' : '')}
-                src={src}
+                src={imageSrc}
                 onError={this.handleError}
                 onLoad={this.handleLoad}
                 style={conditionalSVGStyleAttribute}
@@ -473,6 +520,7 @@ export class SizeAwareImage extends React.PureComponent<Props, State> {
             <>
                 {fallback}
                 <div
+                    ref={this.containerRef}
                     className='file-preview__button'
                     style={{display: shouldShowImg ? 'inline-block' : 'none'}}
                 >

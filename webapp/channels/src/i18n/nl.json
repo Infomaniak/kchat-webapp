@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Onlangs gebruikte aangepaste tijd",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} {user}'s tijd",
   "create_post_button.option.schedule_message.options.tomorrow": "Morgen om {9amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Bevestig inplanning",
+  "create_post_button.option.schedule_message.options.confirm_message": "Het is nu {currentTime}. Dit bericht kan worden verzonden {thisMorningDateTime} of {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Annuleren",
   "create_post_button.option.send_now": "Nu verzenden",
   "create_post.dm_or_gm_remote": "Privé-berichten en groepsberichten met externe gebruikers worden niet ondersteund.",
   "create_post.error_message": "Je bericht is te lang. Aantal tekens: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "Er is een fout opgetreden in de {pluginId} plugin.",
   "pluggable.errorRefresh": "Vernieuwen?",
   "pluginsMenu.more_actions": "Meer acties",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Neem contact op met een beheerder om hem toe te voegen aan dit kanaal.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Neem contact op met een beheerder om hen toe te voegen aan dit kanaal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Neem contact op met een beheerder om hem toe te voegen aan dit privé-kanaal.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Neem contact op met een beheerder om hen toe te voegen aan dit privé-kanaal.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Neem contact op met een beheerder om hem toe te voegen aan dit privé-kanaal.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Neem contact op met een beheerder om hen toe te voegen aan dit privé-kanaal.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {is niet op de hoogte gebracht van deze vermelding omdat hij niet in het kanaal zit. Hij kan niet aan het kanaal worden toegevoegd omdat hij geen lid is van de gekoppelde groepen. Om hem aan dit kanaal toe te voegen, moet hij worden toegevoegd aan de gekoppelde groepen.} other {zijn niet op de hoogte gebracht van deze vermelding omdat ze niet in het kanaal zitten. Ze kunnen niet aan het kanaal worden toegevoegd omdat ze geen lid zijn van de gekoppelde groepen. Om ze aan dit kanaal toe te voegen, moeten ze worden toegevoegd aan de gekoppelde groepen.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " en ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} anderen",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Lid} other {Leden}}",
   "view_user_group_modal.pluginSynced": "Plugin GESYNCRONISEERD",
   "vocals.show": "Luister naar het bericht",
+  "vocals.show_less": "Minder weergeven",
+  "vocals.show_more": "Meer weergeven",
   "vocals.transcript_loading": "Audio-transcriptie wordt uitgevoerd...",
   "voiceMessage.canvasFallback.recording": "Opname gestart",
   "voiceMessage.preview.title": "Spraakbericht",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Sommige oudere berichten worden mogelijk niet getoond omdat jouw werkruimte meer dan {messages} berichten bevat. <a>{ctaAction}</a>",
   "yourcomputer": "Jouw computer",
   "yourmobiledevice": "Uw mobiele apparaat",
-  "vocals.show_more": "Meer weergeven",
-  "vocals.show_less": "Minder weergeven"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

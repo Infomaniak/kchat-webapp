@@ -13,7 +13,7 @@ import {getChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getPost} from 'mattermost-redux/selectors/entities/posts';
 import {getCurrentUser} from 'mattermost-redux/selectors/entities/users';
 
-import PostAddChannelMember from './post_add_channel_member';
+import PostChannelMemberMention from './post_add_channel_member';
 
 type OwnProps = {
     postId: string;
@@ -46,4 +46,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostAddChannelMember);
+export default connect(mapStateToProps, mapDispatchToProps)(PostChannelMemberMention);

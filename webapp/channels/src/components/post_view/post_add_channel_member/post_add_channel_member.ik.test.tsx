@@ -14,12 +14,12 @@ import React from 'react';
 import type {Post} from '@mattermost/types/posts';
 import type {UserProfile} from '@mattermost/types/users';
 
-import PostAddChannelMember from 'components/post_view/post_add_channel_member/post_add_channel_member';
+import PostChannelMemberMention from 'components/post_view/post_add_channel_member/post_add_channel_member';
 import type {Props} from 'components/post_view/post_add_channel_member/post_add_channel_member';
 
 import {TestHelper} from 'utils/test_helper';
 
-describe('components/post_view/PostAddChannelMember - Custom Fork Features', () => {
+describe('components/post_view/PostChannelMemberMention - Custom Fork Features', () => {
     const post: Post = TestHelper.getPostMock({
         id: 'post_id_1',
         root_id: 'root_id',
@@ -58,8 +58,8 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
         });
 
         test('should have handleNotifyChannelMember method', () => {
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
-            const instance = wrapper.instance() as PostAddChannelMember;
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
+            const instance = wrapper.instance() as PostChannelMemberMention;
 
             // This method does NOT exist in upstream mattermost
             expect(instance.handleNotifyChannelMember).toBeDefined();
@@ -69,14 +69,14 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
         test('should use post_body.check_for_out_of_channel_mentions.public_with_notify translation key for public channels', () => {
             // Upstream uses separate keys without notify option
             // Our fork uses a single key with both "add" and "notify" options
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
 
             expect(formattedMessage.prop('id')).toBe('post_body.check_for_out_of_channel_mentions.public_with_notify');
         });
 
         test('should pass notifyLink callback to FormattedMessage for public channels', () => {
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
             const values = formattedMessage.prop('values') as unknown as Record<string, unknown>;
 
@@ -86,7 +86,7 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
         });
 
         test('notifyLink should render a link with PostBody_addChannelMemberLink-notify class', () => {
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
             const values = formattedMessage.prop('values') as unknown as Record<string, unknown>;
             const {notifyLink} = values;
@@ -99,8 +99,8 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
         });
 
         test('notifyLink onClick should call handleNotifyChannelMember', () => {
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
-            const instance = wrapper.instance() as PostAddChannelMember;
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
+            const instance = wrapper.instance() as PostChannelMemberMention;
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
             const values = formattedMessage.prop('values') as unknown as Record<string, unknown>;
             const {notifyLink} = values;
@@ -121,8 +121,8 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
                 actions,
                 userIds: ['user_id_1', 'user_id_2'],
             };
-            const wrapper = shallow(<PostAddChannelMember {...props}/>);
-            const instance = wrapper.instance() as PostAddChannelMember;
+            const wrapper = shallow(<PostChannelMemberMention {...props}/>);
+            const instance = wrapper.instance() as PostChannelMemberMention;
 
             instance.handleNotifyChannelMember();
 
@@ -141,7 +141,7 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
                 ...requiredProps,
                 channelType: 'P',
             };
-            const wrapper = shallow(<PostAddChannelMember {...props}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...props}/>);
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
 
             // Private channels use different translation key without notify option
@@ -159,7 +159,7 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
         test('should use FormattedMessage with callback functions instead of separate message parts', () => {
             // Upstream concatenates multiple FormattedMessage components with links between them
             // Our fork uses a single FormattedMessage with callback functions for better i18n
-            const wrapper = shallow(<PostAddChannelMember {...requiredProps}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...requiredProps}/>);
             const formattedMessage = wrapper.find('MemoizedFormattedMessage').first();
             const values = formattedMessage.prop('values') as unknown as Record<string, unknown>;
 
@@ -174,7 +174,7 @@ describe('components/post_view/PostAddChannelMember - Custom Fork Features', () 
                 ...requiredProps,
                 noGroupsUsernames: ['user_no_group'],
             };
-            const wrapper = shallow(<PostAddChannelMember {...props}/>);
+            const wrapper = shallow(<PostChannelMemberMention {...props}/>);
             const formattedMessages = wrapper.find('MemoizedFormattedMessage');
 
             // Find the groups message (should be the second one)

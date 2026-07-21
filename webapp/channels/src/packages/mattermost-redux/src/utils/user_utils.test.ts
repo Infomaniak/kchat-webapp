@@ -5,6 +5,7 @@ import {
     displayUsername,
     filterProfilesStartingWithTerm,
     filterProfilesMatchingWithTerm,
+    getInitialsFromName,
     getSuggestionsSplitBy,
     getSuggestionsSplitByMultiple,
     includesAnAdminRole,
@@ -366,6 +367,77 @@ describe('user utils', () => {
                 const mockRoles = `foo ${role} bar`;
                 const actual = includesAnAdminRole(mockRoles);
                 expect(actual).toBe(expected);
+            });
+        });
+    });
+
+    describe('getInitialsFromName', () => {
+        const testCases: Array<{input: string; expected: string; reason: string}> = [
+            {
+                input: 'Eliott Scherrer',
+                expected: 'ES',
+                reason: 'multiple words: first letter of first 2 words',
+            },
+            {
+                input: 'Infomaniak',
+                expected: 'IN',
+                reason: 'single word, >1 char: first + second letter',
+            },
+            {
+                input: 'ik',
+                expected: 'IK',
+                reason: 'single word, 2 chars: first + second letter (same as first + last)',
+            },
+            {
+                input: 'Jean-Pierre',
+                expected: 'JP',
+                reason: 'single word with hyphen: treated as multiple words',
+            },
+            {
+                input: 'A',
+                expected: 'A',
+                reason: 'single char: just that char',
+            },
+            {
+                input: 'AB',
+                expected: 'AB',
+                reason: '2 chars: first + second',
+            },
+            {
+                input: 'A B C',
+                expected: 'AB',
+                reason: '3+ words: first 2 words only',
+            },
+            {
+                input: '  Trimmed  Name  ',
+                expected: 'TN',
+                reason: 'extra whitespace is trimmed',
+            },
+            {
+                input: '',
+                expected: '',
+                reason: 'empty string',
+            },
+            {
+                input: '   ',
+                expected: '',
+                reason: 'only whitespace',
+            },
+            {
+                input: 'O\'Brien',
+                expected: 'OB',
+                reason: 'single word with apostrophe: treated as multiple words',
+            },
+            {
+                input: 'lowercase NAME',
+                expected: 'LN',
+                reason: 'result always uppercase',
+            },
+        ];
+
+        testCases.forEach(({input, expected, reason}) => {
+            it(`should handle ${reason}: "${input}" -> "${expected}"`, () => {
+                expect(getInitialsFromName(input)).toBe(expected);
             });
         });
     });

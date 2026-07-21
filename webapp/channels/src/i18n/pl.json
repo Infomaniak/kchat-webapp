@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Ostatnio używany czas niestandardowy",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} czas {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "Jutro o godz. {9amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Potwierdź zaplanowanie",
+  "create_post_button.option.schedule_message.options.confirm_message": "Jest obecnie {currentTime}. Ta wiadomość może zostać wysłana {thisMorningDateTime} lub {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Anuluj",
   "create_post_button.option.send_now": "Wyślij teraz",
   "create_post.dm_or_gm_remote": "Wiadomości bezpośrednie i wiadomości grupowe z użytkownikami zdalnymi nie są obsługiwane.",
   "create_post.error_message": "Wiadomość jest zbyt długa. Ilość znaków: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "W pluginie {pluginId} wystąpił błąd.",
   "pluggable.errorRefresh": "Odświeżyć?",
   "pluginsMenu.more_actions": "Więcej akcji",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {nie został powiadomiony o tej wzmiance, ponieważ nie jest w kanale. Skontaktuj się z administratorem, aby dodać go do tego kanału.} other {nie zostali powiadomieni o tej wzmiance, ponieważ nie są w kanale. Skontaktuj się z administratorem, aby dodać ich do tego kanału.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {nie został powiadomiony o tej wzmiance, ponieważ nie jest w kanale. Skontaktuj się z administratorem, aby dodać go do tego prywatnego kanału.} other {nie zostali powiadomieni o tej wzmiance, ponieważ nie są w kanale. Skontaktuj się z administratorem, aby dodać ich do tego prywatnego kanału.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {nie został powiadomiony o tej wzmiance, ponieważ nie jest w kanale. Skontaktuj się z administratorem, aby dodać go do tego prywatnego kanału.} other {nie zostali powiadomieni o tej wzmiance, ponieważ nie są w kanale. Skontaktuj się z administratorem, aby dodać ich do tego prywatnego kanału.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {nie otrzymał powiadomienia o tej wzmiance, ponieważ nie znajduje się na kanale. Nie można go dodać do kanału, ponieważ nie jest członkiem powiązanych grup. Aby dodać go do tego kanału, należy dodać go do powiązanych grup.} other {nie otrzymali powiadomienia o tej wzmiance, ponieważ nie znajdują się na kanale. Nie można ich dodać do kanału, ponieważ nie są członkami powiązanych grup. Aby dodać ich do tego kanału, należy dodać ich do powiązanych grup.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " i ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} innych",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Członek} other {Członków}}",
   "view_user_group_modal.pluginSynced": "Wtyczka SYNCED",
   "vocals.show": "Posłuchaj wiadomości",
+  "vocals.show_less": "Pokaż mniej",
+  "vocals.show_more": "Pokaż więcej",
   "vocals.transcript_loading": "Transkrypcja dźwięku w toku...",
   "voiceMessage.canvasFallback.recording": "Rozpoczęto nagrywanie",
   "voiceMessage.preview.title": "Wiadomość głosowa",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Niektóre starsze wiadomości mogą nie być wyświetlane, ponieważ Twój obszar roboczy ma ponad {messages} wiadomości. <a>{ctaAction}</a>",
   "yourcomputer": "Twój komputer",
   "yourmobiledevice": "Twoje urządzenie mobilne",
-  "vocals.show_more": "Pokaż więcej",
-  "vocals.show_less": "Pokaż mniej"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

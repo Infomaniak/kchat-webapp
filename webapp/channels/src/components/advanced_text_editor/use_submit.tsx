@@ -7,7 +7,7 @@ import {useIntl} from 'react-intl';
 import {useDispatch, useSelector} from 'react-redux';
 
 import type {ServerError} from '@mattermost/types/errors';
-import type {SchedulingInfo} from '@mattermost/types/schedule_post';
+import type {SchedulingInfoInput} from '@mattermost/types/schedule_post';
 
 import {FileTypes} from 'mattermost-redux/action_types';
 import {getChannelTimezones} from 'mattermost-redux/actions/channels';
@@ -75,7 +75,7 @@ const useSubmit = (
     isInEditMode?: boolean,
     postId?: string,
 ): [
-        (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions) => Promise<boolean>,
+        (submittingDraft?: PostDraft, schedulingInfo?: SchedulingInfoInput, options?: CreatePostOptions) => Promise<boolean>,
         string | null,
     ] => {
     const getGroupMentions = useGroups(channelId, draft.message);
@@ -133,7 +133,7 @@ const useSubmit = (
         }));
     }, [dispatch]);
 
-    const doSubmit = useCallback(async (submittingDraft: PostDraft = draft, schedulingInfo?: SchedulingInfo, createPostOptions?: CreatePostOptions): Promise<boolean> => {
+    const doSubmit = useCallback(async (submittingDraft: PostDraft = draft, schedulingInfo?: SchedulingInfoInput, createPostOptions?: CreatePostOptions): Promise<boolean> => {
         if (submittingDraft.uploadsInProgress.length > 0) {
             isDraftSubmitting.current = false;
             return false;
@@ -353,7 +353,7 @@ const useSubmit = (
         }));
     }, [dispatch]);
 
-    const handleSubmit = useCallback(async (submittingDraftParam = draft, schedulingInfo?: SchedulingInfo, options?: CreatePostOptions): Promise<boolean> => {
+    const handleSubmit = useCallback(async (submittingDraftParam = draft, schedulingInfo?: SchedulingInfoInput, options?: CreatePostOptions): Promise<boolean> => {
         if (!channel) {
             return false;
         }

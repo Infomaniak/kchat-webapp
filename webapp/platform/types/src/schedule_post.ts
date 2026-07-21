@@ -6,8 +6,26 @@ import type {Post} from './posts';
 
 export type ScheduledPostErrorCode = 'unknown' | 'channel_archived' | 'channel_not_found' | 'user_missing' | 'user_deleted' | 'no_channel_permission' | 'no_channel_member' | 'thread_deleted' | 'unable_to_send' | 'invalid_post';
 
+export type FixedScheduledAt = {
+    type: 'fixed';
+    value: 'tomorrow' | 'monday';
+}
+
+export type CustomScheduledAt = {
+    type: 'custom';
+    value: number;
+}
+
+export type ScheduledAt = FixedScheduledAt | CustomScheduledAt;
+
 export type SchedulingInfo = {
     scheduled_at: number;
+    processed_at?: number;
+    error_code?: ScheduledPostErrorCode;
+}
+
+export type SchedulingInfoInput = {
+    scheduled_at: number | 'tomorrow' | 'monday';
     processed_at?: number;
     error_code?: ScheduledPostErrorCode;
 }
@@ -15,6 +33,8 @@ export type SchedulingInfo = {
 export type ScheduledPost = Omit<Draft, 'delete_at'> & SchedulingInfo & {
     id: string;
 }
+
+export type ScheduledPostInput = Omit<ScheduledPost, 'scheduled_at'> & SchedulingInfoInput;
 
 export type ScheduledPostsState = {
     byId: {
@@ -31,7 +51,7 @@ export type ScheduledPostsState = {
     };
 }
 
-export function scheduledPostFromPost(post: Post, schedulingInfo: SchedulingInfo): ScheduledPost {
+export function scheduledPostFromPost(post: Post, schedulingInfo: SchedulingInfoInput): ScheduledPostInput {
     return {
         id: '',
         scheduled_at: schedulingInfo.scheduled_at,

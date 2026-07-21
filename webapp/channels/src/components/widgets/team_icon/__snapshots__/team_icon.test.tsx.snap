@@ -13,7 +13,7 @@ exports[`components/widgets/team-icon basic icon 1`] = `
       data-testid="teamIconInitial"
       role="img"
     >
-      TT
+      TE
     </div>
   </div>
 </div>
@@ -32,7 +32,7 @@ exports[`components/widgets/team-icon icon with hover 1`] = `
       data-testid="teamIconInitial"
       role="img"
     >
-      TT
+      TE
     </div>
   </div>
 </div>
@@ -73,7 +73,7 @@ exports[`components/widgets/team-icon small icon 1`] = `
       data-testid="teamIconInitial"
       role="img"
     >
-      TT
+      TE
     </div>
   </div>
 </div>

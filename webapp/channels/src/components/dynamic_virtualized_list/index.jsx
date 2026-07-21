@@ -873,7 +873,6 @@ export class DynamicVirtualizedList extends PureComponent {
                     WebkitOverflowScrolling: 'touch',
                     overflowY: 'auto',
                     overflowAnchor: 'none',
-                    willChange: 'transform',
                     width: '100%',
                     ...style,
                 },

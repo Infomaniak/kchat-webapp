@@ -9,7 +9,7 @@ import {WithTestMenuContext} from 'components/menu/menu_context_test';
 
 import {renderWithContext, fireEvent, screen} from 'tests/react_testing_utils';
 
-import CoreMenuOptions from './core_menu_options';
+import CoreMenuOptions, {ScheduleConfirmModal} from './core_menu_options';
 
 jest.mock('components/advanced_text_editor/use_post_box_indicator');
 const mockedUseTimePostBoxIndicator = jest.mocked(useTimePostBoxIndicator);
@@ -75,8 +75,8 @@ describe('CoreMenuOptions Component', () => {
         );
     }
 
-    function setMockDate(weekday: number) {
-        const mockDate = DateTime.fromObject({weekday}, {zone: userCurrentTimezone}).toJSDate();
+    function setMockDate(weekday: number, hour = 12) {
+        const mockDate = DateTime.fromObject({weekday, hour}, {zone: userCurrentTimezone}).toJSDate();
         jest.useFakeTimers();
         jest.setSystemTime(mockDate);
     }
@@ -133,14 +133,25 @@ describe('CoreMenuOptions Component', () => {
     });
 
     it('should call handleOnSelect with the right timestamp if tomorrow option is clicked', () => {
-        setMockDate(3); // Wednesday
+        setMockDate(3, 12); // Wednesday at noon
 
         renderComponent();
 
         const tomorrowOption = screen.getByText(/Tomorrow at/);
         fireEvent.click(tomorrowOption);
 
-        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), 'tomorrow');
+        expect(handleOnSelect).toHaveBeenCalledWith(expect.anything(), {type: 'fixed', value: 'tomorrow'});
+    });
+
+    it('should NOT directly call handleOnSelect if between midnight and 8am and tomorrow option is clicked', () => {
+        setMockDate(3, 5); // Wednesday at 5am
+
+        renderComponent();
+
+        const tomorrowOption = screen.getByText(/Tomorrow at/);
+        fireEvent.click(tomorrowOption);
+
+        expect(handleOnSelect).not.toHaveBeenCalled();
     });
 
     it('should NOT include trailing element when isDM and isBot are true', () => {
@@ -173,5 +184,27 @@ describe('CoreMenuOptions Component', () => {
 
         // Check the trailing element is NOT rendered in the component as this is a bot
         expect(screen.queryByText(/John Doe/)).toBeNull();
+    });
+
+    it('should call onScheduleThisMorning when this morning button is clicked in confirm modal', () => {
+        const onScheduleThisMorning = jest.fn();
+        const onScheduleTomorrow = jest.fn();
+
+        renderWithContext(
+            <ScheduleConfirmModal
+                thisMorningDateButtonString='Wed 5 Feb, 08:00'
+                tomorrowDateButtonString='Thu 6 Feb, 08:00'
+                thisMorningDateTimeMessageString='Wednesday 5 February, 08:00'
+                tomorrowDateTimeMessageString='Thursday 6 February, 08:00'
+                currentTimeString='05:00'
+                onScheduleTomorrow={onScheduleTomorrow}
+                onScheduleThisMorning={onScheduleThisMorning}
+            />,
+        );
+
+        const thisMorningButton = screen.getByRole('button', {name: 'Wed 5 Feb, 08:00'});
+        fireEvent.click(thisMorningButton);
+
+        expect(onScheduleThisMorning).toHaveBeenCalled();
     });
 });

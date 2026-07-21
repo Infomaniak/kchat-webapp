@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Hora personalizada usada recientemente",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} para {user}",
   "create_post_button.option.schedule_message.options.tomorrow": "Mañana a las {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Confirmar programación",
+  "create_post_button.option.schedule_message.options.confirm_message": "Son las {currentTime}. Este mensaje se puede enviar {thisMorningDateTime} o {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Cancelar",
   "create_post_button.option.send_now": "Enviar",
   "create_post.dm_or_gm_remote": "Los mensajes directos y los mensajes de grupo con usuarios remotos no están soportados.",
   "create_post.error_message": "Tu mensaje es demasiado largo. Cantidad de caracteres: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "Ocurrió un erro en el plugin {pluginId}.",
   "pluggable.errorRefresh": "¿Actualizar?",
   "pluginsMenu.more_actions": "Más acciones",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {no fue notificado por esta mención porque no está en el canal. Por favor, contacte a un administrador para agregarlo a este canal.} other {no fueron notificados por esta mención porque no están en el canal. Por favor, contacte a un administrador para agregarlos a este canal.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {no fue notificado por esta mención porque no está en el canal. Por favor, contacte a un administrador para agregarlo a este canal privado.} other {no fueron notificados por esta mención porque no están en el canal. Por favor, contacte a un administrador para agregarlos a este canal privado.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {no fue notificado por esta mención porque no está en el canal. Por favor, contacte a un administrador para agregarlo a este canal privado.} other {no fueron notificados por esta mención porque no están en el canal. Por favor, contacte a un administrador para agregarlos a este canal privado.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "<mentions></mentions> {count, plural, one {no fue notificado por esta mención porque no está en el canal. No puede ser agregado al canal porque no es miembro de los grupos vinculados. Para agregarlo a este canal, debe ser agregado a los grupos vinculados.} other {no fueron notificados por esta mención porque no están en el canal. No pueden ser agregados al canal porque no son miembros de los grupos vinculados. Para agregarlos a este canal, deben ser agregados a los grupos vinculados.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": " y ",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} otros",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, uno {Member} otros {Members}}",
   "view_user_group_modal.pluginSynced": "Plugin SINCRONIZADO",
   "vocals.show": "Escuchar el mensaje",
+  "vocals.show_less": "Mostrar menos",
+  "vocals.show_more": "Mostrar más",
   "vocals.transcript_loading": "Transcripción de audio en curso...",
   "voiceMessage.canvasFallback.recording": "Grabación iniciada",
   "voiceMessage.preview.title": "Mensaje de voz",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Algunos mensajes más antiguos pueden no ser mostrados ya que tu espacio de trabajo tiene más de {messages} mensajes. <a>{ctaAction}</a>",
   "yourcomputer": "Tu computador",
   "yourmobiledevice": "Tu dispositivo móvil",
-  "vocals.show_more": "Mostrar más",
-  "vocals.show_less": "Mostrar menos"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }

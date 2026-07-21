@@ -843,6 +843,10 @@
   "create_post_button.option.schedule_message.options.recently_used_custom_time": "Viimeksi käytetty mukautettu aika",
   "create_post_button.option.schedule_message.options.teammate_user_hour": "{time} {user}:n aika",
   "create_post_button.option.schedule_message.options.tomorrow": "Huomenna klo {8amTime}",
+  "create_post_button.option.schedule_message.options.confirm_title": "Vahvista ajoitus",
+  "create_post_button.option.schedule_message.options.confirm_message": "Kello on {currentTime}. Tämä viesti voidaan lähettää {thisMorningDateTime} tai {tomorrowDateTime}.",
+  "create_post_button.option.schedule_message.options.confirm_button": "{dateTime}",
+  "create_post_button.option.schedule_message.options.cancel_button": "Peruuta",
   "create_post_button.option.send_now": "Lähetä nyt",
   "create_post.dm_or_gm_remote": "Suorat viestit ja ryhmäviestit etäkäyttäjille eivät ole tuettuja.",
   "create_post.error_message": "Viestisi on liian pitkä. Merkkien määrä: {length}/{limit}",
@@ -1969,7 +1973,9 @@
   "pluggable.errorOccurred": "{pluginId}-lisäosassa ilmeni virhe.",
   "pluggable.errorRefresh": "Päivitä?",
   "pluginsMenu.more_actions": "Lisää toimintoja",
+  "post_body.check_for_out_of_channel_ephemeral.ask": "<mentions></mentions> {count, plural, one {ei saanut ilmoitusta tästä maininnasta, koska hän ei ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi hänet tälle kanavalle.} other {eivät saaneet ilmoitusta tästä maininnasta, koska he eivät ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi heidät tälle kanavalle.}}",
   "post_body.check_for_out_of_channel_ephemeral.private_no_manage": "{mentions} {count, plural, one {ei saanut ilmoitusta tästä maininnasta, koska hän ei ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi hänet tälle yksityiselle kanavalle.} other {eivät saaneet ilmoitusta tästä maininnasta, koska he eivät ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi heidät tälle yksityiselle kanavalle.}}",
+  "post_body.check_for_out_of_channel_ephemeral.ask_admin_private": "<mentions></mentions> {count, plural, one {ei saanut ilmoitusta tästä maininnasta, koska hän ei ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi hänet tälle yksityiselle kanavalle.} other {eivät saaneet ilmoitusta tästä maininnasta, koska he eivät ole kanavalla. Ota yhteyttä ylläpitäjään lisätäksesi heidät tälle yksityiselle kanavalle.}}",
   "post_body.check_for_out_of_channel_groups_mentions": "{count, plural, one {Häntä ei ilmoitettu tästä maininnasta, koska hän ei ole kanavalla. Häntä ei voida lisätä kanavalle, koska hän ei ole linkitettyjen ryhmien jäsen. Jotta hänet voidaan lisätä tähän kanavaan, hänet on lisättävä linkitettyihin ryhmiin.} other {Heitä ei ilmoitettu tästä maininnasta, koska he eivät ole kanavalla. Heitä ei voida lisätä kanavalle, koska he eivät ole linkitettyjen ryhmien jäseniä. Jotta heidät voidaan lisätä tähän kanavaan, heidät on lisättävä linkitettyihin ryhmiin.}}",
   "post_body.check_for_out_of_channel_mentions.link.and": "ja",
   "post_body.check_for_out_of_channel_mentions.others": "{numOthers} muuta",
@@ -3200,6 +3206,8 @@
   "view_user_group_modal.memberCount": "{member_count} {member_count, plural, one {Jäsen} other {Jäsentä}}",
   "view_user_group_modal.pluginSynced": "Lisäosa synkronoitu",
   "vocals.show": "Kuuntele viesti",
+  "vocals.show_less": "Näytä vähemmän",
+  "vocals.show_more": "Näytä lisää",
   "vocals.transcript_loading": "Äänitiedoston litterointi on käynnissä...",
   "voiceMessage.canvasFallback.recording": "Tallennus aloitettu",
   "voiceMessage.preview.title": "Ääniviesti",
@@ -3278,6 +3286,5 @@
   "workspace_limits.search_message_limit.banner_text": "Joitakin vanhempia viestejä ei ehkä näytetä, koska työtilassasi on yli {messages} viestiä. <a>{ctaAction}</a>",
   "yourcomputer": "Tietokoneesi",
   "yourmobiledevice": "Mobiililaiteesi",
-  "vocals.show_more": "Näytä lisää",
-  "vocals.show_less": "Näytä vähemmän"
+  "create_post_button.option.schedule_message.options.this_morning_button": "{dateTime}"
 }
