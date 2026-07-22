@@ -16,9 +16,10 @@ const SmartLoader = ({loading, children, className, onLoaded}: Props) => {
     const [timeoutFinished, setTimeoutFinished] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             setTimeoutFinished(true);
         }, DEFAULT_MIN_LOADER_DURATION);
+        return () => clearTimeout(timeoutId);
     }, []);
 
     useEffect(() => {

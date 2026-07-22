@@ -55,20 +55,25 @@ const SearchBar: React.FunctionComponent<Props> = (props: Props): JSX.Element =>
     const searchRef = useRef<SuggestionBoxComponent>();
     const intl = useIntl();
 
-    useEffect((): void => {
+    useEffect(() => {
         const shouldFocus = isFocused || keepFocused;
-        if (shouldFocus) {
-            // let redux handle changes before focussing the input
-            setTimeout(() => searchRef.current?.focus(), 0);
-        } else {
-            setTimeout(() => searchRef.current?.blur(), 0);
-        }
+        const timeoutId = setTimeout(() => {
+            if (shouldFocus) {
+                searchRef.current?.focus();
+            } else {
+                searchRef.current?.blur();
+            }
+        }, 0);
+        return () => clearTimeout(timeoutId);
     }, [isFocused, keepFocused]);
 
-    useEffect((): void => {
-        if (isFocused && !keepFocused && searchTerms.endsWith('""')) {
-            setTimeout(() => searchRef.current?.focus(), 0);
-        }
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (isFocused && !keepFocused && searchTerms.endsWith('""')) {
+                searchRef.current?.focus();
+            }
+        }, 0);
+        return () => clearTimeout(timeoutId);
     }, [searchTerms]);
 
     const handleKeyDown = (e: ChangeEvent<HTMLInputElement>): void => {

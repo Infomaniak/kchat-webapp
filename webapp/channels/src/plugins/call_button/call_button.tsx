@@ -33,13 +33,17 @@ export default function CallButton({pluginCallComponents, currentChannel, channe
     const {formatMessage} = useIntl();
 
     useEffect(() => {
-        if (prevSidebarOpen.current && !sidebarOpen) {
-            setClickEnabled(false);
-            setTimeout(() => {
-                setClickEnabled(true);
-            }, Constants.CHANNEL_HEADER_BUTTON_DISABLE_TIMEOUT);
+        if (!prevSidebarOpen.current || sidebarOpen) {
+            prevSidebarOpen.current = sidebarOpen;
+            return () => {};
         }
+
+        setClickEnabled(false);
+        const timeoutId = setTimeout(() => {
+            setClickEnabled(true);
+        }, Constants.CHANNEL_HEADER_BUTTON_DISABLE_TIMEOUT);
         prevSidebarOpen.current = sidebarOpen;
+        return () => clearTimeout(timeoutId);
     }, [sidebarOpen]);
 
     if (pluginCallComponents.length === 0) {

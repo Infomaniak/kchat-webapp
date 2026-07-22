@@ -54,11 +54,14 @@ const FilePreviewModalMainActions: React.FC<Props> = (props: Props) => {
     }, [props.fileInfo, props.enablePublicLink]);
 
     useEffect(() => {
-        if (publicLinkCopied) {
-            setTimeout(() => {
-                setPublicLinkCopied(false);
-            }, COPIED_TOOLTIP_DURATION);
+        if (!publicLinkCopied) {
+            return () => {};
         }
+
+        const timeoutId = setTimeout(() => {
+            setPublicLinkCopied(false);
+        }, COPIED_TOOLTIP_DURATION);
+        return () => clearTimeout(timeoutId);
     }, [publicLinkCopied]);
 
     const copyPublicLink = () => {
