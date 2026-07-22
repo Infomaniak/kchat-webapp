@@ -155,6 +155,7 @@ export class SidebarList extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         document.removeEventListener('keydown', this.navigateChannelShortcut);
         document.removeEventListener('keydown', this.navigateUnreadChannelShortcut);
+        this.scrollAnimation.removeAllListeners();
     }
 
     componentDidUpdate(prevProps: Props) {
