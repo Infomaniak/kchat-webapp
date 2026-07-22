@@ -206,7 +206,7 @@ export function handleLoginLogoutSignal(e: StorageEvent): ThunkActionFunc<void> 
             function reloadOnFocus() {
                 location.reload();
             }
-            window.addEventListener('focus', reloadOnFocus);
+            window.addEventListener('focus', reloadOnFocus, {once: true});
         }
     };
 }

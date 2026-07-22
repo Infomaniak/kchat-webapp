@@ -220,6 +220,7 @@ export default class Root extends React.PureComponent<Props, State> {
         this.IKLoginCode = undefined;
 
         window.removeEventListener('storage', this.handleLogoutLoginSignal);
+        window.removeEventListener('emitReportSubmitted', this.handleEmitReportSubmitted);
         document.removeEventListener('drop', this.handleDropEvent);
         document.removeEventListener('dragover', this.handleDragOverEvent);
         document.removeEventListener('click', this.ksuiteLinkHandler);
@@ -593,9 +594,7 @@ export default class Root extends React.PureComponent<Props, State> {
             });
         }
 
-        window.addEventListener('emitReportSubmitted', (event) => {
-            this.handleWebComponentReportSubmitted(event as CustomEvent<{ ticketUrl: string }>);
-        });
+        window.addEventListener('emitReportSubmitted', this.handleEmitReportSubmitted);
 
         // Force logout of all tabs if one tab is logged out
         window.addEventListener('storage', this.handleLogoutLoginSignal);
@@ -608,6 +607,10 @@ export default class Root extends React.PureComponent<Props, State> {
 
     handleLogoutLoginSignal = (e: StorageEvent) => {
         this.props.actions.handleLoginLogoutSignal(e);
+    };
+
+    handleEmitReportSubmitted = (event: Event) => {
+        this.handleWebComponentReportSubmitted(event as CustomEvent<{ ticketUrl: string }>);
     };
 
     handleWebComponentReportSubmitted = (redmineEvent: CustomEvent<{ ticketUrl: string }>) => {
