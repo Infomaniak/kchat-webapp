@@ -88,7 +88,7 @@ describe('GroupItem', () => {
     });
 
     it('calls showTeamIdentitySheet when group row is clicked', () => {
-        const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet');
+        const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet').mockImplementation(() => {});
 
         const initialState = {
             entities: {

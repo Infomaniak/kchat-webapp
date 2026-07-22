@@ -5,6 +5,8 @@ import type {UserProfile} from '@mattermost/types/users';
 
 import {isAnyModalOpen} from 'selectors/views/modals';
 
+import {useWebComponent} from 'components/common/hooks/useWebComponent';
+
 import {getHistory} from 'utils/browser_history';
 import {copyToClipboard} from 'utils/utils';
 
@@ -47,11 +49,16 @@ export interface WcContactSheetElement extends HTMLElement {
 let showFn: ((config: ContactSheetConfig, trigger: HTMLElement) => void) | null = null;
 
 export function showContactSheet(config: ContactSheetConfig, trigger: HTMLElement) {
-    showFn?.(config, trigger);
+    if (showFn) {
+        showFn(config, trigger);
+    } else {
+        // eslint-disable-next-line no-console
+        console.warn('WcContactSheetService: not ready — cannot show contact sheet');
+    }
 }
 
 export function WcContactSheetService() {
-    const sheetRef = useRef<WcContactSheetElement | null>(null);
+    const {ref: sheetRef, isReady} = useWebComponent<WcContactSheetElement>('wc-contact-sheet');
     const latestConfig = useRef<ContactSheetConfig | null>(null);
     const [config, setConfig] = useState<ContactSheetConfig | null>(null);
     const anyModalOpen = useSelector(isAnyModalOpen);
@@ -89,21 +96,32 @@ export function WcContactSheetService() {
             }
 
             el.customTrigger = trigger;
-            el.open({mode: 'click'}).catch(() => { /* ignore */ });
+            el.open({mode: 'click'}).catch((err) => {
+                // eslint-disable-next-line no-console
+                console.error('WcContactSheetService: failed to open sheet', err);
+            });
         });
-    }, []);
+    }, [sheetRef]);
 
     const showRef = useRef(handleShow);
     showRef.current = handleShow;
 
     useEffect(() => {
-        showFn = (config, trigger) => showRef.current(config, trigger);
+        if (isReady) {
+            showFn = (config, trigger) => showRef.current(config, trigger);
+        } else {
+            showFn = null;
+        }
         return () => {
             showFn = null;
         };
-    }, []);
+    }, [isReady]);
 
     useEffect(() => {
+        if (!isReady) {
+            return undefined;
+        }
+
         const el = sheetRef.current;
         if (!el) {
             return undefined;
@@ -138,13 +156,19 @@ export function WcContactSheetService() {
             el.removeEventListener('close', handleClose);
             el.removeEventListener('quickActionClick', handleQuickActionClick as EventListenerOrEventListenerObject);
         };
-    }, []);
+    }, [isReady, sheetRef]);
 
     useEffect(() => {
-        if (anyModalOpen) {
-            sheetRef.current?.close().catch(() => { /* ignore */ });
+        if (anyModalOpen && isReady) {
+            const el = sheetRef.current;
+            if (el && typeof el.close === 'function') {
+                el.close().catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.error('WcContactSheetService: failed to close sheet', err);
+                });
+            }
         }
-    }, [anyModalOpen]);
+    }, [anyModalOpen, isReady]);
 
     return (
         <div style={{position: 'absolute', left: '-9999px', pointerEvents: 'none'}}>

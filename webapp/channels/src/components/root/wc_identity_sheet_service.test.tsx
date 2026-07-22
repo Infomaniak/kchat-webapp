@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import {renderWithContext} from 'tests/react_testing_utils';
@@ -11,6 +10,10 @@ describe('WcIdentitySheetService', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+
+        if (!customElements.get('wc-identity-sheet')) {
+            customElements.define('wc-identity-sheet', class extends HTMLElement {});
+        }
     });
 
     test('should render wc-identity-sheet element', () => {

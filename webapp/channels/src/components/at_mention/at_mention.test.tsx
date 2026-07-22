@@ -264,7 +264,7 @@ describe('components/AtMention', () => {
 
     describe('group mention click', () => {
         test('should call showTeamIdentitySheet when group mention is clicked', () => {
-            const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet');
+            const showTeamIdentitySheet = jest.spyOn(WcIdentitySheetService, 'showTeamIdentitySheet').mockImplementation(() => {});
 
             render(
                 <AtMention

@@ -3,6 +3,8 @@ import {useSelector} from 'react-redux';
 
 import {isAnyModalOpen} from 'selectors/views/modals';
 
+import {useWebComponent} from 'components/common/hooks/useWebComponent';
+
 export interface TeamIdentityConfig {
     accountId: number;
     entityId: number;
@@ -27,11 +29,16 @@ export interface WcIdentitySheetElement extends HTMLElement {
 let showFn: ((config: TeamIdentityConfig, trigger: HTMLElement) => void) | null = null;
 
 export function showTeamIdentitySheet(config: TeamIdentityConfig, trigger: HTMLElement) {
-    showFn?.(config, trigger);
+    if (showFn) {
+        showFn(config, trigger);
+    } else {
+        // eslint-disable-next-line no-console
+        console.warn('WcIdentitySheetService: not ready — cannot show team identity sheet');
+    }
 }
 
 export function WcIdentitySheetService() {
-    const sheetRef = useRef<WcIdentitySheetElement | null>(null);
+    const {ref: sheetRef, isReady} = useWebComponent<WcIdentitySheetElement>('wc-identity-sheet');
     const anyModalOpen = useSelector(isAnyModalOpen);
 
     const handleShow = useCallback((newConfig: TeamIdentityConfig, trigger: HTMLElement) => {
@@ -55,23 +62,33 @@ export function WcIdentitySheetService() {
                 console.error('WcIdentitySheetService: failed to open sheet', err);
             });
         });
-    }, []);
+    }, [sheetRef]);
 
     const showRef = useRef(handleShow);
     showRef.current = handleShow;
 
     useEffect(() => {
-        showFn = (config, trigger) => showRef.current(config, trigger);
+        if (isReady) {
+            showFn = (config, trigger) => showRef.current(config, trigger);
+        } else {
+            showFn = null;
+        }
         return () => {
             showFn = null;
         };
-    }, []);
+    }, [isReady]);
 
     useEffect(() => {
-        if (anyModalOpen) {
-            sheetRef.current?.close().catch(() => { /* ignore */ });
+        if (anyModalOpen && isReady) {
+            const el = sheetRef.current;
+            if (el && typeof el.close === 'function') {
+                el.close().catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.error('WcIdentitySheetService: failed to close sheet', err);
+                });
+            }
         }
-    }, [anyModalOpen]);
+    }, [anyModalOpen, isReady]);
 
     return (
         <div style={{position: 'absolute', left: '-9999px', pointerEvents: 'none'}}>
