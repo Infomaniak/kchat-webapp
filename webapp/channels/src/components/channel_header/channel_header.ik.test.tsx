@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import {RHSStates} from 'utils/constants';
+import Constants, {RHSStates} from 'utils/constants';
 
 import type {MockIntl} from 'tests/helpers/intl-test-helper';
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
@@ -69,12 +69,13 @@ describe('components/ChannelHeader', () => {
             id: 'user_id',
             bot_description: 'the bot description',
         }),
+        canCall: true,
     };
 
-    test('should not render Meet button when canPost is false', () => {
+    test('should not render Meet button when canCall is false', () => {
         const props = {
             ...populatedProps,
-            canPost: false,
+            canCall: false,
         };
 
         const wrapper = shallowWithIntl(
@@ -83,10 +84,10 @@ describe('components/ChannelHeader', () => {
         expect(wrapper.find('Connect(MeetButton)').exists()).toBe(false);
     });
 
-    test('should render Meet button when canPost is true', () => {
+    test('should render Meet button when canCall is true', () => {
         const props = {
             ...populatedProps,
-            canPost: true,
+            canCall: true,
         };
 
         const wrapper = shallowWithIntl(
@@ -94,5 +95,26 @@ describe('components/ChannelHeader', () => {
         );
 
         expect(wrapper.find('Connect(MeetButton)').exists()).toBe(true);
+    });
+
+    test('should not render Meet button when canCall is false (e.g. deactivated user)', () => {
+        const props = {
+            ...populatedProps,
+            canCall: false,
+            channel: TestHelper.getChannelMock({
+                ...populatedProps.channel,
+                type: Constants.DM_CHANNEL as any,
+            }),
+            dmUser: TestHelper.getUserMock({
+                id: 'dm_user_id',
+                delete_at: 1234,
+            }),
+        };
+
+        const wrapper = shallowWithIntl(
+            <ChannelHeader {...props}/>,
+        );
+
+        expect(wrapper.find('Connect(MeetButton)').exists()).toBe(false);
     });
 });

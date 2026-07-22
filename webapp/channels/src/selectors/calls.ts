@@ -2,11 +2,18 @@
 // See LICENSE.txt for license information.
 import semver from 'semver';
 
-import {getCurrentChannelId, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import type {Channel} from '@mattermost/types/channels';
+
+import {General} from 'mattermost-redux/constants';
+import {getCurrentChannelId, getCurrentUser, getCurrentUserId} from 'mattermost-redux/selectors/entities/common';
+import {getUser} from 'mattermost-redux/selectors/entities/users';
+import {getUserIdFromChannelName} from 'mattermost-redux/utils/channel_utils';
 
 import {suitePluginIds} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
+
+const CALLS_PLUGIN_KEY = 'plugins-com.mattermost.calls';
 
 export const connectedChannelID = (state: GlobalState) => state.views.calls.connectedChannelID;
 export const connectedCallID = (state: GlobalState) => state.views.calls.connectedCallID;
@@ -81,33 +88,17 @@ export function isCallsEnabled(state: GlobalState, minVersion = '0.4.2') {
 }
 
 // isCallsRingingEnabledOnServer is the flag for the ringing/notification feature in calls
-export function isCallsRingingEnabledOnServer(state: GlobalState) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return Boolean(state[CALLS_PLUGIN]?.callsConfig?.EnableRinging);
+export function isCallsRingingEnabledOnServer(state: GlobalState): boolean {
+    const plugin = (state as any)[CALLS_PLUGIN_KEY];
+    return Boolean(plugin?.callsConfig?.EnableRinging);
 }
 
-// export function getSessionsInCalls(state: GlobalState): Record<string, Record<string, UserSessionState>> {
-//     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//     // @ts-ignore
-//     return state[CALLS_PLUGIN]?.sessions || {};
-// }
-
-// export function getCallsConfig(state: GlobalState): CallsConfig {
-//     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//     // @ts-ignore
-//     return state[CALLS_PLUGIN]?.callsConfig;
-// }
-
 export function getCallsChannelState(state: GlobalState, channelId: string): {enabled?: boolean} {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (!state[CALLS_PLUGIN] || !state[CALLS_PLUGIN].channels) {
+    const plugin = (state as any)[CALLS_PLUGIN_KEY];
+    if (!plugin || !plugin.channels) {
         return {};
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return state[CALLS_PLUGIN].channels[channelId] || {};
+    return plugin.channels[channelId] || {};
 }
 
 export function callsChannelExplicitlyEnabled(state: GlobalState, channelId: string) {
@@ -117,4 +108,29 @@ export function callsChannelExplicitlyEnabled(state: GlobalState, channelId: str
 export function callsChannelExplicitlyDisabled(state: GlobalState, channelId: string) {
     const enabled = getCallsChannelState(state, channelId).enabled;
     return (typeof enabled !== 'undefined') && !enabled;
+}
+
+export function canCallInChannel(state: GlobalState, channel?: Channel): boolean {
+    if (!channel) {
+        return false;
+    }
+
+    const isChannelArchived = channel.delete_at !== 0;
+    if (isChannelArchived) {
+        return false;
+    }
+
+    if (channel.type !== General.DM_CHANNEL) {
+        return true;
+    }
+
+    const currentUser = getCurrentUser(state);
+    const dmUserId = getUserIdFromChannelName(currentUser.id, channel.name);
+    const dmUser = getUser(state, dmUserId);
+
+    if (!dmUser) {
+        return false;
+    }
+
+    return !dmUser.delete_at && !dmUser.is_bot && currentUser.id !== dmUser.id;
 }

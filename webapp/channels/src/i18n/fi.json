@@ -2702,7 +2702,6 @@
   "user_profile.account.localTimeWithTimezone": "Paikallinen aika ({timezone})",
   "user_profile.account.post_was_created": "Tämä viesti on luotu @{username}-käyttäjän integraation kautta",
   "user_profile.add_user_to_channel": "Lisää kanavaan",
-  "user_profile.call.ongoing": "Puhelu käyttäjän {user} kanssa on käynnissä",
   "user_profile.close": "Sulje käyttäjäprofiilin ponnahdusikkuna",
   "user_profile.custom_status": "Tila",
   "user_profile.custom_status.set_status": "Aseta tila",

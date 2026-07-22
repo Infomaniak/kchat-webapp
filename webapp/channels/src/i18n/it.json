@@ -2702,7 +2702,6 @@
   "user_profile.account.localTimeWithTimezone": "Ora Locale ({timezone})",
   "user_profile.account.post_was_created": "Questa pubblicazione è stata creata da un'integrazione da @{username}",
   "user_profile.add_user_to_channel": "Aggiungi al Canale",
-  "user_profile.call.ongoing": "La chiamata con {user} è in corso",
   "user_profile.close": "Chiudi popover profilo utente",
   "user_profile.custom_status": "Stato",
   "user_profile.custom_status.set_status": "Imposta uno stato",

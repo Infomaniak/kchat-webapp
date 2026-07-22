@@ -38,6 +38,7 @@ import {
     closeRightHandSide,
     showChannelMembers,
 } from 'actions/views/rhs';
+import {canCallInChannel} from 'selectors/calls';
 import {getShowTutorialStep} from 'selectors/onboarding';
 import {getRhsState} from 'selectors/rhs';
 import {makeGetCustomStatus, isCustomStatusEnabled, isCustomStatusExpired} from 'selectors/views/custom_status';
@@ -92,12 +93,13 @@ function makeMapStateToProps() {
         // ik: for meet button visibility
         const channelMembership = getMyCurrentChannelMembership(state);
         const canPost = (channelMembership && haveIChannelPermission(state, channel?.team_id, channel?.id, Permissions.CREATE_POST)) ?? false;
+        const canCall = canPost && canCallInChannel(state, channel);
 
         return {
             teamId: getCurrentTeamId(state),
             channel,
             channelMember: channelMembership,
-            canPost,
+            canCall,
             memberCount: stats?.member_count || 0,
             currentUser: user,
             dmUser,

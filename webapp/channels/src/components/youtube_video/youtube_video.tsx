@@ -23,6 +23,7 @@ type State = {
 }
 
 export default class YoutubeVideo extends React.PureComponent<Props, State> {
+    iframeRef = React.createRef<HTMLIFrameElement>();
     constructor(props: Props) {
         super(props);
 
@@ -84,6 +85,7 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
         if (this.state.playing) {
             content = (
                 <iframe
+                    ref={this.iframeRef}
                     src={'https://www.youtube.com/embed/' + videoId + '?autoplay=1&autohide=1&border=0&wmode=opaque&fs=1&enablejsapi=1' + time}
                     width='380px'
                     height='290px'
@@ -131,6 +133,12 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
                 </div>
             </div>
         );
+    }
+
+    componentWillUnmount() {
+        if (this.iframeRef.current) {
+            this.iframeRef.current.src = '';
+        }
     }
 
     public static isYoutubeLink(link: string): boolean {

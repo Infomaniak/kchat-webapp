@@ -14,6 +14,7 @@ import {
     callConferenceId,
     callParameters,
     callUserStatus,
+    canCallInChannel,
     connectedCallID,
     connectedCallUrl,
     connectedChannelID,
@@ -145,11 +146,14 @@ export function startOrJoinCallInChannelV2(channelID: string) {
             if (isDesktopApp()) {
                 version = getDesktopVersion();
             }
-            const data = await Client4.startMeet(channelID, version);
             const channel = getChannel(state, channelID);
-            if (!channel) {
+            if (!channel || !canCallInChannel(state, channel)) {
+                // eslint-disable-next-line no-console
+                console.warn('[calls] blocked call to inactive/archived channel or deactivated user', channelID);
                 return;
             }
+
+            const data = await Client4.startMeet(channelID, version);
 
             dispatch({
                 type: ActionTypes.VOICE_CHANNEL_ENABLE,

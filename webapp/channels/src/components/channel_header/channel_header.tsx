@@ -115,7 +115,6 @@ class ChannelHeader extends React.PureComponent<Props> {
     render() {
         const {
             teamId,
-            currentUser,
             gmMembers,
             channel,
             channelMember,
@@ -123,15 +122,14 @@ class ChannelHeader extends React.PureComponent<Props> {
             dmUser,
             rhsState,
             hasGuests,
-            canPost,
+            canCall,
         } = this.props;
         if (!channel) {
             return null;
         }
 
         const ariaLabelChannelHeader = this.props.intl.formatMessage({id: 'accessibility.sections.channelHeader', defaultMessage: 'channel header region'});
-        const isChannelArchived = channel.delete_at !== 0;
-        let showMeetBtn = canPost && !isChannelArchived;
+        const showMeetBtn = canCall;
 
         let hasGuestsText: ReactNode = '';
         if (hasGuests) {
@@ -177,10 +175,6 @@ class ChannelHeader extends React.PureComponent<Props> {
         }
 
         let dmHeaderTextStatus: ReactNode;
-
-        if (dmUser?.is_bot || currentUser.id === dmUser?.id) {
-            showMeetBtn = false;
-        }
 
         if (isDirect && !dmUser?.delete_at && !dmUser?.is_bot) {
             dmHeaderTextStatus = (

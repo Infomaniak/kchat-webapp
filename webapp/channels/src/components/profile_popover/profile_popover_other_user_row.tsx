@@ -55,12 +55,6 @@ const ProfilePopoverOtherUserRow = ({
                     user={user}
                     hide={hide}
                 />
-                {/* <ProfilePopoverCallButtonWrapper
-                    currentUserId={currentUserId}
-                    fullname={fullname}
-                    userId={user.id}
-                    username={user.username}
-                /> */}
             </div>
         </div>
     );

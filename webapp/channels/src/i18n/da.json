@@ -2702,7 +2702,6 @@
   "user_profile.account.localTimeWithTimezone": "Lokal tid ({timezone})",
   "user_profile.account.post_was_created": "Dette opslag er oprettet af en integration fra @{username}",
   "user_profile.add_user_to_channel": "Tilføj til en kanal",
-  "user_profile.call.ongoing": "Samtalen med {user} er i gang",
   "user_profile.close": "Luk brugerprofil-popupvinduet",
   "user_profile.custom_status": "Status",
   "user_profile.custom_status.set_status": "Angiv en status",
