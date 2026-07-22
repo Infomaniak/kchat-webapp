@@ -247,12 +247,17 @@ export function emitLocalUserTypingEvent(eventType = 'typing', channelId: string
             }
         } else if (eventType === 'recording') {
             const TIMER = 1000;
+            if (recordingInterval !== null) {
+                clearInterval(recordingInterval);
+                recordingInterval = null;
+            }
             recordingInterval = setInterval(() => {
                 WebSocketClient.userRecording(channelId, userId, parentPostId);
             }, TIMER);
         } else if (eventType === 'stop') {
             if (recordingInterval !== null) {
                 clearInterval(recordingInterval);
+                recordingInterval = null;
             }
         }
 
