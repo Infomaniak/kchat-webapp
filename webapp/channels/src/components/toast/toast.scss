@@ -2,7 +2,7 @@
 
 .toast {
     position: absolute;
-    z-index: 2;
+    z-index: 10;
     width: calc(100% - 30px);
     height: 32px;
     border-radius: 4px;
@@ -92,7 +92,7 @@
 }
 
 .toast__history {
-    z-index: 1;
+    z-index: 10;
     background-color: rgb(216, 216, 216);
     color: #3d3c40;
 
