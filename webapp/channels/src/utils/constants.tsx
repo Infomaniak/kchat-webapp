@@ -406,7 +406,6 @@ export const PostRequestTypes = keyMirror({
 
 export const ModalIdentifiers = {
     ABOUT: 'about',
-    TEAM_SETTINGS: 'team_settings',
     CHANNEL_INFO: 'channel_info',
     DELETE_CHANNEL: 'delete_channel',
     UNARCHIVE_CHANNEL: 'unarchive_channel',

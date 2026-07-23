@@ -250,18 +250,6 @@ export class MainMenu extends React.PureComponent<Props> {
                         permissions={[Permissions.MANAGE_TEAM]}
                     >
                         <Menu.ItemToggleModalRedux
-                            id='teamSettings'
-                            modalId={ModalIdentifiers.TEAM_SETTINGS}
-                            dialogType={TeamSettingsModal}
-                            text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
-                            icon={<i className='fa fa-globe'/>}
-                        />
-                    </TeamPermissionGate> */}
-                    {/* <TeamPermissionGate
-                        teamId={teamId}
-                        permissions={[Permissions.MANAGE_TEAM]}
-                    >
-                        <Menu.ItemToggleModalRedux
                             id='manageGroups'
                             show={teamIsGroupConstrained && isLicensedForLDAPGroups}
                             modalId={ModalIdentifiers.MANAGE_TEAM_GROUPS}
@@ -381,17 +369,6 @@ export class MainMenu extends React.PureComponent<Props> {
                             text={formatMessage({id: 'navbar_dropdown.addGroupsToTeam', defaultMessage: 'Add Groups to Team'})}
                         />
                     </TeamPermissionGate>
-                    {/* <TeamPermissionGate
-                        teamId={teamId}
-                        permissions={[Permissions.MANAGE_TEAM]}
-                    >
-                        <Menu.ItemToggleModalRedux
-                            id='teamSettings'
-                            modalId={ModalIdentifiers.TEAM_SETTINGS}
-                            dialogType={TeamSettingsModal}
-                            text={formatMessage({id: 'navbar_dropdown.teamSettings', defaultMessage: 'Team Settings'})}
-                        />
-                    </TeamPermissionGate> */}
                     <TeamPermissionGate
                         teamId={teamId}
                         permissions={[Permissions.MANAGE_TEAM]}
