@@ -137,7 +137,7 @@ export default class YoutubeVideo extends React.PureComponent<Props, State> {
 
     componentWillUnmount() {
         if (this.iframeRef.current) {
-            this.iframeRef.current.src = '';
+            this.iframeRef.current.src = 'about:blank';
         }
     }
 
